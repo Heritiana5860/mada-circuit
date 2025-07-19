@@ -1,38 +1,43 @@
-
-import React, { useEffect, useState } from 'react';
-import { useQuery } from '@apollo/client';
-import NavBar from '../components/NavBar';
-import Footer from '../components/Footer';
-import CircuitCard from '../components/CircuitCard';
-import { Separator } from '@/components/ui/separator';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Calendar, MapPin, Clock, Loader2 } from 'lucide-react';
-import { GET_ALL_CIRCUITS, GET_ALL_DESTINATIONS } from '@/graphql/queries';
-import { Circuit } from '@/types';
-import { Alert, AlertDescription } from '@/components/ui/alert';
+import React, { useEffect, useState } from "react";
+import { useQuery } from "@apollo/client";
+import NavBar from "../components/NavBar";
+import Footer from "../components/Footer";
+import CircuitCard from "../components/CircuitCard";
+import { Separator } from "@/components/ui/separator";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Calendar, MapPin, Clock, Loader2 } from "lucide-react";
+import { GET_ALL_CIRCUITS, GET_ALL_DESTINATIONS } from "@/graphql/queries";
+import { Circuit } from "@/types";
+import { Alert, AlertDescription } from "@/components/ui/alert";
 
 const Circuits = () => {
-  const [selectedRegion, setSelectedRegion] = useState<string>('all');
+  const [selectedRegion, setSelectedRegion] = useState<string>("all");
   const [filteredCircuits, setFilteredCircuits] = useState<Circuit[]>([]);
 
   // Requêtes GraphQL
-  const { data: circuitsData, loading: circuitsLoading, error: circuitsError } = useQuery(GET_ALL_CIRCUITS);
+  const {
+    data: circuitsData,
+    loading: circuitsLoading,
+    error: circuitsError,
+  } = useQuery(GET_ALL_CIRCUITS);
   const { data: destinationsData } = useQuery(GET_ALL_DESTINATIONS);
 
   useEffect(() => {
     window.scrollTo(0, 0);
-    document.title = 'Circuits Touristiques à Madagascar | Madagascar Voyage';
+    document.title = "Circuits Touristiques à Madagascar | Madagascar Voyage";
   }, []);
 
   // Filtrer les circuits par région
   useEffect(() => {
     if (circuitsData?.allCircuits) {
       const circuits = circuitsData.allCircuits;
-      if (selectedRegion === 'all') {
+      if (selectedRegion === "all") {
         setFilteredCircuits(circuits);
       } else {
         const filtered = circuits.filter((circuit: Circuit) =>
-          circuit.destination.region.toLowerCase().includes(selectedRegion.toLowerCase())
+          circuit.destination.region
+            .toLowerCase()
+            .includes(selectedRegion.toLowerCase())
         );
         setFilteredCircuits(filtered);
       }
@@ -54,7 +59,7 @@ const Circuits = () => {
     location: `${circuit.destination.nom}, ${circuit.destination.region}`,
     duration: `${circuit.duree} jours`,
     price: circuit.prix,
-    image: `http://localhost:8000/media/${circuit.image}`,
+    image: circuit.images,
   });
 
   if (circuitsLoading) {
@@ -79,7 +84,8 @@ const Circuits = () => {
         <main className="flex-grow flex items-center justify-center p-4">
           <Alert variant="destructive" className="max-w-md">
             <AlertDescription>
-              Erreur lors du chargement des circuits. Veuillez réessayer plus tard.
+              Erreur lors du chargement des circuits. Veuillez réessayer plus
+              tard.
             </AlertDescription>
           </Alert>
         </main>
@@ -91,7 +97,7 @@ const Circuits = () => {
   return (
     <div className="min-h-screen flex flex-col">
       <NavBar />
-      
+
       <main className="flex-grow">
         <section className="bg-primary/5 pt-32 pb-12">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -100,16 +106,21 @@ const Circuits = () => {
                 Circuits Touristiques à Madagascar
               </h1>
               <p className="text-lg text-muted-foreground">
-                Explorez nos circuits soigneusement conçus pour vous faire découvrir les merveilles 
-                naturelles, la faune unique et la culture fascinante de Madagascar.
+                Explorez nos circuits soigneusement conçus pour vous faire
+                découvrir les merveilles naturelles, la faune unique et la
+                culture fascinante de Madagascar.
               </p>
             </div>
           </div>
         </section>
-        
+
         <section className="py-12">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <Tabs defaultValue="all" className="mb-8" onValueChange={setSelectedRegion}>
+            <Tabs
+              defaultValue="all"
+              className="mb-8"
+              onValueChange={setSelectedRegion}
+            >
               <TabsList className="mb-8">
                 <TabsTrigger value="all">Tous les circuits</TabsTrigger>
                 <TabsTrigger value="nord">Nord</TabsTrigger>
@@ -117,7 +128,7 @@ const Circuits = () => {
                 <TabsTrigger value="est">Est</TabsTrigger>
                 <TabsTrigger value="ouest">Ouest</TabsTrigger>
               </TabsList>
-              
+
               <div className="flex items-center gap-4 mb-8 flex-wrap">
                 <div className="flex items-center">
                   <Clock className="h-4 w-4 mr-2 text-primary" />
@@ -149,8 +160,11 @@ const Circuits = () => {
                   </select>
                 </div>
               </div>
-              
-              <TabsContent value="all" className="grid grid-cols-1 md:grid-cols-3 gap-6">
+
+              <TabsContent
+                value="all"
+                className="grid grid-cols-1 md:grid-cols-3 gap-6"
+              >
                 {filteredCircuits.length > 0 ? (
                   filteredCircuits.map((circuit) => (
                     <CircuitCard
@@ -160,13 +174,18 @@ const Circuits = () => {
                   ))
                 ) : (
                   <div className="col-span-full text-center py-12">
-                    <p className="text-muted-foreground">Aucun circuit disponible pour le moment.</p>
+                    <p className="text-muted-foreground">
+                      Aucun circuit disponible pour le moment.
+                    </p>
                   </div>
                 )}
               </TabsContent>
-              <TabsContent value="nord" className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                {getRegionCircuits('nord').length > 0 ? (
-                  getRegionCircuits('nord').map((circuit) => (
+              <TabsContent
+                value="nord"
+                className="grid grid-cols-1 md:grid-cols-3 gap-6"
+              >
+                {getRegionCircuits("nord").length > 0 ? (
+                  getRegionCircuits("nord").map((circuit) => (
                     <CircuitCard
                       key={circuit.id}
                       {...convertCircuitData(circuit)}
@@ -174,13 +193,18 @@ const Circuits = () => {
                   ))
                 ) : (
                   <div className="col-span-full text-center py-12">
-                    <p className="text-muted-foreground">Aucun circuit disponible dans le Nord pour le moment.</p>
+                    <p className="text-muted-foreground">
+                      Aucun circuit disponible dans le Nord pour le moment.
+                    </p>
                   </div>
                 )}
               </TabsContent>
-              <TabsContent value="sud" className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                {getRegionCircuits('sud').length > 0 ? (
-                  getRegionCircuits('sud').map((circuit) => (
+              <TabsContent
+                value="sud"
+                className="grid grid-cols-1 md:grid-cols-3 gap-6"
+              >
+                {getRegionCircuits("sud").length > 0 ? (
+                  getRegionCircuits("sud").map((circuit) => (
                     <CircuitCard
                       key={circuit.id}
                       {...convertCircuitData(circuit)}
@@ -188,13 +212,18 @@ const Circuits = () => {
                   ))
                 ) : (
                   <div className="col-span-full text-center py-12">
-                    <p className="text-muted-foreground">Aucun circuit disponible dans le Sud pour le moment.</p>
+                    <p className="text-muted-foreground">
+                      Aucun circuit disponible dans le Sud pour le moment.
+                    </p>
                   </div>
                 )}
               </TabsContent>
-              <TabsContent value="est" className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                {getRegionCircuits('est').length > 0 ? (
-                  getRegionCircuits('est').map((circuit) => (
+              <TabsContent
+                value="est"
+                className="grid grid-cols-1 md:grid-cols-3 gap-6"
+              >
+                {getRegionCircuits("est").length > 0 ? (
+                  getRegionCircuits("est").map((circuit) => (
                     <CircuitCard
                       key={circuit.id}
                       {...convertCircuitData(circuit)}
@@ -202,13 +231,18 @@ const Circuits = () => {
                   ))
                 ) : (
                   <div className="col-span-full text-center py-12">
-                    <p className="text-muted-foreground">Aucun circuit disponible dans l'Est pour le moment.</p>
+                    <p className="text-muted-foreground">
+                      Aucun circuit disponible dans l'Est pour le moment.
+                    </p>
                   </div>
                 )}
               </TabsContent>
-              <TabsContent value="ouest" className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                {getRegionCircuits('ouest').length > 0 ? (
-                  getRegionCircuits('ouest').map((circuit) => (
+              <TabsContent
+                value="ouest"
+                className="grid grid-cols-1 md:grid-cols-3 gap-6"
+              >
+                {getRegionCircuits("ouest").length > 0 ? (
+                  getRegionCircuits("ouest").map((circuit) => (
                     <CircuitCard
                       key={circuit.id}
                       {...convertCircuitData(circuit)}
@@ -216,7 +250,9 @@ const Circuits = () => {
                   ))
                 ) : (
                   <div className="col-span-full text-center py-12">
-                    <p className="text-muted-foreground">Aucun circuit disponible dans l'Ouest pour le moment.</p>
+                    <p className="text-muted-foreground">
+                      Aucun circuit disponible dans l'Ouest pour le moment.
+                    </p>
                   </div>
                 )}
               </TabsContent>
@@ -224,7 +260,7 @@ const Circuits = () => {
           </div>
         </section>
       </main>
-      
+
       <Footer />
     </div>
   );

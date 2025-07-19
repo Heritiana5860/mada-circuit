@@ -9,6 +9,7 @@ export const GET_ALL_CIRCUITS = gql`
       description
       duree
       prix
+      image
       difficulte
       images {
         id

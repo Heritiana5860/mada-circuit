@@ -51,19 +51,19 @@ export const CANCEL_VEHICLE_RESERVATION = gql`
 export const CHECK_VEHICLE_AVAILABILITY = gql`
   mutation CheckVehicleAvailability(
     $vehiculeId: ID!
-    $dateDebut: String!
-    $dateFin: String!
+    $dateDepart: Date!
+    $dateFin: Date!
   ) {
     checkVehicleAvailability(
       vehiculeId: $vehiculeId
-      dateDebut: $dateDebut
+      dateDepart: $dateDepart
       dateFin: $dateFin
     ) {
       disponible
       message
       reservationsExistantes {
-        dateDebut
-        dateFin
+        dateDepart
+        duree
       }
     }
   }

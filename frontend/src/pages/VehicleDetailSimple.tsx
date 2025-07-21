@@ -17,6 +17,7 @@ import {
   Calendar,
   MapPin,
 } from "lucide-react";
+import { useVehicleReservation } from "@/hooks/useVehicleReservation";
 
 // Fonction pour décoder l'ID Relay
 const decodeRelayId = (relayId: string): string => {
@@ -99,6 +100,8 @@ const VehicleDetailSimple = () => {
   const [dateFin, setDateFin] = useState<string>("");
   const [error, setError] = useState<string | null>(null);
 
+  const { createReservation, cancelReservation, checkAvailability} = useVehicleReservation();
+
   // Essayer d'abord avec l'ID décodé
   const {
     loading: loading1,
@@ -143,6 +146,23 @@ const VehicleDetailSimple = () => {
       setError("Veuillez sélectionner des dates valides");
       return;
     }
+
+    const reservationData = {
+      vehiculeId : data.vehicule.id,
+      dateDebut : dateDebut,
+      dateFin : dateFin,
+      nombrePersonnes : 0,
+      commentaires : "",
+      prixTotal:
+        Math.ceil(
+          (new Date(dateFin).getTime() - new Date(dateDebut).getTime()) /
+            (1000 * 60 * 60 * 24)
+        ) * data.vehicule.prix,
+    }
+    
+    // console.log("Reservation Data:", reservationData)
+
+    createReservation(reservationData)
 
     // Simulation de réservation
     setError(null);

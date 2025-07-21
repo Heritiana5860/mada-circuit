@@ -1,0 +1,79 @@
+services:
+  frontend:
+    build:
+      context: ./frontend
+      target: development
+    ports:
+      - "5173:5173"
+    volumes:
+      - ./frontend:/app:cached
+      - frontend_node_modules:/app/node_modules
+    environment:
+      VITE_API_URL: http://localhost:8000/graphql/
+      HOST: 0.0.0.0
+      CHOKIDAR_USEPOLLING: true
+      NODE_ENV: development
+    depends_on:
+      - backend
+    restart: always
+    networks:
+      - app-network
+
+  backend:
+    build: ./backend
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./backend/:/app:cached
+    environment:
+      DEBUG: 1
+      DJANGO_ALLOWED_HOSTS: 0.0.0.0
+      DB_NAME: mada_circuit
+      DB_USER: mada_circuit
+      DB_PASSWORD: mada_circuit
+      DB_HOST: postgresql
+      DB_PORT: 5432
+    restart: always
+    networks:
+      - app-network
+
+  # postgresql:
+  #   image: postgres:15
+  #   volumes:
+  #     - postgres_data:/var/lib/postgresql/data
+  #   environment:
+  #     POSTGRES_DB: mada_circuit
+  #     POSTGRES_USER: mada_circuit
+  #     POSTGRES_PASSWORD: mada_circuit
+  #   healthcheck:
+  #     test: ["CMD-SHELL", "pg_isready -U mada_circuitT -d mada_circuit"]
+  #     interval: 10s
+  #     timeout: 5s
+  #     retries: 5
+  #   restart: always
+  #   networks:
+  #     - app-network
+
+  # pgadmin:
+  #   image: dpage/pgadmin4
+  #   container_name: mada_circuit_pgadmin
+  #   restart: always
+  #   ports:
+  #     - "8080:80"
+  #   environment:
+  #     PGADMIN_DEFAULT_EMAIL: admin@mada-circuit.org
+  #     PGADMIN_DEFAULT_PASSWORD: admin@mada-circuit
+  #   volumes:
+  #     - pgadmin-data:/var/lib/pgadmin
+  #   networks:
+  #     - app-network
+
+
+
+volumes:
+  backend:
+  frontend_node_modules:
+
+networks:
+  app-network:
+    driver: bridge

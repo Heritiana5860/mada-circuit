@@ -319,3 +319,13 @@ class FaqType(DjangoObjectType):
             'order_affichage', 'active'
         )
         interfaces = (relay.Node,)
+
+class AvailabilityTYpe(graphene.ObjectType):
+    disponible = graphene.Boolean()
+    message = graphene.String()
+    reservationsExistantes = graphene.List(ReservationType)
+
+    def resolve_reservationsExistantes(self, info):
+        
+        return 
+

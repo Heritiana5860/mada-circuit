@@ -15,7 +15,7 @@ from .types import (
     PointInteretType, TypeVehiculeType, CapaciteType, VehiculeType,
     ReservationType, GuideType, MessageType, BlogType,
     BlogCommentaireType, FaqType,
-    CircuitImageType, VehiculeImageType, DestinationImageType, BlogImageType
+    CircuitImageType, VehiculeImageType, DestinationImageType, BlogImageType, VehiculeAvailabilityType
 )
 
 class Query(graphene.ObjectType):
@@ -68,7 +68,7 @@ class Query(graphene.ObjectType):
     vehicules_by_type = graphene.List(VehiculeType, type_id=graphene.ID())
     vehicules_by_capacite = graphene.List(VehiculeType, capacite_id=graphene.ID())
     vehicules_by_price_range = graphene.List(VehiculeType, min_price=graphene.Float(), max_price=graphene.Float())
-    
+
     # Queries pour les réservations
     all_reservations = graphene.List(ReservationType)
     reservation = graphene.Field(ReservationType, id=graphene.ID())
@@ -284,6 +284,7 @@ class Query(graphene.ObjectType):
         return queryset
 
     # Resolvers pour les véhicules
+
     def resolve_all_vehicules(self, info):
         return Vehicule.objects.all().select_related('type', 'capacite').prefetch_related('images')
 

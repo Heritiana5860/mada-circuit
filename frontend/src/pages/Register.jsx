@@ -27,7 +27,7 @@ const Register = () => {
 
   // Rediriger si déjà connecté
   useEffect(() => {
-    if (isAuthenticated()) {
+    if (isAuthenticated) {
       navigate('/', { replace: true });
     }
   }, [isAuthenticated, navigate]);

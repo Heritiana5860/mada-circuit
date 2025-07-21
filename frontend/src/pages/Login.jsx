@@ -23,7 +23,7 @@ const Login = () => {
 
   // Rediriger si déjà connecté
   useEffect(() => {
-    if (isAuthenticated()) {
+    if (isAuthenticated) {
       const from = location.state?.from?.pathname || '/';
       navigate(from, { replace: true });
     }

@@ -2,8 +2,7 @@ import { Heart } from "lucide-react";
 import { useState, CSSProperties } from "react";
 import { Link } from "react-router-dom";
 import { cn } from "@/lib/utils";
-
-import { CircuitImage } from "@/types";
+import { Circuit, CircuitImage } from "@/types";
 
 interface CircuitCardProps {
   id: string;
@@ -14,8 +13,8 @@ interface CircuitCardProps {
   images?: CircuitImage[];
   className?: string;
   style?: CSSProperties;
+  circuitData?: Circuit;
 }
-
 
 const CircuitCard = ({
   id,
@@ -26,6 +25,7 @@ const CircuitCard = ({
   images,
   className,
   style,
+  circuitData,
 }: CircuitCardProps) => {
   const [isFavorite, setIsFavorite] = useState(false);
 
@@ -42,7 +42,7 @@ const CircuitCard = ({
       : "/placeholder.svg";
 
   return (
-    <Link to={`/circuits/${id}`}>
+    <Link to={`/circuits/${id}`} state={{ circuit: circuitData }}>
       <div
         className={cn(
           "rounded-lg overflow-hidden bg-card shadow-md card-hover",

@@ -1,9 +1,8 @@
-import { Heart } from 'lucide-react';
-import { useState, CSSProperties } from 'react';
-import { Link } from 'react-router-dom';
-import { cn } from '@/lib/utils';
-
-import { CircuitImage } from '@/types';
+import { Heart } from "lucide-react";
+import { useState, CSSProperties } from "react";
+import { Link } from "react-router-dom";
+import { cn } from "@/lib/utils";
+import { Circuit, CircuitImage } from "@/types";
 
 interface CircuitCardProps {
   id: string;
@@ -14,25 +13,37 @@ interface CircuitCardProps {
   images?: CircuitImage[];
   className?: string;
   style?: CSSProperties;
+  circuitData?: Circuit;
 }
 
-const CircuitCard = ({ id, title, location, duration, price, images, className, style }: CircuitCardProps) => {
+const CircuitCard = ({
+  id,
+  title,
+  location,
+  duration,
+  price,
+  images,
+  className,
+  style,
+  circuitData,
+}: CircuitCardProps) => {
   const [isFavorite, setIsFavorite] = useState(false);
-  
+
   const toggleFavorite = (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
     setIsFavorite(!isFavorite);
   };
-  
+
   // Afficher la première image de la galerie ou un placeholder
-  const imageUrl = images && images.length > 0
-    ? `http://localhost:8000/media/${images[0].image}`
-    : '/placeholder.svg';
+  const imageUrl =
+    images && images.length > 0
+      ? `http://localhost:8000/media/${images[0].image}`
+      : "/placeholder.svg";
 
   return (
-    <Link to={`/circuits/${id}`}>
-      <div 
+    <Link to={`/circuits/${id}`} state={{ circuit: circuitData }}>
+      <div
         className={cn(
           "rounded-lg overflow-hidden bg-card shadow-md card-hover",
           className
@@ -40,21 +51,23 @@ const CircuitCard = ({ id, title, location, duration, price, images, className, 
         style={style}
       >
         <div className="relative img-zoom-container">
-          <img 
+          <img
             src={imageUrl}
             alt={title}
             className="w-full h-64 object-cover img-zoom"
           />
-          <button 
+          <button
             onClick={toggleFavorite}
             className="absolute top-3 right-3 bg-background/50 hover:bg-background/80 p-2 rounded-full transition-colors backdrop-blur-sm"
-            aria-label={isFavorite ? "Remove from favorites" : "Add to favorites"}
+            aria-label={
+              isFavorite ? "Remove from favorites" : "Add to favorites"
+            }
           >
-            <Heart 
+            <Heart
               className={cn(
-                "h-5 w-5", 
+                "h-5 w-5",
                 isFavorite ? "fill-red-500 text-red-500" : "text-foreground"
-              )} 
+              )}
             />
           </button>
           <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-4">

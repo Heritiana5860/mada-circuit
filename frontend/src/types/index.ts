@@ -29,6 +29,14 @@ export interface Saison {
   dateFin: string;
 }
 
+// pointsInteret
+export interface PointsInteret {
+  id: string;
+  nom: string;
+  description: string;
+  image?: string;
+}
+
 // Types pour les circuits
 export interface CircuitImage {
   id: string;
@@ -44,6 +52,7 @@ export interface Circuit {
   difficulte: 'FACILE' | 'MOYEN' | 'DIFFICILE';
   destination: Destination;
   saison: Saison;
+  pointsInteret?: PointsInteret[];
   images?: CircuitImage[];
 }
 

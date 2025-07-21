@@ -1,0 +1,1 @@
+[{"model": "mada_journey.circuit", "pk": "9b984f08-eebf-4a62-96fb-289ef4b3ca39", "fields": {"titre": "Aventure", "description": "Description de l'aventure...", "duree": 3, "prix": "1250000.00", "image": "", "difficulte": "MOYEN", "destination": "828fed7d-057d-4744-98a5-e406df544e0e", "saison": "199422d4-3a14-4c44-944f-dd2cd51506e8"}}]

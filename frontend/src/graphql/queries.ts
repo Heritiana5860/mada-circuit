@@ -1,4 +1,4 @@
-import { gql } from '@apollo/client';
+import { gql } from "@apollo/client";
 
 // Queries pour les circuits
 export const GET_ALL_CIRCUITS = gql`
@@ -29,14 +29,18 @@ export const GET_ALL_CIRCUITS = gql`
 `;
 
 export const GET_CIRCUIT_BY_ID = gql`
-  query GetCircuitById($id: ID!) {
+  query Circuit($id: ID) {
     circuit(id: $id) {
       id
       titre
       description
       duree
       prix
+      image
       difficulte
+      reservationsCount
+      isAvailable
+      imagesCount
       images {
         id
         image
@@ -48,19 +52,25 @@ export const GET_CIRCUIT_BY_ID = gql`
         region
         pays
         image
+        circuitsCount
+        imagesCount
       }
       saison {
         id
         nom
-        description
         dateDebut
         dateFin
+        circuitsCount
+      }
+      pointsInteret {
+        id
+        nom
+        description
+        image
       }
     }
   }
 `;
-
-
 
 export const GET_CIRCUITS_BY_DESTINATION = gql`
   query GetCircuitsByDestination($destinationId: ID!) {

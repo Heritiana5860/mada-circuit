@@ -1332,6 +1332,41 @@ class DeleteBlogImage(graphene.Mutation):
         except Exception as e:
             return DeleteBlogImage(success=False, errors=[str(e)])
 
+class CheckVehicleAvailability(graphene.Mutation):
+    class Arguments:
+        vehicule_id = graphene.ID(required=True)
+        date_depart = graphene.Date(required=True)
+        date_fin = graphene.Date(required=False)
+
+    disponible = graphene.Boolean()
+    message = graphene.String()
+    reservationsExistantes = graphene.List(ReservationType)
+    def mutate(self, info, vehicule_id, date_depart, date_fin):
+        reservation = Reservation.objects.filter(vehicule_id=vehicule_id, date_depart=date_depart)
+        if reservation:
+            return CheckVehicleAvailability(disponible=False, message=f"Le vehicule n'est pas disponnible entre {date_depart} et {date_fin}", reservationsExistantes=reservation)
+        return CheckVehicleAvailability(disponible=True, message=f"Le vehicule est pas disponnible ", reservationsExistantes=None)
+
+class CreateVehiculeReservation(graphene.Mutation):
+    class Arguments:
+        vehiculeId = graphene.ID(required=True)
+        dateDebut = graphene.Date(required=True)
+        dateFin = graphene.Date(required=True)
+        nombrePersonnes = graphene.Int(required=True)
+        prixTotal = graphene.Float(required=False)
+        commentaires = graphene.String(required=False)
+
+    id = graphene.ID()
+    dateReservation = graphene.Date()
+    dateDebut = graphene.Date()
+    dateFin= graphene.Date()
+    nombrePersonnes = graphene.Int()
+    prixTotal = graphene.Float()
+    statut  = graphene.String()
+    vehicule = graphene.Field(VehiculeType)
+
+    
+
 # Classe principale des mutations
 class Mutation(graphene.ObjectType):
     # Mutations d'authentification
@@ -1404,3 +1439,5 @@ class Mutation(graphene.ObjectType):
     create_blog_image = CreateBlogImage.Field()
     update_blog_image = UpdateBlogImage.Field()
     delete_blog_image = DeleteBlogImage.Field()
+    check_vehicle_availability = CheckVehicleAvailability.Field()
+

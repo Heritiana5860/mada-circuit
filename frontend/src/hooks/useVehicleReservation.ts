@@ -26,7 +26,7 @@ interface CreateReservationData {
 
 interface CheckAvailabilityData {
   vehiculeId: string;
-  dateDebut: string;
+  dateDepart: string;
   dateFin: string;
 }
 
@@ -47,7 +47,7 @@ export const useVehicleReservation = (): UseVehicleReservationReturn => {
       const availabilityResult = await checkAvailabilityMutation({
         variables: {
           vehiculeId: data.vehiculeId,
-          dateDebut: data.dateDebut,
+          dateDepart: data.dateDebut,
           dateFin: data.dateFin,
         },
       });

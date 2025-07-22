@@ -22,6 +22,7 @@ import ObjectifsAssociationPage from "./pages/ObjectifsAssociationPage";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import Profile from "./pages/Profile";
+import PageGuide from "./pages/guide/PageGuide";
 
 const queryClient = new QueryClient();
 
@@ -37,37 +38,62 @@ const App = () => (
               <Route path="/" element={<Index />} />
 
               {/* Routes d'authentification */}
-              <Route path="/login" element={
-                <ProtectedRoute requireAuth={false}>
-                  <Login />
-                </ProtectedRoute>
-              } />
-              <Route path="/register" element={
-                <ProtectedRoute requireAuth={false}>
-                  <Register />
-                </ProtectedRoute>
-              } />
+              <Route
+                path="/login"
+                element={
+                  <ProtectedRoute requireAuth={false}>
+                    <Login />
+                  </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/register"
+                element={
+                  <ProtectedRoute requireAuth={false}>
+                    <Register />
+                  </ProtectedRoute>
+                }
+              />
 
               {/* Routes publiques */}
               <Route path="/circuits" element={<Circuits />} />
               <Route path="/circuits/:id" element={<CircuitDetail />} />
-              <Route path="/voyages-sur-mesure" element={<VoyagesSurMesure />} />
-              <Route path="/sur-mesure" element={<Navigate to="/voyages-sur-mesure" replace />} />
+              <Route
+                path="/voyages-sur-mesure"
+                element={<VoyagesSurMesure />}
+              />
+              <Route
+                path="/sur-mesure"
+                element={<Navigate to="/voyages-sur-mesure" replace />}
+              />
               <Route path="/location-4x4" element={<Location4x4 />} />
-              <Route path="/location-4x4/:id" element={<VehicleDetailSimple />} />
+              <Route
+                path="/location-4x4/:id"
+                element={<VehicleDetailSimple />}
+              />
               <Route path="/pangalanes" element={<PangalanesPage />} />
-              <Route path="/programme-solidaire" element={<ProgrammeSolidairePage />} />
-              <Route path="/objectif-association" element={<ObjectifsAssociationPage /> }/>
+              <Route
+                path="/programme-solidaire"
+                element={<ProgrammeSolidairePage />}
+              />
+              <Route
+                path="/objectif-association"
+                element={<ObjectifsAssociationPage />}
+              />
               <Route path="/blog" element={<Blog />} />
               <Route path="/blog/:id" element={<BlogPost />} />
               <Route path="/contact" element={<Contact />} />
+              <Route path="/guides" element={<PageGuide />} />
 
               {/* Routes protégées */}
-              <Route path="/profile" element={
-                <ProtectedRoute>
-                  <Profile />
-                </ProtectedRoute>
-              } />
+              <Route
+                path="/profile"
+                element={
+                  <ProtectedRoute>
+                    <Profile />
+                  </ProtectedRoute>
+                }
+              />
 
               <Route path="*" element={<NotFound />} />
             </Routes>

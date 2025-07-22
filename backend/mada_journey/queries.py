@@ -8,14 +8,14 @@ from .models import (
     TypeVehicule, Capacite, Vehicule, Reservation, Guide,
     Message, Blog, BlogCommentaire, Faq,
     CircuitImage, VehiculeImage, DestinationImage, BlogImage,
-    StatutReservation, EtatVehicule
+    EtatVehicule
 )
 from .types import (
     UtilisateurType, DestinationType, SaisonType, CircuitType,
     PointInteretType, TypeVehiculeType, CapaciteType, VehiculeType,
     ReservationType, GuideType, MessageType, BlogType,
     BlogCommentaireType, FaqType,
-    CircuitImageType, VehiculeImageType, DestinationImageType, BlogImageType, VehiculeAvailabilityType
+    CircuitImageType, VehiculeImageType, DestinationImageType, BlogImageType
 )
 
 class Query(graphene.ObjectType):
@@ -225,7 +225,7 @@ class Query(graphene.ObjectType):
         return Circuit.objects.annotate(
             confirmed_reservations=graphene.Count(
                 'reservations',
-                filter=Q(reservations__statut=StatutReservation.CONFIRMEE)
+                filter=Q(reservations__statut=Reservation.ReservationStatus.CONFIRMEE)
             )
         ).filter(confirmed_reservations__lt=10).select_related('destination', 'saison')
     
@@ -339,10 +339,10 @@ class Query(graphene.ObjectType):
         return queryset
 
     def resolve_pending_reservations(self, info):
-        return Reservation.objects.filter(statut=StatutReservation.EN_ATTENTE).select_related('utilisateur', 'circuit', 'vehicule')
+        return Reservation.objects.filter(statut=Reservation.ReservationStatus.EN_ATTENTE).select_related('utilisateur', 'circuit', 'vehicule')
 
     def resolve_confirmed_reservations(self, info):
-        return Reservation.objects.filter(statut=StatutReservation.CONFIRMEE).select_related('utilisateur', 'circuit', 'vehicule')
+        return Reservation.objects.filter(statut=Reservation.ReservationStatus.CONFIRMEE).select_related('utilisateur', 'circuit', 'vehicule')
 
     # Resolvers pour les guides
     def resolve_all_guides(self, info):

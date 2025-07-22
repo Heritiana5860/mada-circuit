@@ -148,25 +148,26 @@ const VehicleDetailSimple = () => {
     }
 
     const reservationData = {
-      vehiculeId : data.vehicule.id,
-      dateDebut : dateDebut,
-      dateFin : dateFin,
+      utilisateurId: "2ed02fd7-adde-4a00-b081-516dfb7a8609",
+      vehiculeId : "3bbba46b-4c0c-41a6-98f7-9911a3fc6950",
+      dateDepart : new Date(dateDebut).toISOString().split('T')[0],
+      dateFin : new Date(dateFin).toISOString().split('T')[0],
       nombrePersonnes : 0,
-      commentaires : "",
-      prixTotal:
-        Math.ceil(
+      commentaire : "",
+      budget:
+        (Math.ceil(
           (new Date(dateFin).getTime() - new Date(dateDebut).getTime()) /
             (1000 * 60 * 60 * 24)
-        ) * data.vehicule.prix,
+        ) * data.vehicule.prix).toString(),
     }
     
-    // console.log("Reservation Data:", reservationData)
+    console.log("Reservation Data:", reservationData)
 
     createReservation(reservationData)
 
     // Simulation de réservation
     setError(null);
-    alert(
+    console.log(
       `Réservation simulée pour le véhicule ${data?.vehicule.marque} ${data?.vehicule.modele} du ${dateDebut} au ${dateFin}`
     );
   };
@@ -212,6 +213,7 @@ const VehicleDetailSimple = () => {
       </div>
     );
 
+  
   const vehicle = data.vehicule;
   console.log(`url: http://localhost:8000/media/${vehicle.images[0].image}`);
 

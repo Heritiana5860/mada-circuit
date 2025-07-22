@@ -22,6 +22,7 @@ import ObjectifsAssociationPage from "./pages/ObjectifsAssociationPage";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import Profile from "./pages/Profile";
+import Reservation from "./pages/Reservation";
 
 const queryClient = new QueryClient();
 
@@ -61,6 +62,7 @@ const App = () => (
               <Route path="/blog" element={<Blog />} />
               <Route path="/blog/:id" element={<BlogPost />} />
               <Route path="/contact" element={<Contact />} />
+              <Route path="/reservations" element={<Reservation />} />
 
               {/* Routes protégées */}
               <Route path="/profile" element={
@@ -68,6 +70,7 @@ const App = () => (
                   <Profile />
                 </ProtectedRoute>
               } />
+
 
               <Route path="*" element={<NotFound />} />
             </Routes>

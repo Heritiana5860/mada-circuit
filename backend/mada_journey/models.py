@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
+from django.utils.translation import gettext_lazy as _
 from django.utils import timezone
 import uuid
 import os
@@ -201,21 +202,25 @@ class Activite(models.TextChoices):
     GASTRONOMIE = 'GASTRONOMIE', 'Gastronomie'
 
 
-class StatutReservation(models.TextChoices):
-    EN_ATTENTE = 'EN_ATTENTE', 'En attente'
-    CONFIRMEE = 'CONFIRMEE', 'Confirmée'
-    ANNULEE = 'ANNULEE', 'Annulée'
-    TERMINEE = 'TERMINEE', 'Terminée'
+
 
 
 class Reservation(models.Model):
+    class ReservationStatus(models.TextChoices):
+        EN_ATTENTE = 'EN_ATTENTE', 'En attente'
+        CONFIRMEE = 'CONFIRMEE', 'Confirmée'
+        ANNULEE = 'ANNULEE', 'Annulée'
+        TERMINEE = 'TERMINEE', 'Terminée'
+    class ReservationType(models.TextChoices):
+        VEHICULE = "vehicule", _("Véhicule")
+        CIRUIT = "circuit", _("Circuit")
+
+
     id = models.CharField(primary_key=True, default=uuid.uuid4, editable=False, max_length=36)
-    utilisateur = models.ForeignKey(Utilisateur, on_delete=models.CASCADE, related_name='reservations')
-    circuit = models.ForeignKey(Circuit, on_delete=models.CASCADE, related_name='reservations')
-    vehicule = models.ForeignKey(Vehicule, on_delete=models.CASCADE, related_name='reservations')
+    type = models.CharField(choices=ReservationType, max_length=20, default=ReservationType.VEHICULE, verbose_name=_("Reservation Type"))
     date_reservation = models.DateTimeField(default=timezone.now)
     date_depart = models.DateTimeField()
-    statut = models.CharField(max_length=20, choices=StatutReservation.choices, default=StatutReservation.EN_ATTENTE)
+    statut = models.CharField(max_length=20, choices=ReservationStatus.choices, default=ReservationStatus.EN_ATTENTE)
     duree = models.IntegerField()
     nombre_personnes = models.IntegerField()
     hebergement = models.CharField(max_length=20, choices=Hebergement.choices, default=Hebergement.STANDARD)
@@ -226,6 +231,11 @@ class Reservation(models.Model):
     email = models.EmailField()
     telephone = models.CharField(max_length=20)
     commentaire = models.TextField(blank=True, null=True)
+
+    utilisateur = models.ForeignKey(Utilisateur, on_delete=models.CASCADE, related_name='reservations')
+    circuit = models.ForeignKey(Circuit, null=True, on_delete=models.CASCADE, related_name='reservations')
+    vehicule = models.ForeignKey(Vehicule, null=True, on_delete=models.CASCADE, related_name='reservations')
+
     
     def __str__(self):
         return f"Réservation {self.id} - {self.nom} {self.prenom}"

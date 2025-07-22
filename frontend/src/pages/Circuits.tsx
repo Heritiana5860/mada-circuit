@@ -26,6 +26,7 @@ import {
 import { GET_ALL_CIRCUITS, GET_ALL_DESTINATIONS } from "@/graphql/queries";
 import { Circuit } from "@/types";
 import { Alert, AlertDescription } from "@/components/ui/alert";
+import CarouselHeader from "@/components/CarouselHeader";
 
 const Circuits = () => {
   const [selectedRegion, setSelectedRegion] = useState<string>("all");
@@ -34,6 +35,16 @@ const Circuits = () => {
   const [showFilters, setShowFilters] = useState(false);
   const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
   const [sortBy, setSortBy] = useState("popular");
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
+
+  // Images de fond pour le carousel (remplacez par vos vraies images)
+  const backgroundImages = [
+    "/doubo.jpg",
+    "/rano.jpg",
+    "/trano.png",
+    "/gidro.png",
+    "/jus.jpg"
+  ];
 
   // Filtres avancés
   const [filters, setFilters] = useState({
@@ -55,6 +66,33 @@ const Circuits = () => {
     window.scrollTo(0, 0);
     document.title = "Circuits Touristiques à Madagascar | Madagascar Voyage";
   }, []);
+
+  // Auto-rotation du carousel
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentImageIndex(
+        (prevIndex) => (prevIndex + 1) % backgroundImages.length
+      );
+    }, 5000); // Change d'image toutes les 5 secondes
+
+    return () => clearInterval(interval);
+  }, [backgroundImages.length]);
+
+  const goToSlide = (index) => {
+    setCurrentImageIndex(index);
+  };
+
+  const goToPrevious = () => {
+    setCurrentImageIndex((prevIndex) =>
+      prevIndex === 0 ? backgroundImages.length - 1 : prevIndex - 1
+    );
+  };
+
+  const goToNext = () => {
+    setCurrentImageIndex(
+      (prevIndex) => (prevIndex + 1) % backgroundImages.length
+    );
+  };
 
   // Filtrage et recherche des circuits
   useEffect(() => {
@@ -118,7 +156,7 @@ const Circuits = () => {
       }
 
       // Tri des résultats
-      circuits.sort((a: Circuit, b: Circuit) => {
+      circuits = [...circuits].sort((a: Circuit, b: Circuit) => {
         switch (sortBy) {
           case "price-low":
             return a.prix - b.prix;
@@ -209,43 +247,14 @@ const Circuits = () => {
 
       <main className="flex-grow">
         {/* Section Hero */}
-        <section className="bg-gradient-to-r from-primary to-primary/80 text-white pt-32 pb-16">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="text-center max-w-4xl mx-auto">
-              <h1 className="text-4xl md:text-6xl font-bold mb-6">
-                Circuits Touristiques à{" "}
-                <span className="text-yellow-300">Madagascar</span>
-              </h1>
-              <p className="text-xl text-primary-foreground/90 mb-8">
-                Explorez nos circuits soigneusement conçus pour vous faire
-                découvrir les merveilles naturelles, la faune unique et la
-                culture fascinante de Madagascar.
-              </p>
-
-              {/* Statistiques */}
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-12">
-                <div className="text-center">
-                  <div className="text-3xl font-bold mb-2">
-                    {circuitsData?.allCircuits?.length || 0}
-                  </div>
-                  <div className="text-primary-foreground/80">
-                    Circuits disponibles
-                  </div>
-                </div>
-                <div className="text-center">
-                  <div className="text-3xl font-bold mb-2">4.8</div>
-                  <div className="text-primary-foreground/80">Note moyenne</div>
-                </div>
-                <div className="text-center">
-                  <div className="text-3xl font-bold mb-2">500+</div>
-                  <div className="text-primary-foreground/80">
-                    Voyageurs satisfaits
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
+        <CarouselHeader
+          backgroundImages={backgroundImages}
+          circuitsData={circuitsData}
+          currentImageIndex={currentImageIndex}
+          goToNext={goToNext}
+          goToPrevious={goToPrevious}
+          goToSlide={goToSlide}
+        />
 
         {/* Section filtres et recherche */}
         <section className="bg-white shadow-sm sticky top-0 z-40 border-b">

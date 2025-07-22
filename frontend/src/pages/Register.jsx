@@ -107,7 +107,7 @@ const Register = () => {
         <div 
           className="w-full h-full bg-cover bg-center bg-fixed opacity-20"
           style={{
-            backgroundImage: "linear-gradient(to bottom, rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.1)), url('/canal_bac.JPG')"
+            backgroundImage: "linear-gradient(to bottom, rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.1)), url('/canal_bac.jpg')"
           }}
         />
       </div>

@@ -1,5 +1,4 @@
-
-import TestimonialCard from './TestimonialCard';
+import TestimonialCard from "./TestimonialCard";
 
 const Testimonials = () => {
   const testimonials = [
@@ -30,23 +29,30 @@ const Testimonials = () => {
     <section className="bg-primary/5 py-20">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center max-w-3xl mx-auto mb-12">
-          <span className="text-sm font-medium text-primary">Témoignages</span>
-          <h2 className="text-3xl md:text-4xl font-bold mt-2 mb-4">
+          <div className="inline-flex items-center px-4 py-2 bg-gradient-to-r from-blue-100 to-purple-100 rounded-full mb-6">
+            <span className="text-sm font-semibold bg-gradient-to-r from-primary via-accent to-secondary bg-clip-text text-transparent">
+              Témoignages
+            </span>
+          </div>
+
+          <h2 className="text-4xl md:text-6xl font-bold mb-6 leading-tight">
             Ce que nos clients disent
           </h2>
-          <p className="text-muted-foreground">
-            Découvrez les expériences de nos clients qui ont exploré Madagascar avec nos services 
-            et ont vécu des aventures inoubliables.
+          <p className="text-xl text-gray-600 leading-relaxed max-w-3xl mx-auto">
+            Découvrez les expériences de nos clients qui ont exploré Madagascar
+            avec nos services et ont vécu des aventures inoubliables.
           </p>
         </div>
-        
+
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {testimonials.map((testimonial, index) => (
             <TestimonialCard
               key={index}
               {...testimonial}
               className="animate-fade-in-up"
-              style={{ animationDelay: `${index * 0.1}s` } as React.CSSProperties}
+              style={
+                { animationDelay: `${index * 0.1}s` } as React.CSSProperties
+              }
             />
           ))}
         </div>

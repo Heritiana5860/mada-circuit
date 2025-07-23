@@ -16,12 +16,13 @@ interface UseVehicleReservationReturn {
 }
 
 interface CreateReservationData {
-  vehiculeId: string;
-  dateDebut: string;
-  dateFin: string;
+  utilisateurId: String;
+  vehiculeId: String;
+  dateDepart: String;
+  dateFin: String;
   nombrePersonnes: number;
-  prixTotal: number;
-  commentaires?: string;
+  budget: String;
+  commentaire?: String;
 }
 
 interface CheckAvailabilityData {
@@ -47,7 +48,7 @@ export const useVehicleReservation = (): UseVehicleReservationReturn => {
       const availabilityResult = await checkAvailabilityMutation({
         variables: {
           vehiculeId: data.vehiculeId,
-          dateDepart: data.dateDebut,
+          dateDepart: data.dateDepart,
           dateFin: data.dateFin,
         },
       });
@@ -60,6 +61,8 @@ export const useVehicleReservation = (): UseVehicleReservationReturn => {
       const result = await createReservationMutation({
         variables: data,
       });
+
+      console.log('Reservation created:', result.data);
 
       return result.data.createVehicleReservation;
     } catch (err) {

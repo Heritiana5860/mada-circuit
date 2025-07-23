@@ -22,6 +22,7 @@ import ObjectifsAssociationPage from "./pages/ObjectifsAssociationPage";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import Profile from "./pages/Profile";
+import Reservation from "./pages/Reservation";
 import PageGuide from "./pages/guide/PageGuide";
 import PageGuideProfile from "./pages/guide/PageGuideProfile";
 
@@ -84,6 +85,7 @@ const App = () => (
               <Route path="/blog" element={<Blog />} />
               <Route path="/blog/:id" element={<BlogPost />} />
               <Route path="/contact" element={<Contact />} />
+              <Route path="/reservations" element={<Reservation />} />
               <Route path="/guides" element={<PageGuide />} />
               <Route path="/guidesprofile/:id" element={<PageGuideProfile />} />
 
@@ -96,6 +98,7 @@ const App = () => (
                   </ProtectedRoute>
                 }
               />
+
 
               <Route path="*" element={<NotFound />} />
             </Routes>

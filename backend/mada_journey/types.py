@@ -7,7 +7,7 @@ from .models import (
     TypeVehicule, Capacite, Vehicule, Reservation, Guide,
     Message, Blog, BlogCommentaire, Faq,
     CircuitImage, VehiculeImage, DestinationImage, BlogImage,
-    Role, Difficulte, EtatVehicule, Hebergement, Activite, StatutReservation
+    Role, Difficulte, EtatVehicule, Hebergement, Activite
 )
 
 User = get_user_model()
@@ -43,10 +43,10 @@ class ActiviteEnum(graphene.Enum):
     GASTRONOMIE = Activite.GASTRONOMIE
 
 class StatutReservationEnum(graphene.Enum):
-    EN_ATTENTE = StatutReservation.EN_ATTENTE
-    CONFIRMEE = StatutReservation.CONFIRMEE
-    ANNULEE = StatutReservation.ANNULEE
-    TERMINEE = StatutReservation.TERMINEE
+    EN_ATTENTE = Reservation.ReservationStatus.EN_ATTENTE
+    CONFIRMEE = Reservation.ReservationStatus.CONFIRMEE
+    ANNULEE = Reservation.ReservationStatus.ANNULEE
+    TERMINEE = Reservation.ReservationStatus.TERMINEE
 
 # Types GraphQL pour les galeries d'images
 class CircuitImageType(DjangoObjectType):
@@ -145,7 +145,7 @@ class CircuitType(DjangoObjectType):
 
     def resolve_is_available(self, info):
         # Logique pour déterminer si le circuit est disponible
-        return self.reservations.filter(statut=StatutReservation.CONFIRMEE).count() < 10
+        return self.reservations.filter(statut=Reservation.ReservationStatus.CONFIRMEE).count() < 10
 
     def resolve_images(self, info):
         return self.images.all().order_by('ordre')

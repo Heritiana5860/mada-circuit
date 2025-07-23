@@ -15,7 +15,7 @@ from .types import (
     PointInteretType, TypeVehiculeType, CapaciteType, VehiculeType,
     ReservationType, GuideType, MessageType, BlogType,
     BlogCommentaireType, FaqType,
-    CircuitImageType, VehiculeImageType, DestinationImageType, BlogImageType, VehiculeAvailabilityType
+    CircuitImageType, VehiculeImageType, DestinationImageType, BlogImageType
 )
 
 class Query(graphene.ObjectType):

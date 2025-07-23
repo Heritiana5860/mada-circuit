@@ -1347,6 +1347,24 @@ class CheckVehicleAvailability(graphene.Mutation):
             return CheckVehicleAvailability(disponible=False, message=f"Le vehicule n'est pas disponnible entre {date_depart} et {date_fin}", reservationsExistantes=reservation)
         return CheckVehicleAvailability(disponible=True, message=f"Le vehicule est pas disponnible ", reservationsExistantes=None)
 
+# class CreateVehiculeReservation(graphene.Mutation):
+#     class Arguments:
+#         vehiculeId = graphene.ID(required=True)
+#         dateDebut = graphene.Date(required=True)
+#         dateFin = graphene.Date(required=True)
+#         nombrePersonnes = graphene.Int(required=True)
+#         prixTotal = graphene.Float(required=False)
+#         commentaires = graphene.String(required=False)
+
+#     id = graphene.ID()
+#     dateReservation = graphene.Date()
+#     dateDebut = graphene.Date()
+#     dateFin= graphene.Date()
+#     nombrePersonnes = graphene.Int()
+#     prixTotal = graphene.Float()
+#     statut  = graphene.String()
+#     vehicule = graphene.Field(VehiculeType)
+
 class CreateVehiculeReservation(graphene.Mutation):
     class Arguments:
         vehiculeId = graphene.ID(required=True)
@@ -1359,11 +1377,44 @@ class CreateVehiculeReservation(graphene.Mutation):
     id = graphene.ID()
     dateReservation = graphene.Date()
     dateDebut = graphene.Date()
-    dateFin= graphene.Date()
+    dateFin = graphene.Date()
     nombrePersonnes = graphene.Int()
     prixTotal = graphene.Float()
-    statut  = graphene.String()
+    statut = graphene.String()
     vehicule = graphene.Field(VehiculeType)
+
+    # AJOUTEZ CETTE MÉTHODE :
+    def mutate(self, info, vehiculeId, dateDebut, dateFin, nombrePersonnes, prixTotal=None, commentaires=None):
+        try:
+            # Récupérer le véhicule
+            vehicule = Vehicule.objects.get(pk=vehiculeId)
+            
+            # Créer la réservation
+            reservation = Reservation.objects.create(
+                vehicule=vehicule,
+                dateDebut=dateDebut,
+                dateFin=dateFin,
+                nombrePersonnes=nombrePersonnes,
+                prixTotal=prixTotal,
+                commentaires=commentaires,
+                statut='EN_ATTENTE'  # ou votre statut par défaut
+            )
+            
+            return CreateVehiculeReservation(
+                id=reservation.id,
+                dateReservation=reservation.dateReservation,
+                dateDebut=reservation.dateDebut,
+                dateFin=reservation.dateFin,
+                nombrePersonnes=reservation.nombrePersonnes,
+                prixTotal=reservation.prixTotal,
+                statut=reservation.statut,
+                vehicule=reservation.vehicule
+            )
+            
+        except Vehicule.DoesNotExist:
+            raise Exception('Véhicule non trouvé')
+        except Exception as e:
+            raise Exception(f'Erreur lors de la création de la réservation: {str(e)}')
 
     
 

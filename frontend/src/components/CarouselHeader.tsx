@@ -2,9 +2,12 @@ const CarouselHeader = ({
   backgroundImages,
   currentImageIndex,
   circuitsData,
+  titre,
+  description,
   goToSlide,
   goToPrevious,
   goToNext,
+  showCircuitsCount = true,
 }) => {
   return (
     <section className="relative py-10 overflow-hidden">
@@ -21,6 +24,7 @@ const CarouselHeader = ({
               backgroundSize: "cover",
               backgroundPosition: "center",
               backgroundRepeat: "no-repeat",
+              filter: "brightness(0.7)",
             }}
           />
         ))}
@@ -33,24 +37,31 @@ const CarouselHeader = ({
       <div className="relative z-10 h-full flex items-center">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
           <div className="text-center max-w-4xl mx-auto text-white">
-            <h1 className="text-4xl md:text-6xl font-bold mb-6 drop-shadow-lg">
-              Circuits Touristiques à{" "}
-              <span className="text-yellow-300">Madagascar</span>
-            </h1>
+            <h1
+              className="text-4xl md:text-6xl font-bold mb-6 drop-shadow-lg"
+              dangerouslySetInnerHTML={{ __html: titre }}
+            />
+
             <p className="text-xl text-white/90 mb-8 drop-shadow-md">
-              Explorez nos circuits soigneusement conçus pour vous faire
-              découvrir les merveilles naturelles, la faune unique et la culture
-              fascinante de Madagascar.
+              {description}
             </p>
 
             {/* Statistiques */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-12">
-              <div className="text-center bg-white/10 backdrop-blur-sm rounded-lg p-6 border border-white/20">
-                <div className="text-3xl font-bold mb-2">
-                  {circuitsData?.allCircuits?.length || 0}
+            <div
+              className={`grid grid-cols-1 gap-6 mt-12 ${
+                showCircuitsCount
+                  ? "grid-cols-1 md:grid-cols-3"
+                  : "grid-cols-1 md:grid-cols-2"
+              }`}
+            >
+              {showCircuitsCount && (
+                <div className="text-center bg-white/10 backdrop-blur-sm rounded-lg p-6 border border-white/20">
+                  <div className="text-3xl font-bold mb-2">
+                    {circuitsData?.allCircuits?.length || 0}
+                  </div>
+                  <div className="text-white/80">Circuits disponibles</div>
                 </div>
-                <div className="text-white/80">Circuits disponibles</div>
-              </div>
+              )}
               <div className="text-center bg-white/10 backdrop-blur-sm rounded-lg p-6 border border-white/20">
                 <div className="text-3xl font-bold mb-2">4.8</div>
                 <div className="text-white/80">Note moyenne</div>

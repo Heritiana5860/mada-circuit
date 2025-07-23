@@ -23,6 +23,7 @@ import Login from "./pages/Login";
 import Register from "./pages/Register";
 import Profile from "./pages/Profile";
 import PageGuide from "./pages/guide/PageGuide";
+import PageGuideProfile from "./pages/guide/PageGuideProfile";
 
 const queryClient = new QueryClient();
 
@@ -84,6 +85,7 @@ const App = () => (
               <Route path="/blog/:id" element={<BlogPost />} />
               <Route path="/contact" element={<Contact />} />
               <Route path="/guides" element={<PageGuide />} />
+              <Route path="/guidesprofile/:id" element={<PageGuideProfile />} />
 
               {/* Routes protégées */}
               <Route

@@ -43,7 +43,7 @@ const Circuits = () => {
     "/rano.jpg",
     "/trano.png",
     "/gidro.png",
-    "/jus.jpg"
+    "/jus.jpg",
   ];
 
   // Filtres avancés
@@ -251,9 +251,14 @@ const Circuits = () => {
           backgroundImages={backgroundImages}
           circuitsData={circuitsData}
           currentImageIndex={currentImageIndex}
+          titre='Circuits Touristiques à <br /> <span class="text-yellow-300">Madagascar</span>'
+          description="Explorez nos circuits soigneusement conçus pour vous faire
+              découvrir les merveilles naturelles, la faune unique et la culture
+              fascinante de Madagascar."
           goToNext={goToNext}
           goToPrevious={goToPrevious}
           goToSlide={goToSlide}
+          showCircuitsCount={true}
         />
 
         {/* Section filtres et recherche */}

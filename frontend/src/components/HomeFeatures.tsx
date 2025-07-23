@@ -8,6 +8,7 @@ import {
   ArrowRight,
 } from "lucide-react";
 import { useState } from "react";
+import { Link } from "react-router-dom";
 
 const FeatureCard = ({
   title,
@@ -16,6 +17,7 @@ const FeatureCard = ({
   index,
   isHovered,
   onHover,
+  lien,
 }) => {
   return (
     <div
@@ -57,10 +59,12 @@ const FeatureCard = ({
         </p>
 
         {/* Animated arrow */}
-        <div className="flex items-center text-blue-600 font-semibold opacity-0 group-hover:opacity-100 transition-all duration-500 transform translate-x-0 group-hover:translate-x-2">
-          <span className="mr-2">Explorer</span>
-          <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
-        </div>
+        <Link to={lien} className="group-hover:underline">
+          <div className="flex items-center text-blue-600 font-semibold opacity-0 group-hover:opacity-100 transition-all duration-500 transform translate-x-0 group-hover:translate-x-2">
+            <span className="mr-2">Explorer</span>
+            <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
+          </div>
+        </Link>
       </div>
 
       {/* Floating particles effect */}
@@ -79,36 +83,42 @@ const HomeFeatures = () => {
       description:
         "Découvrez nos circuits soigneusement conçus pour explorer les merveilles de Madagascar.",
       icon: <Map className="h-7 w-7" />,
+      lien: "/circuits",
     },
     {
       title: "Voyages Sur Mesure",
       description:
         "Créez votre propre itinéraire avec l'aide de nos experts pour une expérience unique.",
       icon: <Calendar className="h-7 w-7" />,
+      lien: "/voyages-sur-mesure",
     },
     {
       title: "Canal des Pangalanes",
       description:
         "Explorez ce canal unique de 700 km reliant Farafangana à Toamasina.",
       icon: <Compass className="h-7 w-7" />,
+      lien: "/pangalanes",
     },
     {
       title: "Location de 4x4",
       description:
         "Louez un véhicule tout-terrain pour explorer librement les paysages variés de l'île.",
       icon: <Truck className="h-7 w-7" />,
+      lien: "/location-4x4",
     },
     {
       title: "Guides Locaux",
       description:
         "Nos guides expérimentés vous feront découvrir la culture et l'histoire locales.",
       icon: <Users className="h-7 w-7" />,
+      lien: "/guides",
     },
     {
       title: "Service 5 Étoiles",
       description:
         "Nous nous engageons à offrir un service d'excellence pour un voyage sans souci.",
       icon: <Star className="h-7 w-7" />,
+      lien: "/service-5-etoiles",
     },
   ];
 
@@ -164,6 +174,7 @@ const HomeFeatures = () => {
                 index={index}
                 isHovered={hoveredCard === index}
                 onHover={setHoveredCard}
+                lien={feature.lien}
               />
             </div>
           ))}

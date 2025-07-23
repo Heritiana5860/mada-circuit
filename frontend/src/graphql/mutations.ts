@@ -1,4 +1,4 @@
-import { gql } from '@apollo/client';
+import { gql } from "@apollo/client";
 
 // Mutation pour créer une réservation de véhicule
 export const CREATE_VEHICLE_RESERVATION = gql`
@@ -8,7 +8,7 @@ export const CREATE_VEHICLE_RESERVATION = gql`
     $dateDepart: Date!
     $dateFin: Date!
     $nombrePersonnes: Int!
-    $budget: String!
+    $budget: String
     $commentaire: String
   ) {
     createVehiculeReservation(
@@ -23,21 +23,21 @@ export const CREATE_VEHICLE_RESERVATION = gql`
       success
       message
       reservation {
-          id
-          dateReservation
-          dateDepart
-          statut
-          duree
-          nombrePersonnes
-          hebergement
-          activite
-          budget
-          nom
-          prenom
-          email
-          telephone
-          commentaire
-          prixTotal
+        id
+        dateReservation
+        dateDepart
+        statut
+        duree
+        nombrePersonnes
+        hebergement
+        activite
+        budget
+        nom
+        prenom
+        email
+        telephone
+        commentaire
+        prixTotal
       }
     }
   }
@@ -73,4 +73,4 @@ export const CHECK_VEHICLE_AVAILABILITY = gql`
       }
     }
   }
-`; 
+`;

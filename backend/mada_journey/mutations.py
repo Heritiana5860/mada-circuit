@@ -22,6 +22,7 @@ from .types import (
     BlogCommentaireType, FaqType,
     CircuitImageType, VehiculeImageType, DestinationImageType, BlogImageType
 )
+from graphql_relay import from_global_id
 
 
 
@@ -1368,9 +1369,9 @@ class CheckVehicleAvailability(graphene.Mutation):
 class CreateVehiculeReservation(graphene.Mutation):
     class Arguments:
         vehicule_id = graphene.ID(required=True)
-        utilisateur_id = graphene.ID(required=True)  # Ajouté car nécessaire dans le modèle
+        utilisateur_id = graphene.ID(required=True) 
         date_depart = graphene.Date(required=True)
-        date_fin = graphene.Date(required=True)  # En jours
+        date_fin = graphene.Date(required=True)
         nombre_personnes = graphene.Int(required=True)
         budget = graphene.String(required=False)
         commentaire = graphene.String(required=False)
@@ -1384,9 +1385,15 @@ class CreateVehiculeReservation(graphene.Mutation):
                budget=None, commentaire=None):
 
         try:
+            
+            # Décoder avec la fonction Relay
+            utilisateur_type, real_utilisateur_id = from_global_id(utilisateur_id)
+            
+            print(f"DEBUG - Type: {utilisateur_type}, UUID: {real_utilisateur_id}")
+            
             # Récupération des objets nécessaires
             vehicule = Vehicule.objects.get(id=vehicule_id)
-            utilisateur = Utilisateur.objects.get(id=utilisateur_id)
+            utilisateur = Utilisateur.objects.get(id=real_utilisateur_id)
 
             duree = date_fin - date_depart
 
@@ -1394,14 +1401,18 @@ class CreateVehiculeReservation(graphene.Mutation):
 
             # Création de la réservation avec le type VEHICULE
             reservation = Reservation.objects.create(
-                type=Reservation.ReservationType.VEHICULE,  # Spécification du type
+                type=Reservation.ReservationType.VEHICULE,
                 utilisateur=utilisateur,
                 vehicule=vehicule,
-                circuit=None,  # Pas de circuit pour une réservation véhicule
+                circuit=None,
                 date_depart=date_depart,
                 duree=duree.days,
                 nombre_personnes=nombre_personnes,
                 budget=budget,
+                nom=utilisateur.nom,
+                prenom=utilisateur.prenom,
+                telephone=utilisateur.telephone,
+                email=utilisateur.email,
                 commentaire=commentaire,
                 date_reservation=timezone.now(),
                 statut=Reservation.ReservationStatus.EN_ATTENTE
@@ -1432,34 +1443,6 @@ class CreateVehiculeReservation(graphene.Mutation):
                 reservation=None,
                 success=False,
                 message=f"Erreur lors de la création de la réservation: {str(e)}"
-            )
-
-    # AJOUTEZ CETTE MÉTHODE :
-    def mutate(self, info, vehiculeId, dateDebut, dateFin, nombrePersonnes, prixTotal=None, commentaires=None):
-        try:
-            # Récupérer le véhicule
-            vehicule = Vehicule.objects.get(pk=vehiculeId)
-            
-            # Créer la réservation
-            reservation = Reservation.objects.create(
-                vehicule=vehicule,
-                dateDebut=dateDebut,
-                dateFin=dateFin,
-                nombrePersonnes=nombrePersonnes,
-                prixTotal=prixTotal,
-                commentaires=commentaires,
-                statut='EN_ATTENTE'  # ou votre statut par défaut
-            )
-            
-            return CreateVehiculeReservation(
-                id=reservation.id,
-                dateReservation=reservation.dateReservation,
-                dateDebut=reservation.dateDebut,
-                dateFin=reservation.dateFin,
-                nombrePersonnes=reservation.nombrePersonnes,
-                prixTotal=reservation.prixTotal,
-                statut=reservation.statut,
-                vehicule=reservation.vehicule
             )
             
         except Vehicule.DoesNotExist:

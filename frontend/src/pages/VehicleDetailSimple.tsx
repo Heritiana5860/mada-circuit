@@ -91,16 +91,22 @@ const generateDescription = (vehicle) => {
 const VehicleDetailSimple = () => {
   const { id: rawId } = useParams();
   const navigate = useNavigate();
-  const { isAuthenticated } = useAuth();
+  const { isAuthenticated, user } = useAuth();
 
   // Décoder l'ID si c'est un ID Relay
   const id = rawId ? decodeRelayId(rawId) : rawId;
+  const [formData, setFormData] = useState({
+    dateDebut: "",
+    dateFin: "",
+    commentaire: "",
+    personne: 1,
+  });
 
-  const [dateDebut, setDateDebut] = useState<string>("");
-  const [dateFin, setDateFin] = useState<string>("");
   const [error, setError] = useState<string | null>(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const { createReservation, cancelReservation, checkAvailability} = useVehicleReservation();
+  const { createReservation, loading: reservationLoading } =
+    useVehicleReservation();
 
   // Essayer d'abord avec l'ID décodé
   const {
@@ -136,40 +142,116 @@ const VehicleDetailSimple = () => {
     document.title = "Détails du Véhicule | Madagascar Voyage";
   }, []);
 
-  const handleReservation = () => {
+  // Fonction pour calculer le nombre de jours
+  const calculateDays = (dateDebut: string, dateFin: string): number => {
+    if (!dateDebut || !dateFin) return 0;
+    const start = new Date(dateDebut);
+    const end = new Date(dateFin);
+    const diffTime = end.getTime() - start.getTime();
+    return Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+  };
+
+  // Fonction pour calculer le prix total
+  const calculateTotal = (): number => {
+    const days = calculateDays(formData.dateDebut, formData.dateFin);
+    return days > 0 ? days * (data?.vehicule?.prix || 0) : 0;
+  };
+
+  // Gestion des changements dans le formulaire
+  const handleInputChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+
+    // Réinitialiser l'erreur quand l'utilisateur modifie les champs
+    if (error) setError(null);
+  };
+
+  // Validation du formulaire
+  const validateForm = (): boolean => {
+    if (!formData.dateDebut) {
+      setError("Veuillez sélectionner une date de début");
+      return false;
+    }
+
+    if (!formData.dateFin) {
+      setError("Veuillez sélectionner une date de fin");
+      return false;
+    }
+
+    if (new Date(formData.dateDebut) >= new Date(formData.dateFin)) {
+      setError("La date de fin doit être postérieure à la date de début");
+      return false;
+    }
+
+    if (formData.personne < 1) {
+      setError("Le nombre de personnes doit être d'au moins 1");
+      return false;
+    }
+
+    if (formData.personne > (data?.vehicule?.capacite?.nombrePlaces || 0)) {
+      setError(
+        `Le nombre de personnes ne peut pas excéder ${data?.vehicule?.capacite?.nombrePlaces} places`
+      );
+      return false;
+    }
+
+    return true;
+  };
+
+  // Gestion de la soumission du formulaire
+  const handleReservation = async (e: React.FormEvent) => {
+    e.preventDefault();
+
     if (!isAuthenticated) {
-      navigate("/login", { state: { from: `/location-4x4/${id}` } });
+      navigate("/login", { state: { from: `/location-4x4/${rawId}` } });
       return;
     }
 
-    if (!dateDebut || !dateFin) {
-      setError("Veuillez sélectionner des dates valides");
+    if (!validateForm()) {
       return;
     }
 
-    const reservationData = {
-      utilisateurId: "2ed02fd7-adde-4a00-b081-516dfb7a8609",
-      vehiculeId : "3bbba46b-4c0c-41a6-98f7-9911a3fc6950",
-      dateDepart : new Date(dateDebut).toISOString().split('T')[0],
-      dateFin : new Date(dateFin).toISOString().split('T')[0],
-      nombrePersonnes : 0,
-      commentaire : "",
-      budget:
-        (Math.ceil(
-          (new Date(dateFin).getTime() - new Date(dateDebut).getTime()) /
-            (1000 * 60 * 60 * 24)
-        ) * data.vehicule.prix).toString(),
-    }
-    
-    console.log("Reservation Data:", reservationData)
-
-    createReservation(reservationData)
-
-    // Simulation de réservation
+    setIsSubmitting(true);
     setError(null);
-    console.log(
-      `Réservation simulée pour le véhicule ${data?.vehicule.marque} ${data?.vehicule.modele} du ${dateDebut} au ${dateFin}`
-    );
+
+    try {
+      const total = calculateTotal();
+
+      const reservationData = {
+        utilisateurId: user?.id || "USER_ID_PLACEHOLDER",
+        vehiculeId: id,
+        dateDepart: formData.dateDebut,
+        dateFin: formData.dateFin,
+        nombrePersonnes: parseInt(formData.personne.toString()),
+        commentaire: formData.commentaire,
+        budget: total.toString(),
+      };
+
+      console.log("Données de réservation:", reservationData);
+      console.log("Données user:", user);
+
+      await createReservation(reservationData);
+
+      // Réinitialiser le formulaire après succès
+      setFormData({
+        dateDebut: "",
+        dateFin: "",
+        commentaire: "",
+        personne: 1,
+      });
+    } catch (err) {
+      console.error("Erreur lors de la réservation:", err);
+      setError(
+        "Une erreur s'est produite lors de la réservation. Veuillez réessayer."
+      );
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   if (loading)
@@ -213,9 +295,9 @@ const VehicleDetailSimple = () => {
       </div>
     );
 
-  
   const vehicle = data.vehicule;
-  console.log(`url: http://localhost:8000/media/${vehicle.images[0].image}`);
+  const days = calculateDays(formData.dateDebut, formData.dateFin);
+  const total = calculateTotal();
 
   return (
     <div className="min-h-screen flex flex-col">
@@ -316,17 +398,19 @@ const VehicleDetailSimple = () => {
                     Réserver ce véhicule
                   </h2>
 
-                  <div className="space-y-4">
+                  <form onSubmit={handleReservation} className="space-y-4">
                     <div>
                       <label className="block text-sm font-medium mb-2 text-gray-700">
                         Date de début
                       </label>
                       <input
                         type="date"
-                        value={dateDebut}
-                        onChange={(e) => setDateDebut(e.target.value)}
+                        name="dateDebut"
+                        value={formData.dateDebut}
+                        onChange={handleInputChange}
                         className="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                         min={new Date().toISOString().split("T")[0]}
+                        required
                       />
                     </div>
 
@@ -336,27 +420,48 @@ const VehicleDetailSimple = () => {
                       </label>
                       <input
                         type="date"
-                        value={dateFin}
-                        onChange={(e) => setDateFin(e.target.value)}
+                        name="dateFin"
+                        value={formData.dateFin}
+                        onChange={handleInputChange}
                         className="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                         min={
-                          dateDebut || new Date().toISOString().split("T")[0]
+                          formData.dateDebut ||
+                          new Date().toISOString().split("T")[0]
                         }
+                        required
                       />
                     </div>
 
-                    {dateDebut && dateFin && (
-                      <Alert
-                        variant="default"
-                        className="bg-green-50 border-green-200"
-                      >
-                        <CheckCircle className="w-4 h-4 text-green-600" />
-                        <AlertDescription className="text-green-800">
-                          Vérification de disponibilité en cours de
-                          développement. Vous pouvez procéder à la réservation.
-                        </AlertDescription>
-                      </Alert>
-                    )}
+                    <div>
+                      <label className="block text-sm font-medium mb-2 text-gray-700">
+                        Nombre de personnes
+                      </label>
+                      <input
+                        type="number"
+                        name="personne"
+                        value={formData.personne}
+                        onChange={handleInputChange}
+                        min="1"
+                        max={vehicle.capacite.nombrePlaces}
+                        placeholder="Combien de personnes ?"
+                        className="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                        required
+                      />
+                    </div>
+
+                    <div>
+                      <label className="block text-sm font-medium mb-2 text-gray-700">
+                        Message (optionnel)
+                      </label>
+                      <textarea
+                        name="commentaire"
+                        value={formData.commentaire}
+                        onChange={handleInputChange}
+                        placeholder="Ajouter un message ou une demande spéciale"
+                        className="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                        rows={3}
+                      />
+                    </div>
 
                     {error && (
                       <Alert variant="destructive">
@@ -375,19 +480,14 @@ const VehicleDetailSimple = () => {
                         </span>
                       </div>
 
-                      {dateDebut && dateFin && (
+                      {days > 0 && (
                         <>
                           <div className="flex justify-between items-center mb-4">
                             <span className="text-sm text-gray-600">
                               Nombre de jours
                             </span>
                             <span className="font-semibold">
-                              {Math.ceil(
-                                (new Date(dateFin).getTime() -
-                                  new Date(dateDebut).getTime()) /
-                                  (1000 * 60 * 60 * 24)
-                              )}{" "}
-                              jours
+                              {days} {days > 1 ? "jours" : "jour"}
                             </span>
                           </div>
                           <div className="flex justify-between items-center mb-6 p-3 bg-blue-50 rounded-lg">
@@ -395,31 +495,34 @@ const VehicleDetailSimple = () => {
                               Total
                             </span>
                             <span className="text-2xl font-bold text-blue-600">
-                              {(
-                                Math.ceil(
-                                  (new Date(dateFin).getTime() -
-                                    new Date(dateDebut).getTime()) /
-                                    (1000 * 60 * 60 * 24)
-                                ) * vehicle.prix
-                              ).toLocaleString("fr-FR")}{" "}
-                              Ar
+                              {total.toLocaleString("fr-FR")} Ar
                             </span>
                           </div>
                         </>
                       )}
 
                       <Button
+                        type="submit"
                         className="w-full bg-blue-600 hover:bg-blue-700 text-white py-3"
                         size="lg"
-                        onClick={handleReservation}
-                        disabled={!dateDebut || !dateFin}
+                        disabled={
+                          !isAuthenticated
+                            ? false
+                            : isSubmitting ||
+                              reservationLoading ||
+                              !formData.dateDebut ||
+                              !formData.dateFin ||
+                              formData.personne < 1
+                        }
                       >
-                        {!isAuthenticated
+                        {isSubmitting || reservationLoading
+                          ? "Réservation en cours..."
+                          : !isAuthenticated
                           ? "Se connecter pour réserver"
                           : "Réserver maintenant"}
                       </Button>
                     </div>
-                  </div>
+                  </form>
                 </CardContent>
               </Card>
             </div>

@@ -1,28 +1,32 @@
-import { useState } from 'react';
-import { useMutation } from '@apollo/client';
-import { 
-  CREATE_VEHICLE_RESERVATION, 
+import { useState } from "react";
+import { useMutation } from "@apollo/client";
+import {
+  CREATE_VEHICLE_RESERVATION,
   CANCEL_VEHICLE_RESERVATION,
-  CHECK_VEHICLE_AVAILABILITY 
-} from '@/graphql/mutations';
-import { DisponibiliteVehicule, ReservationVehicule } from '@/types';
+  CHECK_VEHICLE_AVAILABILITY,
+} from "@/graphql/mutations";
+import { DisponibiliteVehicule, ReservationVehicule } from "@/types";
 
 interface UseVehicleReservationReturn {
-  createReservation: (data: CreateReservationData) => Promise<ReservationVehicule>;
+  createReservation: (
+    data: CreateReservationData
+  ) => Promise<ReservationVehicule>;
   cancelReservation: (id: string) => Promise<void>;
-  checkAvailability: (data: CheckAvailabilityData) => Promise<DisponibiliteVehicule>;
+  checkAvailability: (
+    data: CheckAvailabilityData
+  ) => Promise<DisponibiliteVehicule>;
   loading: boolean;
   error: string | null;
 }
 
 interface CreateReservationData {
-  utilisateurId: String;
-  vehiculeId: String;
-  dateDepart: String;
-  dateFin: String;
+  utilisateurId: string;
+  vehiculeId: string;
+  dateDepart: string;
+  dateFin: string;
   nombrePersonnes: number;
-  budget: String;
-  commentaire?: String;
+  budget: string;
+  commentaire?: string;
 }
 
 interface CheckAvailabilityData {
@@ -39,7 +43,9 @@ export const useVehicleReservation = (): UseVehicleReservationReturn => {
   const [cancelReservationMutation] = useMutation(CANCEL_VEHICLE_RESERVATION);
   const [checkAvailabilityMutation] = useMutation(CHECK_VEHICLE_AVAILABILITY);
 
-  const createReservation = async (data: CreateReservationData): Promise<ReservationVehicule> => {
+  const createReservation = async (
+    data: CreateReservationData
+  ): Promise<ReservationVehicule> => {
     try {
       setLoading(true);
       setError(null);
@@ -50,11 +56,14 @@ export const useVehicleReservation = (): UseVehicleReservationReturn => {
           vehiculeId: data.vehiculeId,
           dateDepart: data.dateDepart,
           dateFin: data.dateFin,
+          message: data.commentaire || "",
         },
       });
 
       if (!availabilityResult.data.checkVehicleAvailability.disponible) {
-        throw new Error(availabilityResult.data.checkVehicleAvailability.message);
+        throw new Error(
+          availabilityResult.data.checkVehicleAvailability.message
+        );
       }
 
       // Créer la réservation
@@ -62,11 +71,11 @@ export const useVehicleReservation = (): UseVehicleReservationReturn => {
         variables: data,
       });
 
-      console.log('Reservation created:', result.data);
+      console.log("Reservation created:", result.data);
 
       return result.data.createVehicleReservation;
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Une erreur est survenue');
+      setError(err instanceof Error ? err.message : "Une erreur est survenue");
       throw err;
     } finally {
       setLoading(false);
@@ -82,14 +91,16 @@ export const useVehicleReservation = (): UseVehicleReservationReturn => {
         variables: { id },
       });
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Une erreur est survenue');
+      setError(err instanceof Error ? err.message : "Une erreur est survenue");
       throw err;
     } finally {
       setLoading(false);
     }
   };
 
-  const checkAvailability = async (data: CheckAvailabilityData): Promise<DisponibiliteVehicule> => {
+  const checkAvailability = async (
+    data: CheckAvailabilityData
+  ): Promise<DisponibiliteVehicule> => {
     try {
       setLoading(true);
       setError(null);
@@ -100,7 +111,7 @@ export const useVehicleReservation = (): UseVehicleReservationReturn => {
 
       return result.data.checkVehicleAvailability;
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Une erreur est survenue');
+      setError(err instanceof Error ? err.message : "Une erreur est survenue");
       throw err;
     } finally {
       setLoading(false);
@@ -114,4 +125,4 @@ export const useVehicleReservation = (): UseVehicleReservationReturn => {
     loading,
     error,
   };
-}; 
+};

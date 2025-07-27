@@ -5,47 +5,59 @@ import { Car, Fuel, Settings, Users } from "lucide-react";
 
 const Reservation = () => {
   const { user } = useAuth();
+
+  console.log("User in Reservation page:", user);
+
   return (
-    <div className="min-h-screen flex flex-col">
+    <div className="min-h-screen flex flex-col bg-gray-50">
       <NavBar />
+
       <main className="flex-grow ">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 ">
-          <div className="lg:col-span-2">
-            <h1 className="text-3xl font-bold mb-4">Réservation de véhicule</h1>
-            <div className="aspect-w-16 aspect-h-9 mb-6">
-              <img
-                src="https://en.wikipedia.org/wiki/Hyundai_Terracan#/media/File:Hyundai_Terracan_JX290_CRDi_HP_PE_Ebony_Black_(3).jpg"
-                className="object-cover w-full h-full rounded-lg"
-              />
-            </div>
+        <div className="container mx-auto px-4 py-8">
+          <h1 className="text-3xl font-bold mb-6">Réservation</h1>
+          <div className="bg-white shadow-md rounded-lg p-6">
+            <h2 className="text-xl font-semibold mb-4">
+              Détails de la Réservation
+            </h2>
+            <p className="mb-2">
+              <strong>Nom:</strong> {user?.nom}
+            </p>
+            <p className="mb-2">
+              <strong>Email:</strong> {user?.prenom}
+            </p>
+            <p className="mb-2">
+              <strong>Téléphone:</strong> {user?.email || "Non fourni"}
+            </p>
 
-            <div className="bg-gray-200 rounded-lg shadow-md p-6">
-              <h1 className="text-3xl font-bold mb-4">
-                "vehicle.marque vehicle.modele vehicle.annee"
-              </h1>
-
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
-                <div className="flex items-center">
-                  <Car className="w-5 h-5 mr-2 text-primary" />
-                  <span>vehicle.type.libelle</span>
+            <div className="mt-6">
+              <h3 className="text-lg font-semibold mb-2">
+                Options de Réservation
+              </h3>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div className="flex items-center space-x-2">
+                  <Car size={24} />
+                  <span>Véhicule</span>
                 </div>
-                <div className="flex items-center">
-                  <Users className="w-5 h-5 mr-2 text-primary" />
-                  <span> vehicle.capacite.nombrePlaces places</span>
+                <div className="flex items-center space-x-2">
+                  <Fuel size={24} />
+                  <span>Carburant</span>
                 </div>
-                <div className="flex items-center">
-                  <Settings className="w-5 h-5 mr-2 text-primary" />
-                  <span>État: vehicle.etat</span>
+                <div className="flex items-center space-x-2">
+                  <Settings size={24} />
+                  <span>Options de réglage</span>
                 </div>
-                <div className="flex items-center">
-                  <Fuel className="w-5 h-5 mr-2 text-primary" />
-                  <span>Immatriculation: vehicle.immatriculation</span>
+                <div className="flex items-center space-x-2">
+                  <Users size={24} />
+                  <span>Passagers</span>
                 </div>
               </div>
             </div>
+
+            {/* Add more reservation details or actions here */}
           </div>
         </div>
       </main>
+
       <Footer />
     </div>
   );

@@ -190,7 +190,7 @@ const HomeFeatures = () => {
         </div>
       </div>
 
-      <style jsx>{`
+      {/* <style jsx>{`
         @keyframes fade-in-up {
           from {
             opacity: 0;
@@ -206,7 +206,7 @@ const HomeFeatures = () => {
           animation: fade-in-up 0.8s ease-out forwards;
           opacity: 0;
         }
-      `}</style>
+      `}</style> */}
     </section>
   );
 };

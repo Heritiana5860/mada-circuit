@@ -475,6 +475,7 @@ const CircuitDetail = () => {
                 </Card>
               </TabsContent>
 
+              {/* Itinéraire */}
               <TabsContent value="itinerary">
                 <Card className="border-0 shadow-sm">
                   <CardContent className="p-8">

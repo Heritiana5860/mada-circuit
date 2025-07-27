@@ -7,7 +7,7 @@ from .models import (
     Utilisateur, Destination, Saison, Circuit, PointInteret,
     TypeVehicule, Capacite, Vehicule, Reservation, Guide,
     Message, Blog, BlogCommentaire, Faq,
-    CircuitImage, VehiculeImage, DestinationImage, BlogImage
+    CircuitImage, VehiculeImage, DestinationImage, BlogImage, Itineraire
 )
 
 
@@ -81,7 +81,20 @@ class SaisonAdmin(admin.ModelAdmin):
     def nombre_circuits(self, obj):
         return obj.circuits.count()
     nombre_circuits.short_description = "Circuits"
+    
+    
+class ItineraireInline(admin.TabularInline):
+    model = Itineraire
+    extra = 1
+    fields = ('titre', 'description')
+    
+@admin.register(Itineraire)
+class ItineraireAdmin(admin.ModelAdmin):
+    list_display = ('titre', 'description', 'circuit', 'nombre_circuits')
 
+    def nombre_circuits(self, obj):
+        return 1 if obj.circuit else 0
+    nombre_circuits.short_description = "Circuits"
 
 class PointInteretInline(admin.TabularInline):
     model = PointInteret
@@ -144,7 +157,7 @@ class CircuitAdmin(admin.ModelAdmin):
     list_filter = ('difficulte', 'destination', 'saison')
     search_fields = ('titre', 'description')
     readonly_fields = ('image_preview',)
-    inlines = [PointInteretInline, CircuitImageInline]
+    inlines = [PointInteretInline, CircuitImageInline, ItineraireInline]
     
     fieldsets = (
         ('Informations générales', {

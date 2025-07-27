@@ -502,7 +502,6 @@ const Circuits = () => {
                   <CircuitCard
                     key={circuit.id}
                     {...convertCircuitData(circuit)}
-                    viewMode={viewMode}
                   />
                 ))}
               </div>

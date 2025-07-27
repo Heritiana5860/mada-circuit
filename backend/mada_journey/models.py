@@ -129,6 +129,19 @@ class Circuit(models.Model):
 
     def __str__(self):
         return self.titre
+    
+class Itineraire(models.Model):
+    circuit = models.ForeignKey(Circuit, on_delete=models.CASCADE, related_name='itineraires')
+    id = models.CharField(primary_key=True, default=uuid.uuid4, editable=False, max_length=36)
+    titre = models.CharField(max_length=200, verbose_name="Titre de l'itinéraire")
+    description = models.TextField(verbose_name="Description détaillée", blank=True)
+    
+    class Meta:
+        verbose_name = "Itinéraire"
+        verbose_name_plural = "Itinéraires"
+
+    def __str__(self):
+        return f"Itinéraire pour {self.titre}"
 
 
 class PointInteret(models.Model):

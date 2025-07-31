@@ -32,6 +32,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { useEffect, useState } from "react";
 import { Circuit } from "@/types";
+import { formatPrice } from "@/helper/formatage";
 
 const CircuitDetail = () => {
   const { id } = useParams();
@@ -57,10 +58,10 @@ const CircuitDetail = () => {
 
   useEffect(() => {
     if (circuitFromState) {
-      console.log('Circuit from state:', circuitFromState);
+      console.log("Circuit from state:", circuitFromState);
       setCircuit(circuitFromState);
     } else if (dataCircuit?.circuit) {
-      console.log('Circuit from GraphQL:', dataCircuit.circuit);
+      console.log("Circuit from GraphQL:", dataCircuit.circuit);
       setCircuit(dataCircuit.circuit);
     }
   }, [circuitFromState, dataCircuit]);
@@ -182,7 +183,6 @@ const CircuitDetail = () => {
   const totalPrice = displayData.price * guestCount;
 
   console.log(`displayData: ${circuitFromState.itineraires}`);
-  
 
   return (
     <div className="min-h-screen flex flex-col bg-gray-50">
@@ -345,7 +345,7 @@ const CircuitDetail = () => {
                 <div className="bg-primary/5 p-6 rounded-xl border border-primary/10">
                   <div className="flex items-baseline gap-2 mb-2">
                     <span className="text-3xl font-bold text-primary">
-                      {displayData.price.toLocaleString()} Ar
+                      {formatPrice(displayData.price)}
                     </span>
                     <span className="text-gray-600">/personne</span>
                   </div>

@@ -3,6 +3,7 @@ import { useState, CSSProperties } from "react";
 import { Link } from "react-router-dom";
 import { cn } from "@/lib/utils";
 import { Circuit, CircuitImage } from "@/types";
+import { formatPrice } from "@/helper/formatage";
 
 interface CircuitCardProps {
   id: string;
@@ -83,7 +84,7 @@ const CircuitCard = ({
           <p className="text-muted-foreground text-sm mb-3">{location}</p>
           <div className="flex justify-between items-center">
             <span className="text-lg font-bold text-primary">
-              {price.toLocaleString()} Ar
+              {formatPrice(price)}
             </span>
             <span className="text-sm text-muted-foreground">par personne</span>
           </div>

@@ -18,6 +18,7 @@ import {
   MapPin,
 } from "lucide-react";
 import { useVehicleReservation } from "@/hooks/useVehicleReservation";
+import { formatPrice } from "@/helper/formatage";
 
 // Fonction pour décoder l'ID Relay
 const decodeRelayId = (relayId: string): string => {
@@ -476,7 +477,7 @@ const VehicleDetailSimple = () => {
                           Prix par jour
                         </span>
                         <span className="font-semibold text-lg">
-                          {vehicle.prix.toLocaleString("fr-FR")} Ar
+                          {formatPrice(vehicle.prix)}
                         </span>
                       </div>
 

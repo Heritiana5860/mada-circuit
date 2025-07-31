@@ -67,6 +67,9 @@ const Circuits = () => {
     document.title = "Circuits Touristiques à Madagascar | Madagascar Voyage";
   }, []);
 
+  console.log("circuitsData: ", circuitsData);
+  
+
   // Auto-rotation du carousel
   useEffect(() => {
     const interval = setInterval(() => {
@@ -445,19 +448,6 @@ const Circuits = () => {
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             {/* En-tête des résultats */}
             <div className="flex items-center justify-between mb-6">
-              <div>
-                <h2 className="text-2xl font-bold">
-                  {filteredCircuits.length} circuit
-                  {filteredCircuits.length !== 1 ? "s" : ""} trouvé
-                  {filteredCircuits.length !== 1 ? "s" : ""}
-                </h2>
-                {activeFiltersCount > 0 && (
-                  <p className="text-muted-foreground mt-1">
-                    Filtres actifs: {activeFiltersCount}
-                  </p>
-                )}
-              </div>
-
               {/* Badges de filtres actifs */}
               {(searchQuery ||
                 selectedRegion !== "all" ||

@@ -1,9 +1,10 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
-import { cn } from '@/lib/utils';
-import { Car, Users, Fuel } from 'lucide-react';
-import { CSSProperties } from 'react';
-import { Vehicule } from '@/types';
+import React from "react";
+import { Link } from "react-router-dom";
+import { cn } from "@/lib/utils";
+import { Car, Users, Fuel } from "lucide-react";
+import { CSSProperties } from "react";
+import { Vehicule } from "@/types";
+import { formatPrice } from "@/helper/formatage";
 
 interface VehicleCardProps {
   vehicle: Vehicule;
@@ -11,18 +12,19 @@ interface VehicleCardProps {
   style?: CSSProperties;
 }
 
-const VehicleCard: React.FC<VehicleCardProps> = ({ 
+const VehicleCard: React.FC<VehicleCardProps> = ({
   vehicle,
   className,
-  style
+  style,
 }) => {
   // Afficher la première image de la galerie ou un placeholder
-  const imageUrl = vehicle.images && vehicle.images.length > 0
-    ? `http://localhost:8000/media/${vehicle.images[0].image}`
-    : '/placeholder.svg';
+  const imageUrl =
+    vehicle.images && vehicle.images.length > 0
+      ? `http://localhost:8000/media/${vehicle.images[0].image}`
+      : "/placeholder.svg";
 
   return (
-    <div 
+    <div
       className={cn(
         "rounded-lg overflow-hidden bg-card shadow-md card-hover",
         className
@@ -41,15 +43,17 @@ const VehicleCard: React.FC<VehicleCardProps> = ({
           </span>
         </div>
       </div>
-      
+
       <div className="p-4">
         <h3 className="text-lg font-bold mb-2">{`${vehicle.marque} ${vehicle.modele} (${vehicle.annee})`}</h3>
-        
+
         <div className="flex justify-between items-center mb-4">
           <div className="flex items-center space-x-4">
             <div className="flex items-center text-muted-foreground">
               <Users className="h-4 w-4 mr-1" />
-              <span className="text-sm">{vehicle.capacite.nombrePlaces} places</span>
+              <span className="text-sm">
+                {vehicle.capacite.nombrePlaces} places
+              </span>
             </div>
             <div className="flex items-center text-muted-foreground">
               <Car className="h-4 w-4 mr-1" />
@@ -57,19 +61,17 @@ const VehicleCard: React.FC<VehicleCardProps> = ({
             </div>
           </div>
         </div>
-        
+
         <div className="flex justify-between items-center">
           <div>
             <span className="text-xl font-bold text-primary">
-              {vehicle.prix.toLocaleString()} Ar
+              {formatPrice(vehicle.prix)}
             </span>
-            <span className="text-sm text-muted-foreground ml-1">
-              /jour
-            </span>
+            <span className="text-sm text-muted-foreground ml-1">/jour</span>
           </div>
-          
-          <Link 
-            to={`/location-4x4/${vehicle.id}`} 
+
+          <Link
+            to={`/location-4x4/${vehicle.id}`}
             className="btn-secondary text-sm py-1 px-3 h-auto"
           >
             Réserver
@@ -80,4 +82,4 @@ const VehicleCard: React.FC<VehicleCardProps> = ({
   );
 };
 
-export default VehicleCard; 
+export default VehicleCard;

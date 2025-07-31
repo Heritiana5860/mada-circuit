@@ -9,8 +9,13 @@ export const GET_ALL_CIRCUITS = gql`
       description
       duree
       prix
+      inclus
+      nonInclus
       image
       difficulte
+      reservationsCount
+      isAvailable
+      imagesCount
       images {
         id
         image
@@ -24,10 +29,23 @@ export const GET_ALL_CIRCUITS = gql`
         id
         nom
       }
+      pointsInteret {
+        id
+        nom
+        description
+        type
+        tempsVisite
+        prixEntree
+      }
       itineraires {
         id
-        titre
+        jour
+        lieuDepart
+        lieuArrivee
+        distanceKm
+        dureeTrajet
         description
+        carteGps
       }
     }
   }
@@ -41,6 +59,8 @@ export const GET_CIRCUIT_BY_ID = gql`
       description
       duree
       prix
+      inclus
+      nonInclus
       image
       difficulte
       reservationsCount
@@ -56,27 +76,30 @@ export const GET_CIRCUIT_BY_ID = gql`
         description
         region
         pays
-        image
         circuitsCount
         imagesCount
       }
       saison {
         id
         nom
-        dateDebut
-        dateFin
-        circuitsCount
       }
       pointsInteret {
         id
         nom
         description
-        image
+        type
+        tempsVisite
+        prixEntree
       }
       itineraires {
         id
-        titre
+        jour
+        lieuDepart
+        lieuArrivee
+        distanceKm
+        dureeTrajet
         description
+        carteGps
       }
     }
   }

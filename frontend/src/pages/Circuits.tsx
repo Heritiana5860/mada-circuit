@@ -498,7 +498,7 @@ const Circuits = () => {
                   <div className="mb-4">
                     <Compass className="h-16 w-16 mx-auto text-gray-300" />
                   </div>
-                  <h3 className="text-xl font-semibold mb-2">
+                  <h3 className="text-xl font-sans font-semibold mb-2">
                     Aucun circuit trouvé
                   </h3>
                   <p className="text-muted-foreground mb-6">

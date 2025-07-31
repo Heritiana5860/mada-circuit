@@ -79,7 +79,7 @@ const CircuitCard = ({
         </div>
         <div className="p-4">
           <div className="flex justify-between items-start mb-2">
-            <h3 className="text-lg font-bold truncate">{title}</h3>
+            <h3 className="text-lg font-sans font-bold truncate">{title}</h3>
           </div>
           <p className="text-muted-foreground text-sm mb-3">{location}</p>
           <div className="flex justify-between items-center">

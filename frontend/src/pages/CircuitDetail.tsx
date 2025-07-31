@@ -521,14 +521,14 @@ const CircuitDetail = () => {
               <TabsContent value="overview" className="space-y-8">
                 <Card className="border-0 shadow-sm">
                   <CardContent className="p-8">
-                    <h3 className="text-2xl font-bold mb-4">
+                    <h3 className="text-2xl font-bold font-sans mb-4">
                       Description du circuit
                     </h3>
                     <p className="text-gray-600 leading-relaxed mb-6">
                       {displayData.description}
                     </p>
 
-                    <h4 className="text-xl font-bold mb-4">
+                    <h4 className="text-xl font-sans font-bold mb-4">
                       Points forts du voyage
                     </h4>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
@@ -597,7 +597,7 @@ const CircuitDetail = () => {
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
                   <Card className="border-0 shadow-sm">
                     <CardContent className="p-8">
-                      <h3 className="text-2xl font-bold mb-6 text-green-600">
+                      <h3 className="text-2xl font-sans font-bold mb-6 text-green-600">
                         Ce qui est inclus
                       </h3>
                       <ul className="space-y-3">
@@ -613,7 +613,7 @@ const CircuitDetail = () => {
 
                   <Card className="border-0 shadow-sm">
                     <CardContent className="p-8">
-                      <h3 className="text-2xl font-bold mb-6 text-red-600">
+                      <h3 className="text-2xl font-sans font-bold mb-6 text-red-600">
                         Non inclus
                       </h3>
                       <ul className="space-y-3">
@@ -636,7 +636,7 @@ const CircuitDetail = () => {
                   <CardContent className="p-8">
                     <div className="text-center py-12">
                       <Star className="h-12 w-12 mx-auto text-gray-300 mb-4" />
-                      <h3 className="text-xl font-semibold mb-2">
+                      <h3 className="text-xl font-sans font-semibold mb-2">
                         Bientôt disponible
                       </h3>
                       <p className="text-gray-500">
@@ -673,7 +673,7 @@ const CircuitDetail = () => {
                 <Button
                   variant="outline"
                   size="lg"
-                  className="flex items-center border-white text-white hover:bg-white hover:text-primary"
+                  className="flex items-center border-white text-white bg-black/20 hover:bg-white hover:text-primary"
                 >
                   <Mail className="h-5 w-5 mr-2" />
                   contact@circuits.mg

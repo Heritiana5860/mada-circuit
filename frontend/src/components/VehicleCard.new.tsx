@@ -45,7 +45,7 @@ const VehicleCard: React.FC<VehicleCardProps> = ({
       </div>
 
       <div className="p-4">
-        <h3 className="text-lg font-bold mb-2">{`${vehicle.marque} ${vehicle.modele} (${vehicle.annee})`}</h3>
+        <h3 className="text-lg font-sans font-bold mb-2">{`${vehicle.marque} ${vehicle.modele} (${vehicle.annee})`}</h3>
 
         <div className="flex justify-between items-center mb-4">
           <div className="flex items-center space-x-4">

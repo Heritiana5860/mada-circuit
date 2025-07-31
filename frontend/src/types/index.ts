@@ -46,8 +46,13 @@ export interface CircuitImage {
 // Types pour les itineraire
 export interface Itineraires {
   id: string;
-  titre: string;
+  jour: number;
+  lieuDepart: string,
+  lieuArrivee: string,
+  distanceKm?: number,
+  dureeTrajet?: number,
   description: string;
+  carteGps?: string
 }
 
 export interface Circuit {
@@ -56,6 +61,8 @@ export interface Circuit {
   description: string;
   duree: number;
   prix: number;
+  inclus: string;
+  nonInclus: string;
   difficulte: 'FACILE' | 'MOYEN' | 'DIFFICILE';
   destination: Destination;
   saison: Saison;

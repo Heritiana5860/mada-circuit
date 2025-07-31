@@ -139,50 +139,59 @@ const CircuitDetail = () => {
     );
   }
 
-  const allImages = circuit.images?.map(
-    (img) => `http://localhost:8000/media/${img.image}`
-  ) || ["/placeholder.svg"];
-  const mainImage = allImages[0];
+  // Gestion des images
+  const getCircuitImages = () => {
+    if (
+      circuit.images &&
+      Array.isArray(circuit.images) &&
+      circuit.images.length > 0
+    ) {
+      return circuit.images
+        .filter((img) => img && img.image)
+        .map((img) => {
+          const imagePath = img.image;
+          if (imagePath.startsWith("http")) {
+            return imagePath;
+          } else {
+            return `http://localhost:8000/media/${imagePath}`;
+          }
+        });
+    }
+
+    return ["/placeholder.svg"];
+  };
+
+  const allCircuitImages = getCircuitImages();
+
+  // Gestion des erreurs d'images
+  const handleImageError = (index: number) => {
+    console.warn(
+      `Erreur de chargement de l'image ${index}: ${allCircuitImages[index]}`
+    );
+
+    // Si c'est l'image principale qui a échoué, passer à la suivante
+    if (index === selectedImageIndex && allCircuitImages.length > 1) {
+      setSelectedImageIndex((prev) => (prev + 1) % allCircuitImages.length);
+    }
+  };
 
   const displayData = {
     id: circuit.id,
     title: circuit.titre,
-    image: mainImage,
+    // image: mainImage,
     location: `${circuit.destination.nom}, ${circuit.destination.region}`,
     duration: `${circuit.duree} jours`,
     price: circuit.prix,
     description: circuit.description,
     rating: 4.5,
     reviews: 24,
-    highlights: [
-      "🏞️ Exploration du Parc National de la Montagne d'Ambre",
-      "🏖️ Plages paradisiaques d'Antsiranana",
-      "🐒 Rencontre avec les lémuriens endémiques",
-      "🎨 Visite du marché artisanal d'Antsiranana",
-      "🥾 Randonnée dans les Tsingy Rouges",
-    ],
+    highlights: circuit.pointsInteret,
     itineraires: circuit.itineraires || [],
-    included: [
-      "🚗 Transport local climatisé",
-      "👨‍🏫 Guide professionnel francophone",
-      "🏨 Hébergement selon programme",
-      "🍽️ Repas mentionnés au programme",
-      "🎯 Activités prévues au programme",
-      "📋 Assistance 24h/7j",
-    ],
-    notIncluded: [
-      "✈️ Vol international",
-      "📄 Visa d'entrée",
-      "🛡️ Assurance voyage",
-      "🍴 Repas non mentionnés",
-      "🍷 Boissons alcoolisées",
-      "💰 Pourboires et dépenses personnelles",
-    ],
-    gallery: allImages,
+    included: circuit.inclus,
+    notIncluded: circuit.nonInclus,
+    gallery: allCircuitImages,
   };
   const totalPrice = displayData.price * guestCount;
-
-  console.log(`displayData: ${circuitFromState.itineraires}`);
 
   return (
     <div className="min-h-screen flex flex-col bg-gray-50">
@@ -214,12 +223,14 @@ const CircuitDetail = () => {
                     src={displayData.gallery[selectedImageIndex]}
                     alt={displayData.title}
                     className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+                    onError={() => handleImageError(selectedImageIndex)}
+                    loading="lazy"
                   />
                   <div className="absolute top-4 right-4 flex gap-2">
                     <Button
                       size="sm"
                       variant="secondary"
-                      className="bg-white/90 hover:bg-white"
+                      className="bg-white/20 hover:bg-white/40"
                       onClick={() => setIsWishlisted(!isWishlisted)}
                     >
                       <Heart
@@ -231,30 +242,27 @@ const CircuitDetail = () => {
                     <Button
                       size="sm"
                       variant="secondary"
-                      className="bg-white/90 hover:bg-white"
+                      className="bg-white/20 hover:bg-white/40"
                     >
                       <Share2 className="h-4 w-4" />
                     </Button>
                   </div>
-                  <Button
-                    size="sm"
-                    variant="secondary"
-                    className="absolute bottom-4 right-4 bg-black/50 hover:bg-black/70 text-white"
-                    onClick={() => setActiveImageModal(true)}
-                  >
-                    <Camera className="h-4 w-4 mr-2" />
-                    Voir toutes les photos
-                  </Button>
+                  {/* Indicateur du nombre d'images */}
+                  {displayData.gallery.length > 1 && (
+                    <div className="absolute bottom-4 right-4 bg-black/60 text-white px-2 py-1 rounded text-sm">
+                      {selectedImageIndex + 1} / {displayData.gallery.length}
+                    </div>
+                  )}
                 </div>
 
                 {/* Miniatures */}
                 {displayData.gallery.length > 1 && (
-                  <div className="flex gap-2 mt-4 overflow-x-auto">
-                    {displayData.gallery.slice(0, 6).map((img, index) => (
+                  <div className="flex gap-2 mt-4 overflow-x-auto pb-2">
+                    {displayData.gallery.slice(0, 8).map((img, index) => (
                       <button
                         key={index}
                         onClick={() => setSelectedImageIndex(index)}
-                        className={`flex-shrink-0 w-20 h-16 rounded-lg overflow-hidden border-2 transition-all ${
+                        className={`flex-shrink-0 w-20 h-16 rounded-lg overflow-hidden border-2 transition-all hover:scale-105 ${
                           selectedImageIndex === index
                             ? "border-primary ring-2 ring-primary/20"
                             : "border-gray-200 hover:border-gray-300"
@@ -264,13 +272,71 @@ const CircuitDetail = () => {
                           src={img}
                           alt={`Vue ${index + 1}`}
                           className="w-full h-full object-cover"
+                          onError={() =>
+                            console.warn(`Erreur miniature ${index}`)
+                          }
+                          loading="lazy"
                         />
                       </button>
                     ))}
-                    {displayData.gallery.length > 6 && (
+                    {displayData.gallery.length > 8 && (
                       <div className="flex-shrink-0 w-20 h-16 rounded-lg border-2 border-gray-200 bg-gray-100 flex items-center justify-center text-xs font-medium text-gray-600">
-                        +{displayData.gallery.length - 6}
+                        +{displayData.gallery.length - 8}
                       </div>
+                    )}
+
+                    {/* Navigation par flèches (optionnel) */}
+                    {displayData.gallery.length > 1 && (
+                      <>
+                        <button
+                          onClick={() =>
+                            setSelectedImageIndex((prev) =>
+                              prev === 0
+                                ? displayData.gallery.length - 1
+                                : prev - 1
+                            )
+                          }
+                          className="absolute left-4 top-1/2 transform -translate-y-1/2 bg-white/80 hover:bg-white p-2 rounded-full shadow-lg transition-all"
+                          aria-label="Image précédente"
+                        >
+                          <svg
+                            className="w-4 h-4"
+                            fill="none"
+                            stroke="currentColor"
+                            viewBox="0 0 24 24"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth={2}
+                              d="M15 19l-7-7 7-7"
+                            />
+                          </svg>
+                        </button>
+                        <button
+                          onClick={() =>
+                            setSelectedImageIndex(
+                              (prev) => (prev + 1) % displayData.gallery.length
+                            )
+                          }
+                          className="absolute right-4 top-1/2 transform -translate-y-1/2 bg-white/80 hover:bg-white p-2 rounded-full shadow-lg transition-all"
+                          aria-label="Image suivante"
+                        >
+                          <svg
+                            className="w-4 h-4"
+                            fill="none"
+                            stroke="currentColor"
+                            viewBox="0 0 24 24"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth={2}
+                              d="M9 5l7 7-7 7"
+                            />
+                          </svg>
+                        </button>
+                      </>
                     )}
                   </div>
                 )}
@@ -284,7 +350,7 @@ const CircuitDetail = () => {
                       <Badge variant="secondary" className="mb-2">
                         Circuit Premium
                       </Badge>
-                      <h1 className="text-3xl font-bold text-gray-900 mb-2">
+                      <h1 className="text-3xl font-bold font-sans text-gray-900 mb-2">
                         {displayData.title}
                       </h1>
                     </div>
@@ -472,7 +538,7 @@ const CircuitDetail = () => {
                           className="flex items-center p-3 bg-primary/5 rounded-lg"
                         >
                           <CheckCircle2 className="h-5 w-5 mr-3 text-primary flex-shrink-0" />
-                          <span className="text-sm">{highlight}</span>
+                          <span className="text-sm">{highlight.nom}</span>
                         </div>
                       ))}
                     </div>
@@ -484,7 +550,7 @@ const CircuitDetail = () => {
               <TabsContent value="itinerary">
                 <Card className="border-0 shadow-sm">
                   <CardContent className="p-8">
-                    <h3 className="text-2xl font-bold mb-6">
+                    <h3 className="text-2xl font-bold font-sans mb-6">
                       Itinéraire détaillé
                     </h3>
                     <div className="space-y-6">
@@ -501,9 +567,12 @@ const CircuitDetail = () => {
                                 )}
                               </div>
                               <div className="flex-grow pb-8">
-                                <h4 className="text-lg font-semibold mb-2">
-                                  {day.titre || `Jour ${index + 1}`}
+                                <h4 className="text-lg font-semibold font-sans mb-2">
+                                  {day.lieuDepart} → {day.lieuArrivee}
                                 </h4>
+                                <p className="pb-4 text-gray">
+                                  ⏱️{day.dureeTrajet}H | 🛣️{day.distanceKm} Km
+                                </p>
                                 <p className="text-gray-600">
                                   {day.description}
                                 </p>
@@ -532,10 +601,10 @@ const CircuitDetail = () => {
                         Ce qui est inclus
                       </h3>
                       <ul className="space-y-3">
-                        {displayData.included.map((item, index) => (
+                        {displayData.included.split(",").map((item, index) => (
                           <li key={index} className="flex items-start">
                             <CheckCircle2 className="h-5 w-5 mr-3 text-green-500 flex-shrink-0 mt-0.5" />
-                            <span>{item}</span>
+                            <span>{item.trim()}</span>
                           </li>
                         ))}
                       </ul>
@@ -548,12 +617,14 @@ const CircuitDetail = () => {
                         Non inclus
                       </h3>
                       <ul className="space-y-3">
-                        {displayData.notIncluded.map((item, index) => (
-                          <li key={index} className="flex items-start">
-                            <XCircle className="h-5 w-5 mr-3 text-red-500 flex-shrink-0 mt-0.5" />
-                            <span>{item}</span>
-                          </li>
-                        ))}
+                        {displayData.notIncluded
+                          .split(",")
+                          .map((item, index) => (
+                            <li key={index} className="flex items-start">
+                              <XCircle className="h-5 w-5 mr-3 text-red-500 flex-shrink-0 mt-0.5" />
+                              <span>{item.trim()}</span>
+                            </li>
+                          ))}
                       </ul>
                     </CardContent>
                   </Card>

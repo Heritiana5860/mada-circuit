@@ -16,6 +16,8 @@ import {
   XCircle,
   Calendar,
   MapPin,
+  Share2,
+  Heart,
 } from "lucide-react";
 import { useVehicleReservation } from "@/hooks/useVehicleReservation";
 import { formatPrice } from "@/helper/formatage";
@@ -105,6 +107,8 @@ const VehicleDetailSimple = () => {
 
   const [error, setError] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [selectedImageIndex, setSelectedImageIndex] = useState(0);
+  const [isWishlisted, setIsWishlisted] = useState(false);
 
   const { createReservation, loading: reservationLoading } =
     useVehicleReservation();
@@ -300,6 +304,42 @@ const VehicleDetailSimple = () => {
   const days = calculateDays(formData.dateDebut, formData.dateFin);
   const total = calculateTotal();
 
+  // Gestion des images
+  const getVehicleImages = () => {
+    if (
+      vehicle.images &&
+      Array.isArray(vehicle.images) &&
+      vehicle.images.length > 0
+    ) {
+      return vehicle.images
+        .filter((img) => img && img.image)
+        .map((img) => {
+          const imagePath = img.image;
+          if (imagePath.startsWith("http")) {
+            return imagePath;
+          } else {
+            return `http://localhost:8000/media/${imagePath}`;
+          }
+        });
+    }
+
+    return ["/placeholder.svg"];
+  };
+
+  const allVehiculeImages = getVehicleImages();
+
+  // Gestion des erreurs d'images
+  const handleImageError = (index: number) => {
+    console.warn(
+      `Erreur de chargement de l'image ${index}: ${allVehiculeImages[index]}`
+    );
+
+    // Si c'est l'image principale qui a échoué, passer à la suivante
+    if (index === selectedImageIndex && allVehiculeImages.length > 1) {
+      setSelectedImageIndex((prev) => (prev + 1) % allVehiculeImages.length);
+    }
+  };
+
   return (
     <div className="min-h-screen flex flex-col">
       <NavBar />
@@ -308,16 +348,130 @@ const VehicleDetailSimple = () => {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
             {/* Informations du véhicule */}
             <div>
-              <div className="mb-6">
-                <img
-                  src={
-                    vehicle.images
-                      ? `http://localhost:8000/media/${vehicle.images[0].image}`
-                      : "/placeholder.svg"
-                  }
-                  alt={`${vehicle.marque} ${vehicle.modele}`}
-                  className="object-cover w-full h-64 rounded-lg shadow-lg"
-                />
+              <div className="relative mb-6">
+                <div className="aspect-[4/3] relative overflow-hidden rounded-2xl group">
+                  <img
+                    src={allVehiculeImages[selectedImageIndex]}
+                    alt={`${vehicle.marque} ${vehicle.modele} - Image ${
+                      selectedImageIndex + 1
+                    }`}
+                    className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+                    onError={() => handleImageError(selectedImageIndex)}
+                    loading="lazy"
+                  />
+                  <div className="absolute top-4 right-4 flex gap-2">
+                    <Button
+                      size="sm"
+                      variant="secondary"
+                      className="bg-white/20 hover:bg-white/40"
+                      onClick={() => setIsWishlisted(!isWishlisted)}
+                    >
+                      <Heart
+                        className={`h-4 w-4 ${
+                          isWishlisted ? "fill-red-500 text-red-500" : ""
+                        }`}
+                      />
+                    </Button>
+                    <Button
+                      size="sm"
+                      variant="secondary"
+                      className="bg-white/20 hover:bg-white/40"
+                    >
+                      <Share2 className="h-4 w-4" />
+                    </Button>
+                  </div>
+
+                  {/* Indicateur du nombre d'images */}
+                  {allVehiculeImages.length > 1 && (
+                    <div className="absolute bottom-4 right-4 bg-black/60 text-white px-2 py-1 rounded text-sm">
+                      {selectedImageIndex + 1} / {allVehiculeImages.length}
+                    </div>
+                  )}
+                </div>
+
+                {/* Miniatures */}
+                {allVehiculeImages.length > 1 && (
+                  <div className="flex gap-2 mt-4 overflow-x-auto pb-2">
+                    {allVehiculeImages.slice(0, 8).map((img, index) => (
+                      <button
+                        key={index}
+                        onClick={() => setSelectedImageIndex(index)}
+                        className={`flex-shrink-0 w-20 h-16 rounded-lg overflow-hidden border-2 transition-all hover:scale-105 ${
+                          selectedImageIndex === index
+                            ? "border-primary ring-2 ring-primary/20"
+                            : "border-gray-200 hover:border-gray-300"
+                        }`}
+                      >
+                        <img
+                          src={img}
+                          alt={`Vue ${index + 1}`}
+                          className="w-full h-full object-cover"
+                          onError={() =>
+                            console.warn(`Erreur miniature ${index}`)
+                          }
+                          loading="lazy"
+                        />
+                      </button>
+                    ))}
+                    {allVehiculeImages.length > 8 && (
+                      <div className="flex-shrink-0 w-20 h-16 rounded-lg border-2 border-gray-200 bg-gray-100 flex items-center justify-center text-xs font-medium text-gray-600">
+                        +{allVehiculeImages.length - 8}
+                      </div>
+                    )}
+                  </div>
+                )}
+
+                {/* Navigation par flèches (optionnel) */}
+                {allVehiculeImages.length > 1 && (
+                  <>
+                    <button
+                      onClick={() =>
+                        setSelectedImageIndex((prev) =>
+                          prev === 0 ? allVehiculeImages.length - 1 : prev - 1
+                        )
+                      }
+                      className="absolute left-4 top-1/2 transform -translate-y-1/2 bg-white/80 hover:bg-white p-2 rounded-full shadow-lg transition-all"
+                      aria-label="Image précédente"
+                    >
+                      <svg
+                        className="w-4 h-4"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M15 19l-7-7 7-7"
+                        />
+                      </svg>
+                    </button>
+                    <button
+                      onClick={() =>
+                        setSelectedImageIndex(
+                          (prev) => (prev + 1) % allVehiculeImages.length
+                        )
+                      }
+                      className="absolute right-4 top-1/2 transform -translate-y-1/2 bg-white/80 hover:bg-white p-2 rounded-full shadow-lg transition-all"
+                      aria-label="Image suivante"
+                    >
+                      <svg
+                        className="w-4 h-4"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M9 5l7 7-7 7"
+                        />
+                      </svg>
+                    </button>
+                  </>
+                )}
               </div>
 
               <div className="bg-white rounded-lg shadow-md p-6">

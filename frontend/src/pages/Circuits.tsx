@@ -67,9 +67,6 @@ const Circuits = () => {
     document.title = "Circuits Touristiques à Madagascar | Madagascar Voyage";
   }, []);
 
-  console.log("circuitsData: ", circuitsData);
-  
-
   // Auto-rotation du carousel
   useEffect(() => {
     const interval = setInterval(() => {

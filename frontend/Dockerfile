@@ -55,7 +55,7 @@ RUN npm ci
 COPY . .
 
 # S'assurer que les binaires npm sont dans le PATH
-ENV PATH /app/node_modules/.bin:$PATH
+ENV PATH=/app/node_modules/.bin:$PATH
 
 # Exposer le port du serveur de dev Vite
 EXPOSE 5173

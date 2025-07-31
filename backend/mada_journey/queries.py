@@ -8,14 +8,14 @@ from .models import (
     TypeVehicule, Capacite, Vehicule, Reservation, Guide,
     Message, Blog, BlogCommentaire, Faq,
     CircuitImage, VehiculeImage, DestinationImage, BlogImage,
-    EtatVehicule
+    EtatVehicule, Itineraire
 )
 from .types import (
     UtilisateurType, DestinationType, SaisonType, CircuitType,
     PointInteretType, TypeVehiculeType, CapaciteType, VehiculeType,
     ReservationType, GuideType, MessageType, BlogType,
     BlogCommentaireType, FaqType,
-    CircuitImageType, VehiculeImageType, DestinationImageType, BlogImageType
+    CircuitImageType, VehiculeImageType, DestinationImageType, BlogImageType, ItineraireType
 )
 
 class Query(graphene.ObjectType):
@@ -46,6 +46,9 @@ class Query(graphene.ObjectType):
     available_circuits = graphene.List(CircuitType)
     featured_circuits = graphene.List(CircuitType, limit=graphene.Int())
     search_circuits = graphene.List(CircuitType, search_term=graphene.String())
+    
+    # itineraire
+    itineraire = graphene.Field(ItineraireType)
     
     # Queries pour les points d'intérêt
     all_points_interet = graphene.List(PointInteretType)
@@ -201,6 +204,13 @@ class Query(graphene.ObjectType):
         try:
             return Circuit.objects.select_related('destination', 'saison').get(pk=id)
         except Circuit.DoesNotExist:
+            return None
+    
+    # Itineraire
+    def resolve_itineraire(root, info, id):
+        try:
+            return Itineraire.objects.get(pk=id)
+        except Itineraire.DoesNotExist:
             return None
     
     def resolve_circuits_by_destination(self, info, destination_id):

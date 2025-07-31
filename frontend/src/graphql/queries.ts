@@ -24,6 +24,11 @@ export const GET_ALL_CIRCUITS = gql`
         id
         nom
       }
+      itineraires {
+        id
+        titre
+        description
+      }
     }
   }
 `;
@@ -67,6 +72,11 @@ export const GET_CIRCUIT_BY_ID = gql`
         nom
         description
         image
+      }
+      itineraires {
+        id
+        titre
+        description
       }
     }
   }

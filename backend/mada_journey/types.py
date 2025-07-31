@@ -7,7 +7,7 @@ from .models import (
     TypeVehicule, Capacite, Vehicule, Reservation, Guide,
     Message, Blog, BlogCommentaire, Faq,
     CircuitImage, VehiculeImage, DestinationImage, BlogImage,
-    Role, Difficulte, EtatVehicule, Hebergement, Activite
+    Role, Difficulte, EtatVehicule, Hebergement, Activite, Itineraire
 )
 
 User = get_user_model()
@@ -121,9 +121,16 @@ class PointInteretType(DjangoObjectType):
         fields = ('id', 'nom', 'description', 'image', 'circuit')
         interfaces = (relay.Node,)
 
+class ItineraireType(DjangoObjectType):
+    class Meta:
+        model = Itineraire
+        fields = ('id', 'titre', 'description', 'circuit')
+        interfaces = (relay.Node,)
+
 class CircuitType(DjangoObjectType):
     difficulte = graphene.Field(DifficulteEnum)
     points_interet = graphene.List(PointInteretType)
+    itineraires = graphene.List(ItineraireType)
     reservations_count = graphene.Int()
     is_available = graphene.Boolean()
     images = graphene.List(CircuitImageType)
@@ -133,12 +140,15 @@ class CircuitType(DjangoObjectType):
         model = Circuit
         fields = (
             'id', 'titre', 'description', 'duree', 'prix', 'image',
-            'difficulte', 'destination', 'saison'
+            'difficulte', 'destination', 'saison'   
         )
         interfaces = (relay.Node,)
 
     def resolve_points_interet(self, info):
         return self.points_interet.all()
+    
+    def resolve_itineraires(self, info):
+        return self.itineraires.all()
 
     def resolve_reservations_count(self, info):
         return self.reservations.count()
@@ -328,4 +338,3 @@ class AvailabilityTYpe(graphene.ObjectType):
     def resolve_reservationsExistantes(self, info):
         
         return 
-

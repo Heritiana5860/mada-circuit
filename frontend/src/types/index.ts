@@ -43,6 +43,13 @@ export interface CircuitImage {
   image: string;
 }
 
+// Types pour les itineraire
+export interface Itineraires {
+  id: string;
+  titre: string;
+  description: string;
+}
+
 export interface Circuit {
   id: string;
   titre: string;
@@ -53,6 +60,7 @@ export interface Circuit {
   destination: Destination;
   saison: Saison;
   pointsInteret?: PointsInteret[];
+  itineraires?: Itineraires[];
   images?: CircuitImage[];
 }
 

@@ -9,7 +9,7 @@ import hashlib
 import time
 
 from .models import (
-    Utilisateur, Destination, Saison, Circuit, PointInteret,
+    Utilisateur, Destination, Saison, Circuit, PointInteret, Itineraire,
     TypeVehicule, Capacite, Vehicule, Reservation, Guide,
     Message, Blog, BlogCommentaire, Faq,
     CircuitImage, VehiculeImage, DestinationImage, BlogImage,
@@ -257,16 +257,18 @@ class CreateCircuit(graphene.Mutation):
         difficulte = graphene.String(required=True)
         destination_id = graphene.ID(required=True)
         saison_id = graphene.ID(required=True)
+        itineraire_id = graphene.ID(required=True)
 
     circuit = graphene.Field(CircuitType)
     success = graphene.Boolean()
     errors = graphene.List(graphene.String)
 
-    def mutate(self, info, titre, description, duree, prix, difficulte, destination_id, saison_id, image=None):
+    def mutate(self, info, titre, description, duree, prix, difficulte, destination_id, saison_id, itineraire_id, image=None):
         try:
             with transaction.atomic():
                 destination = Destination.objects.get(pk=destination_id)
                 saison = Saison.objects.get(pk=saison_id)
+                itineraire = Itineraire.objects.get(pk=itineraire_id)
 
                 circuit = Circuit.objects.create(
                     titre=titre,
@@ -276,7 +278,8 @@ class CreateCircuit(graphene.Mutation):
                     image=image,
                     difficulte=difficulte,
                     destination=destination,
-                    saison=saison
+                    saison=saison,
+                    itineraire=itineraire,
                 )
                 return CreateCircuit(circuit=circuit, success=True)
         except (Destination.DoesNotExist, Saison.DoesNotExist):

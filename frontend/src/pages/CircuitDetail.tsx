@@ -57,8 +57,10 @@ const CircuitDetail = () => {
 
   useEffect(() => {
     if (circuitFromState) {
+      console.log('Circuit from state:', circuitFromState);
       setCircuit(circuitFromState);
     } else if (dataCircuit?.circuit) {
+      console.log('Circuit from GraphQL:', dataCircuit.circuit);
       setCircuit(dataCircuit.circuit);
     }
   }, [circuitFromState, dataCircuit]);
@@ -142,6 +144,7 @@ const CircuitDetail = () => {
   const mainImage = allImages[0];
 
   const displayData = {
+    id: circuit.id,
     title: circuit.titre,
     image: mainImage,
     location: `${circuit.destination.nom}, ${circuit.destination.region}`,
@@ -157,7 +160,7 @@ const CircuitDetail = () => {
       "🎨 Visite du marché artisanal d'Antsiranana",
       "🥾 Randonnée dans les Tsingy Rouges",
     ],
-    itinerary: circuit.pointsInteret || [],
+    itineraires: circuit.itineraires || [],
     included: [
       "🚗 Transport local climatisé",
       "👨‍🏫 Guide professionnel francophone",
@@ -176,8 +179,10 @@ const CircuitDetail = () => {
     ],
     gallery: allImages,
   };
-
   const totalPrice = displayData.price * guestCount;
+
+  console.log(`displayData: ${circuitFromState.itineraires}`);
+  
 
   return (
     <div className="min-h-screen flex flex-col bg-gray-50">
@@ -483,21 +488,21 @@ const CircuitDetail = () => {
                       Itinéraire détaillé
                     </h3>
                     <div className="space-y-6">
-                      {displayData.itinerary.length > 0 ? (
-                        displayData.itinerary.map((day, index) => (
+                      {displayData.itineraires.length > 0 ? (
+                        displayData.itineraires.map((day, index) => (
                           <div key={index} className="relative">
                             <div className="flex gap-4">
                               <div className="flex-shrink-0">
                                 <div className="w-12 h-12 rounded-xl bg-primary text-white flex items-center justify-center font-bold">
                                   {index + 1}
                                 </div>
-                                {index < displayData.itinerary.length - 1 && (
+                                {index < displayData.itineraires.length - 1 && (
                                   <div className="w-px h-12 bg-gray-200 mx-auto mt-4" />
                                 )}
                               </div>
                               <div className="flex-grow pb-8">
                                 <h4 className="text-lg font-semibold mb-2">
-                                  {day.nom || `Jour ${index + 1}`}
+                                  {day.titre || `Jour ${index + 1}`}
                                 </h4>
                                 <p className="text-gray-600">
                                   {day.description}

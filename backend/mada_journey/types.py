@@ -118,13 +118,13 @@ class SaisonType(DjangoObjectType):
 class PointInteretType(DjangoObjectType):
     class Meta:
         model = PointInteret
-        fields = ('id', 'nom', 'description', 'image', 'circuit')
+        fields = ('id', 'nom', 'description', 'type', 'temps_visite', 'prix_entree', 'image', 'circuit')
         interfaces = (relay.Node,)
 
 class ItineraireType(DjangoObjectType):
     class Meta:
         model = Itineraire
-        fields = ('id', 'titre', 'description', 'circuit')
+        fields = ('id', 'jour', 'lieu_depart', 'lieu_arrivee', 'distance_km', 'duree_trajet', 'description', 'carte_gps', 'circuit')
         interfaces = (relay.Node,)
 
 class CircuitType(DjangoObjectType):
@@ -139,8 +139,8 @@ class CircuitType(DjangoObjectType):
     class Meta:
         model = Circuit
         fields = (
-            'id', 'titre', 'description', 'duree', 'prix', 'image',
-            'difficulte', 'destination', 'saison'   
+            'id', 'titre', 'description', 'duree', 'prix', 'inclus', 'non_inclus', 'image',
+            'difficulte', 'destination', 'saison', 'vehicule_recommande'   
         )
         interfaces = (relay.Node,)
 

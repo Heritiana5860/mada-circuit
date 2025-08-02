@@ -86,11 +86,11 @@ class SaisonAdmin(admin.ModelAdmin):
 class ItineraireInline(admin.TabularInline):
     model = Itineraire
     extra = 1
-    fields = ('titre', 'description')
+    fields = ('jour', 'lieu_depart', 'lieu_arrivee', 'distance_km', 'duree_trajet', 'description', 'carte_gps')
     
 @admin.register(Itineraire)
 class ItineraireAdmin(admin.ModelAdmin):
-    list_display = ('titre', 'description', 'circuit', 'nombre_circuits')
+    list_display = ('jour', 'lieu_depart', 'lieu_arrivee', 'distance_km', 'duree_trajet', 'description', 'carte_gps', 'circuit', 'nombre_circuits')
 
     def nombre_circuits(self, obj):
         return 1 if obj.circuit else 0
@@ -153,18 +153,18 @@ class BlogImageInline(admin.TabularInline):
 
 @admin.register(Circuit)
 class CircuitAdmin(admin.ModelAdmin):
-    list_display = ('titre', 'destination', 'duree', 'prix', 'difficulte', 'saison', 'image_preview', 'nombre_reservations')
-    list_filter = ('difficulte', 'destination', 'saison')
+    list_display = ('titre', 'destination', 'duree', 'prix', 'inclus', 'non_inclus', 'difficulte', 'saison', 'vehicule_recommande', 'image_preview', 'nombre_reservations')
+    list_filter = ('difficulte', 'destination', 'saison', 'vehicule_recommande')
     search_fields = ('titre', 'description')
     readonly_fields = ('image_preview',)
     inlines = [PointInteretInline, CircuitImageInline, ItineraireInline]
     
     fieldsets = (
         ('Informations générales', {
-            'fields': ('titre', 'description', 'destination', 'saison')
+            'fields': ('titre', 'description', 'destination', 'saison', 'vehicule_recommande')
         }),
         ('Détails du circuit', {
-            'fields': ('duree', 'prix', 'difficulte')
+            'fields': ('duree', 'prix', 'difficulte', 'inclus', 'non_inclus')
         }),
         ('Image', {
             'fields': ('image', 'image_preview')

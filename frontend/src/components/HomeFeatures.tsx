@@ -182,11 +182,13 @@ const HomeFeatures = () => {
 
         {/* Bottom CTA */}
         <div className="text-center mt-16">
-          <button className="group relative inline-flex items-center px-8 py-4 bg-primary text-white font-semibold rounded-2xl shadow-xl hover:scale-105 transition-all duration-300 px-8 py-4 text-base">
-            <span>Planifier mon voyage</span>
-            <ArrowRight className="ml-2 h-5 w-5 transition-transform duration-300 group-hover:translate-x-1" />
-            <div className="absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-          </button>
+          <Link to={"/voyages-sur-mesure"}>
+            <button className="group relative inline-flex items-center px-8 py-4 bg-primary text-white font-semibold rounded-2xl shadow-xl hover:scale-105 transition-all duration-300 px-8 py-4 text-base">
+              <span>Planifier mon voyage</span>
+              <ArrowRight className="ml-2 h-5 w-5 transition-transform duration-300 group-hover:translate-x-1" />
+              <div className="absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+            </button>
+          </Link>
         </div>
       </div>
 

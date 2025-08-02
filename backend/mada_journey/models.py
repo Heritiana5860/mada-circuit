@@ -122,33 +122,55 @@ class Circuit(models.Model):
     description = models.TextField()
     duree = models.IntegerField(help_text="Durée en jours")
     prix = models.DecimalField(max_digits=10, decimal_places=2)
+    inclus = models.TextField(blank=True, help_text="Services inclus (ex: hébergement, guide, petit-déjeuner)")
+    non_inclus = models.TextField(blank=True, help_text="Services non inclus (ex: essence, péages)")
+    # is_actif = models.BooleanField(default=True, help_text="Ce circuit est-il disponible à la réservation ?")
+    
     image = models.ImageField(upload_to=circuit_image_path, blank=True, null=True)
+    
     difficulte = models.CharField(max_length=10, choices=Difficulte.choices, default=Difficulte.FACILE)
+    
     destination = models.ForeignKey(Destination, on_delete=models.CASCADE, related_name='circuits')
     saison = models.ForeignKey(Saison, on_delete=models.CASCADE, related_name='circuits')
+    vehicule_recommande = models.ForeignKey('Vehicule', on_delete=models.SET_NULL, null=True, blank=True, related_name='circuits', help_text="Véhicule recommandé pour ce circuit")
 
     def __str__(self):
         return self.titre
     
+    
 class Itineraire(models.Model):
-    circuit = models.ForeignKey(Circuit, on_delete=models.CASCADE, related_name='itineraires')
     id = models.CharField(primary_key=True, default=uuid.uuid4, editable=False, max_length=36)
-    titre = models.CharField(max_length=200, verbose_name="Titre de l'itinéraire")
+    jour = models.PositiveIntegerField(default=1, help_text="Jour 1, Jour 2...")
+    lieu_depart = models.CharField(max_length=100)
+    lieu_arrivee = models.CharField(max_length=100)
+    distance_km = models.FloatField(null=True, blank=True, help_text="Distance estimée (km)")
+    duree_trajet = models.FloatField(null=True, blank=True, help_text="Durée estimée (heures)")
     description = models.TextField(verbose_name="Description détaillée", blank=True)
+    carte_gps = models.URLField(blank=True, help_text="Lien vers l'itinéraire GPS")
+    
+    circuit = models.ForeignKey(Circuit, on_delete=models.CASCADE, related_name='itineraires')
     
     class Meta:
         verbose_name = "Itinéraire"
         verbose_name_plural = "Itinéraires"
 
     def __str__(self):
-        return f"Itinéraire pour {self.titre}"
+        return f"Itinéraire pour {self.lieu_depart}"
 
 
 class PointInteret(models.Model):
+    
+    CATEGORIE_POINT_INTERET= [('NATURE', 'Nature'), ('CULTURE', 'Culture'), ('GASTRONOMIE', 'Gastronomie')]
+    
     id = models.CharField(primary_key=True, default=uuid.uuid4, editable=False, max_length=36)
     nom = models.CharField(max_length=100)
     description = models.TextField()
+    type = models.CharField(max_length=100, choices=CATEGORIE_POINT_INTERET, default='CULTURE', help_text="Catégoriser les points d'intérêt")
+    temps_visite = models.FloatField(default=1.0, help_text="Durée recommandée (heures)")
+    prix_entree = models.DecimalField(max_digits=6, decimal_places=2, null=True, help_text="Coût d'entrée si applicable")
+    
     image = models.ImageField(upload_to=point_interet_image_path, blank=True, null=True)
+    
     circuit = models.ForeignKey(Circuit, on_delete=models.CASCADE, related_name='points_interet')
 
     def __str__(self):
@@ -184,11 +206,12 @@ class Vehicule(models.Model):
     marque = models.CharField(max_length=100)
     modele = models.CharField(max_length=100)
     annee = models.IntegerField()
-    type = models.ForeignKey(TypeVehicule, on_delete=models.CASCADE, related_name='vehicules')
-    capacite = models.ForeignKey(Capacite, on_delete=models.CASCADE, related_name='vehicules')
     prix = models.DecimalField(max_digits=10, decimal_places=2)  # Nom original dans la DB
     etat = models.CharField(max_length=20, choices=EtatVehicule.choices, default=EtatVehicule.DISPONIBLE)
     # image = models.ImageField(upload_to=vehicule_image_path, blank=True, null=True)
+    
+    type = models.ForeignKey(TypeVehicule, on_delete=models.CASCADE, related_name='vehicules')
+    capacite = models.ForeignKey(Capacite, on_delete=models.CASCADE, related_name='vehicules')
 
     def __str__(self):
         return f"{self.marque} {self.modele} ({self.immatriculation})"
@@ -213,9 +236,6 @@ class Activite(models.TextChoices):
     PLONGEE = 'PLONFEE', 'Plongée'  # Corriger la faute dans le modèle Prisma
     CULTURE = 'CULTURE', 'Culture'
     GASTRONOMIE = 'GASTRONOMIE', 'Gastronomie'
-
-
-
 
 
 class Reservation(models.Model):

@@ -2,6 +2,7 @@ import graphene
 from django.db.models import Q
 from django.utils import timezone
 from graphql_relay import from_global_id
+import logging
 
 from .models import (
     Utilisateur, Destination, Saison, Circuit, PointInteret,
@@ -17,6 +18,8 @@ from .types import (
     BlogCommentaireType, FaqType,
     CircuitImageType, VehiculeImageType, DestinationImageType, BlogImageType, ItineraireType
 )
+
+logger = logging.getLogger(__name__) 
 
 class Query(graphene.ObjectType):
     # Queries pour les utilisateurs
@@ -331,7 +334,19 @@ class Query(graphene.ObjectType):
         except Reservation.DoesNotExist:
             return None
 
+    # def resolve_reservations_by_user(self, info, user_id):
+    #     return Reservation.objects.filter(utilisateur_id=user_id).select_related('utilisateur', 'circuit', 'vehicule')
     def resolve_reservations_by_user(self, info, user_id):
+        print("Utilisateur dans le contexte:", info.context.user)
+        logger.debug("Utilisateur dans le contexte:", info.context.user)
+        logger.debug("Utilisateur authentifié:", info.context.user.is_authenticated)
+        logger.debug("ID utilisateur dans contexte:", info.context.user.id if info.context.user.is_authenticated else "Aucun")
+        logger.debug("user_id passé:", user_id)
+        
+        if not info.context.user.is_authenticated:
+            raise ValueError("Utilisateur non authentifié")
+        if str(info.context.user.id) != str(user_id):
+            raise ValueError("Accès non autorisé")
         return Reservation.objects.filter(utilisateur_id=user_id).select_related('utilisateur', 'circuit', 'vehicule')
 
     def resolve_reservations_by_circuit(self, info, circuit_id):

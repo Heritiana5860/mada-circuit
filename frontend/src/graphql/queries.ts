@@ -313,23 +313,52 @@ export const GET_USER_RESERVATIONS = gql`
     reservationsByUser(userId: $userId) {
       id
       dateReservation
-      dateDebut
-      dateFin
-      nombrePersonnes
-      prixTotal
+      dateDepart
       statut
+      duree
+      nombrePersonnes
+      hebergement
+      activite
+      budget
+      nom
+      prenom
+      email
+      telephone
+      commentaire
+      prixTotal
+      utilisateur {
+        id
+        email
+        nom
+        prenom
+        telephone
+      }
       circuit {
         id
         titre
-        image
+        description
+        duree
+        prix
+        inclus
+        nonInclus
+        difficulte
         destination {
+          id
+          nom
+          region
+          pays
+        }
+        saison {
+          id
           nom
         }
       }
       vehicule {
         id
+        immatriculation
         marque
         modele
+        prix
       }
     }
   }

@@ -27,6 +27,7 @@ import { GET_ALL_CIRCUITS, GET_ALL_DESTINATIONS } from "@/graphql/queries";
 import { Circuit } from "@/types";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import CarouselHeader from "@/components/CarouselHeader";
+import { Link } from "react-router-dom";
 
 const Circuits = () => {
   const [selectedRegion, setSelectedRegion] = useState<string>("all");
@@ -527,10 +528,16 @@ const Circuits = () => {
                 <Users className="h-5 w-5 mr-2" />
                 Parler à un expert
               </Button>
-              <Button variant="outline" size="lg" className="flex items-center">
-                <Star className="h-5 w-5 mr-2" />
-                Circuit sur mesure
-              </Button>
+              <Link to={"/voyages-sur-mesure"}>
+                <Button
+                  variant="outline"
+                  size="lg"
+                  className="flex items-center"
+                >
+                  <Star className="h-5 w-5 mr-2" />
+                  Circuit sur mesure
+                </Button>
+              </Link>
             </div>
           </div>
         </section>

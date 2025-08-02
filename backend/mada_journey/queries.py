@@ -342,11 +342,11 @@ class Query(graphene.ObjectType):
         logger.debug("Utilisateur authentifié:", info.context.user.is_authenticated)
         logger.debug("ID utilisateur dans contexte:", info.context.user.id if info.context.user.is_authenticated else "Aucun")
         logger.debug("user_id passé:", user_id)
-        
-        if not info.context.user.is_authenticated:
-            raise ValueError("Utilisateur non authentifié")
-        if str(info.context.user.id) != str(user_id):
-            raise ValueError("Accès non autorisé")
+        #
+        # if not info.context.user.is_authenticated:
+        #     raise ValueError("Utilisateur non authentifié")
+        # if str(info.context.user.id) != str(user_id):
+        #     raise ValueError("Accès non autorisé")
         return Reservation.objects.filter(utilisateur_id=user_id).select_related('utilisateur', 'circuit', 'vehicule')
 
     def resolve_reservations_by_circuit(self, info, circuit_id):

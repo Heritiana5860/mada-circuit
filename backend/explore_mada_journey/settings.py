@@ -16,6 +16,63 @@ from pathlib import Path
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+LOGGING = {
+    "version": 1,
+    "disable_existing_loggers": False,  # conserve les loggers Django par défaut
+    "formatters": {
+        "standard": {
+            "format": "[%(asctime)s] %(levelname)s %(name)s: %(message)s"
+        },
+        "verbose": {
+            "format": "[%(asctime)s] %(levelname)s %(name)s "
+                      "(%(filename)s:%(lineno)d): %(message)s"
+        },
+    },
+    "handlers": {
+        "console": {
+            "class": "logging.StreamHandler",
+            "formatter": "standard",
+        },
+        "file": {
+            "class": "logging.handlers.RotatingFileHandler",
+            "formatter": "verbose",
+            "filename": os.path.join(BASE_DIR, "logs", "app.log"),
+            "maxBytes": 5 * 1024 * 1024,  # 5 MB
+            "backupCount": 5,
+            "encoding": "utf-8",
+        },
+        # Optionnel : pour capturer les erreurs critiques séparément
+        "errors_file": {
+            "class": "logging.handlers.RotatingFileHandler",
+            "formatter": "verbose",
+            "filename": os.path.join(BASE_DIR, "logs", "errors.log"),
+            "level": "ERROR",
+            "maxBytes": 5 * 1024 * 1024,
+            "backupCount": 3,
+            "encoding": "utf-8",
+        },
+    },
+    "loggers": {
+        # Logger racine
+        "": {
+            "handlers": ["console", "file"],
+            "level": "INFO",
+        },
+        # Logger pour Django (évite de surcharger avec DEBUG de django.db)
+        "django": {
+            "handlers": ["console"],
+            "level": "WARNING",
+            "propagate": False,
+        },
+        # Exemple : logger pour les erreurs critiques en plus
+        "myapp": {
+            "handlers": ["console", "file", "errors_file"],
+            "level": "DEBUG",
+            "propagate": False,
+        },
+    },
+}
+
 # Import default_headers after defining BASE_DIR
 from corsheaders.defaults import default_headers
 
@@ -162,7 +219,6 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-
 
 
 #Configuration de stockage d'image:

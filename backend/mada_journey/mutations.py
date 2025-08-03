@@ -1,3 +1,4 @@
+from datetime import timedelta
 import graphene
 from graphene_file_upload.scalars import Upload
 from django.contrib.auth import authenticate
@@ -477,10 +478,34 @@ class CreateReservation(graphene.Mutation):
 
     def mutate(self, info, circuit_id, vehicule_id, date_depart, duree, nombre_personnes,
                nom, prenom, email, telephone, **kwargs):
+        errors = []
+
+        # Validations préliminaires
+        if duree <= 0:
+            errors.append("La durée doit être positive")
+        
+        if nombre_personnes <= 0:
+            errors.append("Le nombre de personnes doit être positif")
+        
+        # Validation de l'email
+        import re
+        email_regex = r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$'
+        if not re.match(email_regex, email):
+            errors.append("Format d'email invalide")
+
+        # Validation du téléphone (format simple)
+        phone_regex = r'^\+?[\d\s-]{9,}$'
+        if not re.match(phone_regex, telephone):
+            errors.append("Format de téléphone invalide")
+
+        if errors:
+            return CreateReservation(success=False, errors=errors)
+
         try:
             with transaction.atomic():
-                circuit = Circuit.objects.get(pk=circuit_id)
-                vehicule = Vehicule.objects.get(pk=vehicule_id)
+                # Récupération des objets avec select_for_update pour éviter les conditions de course
+                circuit = Circuit.objects.select_for_update().get(pk=circuit_id)
+                vehicule = Vehicule.objects.select_for_update().get(pk=vehicule_id)
 
                 # Vérifications de disponibilité
                 if vehicule.etat != EtatVehicule.DISPONIBLE:
@@ -489,45 +514,58 @@ class CreateReservation(graphene.Mutation):
                 if vehicule.capacite.nombre_places < nombre_personnes:
                     return CreateReservation(success=False, errors=["Capacité du véhicule insuffisante"])
 
-                # Vérifier les conflits de dates
+                # Vérification plus précise des conflits de dates
+                date_fin = date_depart + timedelta(days=duree)
                 conflicting_reservations = Reservation.objects.filter(
                     vehicule=vehicule,
                     statut__in=[Reservation.ReservationStatus.EN_ATTENTE, Reservation.ReservationStatus.CONFIRMEE],
-                    date_depart__date=date_depart.date()
+                    date_depart__lt=date_fin,
+                    date_depart__gte=date_depart - timedelta(days=Reservation.objects.filter(
+                        vehicule=vehicule,
+                        statut__in=[Reservation.ReservationStatus.EN_ATTENTE, Reservation.ReservationStatus.CONFIRMEE]
+                    ).aggregate(Max('duree'))['duree__max'] or 1)
                 )
                 if conflicting_reservations.exists():
-                    return CreateReservation(success=False, errors=["Véhicule déjà réservé pour cette date"])
+                    return CreateReservation(success=False, errors=["Véhicule déjà réservé pour cette période"])
 
                 utilisateur = None
                 if kwargs.get('utilisateur_id'):
                     utilisateur = Utilisateur.objects.get(pk=kwargs['utilisateur_id'])
 
-                reservation = Reservation.objects.create(
+                # Création de la réservation
+                reservation = Reservation(
                     utilisateur=utilisateur,
                     circuit=circuit,
                     vehicule=vehicule,
                     date_depart=date_depart,
                     duree=duree,
                     nombre_personnes=nombre_personnes,
-                    hebergement=kwargs.get('hebergement', 'STANDARD'),
-                    activite=kwargs.get('activite', 'RANDONNEE'),
+                    hebergement=kwargs.get('hebergement', 'STANDARD').upper(),
+                    activite=kwargs.get('activite', 'RANDONNEE').upper(),
                     budget=kwargs.get('budget'),
-                    nom=nom,
-                    prenom=prenom,
-                    email=email,
-                    telephone=telephone,
-                    commentaire=kwargs.get('commentaire')
+                    nom=nom.strip(),
+                    prenom=prenom.strip(),
+                    email=email.lower().strip(),
+                    telephone=telephone.strip(),
+                    commentaire=kwargs.get('commentaire', '').strip()
                 )
+                
+                # Validation du modèle avant sauvegarde
+                reservation.full_clean()
+                reservation.save()
 
-                # Marquer le véhicule comme réservé
+                # Mise à jour du statut du véhicule
                 vehicule.etat = EtatVehicule.RESERVE
                 vehicule.save()
 
-                return CreateReservation(reservation=reservation, success=True)
+                return CreateReservation(reservation=reservation, success=True, errors=None)
+
         except (Circuit.DoesNotExist, Vehicule.DoesNotExist, Utilisateur.DoesNotExist):
             return CreateReservation(success=False, errors=["Circuit, véhicule ou utilisateur non trouvé"])
+        except ValidationError as e:
+            return CreateReservation(success=False, errors=[str(err) for err in e.messages])
         except Exception as e:
-            return CreateReservation(success=False, errors=[str(e)])
+            return CreateReservation(success=False, errors=[f"Erreur inattendue: {str(e)}"])
 
 class UpdateReservationStatus(graphene.Mutation):
     class Arguments:

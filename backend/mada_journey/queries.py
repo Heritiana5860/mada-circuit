@@ -3,6 +3,9 @@ from django.db.models import Q
 from django.utils import timezone
 from graphql_relay import from_global_id
 import logging
+import base64
+import uuid
+from django.core.exceptions import ValidationError
 
 from .models import (
     Utilisateur, Destination, Saison, Circuit, PointInteret,
@@ -19,7 +22,8 @@ from .types import (
     CircuitImageType, VehiculeImageType, DestinationImageType, BlogImageType, ItineraireType
 )
 
-logger = logging.getLogger(__name__) 
+logger = logging.getLogger("myapp") 
+logger.setLevel(logging.INFO)
 
 class Query(graphene.ObjectType):
     # Queries pour les utilisateurs
@@ -333,21 +337,15 @@ class Query(graphene.ObjectType):
             return Reservation.objects.select_related('utilisateur', 'circuit', 'vehicule').get(pk=id)
         except Reservation.DoesNotExist:
             return None
-
-    # def resolve_reservations_by_user(self, info, user_id):
-    #     return Reservation.objects.filter(utilisateur_id=user_id).select_related('utilisateur', 'circuit', 'vehicule')
-    def resolve_reservations_by_user(self, info, user_id):
-        print("Utilisateur dans le contexte:", info.context.user)
-        logger.debug("Utilisateur dans le contexte:", info.context.user)
-        logger.debug("Utilisateur authentifié:", info.context.user.is_authenticated)
-        logger.debug("ID utilisateur dans contexte:", info.context.user.id if info.context.user.is_authenticated else "Aucun")
-        logger.debug("user_id passé:", user_id)
         
-        if not info.context.user.is_authenticated:
-            raise ValueError("Utilisateur non authentifié")
-        if str(info.context.user.id) != str(user_id):
-            raise ValueError("Accès non autorisé")
-        return Reservation.objects.filter(utilisateur_id=user_id).select_related('utilisateur', 'circuit', 'vehicule')
+    def resolve_reservations_by_user(self, info, user_id):
+        decoded_bytes = base64.b64decode(user_id)
+        decoded_str = decoded_bytes.decode('utf-8')
+        clean_user_id = decoded_str.split(':')[1]
+        logger.debug(f"Decoded User ID: {user_id}")
+        logger.debug(f"decoded_str: {decoded_str}")
+        logger.debug(f"clean_user_id: {clean_user_id}")
+        return Reservation.objects.filter(utilisateur_id=clean_user_id).select_related('utilisateur', 'circuit', 'vehicule')
 
     def resolve_reservations_by_circuit(self, info, circuit_id):
         return Reservation.objects.filter(circuit_id=circuit_id).select_related('utilisateur', 'circuit', 'vehicule')

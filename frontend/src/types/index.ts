@@ -63,6 +63,7 @@ export interface Circuit {
   prix: number;
   inclus: string;
   nonInclus: string;
+  type: string;
   difficulte: 'FACILE' | 'MOYEN' | 'DIFFICILE';
   destination: Destination;
   saison: Saison;

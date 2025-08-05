@@ -22,6 +22,7 @@ import {
   Users,
   TrendingUp,
   Compass,
+  Variable,
 } from "lucide-react";
 import { GET_ALL_CIRCUITS, GET_ALL_DESTINATIONS } from "@/graphql/queries";
 import { Circuit } from "@/types";
@@ -60,7 +61,9 @@ const Circuits = () => {
     data: circuitsData,
     loading: circuitsLoading,
     error: circuitsError,
-  } = useQuery(GET_ALL_CIRCUITS);
+  } = useQuery(GET_ALL_CIRCUITS, {
+    variables: { type: "circuit" },
+  });
   const { data: destinationsData } = useQuery(GET_ALL_DESTINATIONS);
 
   useEffect(() => {
@@ -97,8 +100,8 @@ const Circuits = () => {
 
   // Filtrage et recherche des circuits
   useEffect(() => {
-    if (circuitsData?.allCircuits) {
-      let circuits = circuitsData.allCircuits;
+    if (circuitsData?.allCircuitsByType) {
+      let circuits = circuitsData.allCircuitsByType;
 
       // Filtre par région
       if (selectedRegion !== "all") {

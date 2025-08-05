@@ -117,6 +117,12 @@ class Difficulte(models.TextChoices):
 
 
 class Circuit(models.Model):
+    
+    class CircuitType(models.TextChoices):
+        PANGALANE = "pangalane", _("Pangalane")
+        CIRCUIT = "circuit", _("Circuit")
+        SOLIDAIRE = "solidaire", _("Solidaire")
+    
     id = models.CharField(primary_key=True, default=uuid.uuid4, editable=False, max_length=36)
     titre = models.CharField(max_length=200)
     description = models.TextField()
@@ -124,11 +130,16 @@ class Circuit(models.Model):
     prix = models.DecimalField(max_digits=10, decimal_places=2)
     inclus = models.TextField(blank=True, help_text="Services inclus (ex: hébergement, guide, petit-déjeuner)")
     non_inclus = models.TextField(blank=True, help_text="Services non inclus (ex: essence, péages)")
-    # is_actif = models.BooleanField(default=True, help_text="Ce circuit est-il disponible à la réservation ?")
     
     image = models.ImageField(upload_to=circuit_image_path, blank=True, null=True)
     
     difficulte = models.CharField(max_length=10, choices=Difficulte.choices, default=Difficulte.FACILE)
+    type = models.CharField(
+        choices=CircuitType, 
+        max_length=20, 
+        default=CircuitType.CIRCUIT, 
+        verbose_name=_("Type de circuit"), 
+        help_text="circuit avec voiture, circuit sur canal de pangalanes avec bateau, circuit pour la visite solidaire")
     
     destination = models.ForeignKey(Destination, on_delete=models.CASCADE, related_name='circuits')
     saison = models.ForeignKey(Saison, on_delete=models.CASCADE, related_name='circuits')
@@ -266,8 +277,8 @@ class Reservation(models.Model):
     commentaire = models.TextField(blank=True, null=True)
 
     utilisateur = models.ForeignKey(Utilisateur, on_delete=models.CASCADE, related_name='reservations')
-    circuit = models.ForeignKey(Circuit, null=True, on_delete=models.CASCADE, related_name='reservations')
-    vehicule = models.ForeignKey(Vehicule, null=True, on_delete=models.CASCADE, related_name='reservations')
+    circuit = models.ForeignKey(Circuit, null=True, blank=True, on_delete=models.CASCADE, related_name='reservations')
+    vehicule = models.ForeignKey(Vehicule, null=True, blank=True, on_delete=models.CASCADE, related_name='reservations')
 
     
     def __str__(self):
@@ -405,3 +416,4 @@ class BlogImage(models.Model):
 
     class Meta:
         ordering = ['ordre']   
+             

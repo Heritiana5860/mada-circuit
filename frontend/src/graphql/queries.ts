@@ -2,8 +2,8 @@ import { gql } from "@apollo/client";
 
 // Queries pour les circuits
 export const GET_ALL_CIRCUITS = gql`
-  query GetAllCircuits {
-    allCircuits {
+  query AllCircuitsByType ($type: String!) {
+    allCircuitsByType(type: $type) {
       id
       titre
       description
@@ -12,6 +12,7 @@ export const GET_ALL_CIRCUITS = gql`
       inclus
       nonInclus
       image
+      type
       difficulte
       reservationsCount
       isAvailable

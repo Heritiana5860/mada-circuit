@@ -4,7 +4,6 @@ from django.utils import timezone
 from graphql_relay import from_global_id
 import logging
 import base64
-import uuid
 from django.core.exceptions import ValidationError
 
 from .models import (
@@ -45,6 +44,10 @@ class Query(graphene.ObjectType):
     
     # Queries pour les circuits
     all_circuits = graphene.List(CircuitType)
+    all_circuits_by_type = graphene.List(
+        CircuitType, 
+        type=graphene.String(required=True)
+    )
     circuit = graphene.Field(CircuitType, id=graphene.ID())
     circuits_by_destination = graphene.List(CircuitType, destination_id=graphene.ID())
     circuits_by_saison = graphene.List(CircuitType, saison_id=graphene.ID())
@@ -206,6 +209,10 @@ class Query(graphene.ObjectType):
     # Resolvers pour les circuits
     def resolve_all_circuits(self, info):
         return Circuit.objects.all().select_related('destination', 'saison')
+    
+    def resolve_all_circuits_by_type(self, info, type):
+        logger.debug(f"filter type {type}")
+        return Circuit.objects.filter(type=type).select_related('destination', 'saison')
     
     def resolve_circuit(self, info, id):
         try:

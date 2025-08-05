@@ -257,6 +257,7 @@ class CreateCircuit(graphene.Mutation):
         description = graphene.String(required=True)
         duree = graphene.Int(required=True)
         prix = graphene.Float(required=True)
+        type = graphene.String(required=True)
         image = Upload()
         difficulte = graphene.String(required=True)
         destination_id = graphene.ID(required=True)
@@ -267,7 +268,7 @@ class CreateCircuit(graphene.Mutation):
     success = graphene.Boolean()
     errors = graphene.List(graphene.String)
 
-    def mutate(self, info, titre, description, duree, prix, difficulte, destination_id, saison_id, itineraire_id, image=None):
+    def mutate(self, info, titre, description, duree, prix, type, difficulte, destination_id, saison_id, itineraire_id, image=None):
         try:
             with transaction.atomic():
                 destination = Destination.objects.get(pk=destination_id)
@@ -279,6 +280,7 @@ class CreateCircuit(graphene.Mutation):
                     description=description,
                     duree=duree,
                     prix=Decimal(str(prix)),
+                    type=type,
                     image=image,
                     difficulte=difficulte,
                     destination=destination,
@@ -1391,24 +1393,6 @@ class CheckVehicleAvailability(graphene.Mutation):
         if reservation:
             return CheckVehicleAvailability(disponible=False, message=f"Le vehicule n'est pas disponnible entre {date_depart} et {date_fin}", reservationsExistantes=reservation)
         return CheckVehicleAvailability(disponible=True, message=f"Le vehicule est pas disponnible ", reservationsExistantes=None)
-
-# class CreateVehiculeReservation(graphene.Mutation):
-#     class Arguments:
-#         vehiculeId = graphene.ID(required=True)
-#         dateDebut = graphene.Date(required=True)
-#         dateFin = graphene.Date(required=True)
-#         nombrePersonnes = graphene.Int(required=True)
-#         prixTotal = graphene.Float(required=False)
-#         commentaires = graphene.String(required=False)
-
-#     id = graphene.ID()
-#     dateReservation = graphene.Date()
-#     dateDebut = graphene.Date()
-#     dateFin= graphene.Date()
-#     nombrePersonnes = graphene.Int()
-#     prixTotal = graphene.Float()
-#     statut  = graphene.String()
-#     vehicule = graphene.Field(VehiculeType)
 
 class CreateVehiculeReservation(graphene.Mutation):
     class Arguments:

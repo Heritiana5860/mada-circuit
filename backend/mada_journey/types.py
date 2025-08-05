@@ -139,7 +139,7 @@ class CircuitType(DjangoObjectType):
     class Meta:
         model = Circuit
         fields = (
-            'id', 'titre', 'description', 'duree', 'prix', 'inclus', 'non_inclus', 'image',
+            'id', 'titre', 'description', 'duree', 'prix', 'inclus', 'non_inclus', 'type', 'image',
             'difficulte', 'destination', 'saison', 'vehicule_recommande'   
         )
         interfaces = (relay.Node,)

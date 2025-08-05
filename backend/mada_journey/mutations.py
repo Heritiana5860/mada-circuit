@@ -8,6 +8,8 @@ from django.db import transaction
 from decimal import Decimal
 import hashlib
 import time
+import base64
+import logging
 
 from .models import (
     Utilisateur, Destination, Saison, Circuit, PointInteret, Itineraire,
@@ -25,7 +27,8 @@ from .types import (
 )
 from graphql_relay import from_global_id
 
-
+logger = logging.getLogger("myapp") 
+logger.setLevel(logging.INFO)
 
 # Mutations pour les utilisateurs
 class CreateUtilisateur(graphene.Mutation):
@@ -1491,7 +1494,92 @@ class CreateVehiculeReservation(graphene.Mutation):
         except Exception as e:
             raise Exception(f'Erreur lors de la création de la réservation: {str(e)}')
 
-    
+# Réservation Circuit 
+class CreateCircuitReservation(graphene.Mutation):
+    class Arguments:
+        circuit_id = graphene.ID(required=True)
+        utilisateur_id = graphene.ID(required=True) 
+        date_depart = graphene.Date(required=True)
+        date_fin = graphene.Date(required=True)
+        nombre_personnes = graphene.Int(required=True)
+        budget = graphene.String(required=False)
+        commentaire = graphene.String(required=False)
+        
+    # Champs de retour
+    reservation = graphene.Field(ReservationType)
+    success = graphene.Boolean()
+    message = graphene.String()
+
+    def mutate(self, info, circuit_id, utilisateur_id, date_depart, date_fin, nombre_personnes,
+               budget=None, commentaire=None):
+
+        try:
+            
+            # Décoder avec la fonction Relay
+            utilisateur_type, real_utilisateur_id = from_global_id(utilisateur_id)
+            circuit_type, real_circuit_id = from_global_id(circuit_id)
+            
+            logger.debug(f"DEBUG - Type: {utilisateur_type}, UUID: {real_utilisateur_id}")  
+            
+            # Récupération des objets nécessaires
+            circuit = Circuit.objects.get(id=real_circuit_id)
+            utilisateur = Utilisateur.objects.get(id=real_utilisateur_id)
+
+            duree = date_fin - date_depart
+
+            print(duree)
+
+            # Création de la réservation avec le type VEHICULE
+            reservation = Reservation.objects.create(
+                type=Reservation.ReservationType.CIRUIT,
+                utilisateur=utilisateur,
+                vehicule=None,
+                circuit=circuit,
+                date_depart=date_depart,
+                duree=duree.days,
+                nombre_personnes=nombre_personnes,
+                budget=budget,
+                nom=utilisateur.nom,
+                prenom=utilisateur.prenom,
+                telephone=utilisateur.telephone,
+                email=utilisateur.email,
+                commentaire=commentaire,
+                date_reservation=timezone.now(),
+                statut=Reservation.ReservationStatus.EN_ATTENTE
+            )
+
+            return CreateCircuitReservation(
+                reservation=reservation,
+                success=True,
+                message="Réservation de véhicule créée avec succès"
+            )
+
+        except Circuit.DoesNotExist:
+            return CreateCircuitReservation(
+                reservation=None,
+                success=False,
+                message="Circuit introuvable"
+            )
+
+        except Utilisateur.DoesNotExist:
+            return CreateCircuitReservation(
+                reservation=None,
+                success=False,
+                message="Utilisateur introuvable"
+            )
+
+        except Exception as e:
+            return CreateCircuitReservation(
+                reservation=None,
+                success=False,
+                message=f"Erreur lors de la création de la réservation: {str(e)}"
+            )
+            
+        except Circuit.DoesNotExist:
+            raise Exception('Circuit non trouvé')
+        except Exception as e:
+            raise Exception(f'Erreur lors de la création de la réservation: {str(e)}')
+
 
 # Classe principale des mutations
 class Mutation(graphene.ObjectType):
@@ -1531,6 +1619,8 @@ class Mutation(graphene.ObjectType):
     # Mutations réservations
     create_reservation = CreateReservation.Field()
     update_reservation_status = UpdateReservationStatus.Field()
+    create_vehicule_reservation = CreateVehiculeReservation.Field()
+    create_circuit_reservation = CreateCircuitReservation.Field()
 
     # Mutations messages
     create_message = CreateMessage.Field()
@@ -1566,5 +1656,5 @@ class Mutation(graphene.ObjectType):
     update_blog_image = UpdateBlogImage.Field()
     delete_blog_image = DeleteBlogImage.Field()
     check_vehicle_availability = CheckVehicleAvailability.Field()
-    create_vehicule_reservation = CreateVehiculeReservation.Field()
+    
 

@@ -74,3 +74,71 @@ export const CHECK_VEHICLE_AVAILABILITY = gql`
     }
   }
 `;
+
+// Mutation pour créer une réservation CIRCUIT
+export const CREATE_CIRCUIT_RESERVATION = gql`
+  mutation CreateCircuitReservation(
+    $utilisateurId: ID!
+    $circuitId: ID!
+    $dateDepart: Date!
+    $dateFin: Date!
+    $nombrePersonnes: Int!
+    $budget: String
+    $commentaire: String
+  ) {
+    createCircuitReservation(
+      utilisateurId: $utilisateurId
+      circuitId: $circuitId
+      dateDepart: $dateDepart
+      dateFin: $dateFin
+      nombrePersonnes: $nombrePersonnes
+      budget: $budget
+      commentaire: $commentaire
+    ) {
+      success
+      message
+      reservation {
+        dateReservation
+        id
+        dateDepart
+        statut
+        duree
+        nombrePersonnes
+        hebergement
+        budget
+        nom
+        prenom
+        email
+        telephone
+        commentaire
+        utilisateur {
+          id
+          email
+          nom
+          prenom
+          telephone
+          role
+        }
+        circuit {
+          id
+          titre
+          description
+          duree
+          prix
+          inclus
+          nonInclus
+          itineraires {
+            id
+            jour
+            lieuDepart
+            lieuArrivee
+            distanceKm
+            dureeTrajet
+            description
+            carteGps
+          }
+        }
+      }
+    }
+  }
+`;

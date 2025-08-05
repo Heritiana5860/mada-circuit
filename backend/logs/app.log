@@ -1,0 +1,59 @@
+[2025-08-03 14:54:38,073] DEBUG myapp (queries.py:366): Decoded User ID: ReservationType:c8a78d7a-b139-43f3-ae96-e242ae4e2c6d
+[2025-08-03 14:55:26,485] DEBUG myapp (queries.py:366): Decoded User ID: UmVzZXJ2YXRpb25UeXBlOmM4YTc4ZDdhLWIxMzktNDNmMy1hZTk2LWUyNDJhZTRlMmM2ZA==
+[2025-08-03 14:55:26,489] DEBUG myapp (queries.py:367): Decoded User ID: ReservationType:c8a78d7a-b139-43f3-ae96-e242ae4e2c6d
+[2025-08-03 14:57:43,560] ERROR myapp (queries.py:376): Erreur lors du traitement de l'user_id: UmVzZXJ2YXRpb25UeXBlOmM4YTc4ZDdhLWIxMzktNDNmMy1hZTk2LWUyNDJhZTRlMmM2ZA==, erreur: name 're' is not defined
+[2025-08-03 14:58:04,362] DEBUG myapp (queries.py:345): Decoded User ID: UmVzZXJ2YXRpb25UeXBlOmM4YTc4ZDdhLWIxMzktNDNmMy1hZTk2LWUyNDJhZTRlMmM2ZA==
+[2025-08-03 14:58:04,363] DEBUG myapp (queries.py:346): Decoded User ID: ReservationType:c8a78d7a-b139-43f3-ae96-e242ae4e2c6d
+[2025-08-03 15:08:36,255] ERROR myapp (queries.py:363): Erreur de décodage Base64 pour user_id 'c8a78d7a-b139-43f3-ae96-e242ae4e2c6d==': Excess padding not allowed
+[2025-08-03 15:08:59,147] DEBUG myapp (queries.py:355): Decoded User ID (bytes): b'ReservationType:c8a78d7a-b139-43f3-ae96-e242ae4e2c6d'
+[2025-08-03 15:08:59,149] DEBUG myapp (queries.py:356): Decoded User ID (str): ReservationType:c8a78d7a-b139-43f3-ae96-e242ae4e2c6d
+[2025-08-03 15:10:03,514] DEBUG myapp (queries.py:355): user_id: UmVzZXJ2YXRpb25UeXBlOmM4YTc4ZDdhLWIxMzktNDNmMy1hZTk2LWUyNDJhZTRlMmM2ZA==
+[2025-08-03 15:10:03,515] DEBUG myapp (queries.py:356): decoded_bytes: b'ReservationType:c8a78d7a-b139-43f3-ae96-e242ae4e2c6d'
+[2025-08-03 15:10:03,515] DEBUG myapp (queries.py:357): decoded_str: ReservationType:c8a78d7a-b139-43f3-ae96-e242ae4e2c6d
+[2025-08-03 15:11:29,592] DEBUG myapp (queries.py:355): user_id: UmVzZXJ2YXRpb25UeXBlOmM4YTc4ZDdhLWIxMzktNDNmMy1hZTk2LWUyNDJhZTRlMmM2ZA==
+[2025-08-03 15:11:29,593] DEBUG myapp (queries.py:356): decoded_bytes: b'ReservationType:c8a78d7a-b139-43f3-ae96-e242ae4e2c6d'
+[2025-08-03 15:11:29,594] DEBUG myapp (queries.py:357): decoded_str: ReservationType:c8a78d7a-b139-43f3-ae96-e242ae4e2c6d
+[2025-08-03 15:16:03,568] DEBUG myapp (queries.py:355): user_id: VXRpbGlzYXRldXJUeXBlOmYyYTlmNmQzLWU3ZTAtNDVlYi1iOTIzLWI0ZmI3NWJiNDMyMw==
+[2025-08-03 15:16:03,569] DEBUG myapp (queries.py:356): decoded_bytes: b'UtilisateurType:f2a9f6d3-e7e0-45eb-b923-b4fb75bb4323'
+[2025-08-03 15:16:03,569] DEBUG myapp (queries.py:357): decoded_str: UtilisateurType:f2a9f6d3-e7e0-45eb-b923-b4fb75bb4323
+[2025-08-03 15:17:24,618] DEBUG myapp (queries.py:355): user_id: VXRpbGlzYXRldXJUeXBlOmYyYTlmNmQzLWU3ZTAtNDVlYi1iOTIzLWI0ZmI3NWJiNDMyMw==
+[2025-08-03 15:17:24,619] DEBUG myapp (queries.py:356): decoded_bytes: b'UtilisateurType:f2a9f6d3-e7e0-45eb-b923-b4fb75bb4323'
+[2025-08-03 15:17:24,619] DEBUG myapp (queries.py:357): decoded_str: UtilisateurType:f2a9f6d3-e7e0-45eb-b923-b4fb75bb4323
+[2025-08-03 15:18:56,145] DEBUG myapp (queries.py:377): Decoded User ID: VXRpbGlzYXRldXJUeXBlOmYyYTlmNmQzLWU3ZTAtNDVlYi1iOTIzLWI0ZmI3NWJiNDMyMw==
+[2025-08-03 15:18:56,146] DEBUG myapp (queries.py:378): Decoded User ID: UtilisateurType:f2a9f6d3-e7e0-45eb-b923-b4fb75bb4323
+[2025-08-03 15:21:29,228] DEBUG myapp (queries.py:378): Decoded User ID: VXRpbGlzYXRldXJUeXBlOmYyYTlmNmQzLWU3ZTAtNDVlYi1iOTIzLWI0ZmI3NWJiNDMyMw==
+[2025-08-03 15:21:29,228] DEBUG myapp (queries.py:379): decoded_str: UtilisateurType:f2a9f6d3-e7e0-45eb-b923-b4fb75bb4323
+[2025-08-03 15:21:29,229] DEBUG myapp (queries.py:380): clean_user_id: f2a9f6d3-e7e0-45eb-b923-b4fb75bb4323
+[2025-08-03 15:22:13,733] DEBUG myapp (queries.py:345): Decoded User ID: VXRpbGlzYXRldXJUeXBlOmYyYTlmNmQzLWU3ZTAtNDVlYi1iOTIzLWI0ZmI3NWJiNDMyMw==
+[2025-08-03 15:22:13,734] DEBUG myapp (queries.py:346): decoded_str: UtilisateurType:f2a9f6d3-e7e0-45eb-b923-b4fb75bb4323
+[2025-08-03 15:22:13,735] DEBUG myapp (queries.py:347): clean_user_id: f2a9f6d3-e7e0-45eb-b923-b4fb75bb4323
+[2025-08-03 15:34:40,447] DEBUG myapp (queries.py:345): Decoded User ID: VXRpbGlzYXRldXJUeXBlOmYyYTlmNmQzLWU3ZTAtNDVlYi1iOTIzLWI0ZmI3NWJiNDMyMw==
+[2025-08-03 15:34:40,448] DEBUG myapp (queries.py:346): decoded_str: UtilisateurType:f2a9f6d3-e7e0-45eb-b923-b4fb75bb4323
+[2025-08-03 15:34:40,448] DEBUG myapp (queries.py:347): clean_user_id: f2a9f6d3-e7e0-45eb-b923-b4fb75bb4323
+[2025-08-03 15:35:00,040] DEBUG myapp (queries.py:345): Decoded User ID: VXRpbGlzYXRldXJUeXBlOmYyYTlmNmQzLWU3ZTAtNDVlYi1iOTIzLWI0ZmI3NWJiNDMyMw==
+[2025-08-03 15:35:00,041] DEBUG myapp (queries.py:346): decoded_str: UtilisateurType:f2a9f6d3-e7e0-45eb-b923-b4fb75bb4323
+[2025-08-03 15:35:00,041] DEBUG myapp (queries.py:347): clean_user_id: f2a9f6d3-e7e0-45eb-b923-b4fb75bb4323
+[2025-08-03 15:35:08,705] DEBUG myapp (queries.py:345): Decoded User ID: VXRpbGlzYXRldXJUeXBlOmYyYTlmNmQzLWU3ZTAtNDVlYi1iOTIzLWI0ZmI3NWJiNDMyMw==
+[2025-08-03 15:35:08,706] DEBUG myapp (queries.py:346): decoded_str: UtilisateurType:f2a9f6d3-e7e0-45eb-b923-b4fb75bb4323
+[2025-08-03 15:35:08,706] DEBUG myapp (queries.py:347): clean_user_id: f2a9f6d3-e7e0-45eb-b923-b4fb75bb4323
+[2025-08-03 15:35:14,134] DEBUG myapp (queries.py:345): Decoded User ID: VXRpbGlzYXRldXJUeXBlOmYyYTlmNmQzLWU3ZTAtNDVlYi1iOTIzLWI0ZmI3NWJiNDMyMw==
+[2025-08-03 15:35:14,135] DEBUG myapp (queries.py:346): decoded_str: UtilisateurType:f2a9f6d3-e7e0-45eb-b923-b4fb75bb4323
+[2025-08-03 15:35:14,136] DEBUG myapp (queries.py:347): clean_user_id: f2a9f6d3-e7e0-45eb-b923-b4fb75bb4323
+[2025-08-03 17:13:23,526] DEBUG myapp (queries.py:345): Decoded User ID: VXRpbGlzYXRldXJUeXBlOmYyYTlmNmQzLWU3ZTAtNDVlYi1iOTIzLWI0ZmI3NWJiNDMyMw==
+[2025-08-03 17:13:23,527] DEBUG myapp (queries.py:346): decoded_str: UtilisateurType:f2a9f6d3-e7e0-45eb-b923-b4fb75bb4323
+[2025-08-03 17:13:23,528] DEBUG myapp (queries.py:347): clean_user_id: f2a9f6d3-e7e0-45eb-b923-b4fb75bb4323
+[2025-08-03 17:19:53,502] DEBUG myapp (queries.py:345): Decoded User ID: VXRpbGlzYXRldXJUeXBlOmYyYTlmNmQzLWU3ZTAtNDVlYi1iOTIzLWI0ZmI3NWJiNDMyMw==
+[2025-08-03 17:19:53,502] DEBUG myapp (queries.py:346): decoded_str: UtilisateurType:f2a9f6d3-e7e0-45eb-b923-b4fb75bb4323
+[2025-08-03 17:19:53,503] DEBUG myapp (queries.py:347): clean_user_id: f2a9f6d3-e7e0-45eb-b923-b4fb75bb4323
+[2025-08-03 17:36:27,154] DEBUG myapp (queries.py:345): Decoded User ID: VXRpbGlzYXRldXJUeXBlOmYyYTlmNmQzLWU3ZTAtNDVlYi1iOTIzLWI0ZmI3NWJiNDMyMw==
+[2025-08-03 17:36:27,154] DEBUG myapp (queries.py:346): decoded_str: UtilisateurType:f2a9f6d3-e7e0-45eb-b923-b4fb75bb4323
+[2025-08-03 17:36:27,155] DEBUG myapp (queries.py:347): clean_user_id: f2a9f6d3-e7e0-45eb-b923-b4fb75bb4323
+[2025-08-03 18:00:05,698] DEBUG myapp (queries.py:345): Decoded User ID: VXRpbGlzYXRldXJUeXBlOmYyYTlmNmQzLWU3ZTAtNDVlYi1iOTIzLWI0ZmI3NWJiNDMyMw==
+[2025-08-03 18:00:05,699] DEBUG myapp (queries.py:346): decoded_str: UtilisateurType:f2a9f6d3-e7e0-45eb-b923-b4fb75bb4323
+[2025-08-03 18:00:05,699] DEBUG myapp (queries.py:347): clean_user_id: f2a9f6d3-e7e0-45eb-b923-b4fb75bb4323
+[2025-08-03 18:00:37,279] DEBUG myapp (queries.py:345): Decoded User ID: VXRpbGlzYXRldXJUeXBlOmYyYTlmNmQzLWU3ZTAtNDVlYi1iOTIzLWI0ZmI3NWJiNDMyMw==
+[2025-08-03 18:00:37,279] DEBUG myapp (queries.py:346): decoded_str: UtilisateurType:f2a9f6d3-e7e0-45eb-b923-b4fb75bb4323
+[2025-08-03 18:00:37,279] DEBUG myapp (queries.py:347): clean_user_id: f2a9f6d3-e7e0-45eb-b923-b4fb75bb4323
+[2025-08-03 18:02:58,574] DEBUG myapp (queries.py:345): Decoded User ID: VXRpbGlzYXRldXJUeXBlOmYyYTlmNmQzLWU3ZTAtNDVlYi1iOTIzLWI0ZmI3NWJiNDMyMw==
+[2025-08-03 18:02:58,574] DEBUG myapp (queries.py:346): decoded_str: UtilisateurType:f2a9f6d3-e7e0-45eb-b923-b4fb75bb4323
+[2025-08-03 18:02:58,575] DEBUG myapp (queries.py:347): clean_user_id: f2a9f6d3-e7e0-45eb-b923-b4fb75bb4323

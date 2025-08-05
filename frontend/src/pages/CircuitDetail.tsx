@@ -33,17 +33,60 @@ import { Badge } from "@/components/ui/badge";
 import { useEffect, useState } from "react";
 import { Circuit } from "@/types";
 import { formatPrice } from "@/helper/formatage";
+import { useAuth } from "@/contexts/AuthContext";
+import { useMutation, gql } from "@apollo/client";
+import { CREATE_CIRCUIT_RESERVATION } from "@/graphql/mutations";
 
 const CircuitDetail = () => {
   const { id } = useParams();
   const navigate = useNavigate();
+  const { isAuthenticated, user } = useAuth();
+
   const location = useLocation();
   const [circuit, setCircuit] = useState<Circuit | null>(null);
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
   const [guestCount, setGuestCount] = useState(2);
-  const [departureDate, setDepartureDate] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [isWishlisted, setIsWishlisted] = useState(false);
-  const [activeImageModal, setActiveImageModal] = useState(false);
+  const [errors, setErrors] = useState<string | null>(null);
+  const [successMessage, setSuccessMessage] = useState<string | null>(null);
+  const [formData, setFormData] = useState({
+    dateDepart: "",
+    dateArrive: "",
+    voyageur: 1,
+    commentaire: "",
+  });
+
+  // Correction de la mutation - synchronisation avec les données du formulaire
+  const [
+    circuitReservation,
+    { loading: mutationLoading, error: mutationError },
+  ] = useMutation(CREATE_CIRCUIT_RESERVATION, {
+    onCompleted: (data) => {
+      console.log("Réservation créée avec succès:", data);
+      setSuccessMessage(
+        "Votre réservation a été enregistrée avec succès ! Nous vous contacterons bientôt."
+      );
+      setErrors(null);
+
+      // Réinitialiser le formulaire après succès
+      setFormData({
+        dateDepart: "",
+        dateArrive: "",
+        voyageur: 1,
+        commentaire: "",
+      });
+      setGuestCount(1);
+    },
+    onError: (error) => {
+      console.error("Erreur lors de la réservation:", error);
+      setErrors(
+        error.message ||
+          "Une erreur s'est produite lors de la réservation. Veuillez réessayer."
+      );
+      setSuccessMessage(null);
+    },
+  });
 
   const circuitFromState = location.state?.circuit as Circuit;
 
@@ -65,6 +108,14 @@ const CircuitDetail = () => {
       setCircuit(dataCircuit.circuit);
     }
   }, [circuitFromState, dataCircuit]);
+
+  // Synchroniser le nombre de voyageurs avec le formulaire
+  useEffect(() => {
+    setFormData((prev) => ({
+      ...prev,
+      voyageur: guestCount,
+    }));
+  }, [guestCount]);
 
   // États de chargement et d'erreur
   if (!circuitFromState && loadingCircuit) {
@@ -178,7 +229,6 @@ const CircuitDetail = () => {
   const displayData = {
     id: circuit.id,
     title: circuit.titre,
-    // image: mainImage,
     location: `${circuit.destination.nom}, ${circuit.destination.region}`,
     duration: `${circuit.duree} jours`,
     price: circuit.prix,
@@ -191,7 +241,130 @@ const CircuitDetail = () => {
     notIncluded: circuit.nonInclus,
     gallery: allCircuitImages,
   };
+
   const totalPrice = displayData.price * guestCount;
+
+  // Fonction pour calculer le nombre de jours
+  const calculateDays = (dateDebut: string, dateFin: string): number => {
+    if (!dateDebut || !dateFin) return 0;
+    const start = new Date(dateDebut);
+    const end = new Date(dateFin);
+    const diffTime = end.getTime() - start.getTime();
+    return Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+  };
+
+  const days = calculateDays(formData.dateDepart, formData.dateArrive);
+
+  // Gestion des changements dans le formulaire
+  const handleInputChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+
+    // Réinitialiser les messages quand l'utilisateur modifie les champs
+    if (errors) setErrors(null);
+    if (successMessage) setSuccessMessage(null);
+  };
+
+  // Validation du formulaire améliorée
+  const validateForm = (): boolean => {
+    if (!formData.dateDepart) {
+      setErrors("Veuillez sélectionner une date de début");
+      return false;
+    }
+
+    if (!formData.dateArrive) {
+      setErrors("Veuillez sélectionner une date de fin");
+      return false;
+    }
+
+    const startDate = new Date(formData.dateDepart);
+    const endDate = new Date(formData.dateArrive);
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
+    if (startDate < today) {
+      setErrors("La date de début ne peut pas être dans le passé");
+      return false;
+    }
+
+    if (startDate >= endDate) {
+      setErrors("La date de fin doit être postérieure à la date de début");
+      return false;
+    }
+
+    if (guestCount < 1) {
+      setErrors("Le nombre de personnes doit être d'au moins 1");
+      return false;
+    }
+
+    if (guestCount > 12) {
+      setErrors("Le nombre maximum de personnes est de 12");
+      return false;
+    }
+
+    return true;
+  };
+
+  // Correction de la fonction de soumission
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    if (!isAuthenticated) {
+      navigate("/login", { state: { from: `/circuit/${id}` } });
+      return;
+    }
+
+    if (!validateForm()) {
+      return;
+    }
+
+    if (!user?.id) {
+      setErrors("Erreur d'authentification. Veuillez vous reconnecter.");
+      return;
+    }
+
+    setIsSubmitting(true);
+    setErrors(null);
+    setSuccessMessage(null);
+
+    try {
+      // Données corrigées pour la mutation
+      const reservationData = {
+        utilisateurId: user.id,
+        circuitId: id,
+        dateDepart: formData.dateDepart,
+        dateFin: formData.dateArrive,
+        nombrePersonnes: guestCount,
+        commentaire: formData.commentaire || "",
+        budget: totalPrice.toString(),
+      };
+
+      console.log("Données de réservation:", reservationData);
+
+      await circuitReservation({
+        variables: reservationData,
+      });
+    } catch (err) {
+      console.error("Erreur lors de la réservation:", err);
+      // L'erreur est gérée par onError de la mutation
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  // Fonction pour gérer les boutons + et -
+  const handleGuestCountChange = (increment: boolean) => {
+    if (increment) {
+      setGuestCount(Math.min(12, guestCount + 1));
+    } else {
+      setGuestCount(Math.max(1, guestCount - 1));
+    }
+  };
 
   return (
     <div className="min-h-screen flex flex-col bg-gray-50">
@@ -285,7 +458,7 @@ const CircuitDetail = () => {
                       </div>
                     )}
 
-                    {/* Navigation par flèches (optionnel) */}
+                    {/* Navigation par flèches */}
                     {displayData.gallery.length > 1 && (
                       <>
                         <button
@@ -299,19 +472,7 @@ const CircuitDetail = () => {
                           className="absolute left-4 top-1/2 transform -translate-y-1/2 bg-white/80 hover:bg-white p-2 rounded-full shadow-lg transition-all"
                           aria-label="Image précédente"
                         >
-                          <svg
-                            className="w-4 h-4"
-                            fill="none"
-                            stroke="currentColor"
-                            viewBox="0 0 24 24"
-                          >
-                            <path
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                              strokeWidth={2}
-                              d="M15 19l-7-7 7-7"
-                            />
-                          </svg>
+                          <ChevronLeft className="w-4 h-4" />
                         </button>
                         <button
                           onClick={() =>
@@ -322,19 +483,7 @@ const CircuitDetail = () => {
                           className="absolute right-4 top-1/2 transform -translate-y-1/2 bg-white/80 hover:bg-white p-2 rounded-full shadow-lg transition-all"
                           aria-label="Image suivante"
                         >
-                          <svg
-                            className="w-4 h-4"
-                            fill="none"
-                            stroke="currentColor"
-                            viewBox="0 0 24 24"
-                          >
-                            <path
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                              strokeWidth={2}
-                              d="M9 5l7 7-7 7"
-                            />
-                          </svg>
+                          <ChevronRight className="w-4 h-4" />
                         </button>
                       </>
                     )}
@@ -407,8 +556,11 @@ const CircuitDetail = () => {
                   </Badge>
                 </div>
 
-                {/* Prix */}
-                <div className="bg-primary/5 p-6 rounded-xl border border-primary/10">
+                {/* Formulaire de réservation */}
+                <form
+                  onSubmit={handleSubmit}
+                  className="bg-primary/5 p-6 rounded-xl border border-primary/10"
+                >
                   <div className="flex items-baseline gap-2 mb-2">
                     <span className="text-3xl font-bold text-primary">
                       {formatPrice(displayData.price)}
@@ -419,6 +571,27 @@ const CircuitDetail = () => {
                     Tout inclus • Base chambre double
                   </p>
 
+                  {/* Messages d'erreur et de succès */}
+                  {errors && (
+                    <div className="mb-4 p-3 bg-red-50 border border-red-200 rounded-lg">
+                      <div className="flex items-center">
+                        <XCircle className="h-4 w-4 text-red-500 mr-2" />
+                        <span className="text-sm text-red-700">{errors}</span>
+                      </div>
+                    </div>
+                  )}
+
+                  {successMessage && (
+                    <div className="mb-4 p-3 bg-green-50 border border-green-200 rounded-lg">
+                      <div className="flex items-center">
+                        <CheckCircle2 className="h-4 w-4 text-green-500 mr-2" />
+                        <span className="text-sm text-green-700">
+                          {successMessage}
+                        </span>
+                      </div>
+                    </div>
+                  )}
+
                   <div className="space-y-4">
                     <div className="grid grid-cols-2 gap-4">
                       <div>
@@ -427,61 +600,144 @@ const CircuitDetail = () => {
                         </label>
                         <input
                           type="date"
-                          value={departureDate}
-                          onChange={(e) => setDepartureDate(e.target.value)}
+                          name="dateDepart"
+                          value={formData.dateDepart}
+                          onChange={handleInputChange}
+                          min={new Date().toISOString().split("T")[0]}
                           className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-primary/20 focus:border-primary"
+                          required
                         />
                       </div>
 
                       <div>
                         <label className="block text-sm font-medium mb-1">
-                          Voyageurs
+                          Date de fin
                         </label>
-                        <div className="flex border border-gray-300 rounded-lg overflow-hidden">
-                          <button
-                            onClick={() =>
-                              setGuestCount(Math.max(1, guestCount - 1))
-                            }
-                            className="px-3 py-2 bg-gray-50 hover:bg-gray-100 text-gray-600"
-                          >
-                            -
-                          </button>
-                          <input
-                            type="number"
-                            value={guestCount}
-                            readOnly
-                            className="w-full text-center py-2 text-sm"
-                          />
-                          <button
-                            onClick={() => setGuestCount(guestCount + 1)}
-                            className="px-3 py-2 bg-gray-50 hover:bg-gray-100 text-gray-600"
-                          >
-                            +
-                          </button>
+                        <input
+                          type="date"
+                          name="dateArrive"
+                          value={formData.dateArrive}
+                          onChange={handleInputChange}
+                          min={
+                            formData.dateDepart ||
+                            new Date().toISOString().split("T")[0]
+                          }
+                          className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-primary/20 focus:border-primary"
+                          required
+                        />
+                      </div>
+                    </div>
+
+                    <div>
+                      <label className="block text-sm font-medium mb-1">
+                        Voyageurs
+                      </label>
+                      <div className="flex border border-gray-300 rounded-lg overflow-hidden">
+                        <button
+                          type="button"
+                          onClick={() => handleGuestCountChange(false)}
+                          disabled={guestCount <= 1}
+                          className="px-3 py-2 bg-gray-50 hover:bg-gray-100 text-gray-600 disabled:opacity-50 disabled:cursor-not-allowed"
+                        >
+                          -
+                        </button>
+                        <input
+                          type="number"
+                          name="voyageur"
+                          value={guestCount}
+                          readOnly
+                          className="w-full text-center py-2 text-sm"
+                        />
+                        <button
+                          type="button"
+                          onClick={() => handleGuestCountChange(true)}
+                          disabled={guestCount >= 12}
+                          className="px-3 py-2 bg-gray-50 hover:bg-gray-100 text-gray-600 disabled:opacity-50 disabled:cursor-not-allowed"
+                        >
+                          +
+                        </button>
+                      </div>
+                      <p className="text-xs text-gray-500 mt-1">
+                        Maximum 12 personnes
+                      </p>
+                    </div>
+
+                    <div>
+                      <label className="block text-sm font-medium mb-1">
+                        Message (optionnel)
+                      </label>
+                      <textarea
+                        name="commentaire"
+                        value={formData.commentaire}
+                        onChange={handleInputChange}
+                        placeholder="Demandes spéciales, régimes alimentaires, etc..."
+                        rows={3}
+                        className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-primary/20 focus:border-primary resize-none"
+                      />
+                    </div>
+
+                    {/* Récapitulatif */}
+                    {days > 0 && (
+                      <div className="bg-gray-50 p-4 rounded-lg space-y-2">
+                        <div className="flex justify-between items-center text-sm">
+                          <span className="text-gray-600">Durée</span>
+                          <span className="font-medium">
+                            {days} {days > 1 ? "jours" : "jour"}
+                          </span>
+                        </div>
+                        <div className="flex justify-between items-center text-sm">
+                          <span className="text-gray-600">
+                            Prix par personne
+                          </span>
+                          <span className="font-medium">
+                            {formatPrice(displayData.price)}
+                          </span>
+                        </div>
+                        <div className="flex justify-between items-center text-sm">
+                          <span className="text-gray-600">
+                            Nombre de personnes
+                          </span>
+                          <span className="font-medium">{guestCount}</span>
+                        </div>
+                        <div className="border-t pt-2">
+                          <div className="flex justify-between items-center">
+                            <span className="font-semibold">Total</span>
+                            <span className="text-xl font-bold text-primary">
+                              {formatPrice(totalPrice)}
+                            </span>
+                          </div>
                         </div>
                       </div>
-                    </div>
+                    )}
 
-                    <div className="border-t pt-4">
-                      <div className="flex justify-between items-center mb-4">
-                        <span className="font-semibold">Total:</span>
-                        <span className="text-xl font-bold text-primary">
-                          {totalPrice.toLocaleString()} Ar
-                        </span>
-                      </div>
-
-                      <div className="space-y-3">
-                        <Button className="w-full h-12 text-base font-semibold">
-                          <Calendar className="h-5 w-5 mr-2" />
-                          Réserver maintenant
-                        </Button>
-                        <Button variant="outline" className="w-full h-12">
-                          Demander un devis personnalisé
-                        </Button>
-                      </div>
+                    <div className="space-y-3">
+                      <Button
+                        type="submit"
+                        className="w-full h-12 text-base font-semibold"
+                        disabled={isSubmitting || mutationLoading}
+                      >
+                        {isSubmitting || mutationLoading ? (
+                          <>
+                            <Loader2 className="h-5 w-5 mr-2 animate-spin" />
+                            Réservation en cours...
+                          </>
+                        ) : (
+                          <>
+                            <Calendar className="h-5 w-5 mr-2" />
+                            Réserver maintenant
+                          </>
+                        )}
+                      </Button>
+                      <Button
+                        type="button"
+                        variant="outline"
+                        className="w-full h-12"
+                      >
+                        Demander un devis personnalisé
+                      </Button>
                     </div>
                   </div>
-                </div>
+                </form>
               </div>
             </div>
           </div>
@@ -570,7 +826,7 @@ const CircuitDetail = () => {
                                 <h4 className="text-lg font-semibold font-sans mb-2">
                                   {day.lieuDepart} → {day.lieuArrivee}
                                 </h4>
-                                <p className="pb-4 text-gray">
+                                <p className="pb-4 text-gray-600">
                                   ⏱️{day.dureeTrajet}H | 🛣️{day.distanceKm} Km
                                 </p>
                                 <p className="text-gray-600">

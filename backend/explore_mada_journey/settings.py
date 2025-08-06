@@ -166,6 +166,16 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'explore_mada_journey.wsgi.application'
 
+# Configuration e-mail
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'  # ou votre serveur SMTP
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+# EMAIL_USE_SSL = True
+EMAIL_HOST_USER = 'heritianaronaldo@gmail.com'
+EMAIL_HOST_PASSWORD = 'dkow oefw sypo nigg'
+DEFAULT_FROM_EMAIL = 'heritianaronaldo@gmail.com'
+
 
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases

@@ -153,7 +153,7 @@ class BlogImageInline(admin.TabularInline):
 
 @admin.register(Circuit)
 class CircuitAdmin(admin.ModelAdmin):
-    list_display = ('titre', 'destination', 'duree', 'prix', 'inclus', 'non_inclus', 'difficulte', 'saison', 'vehicule_recommande', 'image_preview', 'nombre_reservations')
+    list_display = ('titre', 'destination', 'duree', 'prix', 'inclus', 'non_inclus', 'type', 'difficulte', 'saison', 'vehicule_recommande', 'image_preview', 'nombre_reservations')
     list_filter = ('difficulte', 'destination', 'saison', 'vehicule_recommande')
     search_fields = ('titre', 'description')
     readonly_fields = ('image_preview',)
@@ -164,7 +164,7 @@ class CircuitAdmin(admin.ModelAdmin):
             'fields': ('titre', 'description', 'destination', 'saison', 'vehicule_recommande')
         }),
         ('Détails du circuit', {
-            'fields': ('duree', 'prix', 'difficulte', 'inclus', 'non_inclus')
+            'fields': ('duree', 'prix', 'type', 'difficulte', 'inclus', 'non_inclus')
         }),
         ('Image', {
             'fields': ('image', 'image_preview')
@@ -245,8 +245,8 @@ class VehiculeAdmin(admin.ModelAdmin):
 
 @admin.register(Reservation)
 class ReservationAdmin(admin.ModelAdmin):
-    list_display = ('id', 'nom', 'prenom', 'circuit', 'vehicule', 'date_depart', 'statut', 'nombre_personnes', 'date_reservation')
-    list_filter = ('statut', 'hebergement', 'activite', 'date_reservation', 'date_depart')
+    list_display = ('id', 'nom', 'prenom', 'circuit', 'vehicule', 'date_depart', 'date_fin', 'statut', 'nombre_personnes', 'date_reservation')
+    list_filter = ('statut', 'hebergement', 'activite', 'date_reservation', 'date_depart', 'date_fin')
     search_fields = ('nom', 'prenom', 'email', 'telephone', 'circuit__titre')
     date_hierarchy = 'date_reservation'
     readonly_fields = ('date_reservation',)
@@ -256,7 +256,7 @@ class ReservationAdmin(admin.ModelAdmin):
             'fields': ('utilisateur', 'nom', 'prenom', 'email', 'telephone')
         }),
         ('Détails de la réservation', {
-            'fields': ('circuit', 'vehicule', 'date_depart', 'duree', 'nombre_personnes')
+            'fields': ('circuit', 'vehicule', 'date_depart', 'date_fin', 'duree', 'nombre_personnes')
         }),
         ('Préférences', {
             'fields': ('hebergement', 'activite', 'budget')

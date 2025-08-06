@@ -91,7 +91,7 @@ class Utilisateur(AbstractUser):
 class Destination(models.Model):
     id = models.CharField(primary_key=True, default=uuid.uuid4, editable=False, max_length=36)
     nom = models.CharField(max_length=100)
-    description = models.TextField()
+    description = models.TextField(null=True, blank=True)
     region = models.CharField(max_length=100)
     pays = models.CharField(max_length=100, default="Madagascar")
     image = models.ImageField(upload_to=destination_image_path, blank=True, null=True)
@@ -103,8 +103,8 @@ class Destination(models.Model):
 class Saison(models.Model):
     id = models.CharField(primary_key=True, default=uuid.uuid4, editable=False, max_length=36)
     nom = models.CharField(max_length=100, unique=True)
-    date_debut = models.DateField()
-    date_fin = models.DateField()
+    date_debut = models.DateField(null=True, blank=True)
+    date_fin = models.DateField(null=True, blank=True)
     
     def __str__(self):
         return self.nom
@@ -153,11 +153,11 @@ class Itineraire(models.Model):
     id = models.CharField(primary_key=True, default=uuid.uuid4, editable=False, max_length=36)
     jour = models.PositiveIntegerField(default=1, help_text="Jour 1, Jour 2...")
     lieu_depart = models.CharField(max_length=100)
-    lieu_arrivee = models.CharField(max_length=100)
+    lieu_arrivee = models.CharField(max_length=100, null=True, blank=True)
     distance_km = models.FloatField(null=True, blank=True, help_text="Distance estimée (km)")
     duree_trajet = models.FloatField(null=True, blank=True, help_text="Durée estimée (heures)")
-    description = models.TextField(verbose_name="Description détaillée", blank=True)
-    carte_gps = models.URLField(blank=True, help_text="Lien vers l'itinéraire GPS")
+    description = models.TextField(verbose_name="Description détaillée", null=True, blank=True)
+    carte_gps = models.URLField(null=True, blank=True, help_text="Lien vers l'itinéraire GPS")
     
     circuit = models.ForeignKey(Circuit, on_delete=models.CASCADE, related_name='itineraires')
     
@@ -178,7 +178,7 @@ class PointInteret(models.Model):
     description = models.TextField()
     type = models.CharField(max_length=100, choices=CATEGORIE_POINT_INTERET, default='CULTURE', help_text="Catégoriser les points d'intérêt")
     temps_visite = models.FloatField(default=1.0, help_text="Durée recommandée (heures)")
-    prix_entree = models.DecimalField(max_digits=6, decimal_places=2, null=True, help_text="Coût d'entrée si applicable")
+    prix_entree = models.DecimalField(max_digits=6, decimal_places=2, null=True, blank=True, help_text="Coût d'entrée si applicable")
     
     image = models.ImageField(upload_to=point_interet_image_path, blank=True, null=True)
     
@@ -264,6 +264,7 @@ class Reservation(models.Model):
     type = models.CharField(choices=ReservationType, max_length=20, default=ReservationType.VEHICULE, verbose_name=_("Reservation Type"))
     date_reservation = models.DateTimeField(default=timezone.now)
     date_depart = models.DateTimeField()
+    date_fin = models.DateTimeField()
     statut = models.CharField(max_length=20, choices=ReservationStatus.choices, default=ReservationStatus.EN_ATTENTE)
     duree = models.IntegerField()
     nombre_personnes = models.IntegerField()

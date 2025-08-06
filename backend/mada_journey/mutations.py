@@ -4,6 +4,7 @@ from graphene_file_upload.scalars import Upload
 from django.contrib.auth import authenticate
 from django.utils import timezone
 from django.core.exceptions import ValidationError
+from django.core.mail import send_mail
 from django.db import transaction
 from decimal import Decimal
 import hashlib
@@ -1520,6 +1521,7 @@ class CreateCircuitReservation(graphene.Mutation):
                 vehicule=None,
                 circuit=circuit,
                 date_depart=date_depart,
+                date_fin=date_fin,
                 duree=duree.days,
                 nombre_personnes=nombre_personnes,
                 budget=budget,
@@ -1530,6 +1532,57 @@ class CreateCircuitReservation(graphene.Mutation):
                 commentaire=commentaire,
                 date_reservation=timezone.now(),
                 statut=Reservation.ReservationStatus.EN_ATTENTE
+            )
+            
+            site_email = 'heritianaronaldo@gmail.com'
+            message = (
+                f"Bonjour,\n\n"
+                f"Une nouvelle demande de réservation a été effectuée via votre site.\n\n"
+                f"Informations du client :\n"
+                f"Nom : {utilisateur.nom} {utilisateur.prenom}\n"
+                f"E-mail : {utilisateur.email}\n"
+                f"Téléphone : {utilisateur.telephone}\n\n"
+                f"Détails de la réservation :\n"
+                f"- Dates : du {date_depart} au {date_fin}\n"
+                f"- Durée : {duree} jour(s)\n"
+                f"- Nombre de personnes : {nombre_personnes}\n"
+                f"- Budget : {budget} Ar\n"
+                f"- Demande personnalisée : {commentaire}\n\n"
+                f"Veuillez contacter le client pour finaliser les détails.\n\n"
+                f"Cordialement,\n"
+                f"Votre site web"
+            )
+            
+            # Envoi au site
+            send_mail(
+                subject="📩 Nouvelle demande de réservation de circuit",
+                message=message,
+                from_email= utilisateur.email,
+                recipient_list=[site_email],
+                fail_silently=False,
+            )
+            
+            # Envoi de confirmation au client
+            confirmation_message = (
+                f"Bonjour {utilisateur.prenom},\n\n"
+                f"Nous avons bien reçu votre demande de réservation.\n"
+                f"Voici un résumé :\n"
+                f"- Circuit du {date_depart} au {date_fin} ({duree} jour(s))\n"
+                f"- Nombre de personnes : {nombre_personnes}\n"
+                f"- Budget : {budget} Ar\n"
+                f"- Votre message : {commentaire}\n\n"
+                f"Nous vous contacterons dans les plus brefs délais.\n"
+                f"Merci pour votre confiance.\n\n"
+                f"Cordialement,\n"
+                f"L’équipe Madagascar Voyage Solidaire"
+            )
+            
+            send_mail(
+                subject="✅ Confirmation de votre demande de réservation",
+                message=confirmation_message,
+                from_email=site_email,
+                recipient_list=[utilisateur.email],
+                fail_silently=False,
             )
 
             return CreateCircuitReservation(

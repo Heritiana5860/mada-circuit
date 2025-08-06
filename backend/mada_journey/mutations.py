@@ -12,6 +12,8 @@ import time
 import base64
 import logging
 
+from .email_helper import message, confirmation_message, objet_message, objet_confirmation_message, site_mail
+
 from .models import (
     Utilisateur, Destination, Saison, Circuit, PointInteret, Itineraire,
     TypeVehicule, Capacite, Vehicule, Reservation, Guide,
@@ -1446,6 +1448,27 @@ class CreateVehiculeReservation(graphene.Mutation):
                 date_reservation=timezone.now(),
                 statut=Reservation.ReservationStatus.EN_ATTENTE
             )
+            
+            site_email = site_mail
+            
+            # Envoi au site
+            send_mail(
+                subject=objet_message("location voiture"),
+                message=message(utilisateur, date_depart, date_fin, duree, nombre_personnes, budget, commentaire),
+                from_email= utilisateur.email,
+                recipient_list=[site_email],
+                fail_silently=False,
+            )
+            
+            # Envoi de confirmation au client            
+            send_mail(
+                subject=objet_confirmation_message(),
+                message=confirmation_message(utilisateur, date_depart, date_fin, duree, nombre_personnes, budget, commentaire, type_circuit=False),
+                from_email=site_email,
+                recipient_list=[utilisateur.email],
+                fail_silently=False,
+            )
+            
 
             return CreateVehiculeReservation(
                 reservation=reservation,
@@ -1512,8 +1535,6 @@ class CreateCircuitReservation(graphene.Mutation):
 
             duree = date_fin - date_depart
 
-            print(duree)
-
             # Création de la réservation avec le type VEHICULE
             reservation = Reservation.objects.create(
                 type=Reservation.ReservationType.CIRUIT,
@@ -1534,52 +1555,21 @@ class CreateCircuitReservation(graphene.Mutation):
                 statut=Reservation.ReservationStatus.EN_ATTENTE
             )
             
-            site_email = 'heritianaronaldo@gmail.com'
-            message = (
-                f"Bonjour,\n\n"
-                f"Une nouvelle demande de réservation a été effectuée via votre site.\n\n"
-                f"Informations du client :\n"
-                f"Nom : {utilisateur.nom} {utilisateur.prenom}\n"
-                f"E-mail : {utilisateur.email}\n"
-                f"Téléphone : {utilisateur.telephone}\n\n"
-                f"Détails de la réservation :\n"
-                f"- Dates : du {date_depart} au {date_fin}\n"
-                f"- Durée : {duree} jour(s)\n"
-                f"- Nombre de personnes : {nombre_personnes}\n"
-                f"- Budget : {budget} Ar\n"
-                f"- Demande personnalisée : {commentaire}\n\n"
-                f"Veuillez contacter le client pour finaliser les détails.\n\n"
-                f"Cordialement,\n"
-                f"Votre site web"
-            )
+            site_email = site_mail
             
             # Envoi au site
             send_mail(
-                subject="📩 Nouvelle demande de réservation de circuit",
-                message=message,
+                subject=objet_message("circuit"),
+                message=message(utilisateur, date_depart, date_fin, duree, nombre_personnes, budget, commentaire),
                 from_email= utilisateur.email,
                 recipient_list=[site_email],
                 fail_silently=False,
             )
             
-            # Envoi de confirmation au client
-            confirmation_message = (
-                f"Bonjour {utilisateur.prenom},\n\n"
-                f"Nous avons bien reçu votre demande de réservation.\n"
-                f"Voici un résumé :\n"
-                f"- Circuit du {date_depart} au {date_fin} ({duree} jour(s))\n"
-                f"- Nombre de personnes : {nombre_personnes}\n"
-                f"- Budget : {budget} Ar\n"
-                f"- Votre message : {commentaire}\n\n"
-                f"Nous vous contacterons dans les plus brefs délais.\n"
-                f"Merci pour votre confiance.\n\n"
-                f"Cordialement,\n"
-                f"L’équipe Madagascar Voyage Solidaire"
-            )
-            
+            # Envoi de confirmation au client            
             send_mail(
-                subject="✅ Confirmation de votre demande de réservation",
-                message=confirmation_message,
+                subject=objet_confirmation_message(),
+                message=confirmation_message(utilisateur, date_depart, date_fin, duree, nombre_personnes, budget, commentaire, type_circuit=True),
                 from_email=site_email,
                 recipient_list=[utilisateur.email],
                 fail_silently=False,

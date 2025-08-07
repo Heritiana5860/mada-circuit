@@ -83,7 +83,7 @@ const PopularCircuits = () => {
           {circuits.map((circuit, index) => (
             <CircuitCard
               key={circuit.id}
-              {...circuit} // Remove the duplicate convertCircuitData call here
+              {...circuit}
               className="animate-fade-in-up"
               style={
                 { animationDelay: `${index * 0.1}s` } as React.CSSProperties

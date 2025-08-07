@@ -57,7 +57,7 @@ const CircuitDetail = () => {
     commentaire: "",
   });
 
-  // Correction de la mutation - synchronisation avec les données du formulaire
+  // Synchronisation avec les données du formulaire
   const [
     circuitReservation,
     { loading: mutationLoading, error: mutationError },
@@ -727,13 +727,6 @@ const CircuitDetail = () => {
                             Réserver maintenant
                           </>
                         )}
-                      </Button>
-                      <Button
-                        type="button"
-                        variant="outline"
-                        className="w-full h-12"
-                      >
-                        Demander un devis personnalisé
                       </Button>
                     </div>
                   </div>

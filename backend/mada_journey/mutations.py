@@ -1,4 +1,4 @@
-from datetime import timedelta
+from datetime import datetime, timedelta
 import graphene
 from graphene_file_upload.scalars import Upload
 from django.contrib.auth import authenticate
@@ -465,115 +465,163 @@ class UpdateVehicule(graphene.Mutation):
 # Mutations pour les réservations
 class CreateReservation(graphene.Mutation):
     class Arguments:
-        circuit_id = graphene.ID(required=True)
-        vehicule_id = graphene.ID(required=True)
-        date_depart = graphene.DateTime(required=True)
-        duree = graphene.Int(required=True)
+        utilisateur_id = graphene.ID(required=True)
+        circuit_id = graphene.ID()
+        vehicule_id = graphene.ID() 
+        date_depart = graphene.Date(required=True)
+        date_fin = graphene.Date(required=True)
         nombre_personnes = graphene.Int(required=True)
-        hebergement = graphene.String()
-        activite = graphene.String()
         budget = graphene.String()
-        nom = graphene.String(required=True)
-        prenom = graphene.String(required=True)
-        email = graphene.String(required=True)
-        telephone = graphene.String(required=True)
         commentaire = graphene.String()
-        utilisateur_id = graphene.ID()
+        
 
     reservation = graphene.Field(ReservationType)
     success = graphene.Boolean()
+    message = graphene.String()
     errors = graphene.List(graphene.String)
 
-    def mutate(self, info, circuit_id, vehicule_id, date_depart, duree, nombre_personnes,
-               nom, prenom, email, telephone, **kwargs):
-        errors = []
-
-        # Validations préliminaires
-        if duree <= 0:
-            errors.append("La durée doit être positive")
-        
-        if nombre_personnes <= 0:
-            errors.append("Le nombre de personnes doit être positif")
-        
-        # Validation de l'email
-        import re
-        email_regex = r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$'
-        if not re.match(email_regex, email):
-            errors.append("Format d'email invalide")
-
-        # Validation du téléphone (format simple)
-        phone_regex = r'^\+?[\d\s-]{9,}$'
-        if not re.match(phone_regex, telephone):
-            errors.append("Format de téléphone invalide")
-
-        if errors:
-            return CreateReservation(success=False, errors=errors)
+    def mutate(self, info, utilisateur_id, date_depart, date_fin, nombre_personnes,
+               circuit_id=None, vehicule_id=None, budget=None, commentaire=None):
 
         try:
             with transaction.atomic():
-                # Récupération des objets avec select_for_update pour éviter les conditions de course
-                circuit = Circuit.objects.select_for_update().get(pk=circuit_id)
-                vehicule = Vehicule.objects.select_for_update().get(pk=vehicule_id)
+                
+                # Validation : au moins un des deux ID doit être fourni
+                if not circuit_id and not vehicule_id:
+                    return CreateReservation(
+                        reservation=None,
+                        success=False,
+                        errors=["Au moins un circuit_id ou vehicule_id doit être fourni"]
+                    )
+                
+                # Décoder avec la fonction Relay
+                utilisateur_type, real_utilisateur_id = from_global_id(utilisateur_id)
+                
+                # Récupération de l'utilisateur
+                try:
+                    utilisateur = Utilisateur.objects.get(id=real_utilisateur_id)
+                except Utilisateur.DoesNotExist:
+                    return CreateReservation(
+                        reservation=None,
+                        success=False,
+                        errors=["Utilisateur introuvable"]
+                    )
+                
+                # Variables pour les objets
+                circuit = None
+                vehicule = None
+                reservation_type = None
+                
+                # Déterminer le type de réservation et récupérer les objets
+                if vehicule_id and circuit_id:
+                    # Les deux sont fournis - réservation véhicule avec circuit
+                    try:
+                        circuit_type, real_circuit_id = from_global_id(circuit_id)
+                        circuit = Circuit.objects.get(id=real_circuit_id)
+                        vehicule = Vehicule.objects.get(id=vehicule_id)
+                        reservation_type = Reservation.ReservationType.VEHICULE
+                    except Circuit.DoesNotExist:
+                        return CreateReservation(
+                            reservation=None,
+                            success=False,
+                            errors=["Circuit introuvable"]
+                        )
+                    except Vehicule.DoesNotExist:
+                        return CreateReservation(
+                            reservation=None,
+                            success=False,
+                            errors=["Véhicule introuvable"]
+                        )
+                        
+                elif vehicule_id:
+                    # Seulement véhicule - réservation véhicule seul
+                    try:
+                        vehicule = Vehicule.objects.get(id=vehicule_id)
+                        reservation_type = Reservation.ReservationType.VEHICULE
+                    except Vehicule.DoesNotExist:
+                        return CreateReservation(
+                            reservation=None,
+                            success=False,
+                            errors=["Véhicule introuvable"]
+                        )
+                        
+                elif circuit_id:
+                    # Seulement circuit - réservation circuit seul
+                    try:
+                        circuit_type, real_circuit_id = from_global_id(circuit_id)
+                        circuit = Circuit.objects.get(id=real_circuit_id)
+                        reservation_type = Reservation.ReservationType.CIRCUIT
+                    except Circuit.DoesNotExist:
+                        return CreateReservation(
+                            reservation=None,
+                            success=False,
+                            errors=["Circuit introuvable"]
+                        )
 
-                # Vérifications de disponibilité
-                if vehicule.etat != EtatVehicule.DISPONIBLE:
-                    return CreateReservation(success=False, errors=["Véhicule non disponible"])
-
-                if vehicule.capacite.nombre_places < nombre_personnes:
-                    return CreateReservation(success=False, errors=["Capacité du véhicule insuffisante"])
-
-                # Vérification plus précise des conflits de dates
-                date_fin = date_depart + timedelta(days=duree)
-                conflicting_reservations = Reservation.objects.filter(
-                    vehicule=vehicule,
-                    statut__in=[Reservation.ReservationStatus.EN_ATTENTE, Reservation.ReservationStatus.CONFIRMEE],
-                    date_depart__lt=date_fin,
-                    date_depart__gte=date_depart - timedelta(days=Reservation.objects.filter(
-                        vehicule=vehicule,
-                        statut__in=[Reservation.ReservationStatus.EN_ATTENTE, Reservation.ReservationStatus.CONFIRMEE]
-                    ).aggregate(Max('duree'))['duree__max'] or 1)
-                )
-                if conflicting_reservations.exists():
-                    return CreateReservation(success=False, errors=["Véhicule déjà réservé pour cette période"])
-
-                utilisateur = None
-                if kwargs.get('utilisateur_id'):
-                    utilisateur = Utilisateur.objects.get(pk=kwargs['utilisateur_id'])
+                # Calcul de la durée
+                duree = (date_fin - date_depart).days
+                    
 
                 # Création de la réservation
-                reservation = Reservation(
+                reservation = Reservation.objects.create(
+                    type=reservation_type,
                     utilisateur=utilisateur,
-                    circuit=circuit,
                     vehicule=vehicule,
+                    circuit=circuit,
                     date_depart=date_depart,
+                    date_fin=date_fin,
                     duree=duree,
                     nombre_personnes=nombre_personnes,
-                    hebergement=kwargs.get('hebergement', 'STANDARD').upper(),
-                    activite=kwargs.get('activite', 'RANDONNEE').upper(),
-                    budget=kwargs.get('budget'),
-                    nom=nom.strip(),
-                    prenom=prenom.strip(),
-                    email=email.lower().strip(),
-                    telephone=telephone.strip(),
-                    commentaire=kwargs.get('commentaire', '').strip()
+                    budget=budget,
+                    nom=utilisateur.nom,
+                    prenom=utilisateur.prenom,
+                    telephone=utilisateur.telephone,
+                    email=utilisateur.email,
+                    commentaire=commentaire,
+                    date_reservation=timezone.now(),
+                    statut=Reservation.ReservationStatus.EN_ATTENTE
                 )
                 
-                # Validation du modèle avant sauvegarde
-                reservation.full_clean()
-                reservation.save()
+                # Configuration des emails selon le type
+                site_email = site_mail()
+                is_vehicule = reservation_type == Reservation.ReservationType.VEHICULE
+                email_subject = objet_message("location voiture") if is_vehicule else objet_message("circuit")
 
-                # Mise à jour du statut du véhicule
-                vehicule.etat = EtatVehicule.RESERVE
-                vehicule.save()
+                # Envoi au site
+                send_mail(
+                    subject=email_subject,
+                    message=message(utilisateur, date_depart, date_fin, duree, nombre_personnes, budget, commentaire),
+                    from_email=utilisateur.email,
+                    recipient_list=[site_email],
+                    fail_silently=False,
+                )
+                
+                # Envoi de confirmation au client            
+                send_mail(
+                    subject=objet_confirmation_message(),
+                    message=confirmation_message(
+                        utilisateur, date_depart, date_fin, duree, 
+                        nombre_personnes, budget, commentaire, 
+                        type_circuit=not is_vehicule
+                    ),
+                    from_email=site_email,
+                    recipient_list=[utilisateur.email],
+                    fail_silently=False,
+                )
+                
 
-                return CreateReservation(reservation=reservation, success=True, errors=None)
+                return CreateReservation(
+                    reservation=reservation,
+                    success=True,
+                    errors=[]
+                )
 
-        except (Circuit.DoesNotExist, Vehicule.DoesNotExist, Utilisateur.DoesNotExist):
-            return CreateReservation(success=False, errors=["Circuit, véhicule ou utilisateur non trouvé"])
-        except ValidationError as e:
-            return CreateReservation(success=False, errors=[str(err) for err in e.messages])
         except Exception as e:
-            return CreateReservation(success=False, errors=[f"Erreur inattendue: {str(e)}"])
+            return CreateReservation(
+                reservation=None,
+                success=False,
+                errors=[f"Erreur lors de la création de la réservation: {str(e)}"]
+            )
 
 class UpdateReservationStatus(graphene.Mutation):
     class Arguments:
@@ -1420,15 +1468,11 @@ class CreateVehiculeReservation(graphene.Mutation):
             # Décoder avec la fonction Relay
             utilisateur_type, real_utilisateur_id = from_global_id(utilisateur_id)
             
-            print(f"DEBUG - Type: {utilisateur_type}, UUID: {real_utilisateur_id}")
-            
             # Récupération des objets nécessaires
             vehicule = Vehicule.objects.get(id=vehicule_id)
             utilisateur = Utilisateur.objects.get(id=real_utilisateur_id)
 
             duree = date_fin - date_depart
-
-            print(duree)
 
             # Création de la réservation avec le type VEHICULE
             reservation = Reservation.objects.create(

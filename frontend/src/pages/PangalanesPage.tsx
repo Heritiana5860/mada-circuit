@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 import NavBar from "../components/NavBar";
 import Footer from "../components/Footer";
 import { Button } from "@/components/ui/button";
@@ -17,7 +17,13 @@ import {
   Shield,
   Star,
 } from "lucide-react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { useQuery } from "@apollo/client";
+import { GET_ALL_CIRCUITS } from "@/graphql/queries";
+import ContentLoading from "@/components/Loading";
+import ContentError from "@/components/error";
+import { SectionCitation } from "./pangalanes/SectionCitation";
+import { formatPrice } from "@/helper/formatage";
 
 const PangalanesPage = () => {
   const navigate = useNavigate();
@@ -67,39 +73,6 @@ const PangalanesPage = () => {
       description:
         "Explorez les sentiers qui bordent le canal avec nos guides expérimentés qui vous feront découvrir la flore locale.",
       icon: <Compass className="h-6 w-6 text-primary" />,
-    },
-  ];
-
-  const tourPackages = [
-    {
-      title: "Escapade d'une Journée",
-      description:
-        "Une journée pour découvrir les merveilles du canal au départ de Tamatave.",
-      price: 300000,
-      duration: "1 jour",
-      location: "Tamatave - Ambila Lemaitso",
-      image:
-        "https://www.madagascar-circuits.com/wp-content/uploads/2024/05/Canal-des-Pangalanes.jpg",
-    },
-    {
-      title: "Aventure de 3 Jours",
-      description:
-        "Trois jours d'immersion dans la nature luxuriante avec logement dans des lodges au bord du canal.",
-      price: 900000,
-      duration: "3 jours",
-      location: "Tamatave - Ankanin'ny Nofy",
-      image:
-        "https://zamilane.com/wp-content/uploads/2023/12/img_20211030_082531.jpg.webp",
-    },
-    {
-      title: "Exploration Complète",
-      description:
-        "Une semaine pour découvrir en profondeur le canal et ses environs avec des activités variées.",
-      price: 2100000,
-      duration: "7 jours",
-      location: "Tamatave - Mananjary",
-      image:
-        "https://media-cdn.tripadvisor.com/media/photo-s/16/05/32/ea/moyen-de-transport-sur.jpg",
     },
   ];
 
@@ -181,6 +154,22 @@ const PangalanesPage = () => {
     },
   ];
 
+  const { data, loading, error } = useQuery(GET_ALL_CIRCUITS, {
+    variables: {
+      type: "pangalane",
+    },
+  });
+
+  if (loading) {
+    return <ContentLoading />;
+  }
+
+  if (error) {
+    return <ContentError />;
+  }
+
+  const dataPangalanes = data?.allCircuitsByType;
+
   return (
     <div className="min-h-screen flex flex-col">
       <NavBar />
@@ -207,11 +196,18 @@ const PangalanesPage = () => {
                   onClick={() => {
                     window.location.href = "#offres";
                   }}
-                className="mr-5">
+                  className="mr-5"
+                >
                   Découvrir nos offres
                 </Button>
-                <Button size="lg" variant="secondary">
-                  En savoir plus
+                <Button
+                  size="lg"
+                  variant="secondary"
+                  onClick={() => {
+                    window.location.href = "#pangalanesVoyages";
+                  }}
+                >
+                  Pourquoi choisir pangalanes voyages?
                 </Button>
               </div>
             </div>
@@ -319,24 +315,24 @@ const PangalanesPage = () => {
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              {tourPackages.map((pack, index) => (
+              {dataPangalanes.map((pack, index) => (
                 <Card key={index} className="overflow-hidden">
                   <div className="relative h-48">
                     <img
-                      src={pack.image}
+                      src={`http://localhost:8000/media/${pack.images[0].image}`}
                       alt={pack.title}
                       className="w-full h-full object-cover"
                     />
                     <div className="absolute top-3 left-3">
                       <span className="bg-primary text-primary-foreground text-xs font-medium px-2 py-1 rounded-full">
-                        {pack.duration}
+                        {pack.duree} jours
                       </span>
                     </div>
                   </div>
                   <CardContent className="p-6">
                     <div className="flex items-center mb-2 text-sm text-muted-foreground">
                       <MapPin className="h-4 w-4 mr-1" />
-                      <span>{pack.location}</span>
+                      <span>{pack.destination.nom}</span>
                     </div>
                     <h3 className="text-xl font-bold mb-2">{pack.title}</h3>
                     <p className="text-muted-foreground mb-4">
@@ -344,16 +340,21 @@ const PangalanesPage = () => {
                     </p>
                     <div className="flex justify-between items-center">
                       <span className="text-xl font-bold text-primary">
-                        {pack.price.toLocaleString()} Ar
+                        {formatPrice(pack.prix)}
                       </span>
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        className="flex items-center"
+                      <Link
+                        to={`/pangalanes/${pack.id}`}
+                        state={{ pangalanes: pack }}
                       >
-                        <span>Détails</span>
-                        <ArrowRight className="ml-2 h-4 w-4" />
-                      </Button>
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          className="flex items-center"
+                        >
+                          <span>Détails</span>
+                          <ArrowRight className="ml-2 h-4 w-4" />
+                        </Button>
+                      </Link>
                     </div>
                   </CardContent>
                 </Card>
@@ -363,7 +364,7 @@ const PangalanesPage = () => {
         </section>
 
         {/* Nouvelle section: Pourquoi choisir Pangalanes Voyages */}
-        <section className="py-16">
+        <section className="py-16" id="pangalanesVoyages">
           <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center max-w-3xl mx-auto mb-12">
               <h2 className="text-3xl font-bold mb-4">
@@ -390,38 +391,7 @@ const PangalanesPage = () => {
         </section>
 
         {/* Nouvelle section: Citation sur l'expérience */}
-        <section className="py-16 bg-primary/5">
-          <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="bg-white p-8 rounded-lg shadow-md">
-              <blockquote className="border-l-4 border-primary pl-6 italic text-lg text-muted-foreground">
-                "On peut trouver les avantages de la navigation fluviale sans
-                stress, sans danger, sans pollution sur le canal des pangalanes,
-                mais en plus, il y a une vraie aventure à vivre comme au début
-                du 20ème siècle, il y a cent ans, à l'époque de Gallieni
-                Gouverneur de Madagascar. Les étendues d'eau présentent une
-                diversité remarquable, les immenses rivières et lacs bordant
-                l'océan Indien sur 650 kilomètres. Les villages sont nichés sur
-                les dunes côtières ou dans la forêt vierge, ils regorgent de
-                poissons et de crustacés, de volaille et de zébus, de fruits et
-                de légumes, de riz et d'épices. Les villes ont de petits hôtels
-                confortables avec des bungalows en bord de mer et des
-                restaurants traditionnels de qualité."
-              </blockquote>
-              <div className="mt-6">
-                <p className="font-bold">
-                  Récemment, Pangalanes voyage, des associations comme
-                  Parrainage des enfants sur le canal des pangalanes dirigée par
-                  Mme RAZAFIHERISON Maminiaina, des prestataires touristiques et
-                  des guides, se sont organisés et regroupés pour offrir aux
-                  clients du tourisme des produits qu'ils sont en mesure de
-                  gérer au complet. Anciens pécheurs, francophones, anglophones
-                  amoureux de leurs traditions et fiers de les faire connaître
-                  leur famille, leur cuisine.
-                </p>
-              </div>
-            </div>
-          </div>
-        </section>
+        <SectionCitation />
 
         {/* Nouvelle section: Nos Formules de Voyage */}
         <section className="py-16">

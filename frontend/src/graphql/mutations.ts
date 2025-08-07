@@ -142,3 +142,49 @@ export const CREATE_CIRCUIT_RESERVATION = gql`
     }
   }
 `;
+
+// Mutation pour créer une réservation
+export const CREATE_RESERVATION = gql`
+  mutation createReservation(
+    $utilisateurId: ID!
+    $circuitId: ID
+    $vehiculeId: ID
+    $dateDepart: Date!
+    $dateFin: Date!
+    $nombrePersonnes: Int!
+    $budget: String
+    $commentaire: String
+  ) {
+    createReservation(
+      utilisateurId: $utilisateurId
+      circuitId: $circuitId
+      vehiculeId: $vehiculeId
+      dateDepart: $dateDepart
+      dateFin: $dateFin
+      nombrePersonnes: $nombrePersonnes
+      budget: $budget
+      commentaire: $commentaire
+    ) {
+      success
+      message
+      errors
+      reservation {
+        id
+        dateReservation
+        dateDepart
+        statut
+        duree
+        nombrePersonnes
+        hebergement
+        activite
+        budget
+        nom
+        prenom
+        email
+        telephone
+        commentaire
+        prixTotal
+      }
+    }
+  }
+`;

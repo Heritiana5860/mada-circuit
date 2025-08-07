@@ -257,7 +257,7 @@ class Reservation(models.Model):
         TERMINEE = 'TERMINEE', 'Terminée'
     class ReservationType(models.TextChoices):
         VEHICULE = "vehicule", _("Véhicule")
-        CIRUIT = "circuit", _("Circuit")
+        CIRCUIT = "circuit", _("Circuit")
 
 
     id = models.CharField(primary_key=True, default=uuid.uuid4, editable=False, max_length=36)

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useQuery } from "@apollo/client";
 import NavBar from "../components/NavBar";
 import Footer from "../components/Footer";
@@ -26,9 +26,10 @@ import {
 } from "lucide-react";
 import { GET_ALL_CIRCUITS, GET_ALL_DESTINATIONS } from "@/graphql/queries";
 import { Circuit } from "@/types";
-import { Alert, AlertDescription } from "@/components/ui/alert";
 import CarouselHeader from "@/components/CarouselHeader";
 import { Link } from "react-router-dom";
+import ContentLoading from "@/components/Loading";
+import ContentError from "@/components/error";
 
 const Circuits = () => {
   const [selectedRegion, setSelectedRegion] = useState<string>("all");
@@ -209,40 +210,11 @@ const Circuits = () => {
     (selectedRegion !== "all" ? 1 : 0);
 
   if (circuitsLoading) {
-    return (
-      <div className="min-h-screen flex flex-col">
-        <NavBar />
-        <main className="flex-grow flex items-center justify-center">
-          <div className="text-center space-y-4">
-            <Loader2 className="h-12 w-12 animate-spin mx-auto text-primary" />
-            <div>
-              <h3 className="text-lg font-semibold">Chargement des circuits</h3>
-              <p className="text-muted-foreground">
-                Découvrez nos destinations exceptionnelles...
-              </p>
-            </div>
-          </div>
-        </main>
-        <Footer />
-      </div>
-    );
+    return <ContentLoading />;
   }
 
   if (circuitsError) {
-    return (
-      <div className="min-h-screen flex flex-col">
-        <NavBar />
-        <main className="flex-grow flex items-center justify-center p-4">
-          <Alert variant="destructive" className="max-w-md">
-            <AlertDescription>
-              Erreur lors du chargement des circuits. Veuillez réessayer plus
-              tard.
-            </AlertDescription>
-          </Alert>
-        </main>
-        <Footer />
-      </div>
-    );
+    return <ContentError />;
   }
 
   return (

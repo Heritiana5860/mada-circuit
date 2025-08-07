@@ -25,6 +25,8 @@ import Profile from "./pages/Profile";
 import Reservation from "./pages/Reservation";
 import PageGuide from "./pages/guide/PageGuide";
 import PageGuideProfile from "./pages/guide/PageGuideProfile";
+import PangalanesDetailPage from "./pages/pangalanes/PangalanesDetail";
+import ProgrammeSolidaireDetail from "./pages/ProgrammeSolidaireDetail";
 
 const queryClient = new QueryClient();
 
@@ -75,8 +77,16 @@ const App = () => (
               />
               <Route path="/pangalanes" element={<PangalanesPage />} />
               <Route
+                path="/pangalanes/:id"
+                element={<PangalanesDetailPage />}
+              />
+              <Route
                 path="/programme-solidaire"
                 element={<ProgrammeSolidairePage />}
+              />
+              <Route
+                path="/programme-solidaire/:id"
+                element={<ProgrammeSolidaireDetail />}
               />
               <Route
                 path="/objectif-association"
@@ -98,7 +108,6 @@ const App = () => (
                   </ProtectedRoute>
                 }
               />
-
 
               <Route path="*" element={<NotFound />} />
             </Routes>

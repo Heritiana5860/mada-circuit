@@ -15,6 +15,7 @@ import { useState } from "react";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { CREATE_RESERVATION } from "@/graphql/mutations";
 import { Calendar, Loader2 } from "lucide-react";
+import { getCircuitImages } from "@/helper/GestionImages";
 
 const PangalanesDetailPage = () => {
   const { id } = useParams();
@@ -37,30 +38,10 @@ const PangalanesDetailPage = () => {
   });
 
   // Données de détail
-  const dataFromState = location.state?.pangalanes;
+  const dataFromState = location.state?.dataState;
 
   // Gestion des images
-  const getPangalaneImages = () => {
-    if (
-      dataFromState?.images &&
-      Array.isArray(dataFromState.images) &&
-      dataFromState.images.length > 0
-    ) {
-      return dataFromState.images
-        .filter((img) => img && img.image)
-        .map((img) => {
-          const imagePath = img.image;
-          if (imagePath.startsWith("http")) {
-            return imagePath;
-          } else {
-            return `http://localhost:8000/media/${imagePath}`;
-          }
-        });
-    }
-    return ["/placeholder.svg"];
-  };
-
-  const allPangalaneImages = getPangalaneImages();
+  const allPangalaneImages = getCircuitImages(dataFromState.images);
 
   // Navigation du carousel
   const nextImage = () => {
@@ -217,19 +198,6 @@ const PangalanesDetailPage = () => {
     setIsFavorite(!isFavorite);
     // Logique pour sauvegarder en favoris
   };
-
-  if (!dataFromState) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="text-center">
-          <h2 className="text-2xl font-semibold mb-4">Circuit introuvable</h2>
-          <Button onClick={() => navigate("/circuits")}>
-            Retour aux circuits
-          </Button>
-        </div>
-      </div>
-    );
-  }
 
   // Gestion des changements dans le formulaire
   const handleInputChange = (

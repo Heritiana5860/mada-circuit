@@ -1,10 +1,15 @@
 import CircuitCard from "./CircuitCard";
-import { ArrowRight, Loader2 } from "lucide-react";
+import { ArrowRight, Loader2, MapPin } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useQuery } from "@apollo/client";
 import { GET_ALL_CIRCUITS } from "@/graphql/queries";
 import { Circuit } from "@/types";
 import { Alert, AlertDescription } from "@/components/ui/alert";
+import CardContentDetail from "./detail/CardContentDetail";
+import { Card, CardContent } from "./ui/card";
+import { Button } from "./ui/button";
+import { formatPrice } from "@/helper/formatage";
+import { useState } from "react";
 
 const PopularCircuits = () => {
   // Requête GraphQL pour récupérer tous les circuits (on prendra les 3 premiers)
@@ -12,25 +17,9 @@ const PopularCircuits = () => {
     variables: { type: "circuit" },
   });
 
-  // Fonction pour convertir les données du backend vers le format attendu par CircuitCard
-  const convertCircuitData = (circuit: Circuit) => ({
-    id: circuit.id,
-    title: circuit.titre,
-    location: `${circuit.destination?.nom || "Destination inconnue"}, 
-    ${circuit.destination?.region || "Région inconnue"}`,
-    duration: `${circuit.duree} jours`,
-    price: circuit.prix,
-    saison: circuit.saison?.nom || "Saison non spécifiée",
-    pointsInteret: circuit.pointsInteret || [],
-    images: circuit.images,
-    circuitData: circuit,
-  });
+  const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
 
-  // Utiliser les données du backend (prendre les 4 derniers circuits)
-  const circuits =
-    data?.allCircuitsByType?.length > 0
-      ? data.allCircuitsByType.slice(-4).reverse().map(convertCircuitData) 
-      : [];
+  const circuits = data?.allCircuitsByType;
 
   return (
     <section className="section-container">
@@ -79,16 +68,15 @@ const PopularCircuits = () => {
           </p>
         </div>
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div
+          className={
+            viewMode === "grid"
+              ? "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
+              : "space-y-4"
+          }
+        >
           {circuits.map((circuit, index) => (
-            <CircuitCard
-              key={circuit.id}
-              {...circuit}
-              className="animate-fade-in-up"
-              style={
-                { animationDelay: `${index * 0.1}s` } as React.CSSProperties
-              }
-            />
+            <CardContentDetail pack={circuit} lien="circuits" key={index} />
           ))}
         </div>
       )}

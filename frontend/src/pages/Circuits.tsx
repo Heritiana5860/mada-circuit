@@ -23,17 +23,19 @@ import {
   TrendingUp,
   Compass,
   Variable,
+  ArrowRight,
 } from "lucide-react";
 import { GET_ALL_CIRCUITS, GET_ALL_DESTINATIONS } from "@/graphql/queries";
-import { Circuit } from "@/types";
 import CarouselHeader from "@/components/CarouselHeader";
 import { Link } from "react-router-dom";
 import ContentLoading from "@/components/Loading";
 import ContentError from "@/components/error";
+import { formatPrice } from "@/helper/formatage";
+import CardContentDetail from "@/components/detail/CardContentDetail";
 
 const Circuits = () => {
   const [selectedRegion, setSelectedRegion] = useState<string>("all");
-  const [filteredCircuits, setFilteredCircuits] = useState<Circuit[]>([]);
+  const [filteredCircuits, setFilteredCircuits] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [showFilters, setShowFilters] = useState(false);
   const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
@@ -65,7 +67,6 @@ const Circuits = () => {
   } = useQuery(GET_ALL_CIRCUITS, {
     variables: { type: "circuit" },
   });
-  const { data: destinationsData } = useQuery(GET_ALL_DESTINATIONS);
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -78,7 +79,7 @@ const Circuits = () => {
       setCurrentImageIndex(
         (prevIndex) => (prevIndex + 1) % backgroundImages.length
       );
-    }, 5000); // Change d'image toutes les 5 secondes
+    }, 5000);
 
     return () => clearInterval(interval);
   }, [backgroundImages.length]);
@@ -102,12 +103,12 @@ const Circuits = () => {
   // Filtrage et recherche des circuits
   useEffect(() => {
     if (circuitsData?.allCircuitsByType) {
-      let circuits = circuitsData.allCircuitsByType;
+      let circuits = circuitsData?.allCircuitsByType;
 
       // Filtre par région
       if (selectedRegion !== "all") {
-        circuits = circuits.filter((circuit: Circuit) =>
-          circuit.destination.region
+        circuits = circuits.filter((circuit: string) =>
+          circuit["destination"]["region"]
             .toLowerCase()
             .includes(selectedRegion.toLowerCase())
         );
@@ -116,12 +117,14 @@ const Circuits = () => {
       // Filtre par recherche textuelle
       if (searchQuery.trim()) {
         circuits = circuits.filter(
-          (circuit: Circuit) =>
-            circuit.titre.toLowerCase().includes(searchQuery.toLowerCase()) ||
-            circuit.destination.nom
+          (circuit: string) =>
+            circuit["titre"]
               .toLowerCase()
               .includes(searchQuery.toLowerCase()) ||
-            circuit.description
+            circuit["destination"]["nom"]
+              .toLowerCase()
+              .includes(searchQuery.toLowerCase()) ||
+            circuit["description"]
               .toLowerCase()
               .includes(searchQuery.toLowerCase())
         );
@@ -129,8 +132,8 @@ const Circuits = () => {
 
       // Filtres avancés
       if (filters.duration !== "all") {
-        circuits = circuits.filter((circuit: Circuit) => {
-          const duration = circuit.duree;
+        circuits = circuits.filter((circuit: string) => {
+          const duration = circuit["duree"];
           switch (filters.duration) {
             case "short":
               return duration <= 5;
@@ -145,8 +148,8 @@ const Circuits = () => {
       }
 
       if (filters.priceRange !== "all") {
-        circuits = circuits.filter((circuit: Circuit) => {
-          const price = circuit.prix;
+        circuits = circuits.filter((circuit: string) => {
+          const price = circuit["prix"];
           switch (filters.priceRange) {
             case "budget":
               return price <= 500000;
@@ -160,38 +163,9 @@ const Circuits = () => {
         });
       }
 
-      // Tri des résultats
-      circuits = [...circuits].sort((a: Circuit, b: Circuit) => {
-        switch (sortBy) {
-          case "price-low":
-            return a.prix - b.prix;
-          case "price-high":
-            return b.prix - a.prix;
-          case "duration":
-            return a.duree - b.duree;
-          case "name":
-            return a.titre.localeCompare(b.titre);
-          default: // popular
-            return 0;
-        }
-      });
-
       setFilteredCircuits(circuits);
     }
   }, [circuitsData, selectedRegion, searchQuery, filters, sortBy]);
-
-  // Fonction pour convertir les données du backend vers le format attendu par CircuitCard
-  const convertCircuitData = (circuit: Circuit) => ({
-    id: circuit.id,
-    title: circuit.titre,
-    location: `${circuit.destination.nom}, ${circuit.destination.region}`,
-    duration: `${circuit.duree} jours`,
-    price: circuit.prix,
-    saison: circuit.saison.nom,
-    pointsInteret: circuit.pointsInteret || [],
-    images: circuit.images,
-    circuitData: circuit,
-  });
 
   const clearFilters = () => {
     setFilters({
@@ -303,43 +277,6 @@ const Circuits = () => {
                     </Badge>
                   )}
                 </Button>
-
-                {/* Tri */}
-                <select
-                  value={sortBy}
-                  onChange={(e) => setSortBy(e.target.value)}
-                  className="border border-gray-300 rounded-md px-3 py-2 text-sm focus:ring-2 focus:ring-primary/20 focus:border-primary"
-                >
-                  <option value="popular">Plus populaires</option>
-                  <option value="price-low">Prix croissant</option>
-                  <option value="price-high">Prix décroissant</option>
-                  <option value="duration">Durée</option>
-                  <option value="name">Nom A-Z</option>
-                </select>
-
-                {/* Mode d'affichage */}
-                <div className="flex border border-gray-300 rounded-md overflow-hidden">
-                  <button
-                    onClick={() => setViewMode("grid")}
-                    className={`p-2 ${
-                      viewMode === "grid"
-                        ? "bg-primary text-white"
-                        : "bg-white text-gray-600 hover:bg-gray-50"
-                    }`}
-                  >
-                    <Grid3X3 className="h-4 w-4" />
-                  </button>
-                  <button
-                    onClick={() => setViewMode("list")}
-                    className={`p-2 ${
-                      viewMode === "list"
-                        ? "bg-primary text-white"
-                        : "bg-white text-gray-600 hover:bg-gray-50"
-                    }`}
-                  >
-                    <List className="h-4 w-4" />
-                  </button>
-                </div>
               </div>
             </div>
 
@@ -461,10 +398,11 @@ const Circuits = () => {
                     : "space-y-4"
                 }
               >
-                {filteredCircuits.map((circuit) => (
-                  <CircuitCard
-                    key={circuit.id}
-                    {...convertCircuitData(circuit)}
+                {filteredCircuits.map((circuit, index) => (
+                  <CardContentDetail
+                    pack={circuit}
+                    lien="circuits"
+                    key={index}
                   />
                 ))}
               </div>

@@ -24,6 +24,7 @@ import ContentLoading from "@/components/Loading";
 import ContentError from "@/components/error";
 import { SectionCitation } from "./pangalanes/SectionCitation";
 import { formatPrice } from "@/helper/formatage";
+import CardContentDetail from "@/components/detail/CardContentDetail";
 
 const PangalanesPage = () => {
   const navigate = useNavigate();
@@ -316,48 +317,7 @@ const PangalanesPage = () => {
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               {dataPangalanes.map((pack, index) => (
-                <Card key={index} className="overflow-hidden">
-                  <div className="relative h-48">
-                    <img
-                      src={`http://localhost:8000/media/${pack.images[0].image}`}
-                      alt={pack.title}
-                      className="w-full h-full object-cover"
-                    />
-                    <div className="absolute top-3 left-3">
-                      <span className="bg-primary text-primary-foreground text-xs font-medium px-2 py-1 rounded-full">
-                        {pack.duree} jours
-                      </span>
-                    </div>
-                  </div>
-                  <CardContent className="p-6">
-                    <div className="flex items-center mb-2 text-sm text-muted-foreground">
-                      <MapPin className="h-4 w-4 mr-1" />
-                      <span>{pack.destination.nom}</span>
-                    </div>
-                    <h3 className="text-xl font-bold mb-2">{pack.title}</h3>
-                    <p className="text-muted-foreground mb-4">
-                      {pack.description}
-                    </p>
-                    <div className="flex justify-between items-center">
-                      <span className="text-xl font-bold text-primary">
-                        {formatPrice(pack.prix)}
-                      </span>
-                      <Link
-                        to={`/pangalanes/${pack.id}`}
-                        state={{ pangalanes: pack }}
-                      >
-                        <Button
-                          variant="outline"
-                          size="sm"
-                          className="flex items-center"
-                        >
-                          <span>Détails</span>
-                          <ArrowRight className="ml-2 h-4 w-4" />
-                        </Button>
-                      </Link>
-                    </div>
-                  </CardContent>
-                </Card>
+                <CardContentDetail pack={pack} lien="pangalanes" key={index} />
               ))}
             </div>
           </div>

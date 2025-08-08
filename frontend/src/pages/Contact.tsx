@@ -286,8 +286,7 @@ const Contact = () => {
                       <div>
                         <h3 className="font-semibold text-lg mb-1">Email</h3>
                         <p className="text-muted-foreground">
-                          info@madagascar-voyage.com<br />
-                          reservations@madagascar-voyage.com
+                          info@madagascar-voyage.com
                         </p>
                       </div>
                     </div>

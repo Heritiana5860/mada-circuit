@@ -1,5 +1,11 @@
-import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
-import { useMutation, gql } from '@apollo/client';
+import React, {
+  createContext,
+  useContext,
+  useState,
+  useEffect,
+  ReactNode,
+} from "react";
+import { useMutation, gql } from "@apollo/client";
 
 // Types
 interface User {
@@ -8,13 +14,19 @@ interface User {
   nom: string;
   prenom: string;
   role: string;
+  profileImage: string | null;
 }
 
 interface AuthContextType {
   user: User | null;
   token: string | null;
-  login: (email: string, password: string) => Promise<{ success: boolean; error?: string }>;
-  register: (userData: RegisterData) => Promise<{ success: boolean; error?: string }>;
+  login: (
+    email: string,
+    password: string
+  ) => Promise<{ success: boolean; error?: string }>;
+  register: (
+    userData: RegisterData
+  ) => Promise<{ success: boolean; error?: string }>;
   logout: () => void;
   isAuthenticated: boolean;
   loading: boolean;
@@ -47,8 +59,20 @@ const LOGIN_MUTATION = gql`
 `;
 
 const REGISTER_MUTATION = gql`
-  mutation RegisterUser($email: String!, $password: String!, $nom: String!, $prenom: String!, $telephone: String) {
-    registerUser(email: $email, password: $password, nom: $nom, prenom: $prenom, telephone: $telephone) {
+  mutation RegisterUser(
+    $email: String!
+    $password: String!
+    $nom: String!
+    $prenom: String!
+    $telephone: String
+  ) {
+    registerUser(
+      email: $email
+      password: $password
+      nom: $nom
+      prenom: $prenom
+      telephone: $telephone
+    ) {
       success
       errors
       token
@@ -67,7 +91,9 @@ const REGISTER_MUTATION = gql`
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 // Provider
-export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
+export const AuthProvider: React.FC<{ children: ReactNode }> = ({
+  children,
+}) => {
   const [user, setUser] = useState<User | null>(null);
   const [token, setToken] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
@@ -77,17 +103,17 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 
   // Vérifier le token au chargement
   useEffect(() => {
-    const savedToken = localStorage.getItem('authToken');
-    const savedUser = localStorage.getItem('authUser');
-    
+    const savedToken = localStorage.getItem("authToken");
+    const savedUser = localStorage.getItem("authUser");
+
     if (savedToken && savedUser) {
       try {
         setToken(savedToken);
         setUser(JSON.parse(savedUser));
       } catch (error) {
-        console.error('Erreur lors du parsing des données utilisateur:', error);
-        localStorage.removeItem('authToken');
-        localStorage.removeItem('authUser');
+        console.error("Erreur lors du parsing des données utilisateur:", error);
+        localStorage.removeItem("authToken");
+        localStorage.removeItem("authUser");
       }
     }
     setLoading(false);
@@ -96,27 +122,27 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   const login = async (email: string, password: string) => {
     try {
       const { data } = await loginMutation({
-        variables: { email, password }
+        variables: { email, password },
       });
 
       if (data.loginUser.success) {
         const { token: newToken, utilisateur } = data.loginUser;
         setToken(newToken);
         setUser(utilisateur);
-        localStorage.setItem('authToken', newToken);
-        localStorage.setItem('authUser', JSON.stringify(utilisateur));
+        localStorage.setItem("authToken", newToken);
+        localStorage.setItem("authUser", JSON.stringify(utilisateur));
         return { success: true };
       } else {
-        return { 
-          success: false, 
-          error: data.loginUser.errors?.[0] || 'Erreur de connexion' 
+        return {
+          success: false,
+          error: data.loginUser.errors?.[0] || "Erreur de connexion",
         };
       }
     } catch (error) {
-      console.error('Erreur de connexion:', error);
-      return { 
-        success: false, 
-        error: 'Erreur de connexion au serveur' 
+      console.error("Erreur de connexion:", error);
+      return {
+        success: false,
+        error: "Erreur de connexion au serveur",
       };
     }
   };
@@ -124,27 +150,29 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   const register = async (userData: RegisterData) => {
     try {
       const { data } = await registerMutation({
-        variables: userData
+        variables: userData,
       });
+
+      console.log("Mutation response:", data);
 
       if (data.registerUser.success) {
         const { token: newToken, utilisateur } = data.registerUser;
         setToken(newToken);
         setUser(utilisateur);
-        localStorage.setItem('authToken', newToken);
-        localStorage.setItem('authUser', JSON.stringify(utilisateur));
+        localStorage.setItem("authToken", newToken);
+        localStorage.setItem("authUser", JSON.stringify(utilisateur));
         return { success: true };
       } else {
-        return { 
-          success: false, 
-          error: data.registerUser.errors?.[0] || 'Erreur d\'inscription' 
+        return {
+          success: false,
+          error: data.registerUser.errors?.[0] || "Erreur d'inscription",
         };
       }
     } catch (error) {
-      console.error('Erreur d\'inscription:', error);
-      return { 
-        success: false, 
-        error: 'Erreur de connexion au serveur' 
+      console.error("Erreur d'inscription:", error);
+      return {
+        success: false,
+        error: "Erreur de connexion au serveur",
       };
     }
   };
@@ -152,8 +180,8 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   const logout = () => {
     setUser(null);
     setToken(null);
-    localStorage.removeItem('authToken');
-    localStorage.removeItem('authUser');
+    localStorage.removeItem("authToken");
+    localStorage.removeItem("authUser");
   };
 
   const value: AuthContextType = {
@@ -163,21 +191,17 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     register,
     logout,
     isAuthenticated: !!user,
-    loading
+    loading,
   };
 
-  return (
-    <AuthContext.Provider value={value}>
-      {children}
-    </AuthContext.Provider>
-  );
+  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 };
 
 // Hook personnalisé
 export const useAuth = () => {
   const context = useContext(AuthContext);
   if (context === undefined) {
-    throw new Error('useAuth must be used within an AuthProvider');
+    throw new Error("useAuth must be used within an AuthProvider");
   }
   return context;
 };

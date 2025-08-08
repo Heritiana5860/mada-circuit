@@ -7,7 +7,7 @@ from .models import (
     Utilisateur, Destination, Saison, Circuit, PointInteret,
     TypeVehicule, Capacite, Vehicule, Reservation, Guide,
     Message, Blog, BlogCommentaire, Faq,
-    CircuitImage, VehiculeImage, DestinationImage, BlogImage, Itineraire
+    CircuitImage, VehiculeImage, DestinationImage, BlogImage, Itineraire, Testimonia
 )
 
 
@@ -18,7 +18,9 @@ class UtilisateurAdmin(UserAdmin):
     list_filter = ('role', 'is_active', 'is_staff', 'date_inscription')
     search_fields = ('email', 'nom', 'prenom', 'telephone')
     ordering = ('-date_inscription',)
-    
+
+    readonly_fields = ('date_inscription',)
+
     fieldsets = UserAdmin.fieldsets + (
         ('Informations personnelles', {
             'fields': ('nom', 'prenom', 'telephone', 'role')
@@ -27,14 +29,12 @@ class UtilisateurAdmin(UserAdmin):
             'fields': ('date_inscription',)
         }),
     )
-    
+
     add_fieldsets = UserAdmin.add_fieldsets + (
         ('Informations personnelles', {
             'fields': ('email', 'nom', 'prenom', 'telephone', 'role')
         }),
     )
-    
-    readonly_fields = ('date_inscription',)
 
 
 # Inline pour les images de destination (défini avant DestinationAdmin)
@@ -489,6 +489,11 @@ class BlogImageAdmin(admin.ModelAdmin):
         return "Pas d'image"
     image_preview.short_description = "Aperçu"
 
+
+@admin.register(Testimonia)
+class TestimoniaAdmin(admin.ModelAdmin):
+    list_display = ('score', 'description', 'status', 'post_date')
+    list_filter = ('description',)
 
 # Configuration globale de l'admin
 admin.site.site_header = "Administration Tourisme Madagascar"

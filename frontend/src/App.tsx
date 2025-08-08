@@ -27,6 +27,7 @@ import PageGuide from "./pages/guide/PageGuide";
 import PageGuideProfile from "./pages/guide/PageGuideProfile";
 import PangalanesDetailPage from "./pages/pangalanes/PangalanesDetail";
 import ProgrammeSolidaireDetail from "./pages/ProgrammeSolidaireDetail";
+import Testimonia from "./pages/Testimonia";
 
 const queryClient = new QueryClient();
 
@@ -98,6 +99,7 @@ const App = () => (
               <Route path="/reservations" element={<Reservation />} />
               <Route path="/guides" element={<PageGuide />} />
               <Route path="/guidesprofile/:id" element={<PageGuideProfile />} />
+              <Route path="/testimonia" element={<Testimonia />} />
 
               {/* Routes protégées */}
               <Route

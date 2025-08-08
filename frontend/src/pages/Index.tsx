@@ -5,7 +5,7 @@ import HomeFeatures from "../components/HomeFeatures";
 import PopularCircuits from "../components/PopularCircuits";
 import PangalanesSection from "../components/PangalanesSection";
 import Vehicles4x4 from "../components/Vehicles4x4";
-import Testimonials from "../components/Testimonials";
+import Testimonials from "../components/testimonia/Testimonials";
 import NewsletterSignup from "../components/NewsletterSignup";
 import Footer from "../components/Footer";
 
@@ -36,7 +36,7 @@ const Index = () => {
 
         <Testimonials />
 
-        <section className="section-container">
+        <section className="section-container z-10">
           <NewsletterSignup />
         </section>
       </main>

@@ -188,3 +188,28 @@ export const CREATE_RESERVATION = gql`
     }
   }
 `;
+
+// Mutation pour créer testimonia
+export const CREATE_TESTIMONIA = gql`
+  mutation CreateTestimonia(
+    $description: String!
+    $score: Int!
+    $utilisateurId: ID!
+  ) {
+    createTestimonia(
+      description: $description
+      score: $score
+      utilisateurId: $utilisateurId
+    ) {
+      success
+      message
+      testimonia {
+        id
+        score
+        description
+        status
+        postDate
+      }
+    }
+  }
+`;

@@ -11,14 +11,14 @@ from .models import (
     TypeVehicule, Capacite, Vehicule, Reservation, Guide,
     Message, Blog, BlogCommentaire, Faq,
     CircuitImage, VehiculeImage, DestinationImage, BlogImage,
-    EtatVehicule, Itineraire
+    EtatVehicule, Itineraire, Testimonia
 )
-from .types import (
+from .model_types import (
     UtilisateurType, DestinationType, SaisonType, CircuitType,
     PointInteretType, TypeVehiculeType, CapaciteType, VehiculeType,
     ReservationType, GuideType, MessageType, BlogType,
     BlogCommentaireType, FaqType,
-    CircuitImageType, VehiculeImageType, DestinationImageType, BlogImageType, ItineraireType
+    CircuitImageType, VehiculeImageType, DestinationImageType, BlogImageType, ItineraireType, TestimoniaType
 )
 
 logger = logging.getLogger("myapp") 
@@ -142,6 +142,10 @@ class Query(graphene.ObjectType):
     all_blog_images = graphene.List(BlogImageType)
     blog_image = graphene.Field(BlogImageType, id=graphene.ID())
     blog_images_by_blog = graphene.List(BlogImageType, blog_id=graphene.ID())
+    
+    # Query Testimonia
+    all_testimonia = graphene.List(TestimoniaType)
+    all_testimonia_by_status = graphene.List(TestimoniaType, status=graphene.Boolean(required=True))
     
     # Resolvers pour les utilisateurs
     def resolve_all_utilisateurs(self, info):
@@ -523,3 +527,9 @@ class Query(graphene.ObjectType):
 
     def resolve_blog_images_by_blog(self, info, blog_id):
         return BlogImage.objects.filter(blog_id=blog_id).select_related('blog').order_by('ordre')
+    
+    def resolve_all_testimonia(self, info):
+        return Testimonia.objects.all()
+
+    def resolve_all_testimonia_by_status(self, info, status):
+        return Testimonia.objects.filter(status=status).select_related('utilisateur')

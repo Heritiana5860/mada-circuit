@@ -50,6 +50,7 @@
     "dotenv": "^16.5.0",
     "embla-carousel-react": "^8.3.0",
     "extract-files": "^13.0.0",
+    "flowbite": "^3.1.2",
     "graphql": "^16.10.0",
     "input-otp": "^1.2.4",
     "lucide-react": "^0.462.0",

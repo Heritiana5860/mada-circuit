@@ -1,6 +1,8 @@
 from datetime import datetime, timedelta
+import os
 import graphene
 from graphene_file_upload.scalars import Upload
+from django.core.files.uploadedfile import UploadedFile
 from django.contrib.auth import authenticate
 from django.utils import timezone
 from django.core.exceptions import ValidationError
@@ -19,14 +21,14 @@ from .models import (
     TypeVehicule, Capacite, Vehicule, Reservation, Guide,
     Message, Blog, BlogCommentaire, Faq,
     CircuitImage, VehiculeImage, DestinationImage, BlogImage,
-    EtatVehicule
+    EtatVehicule, Testimonia
 )
-from .types import (
+from .model_types import (
     UtilisateurType, DestinationType, SaisonType, CircuitType,
     PointInteretType, TypeVehiculeType, CapaciteType, VehiculeType,
     ReservationType, GuideType, MessageType, BlogType,
     BlogCommentaireType, FaqType,
-    CircuitImageType, VehiculeImageType, DestinationImageType, BlogImageType
+    CircuitImageType, VehiculeImageType, DestinationImageType, BlogImageType, TestimoniaType
 )
 from graphql_relay import from_global_id
 
@@ -42,27 +44,46 @@ class CreateUtilisateur(graphene.Mutation):
         prenom = graphene.String(required=True)
         telephone = graphene.String()
         role = graphene.String()
+        profileImage = Upload()
 
     utilisateur = graphene.Field(UtilisateurType)
     success = graphene.Boolean()
     errors = graphene.List(graphene.String)
 
-    def mutate(self, info, email, password, nom, prenom, telephone=None, role=None):
+    def mutate(self, info, email, password, nom, prenom, telephone=None, role=None, profileImage=None):
         try:
             with transaction.atomic():
                 if Utilisateur.objects.filter(email=email).exists():
                     return CreateUtilisateur(success=False, errors=["Un utilisateur avec cet email existe déjà"])
                 
-                utilisateur = Utilisateur.objects.create_user(
-                    username=email,
-                    email=email,
-                    password=password,
-                    nom=nom,
-                    prenom=prenom,
-                    telephone=telephone,
-                    role=role or 'CLIENT'
-                )
-                return CreateUtilisateur(utilisateur=utilisateur, success=True)
+                # Validation de la photo si fournie
+                if profileImage:
+                    # Vérifier la taille du fichier (max 5MB)
+                    if profileImage.size > 5 * 1024 * 1024:
+                        return CreateUtilisateur(success=False, errors=["L'image ne doit pas dépasser 5MB"])
+                    
+                    # Vérifier le type de fichier
+                    if not profileImage.content_type.startswith('image/'):
+                        return CreateUtilisateur(success=False, errors=["Le fichier doit être une image"])
+                    
+                # Créer l'utilisateur avec tous les champs
+                utilisateur_data = {
+                    'username': email,
+                    'email': email,
+                    'password': password,
+                    'nom': nom,
+                    'prenom': prenom,
+                    'telephone': telephone,
+                    'role': role or 'CLIENT',
+                }
+                
+                # Ajouter la photo si elle est fournie
+                if profileImage:
+                    utilisateur_data['profileImage'] = profileImage
+                    
+                utilisateur = Utilisateur.objects.create_user(**utilisateur_data)
+                    
+                return CreateUtilisateur(utilisateur=utilisateur, success=True, errors=[])
         except Exception as e:
             return CreateUtilisateur(success=False, errors=[str(e)])
 
@@ -974,6 +995,7 @@ class RegisterUser(graphene.Mutation):
         nom = graphene.String(required=True)
         prenom = graphene.String(required=True)
         telephone = graphene.String()
+        # profileImage = Upload(required=False)
 
     utilisateur = graphene.Field(UtilisateurType)
     success = graphene.Boolean()
@@ -1003,21 +1025,53 @@ class RegisterUser(graphene.Mutation):
                         success=False,
                         errors=["Le mot de passe doit contenir au moins 6 caractères"]
                     )
+                
+                # Validation de la photo (required)
+                # if not profileImage or not hasattr(profileImage, 'name'):
+                #     logger.error(f"Invalid profileImage: type={type(profileImage)}, value={profileImage}")
+                #     return RegisterUser(
+                #         success=False,
+                #         errors=["Une image de profil valide est requise"]
+                #     )
+                    
+                # Validation de la photo si fournie
+                # if profileImage:
+                #     # Vérifier la taille du fichier (max 5MB)
+                #     if profileImage.size > 5 * 1024 * 1024:
+                #         return RegisterUser(success=False, errors=["L'image ne doit pas dépasser 5MB"])
+                    
+                # Type MIME
+                # if not profileImage.content_type.startswith('image/'):
+                #     return RegisterUser(success=False, errors=["Le fichier doit être une image (JPG, PNG, GIF)"])
 
-                # Créer l'utilisateur
-                utilisateur = Utilisateur.objects.create_user(
+                # Vérification extension
+                # ext = os.path.splitext(profileImage.name)[1].lower()
+                # if ext not in ['.jpg', '.jpeg', '.png', '.gif']:
+                #     return RegisterUser(success=False, errors=["Extension d'image non supportée"])
+                        
+                    
+                # logger.debug(f"profileImage type: {type(profileImage)}, name: {getattr(profileImage, 'name', None)}, size: {profileImage.size}, content_type: {profileImage.content_type}")
+                
+                # Créer l'utilisateur avec tous les champs
+                utilisateur = Utilisateur(
                     username=email,
                     email=email,
                     password=password,
                     nom=nom,
                     prenom=prenom,
                     telephone=telephone,
-                    role='CLIENT'  # Par défaut, les nouveaux utilisateurs sont des clients
+                    role='CLIENT',
                 )
+                
+                utilisateur.set_password(password)
+                # utilisateur.profileImage = profileImage
+                utilisateur.save()
 
                 # Générer un token simple (optionnel)
                 import uuid
                 token = f"token_{utilisateur.id}_{uuid.uuid4().hex[:8]}"
+                
+                logger.debug(f"Utilisateur: {utilisateur}")
 
                 return RegisterUser(
                     utilisateur=utilisateur,
@@ -1651,7 +1705,48 @@ class CreateCircuitReservation(graphene.Mutation):
         except Exception as e:
             raise Exception(f'Erreur lors de la création de la réservation: {str(e)}')
 
+# Testimonia 
+class CreateTestimonia(graphene.Mutation):
+    class Arguments:
+        score = graphene.Int(required=True)
+        description = graphene.String(required=True)
+        utilisateur_id = graphene.ID(required=True)
+        
+    # Champs de retour
+    testimonia = graphene.Field(TestimoniaType)
+    success = graphene.Boolean()
+    message = graphene.String() 
+    
+    def mutate(self, info, score, description, utilisateur_id):
+        
+        try:
+            # Décoder avec la fonction Relay
+            _, real_utilisateur_id = from_global_id(utilisateur_id)
+            utilisateur = Utilisateur.objects.get(id=real_utilisateur_id)
+            
+            new_testimonia = Testimonia.objects.create(
+                score=score,
+                description=description,
+                utilisateur=utilisateur
+            )
 
+            return CreateTestimonia(
+                testimonia=new_testimonia, 
+                success=True,
+                message="Temoignage créée avec succès")
+            
+        except Utilisateur.DoesNotExist:
+            return CreateTestimonia(
+                success=False,
+                message="Utilisateur introuvable"
+            )
+        except Exception as e:
+            return CreateTestimonia(
+                success=False,
+                message=f"Erreur lors de la création du témoignage : {str(e)}"
+            )
+            
+            
 # Classe principale des mutations
 class Mutation(graphene.ObjectType):
     # Mutations d'authentification
@@ -1727,5 +1822,8 @@ class Mutation(graphene.ObjectType):
     update_blog_image = UpdateBlogImage.Field()
     delete_blog_image = DeleteBlogImage.Field()
     check_vehicle_availability = CheckVehicleAvailability.Field()
+    
+    # Add mutation Testimonia
+    create_testimonia = CreateTestimonia.Field()
     
 

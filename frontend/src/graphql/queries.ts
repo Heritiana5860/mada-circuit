@@ -2,7 +2,7 @@ import { gql } from "@apollo/client";
 
 // Queries pour les circuits
 export const GET_ALL_CIRCUITS = gql`
-  query AllCircuitsByType ($type: String!) {
+  query AllCircuitsByType($type: String!) {
     allCircuitsByType(type: $type) {
       id
       titre
@@ -391,6 +391,26 @@ export const GET_ALL_FAQS = gql`
       reponse
       categorie
       ordre
+    }
+  }
+`;
+
+// Testimonia query
+export const GET_TESTIMONIA_BY_STATUS = gql`
+  query AllTestimoniaByStatus($status: Boolean!) {
+    allTestimoniaByStatus(status: $status) {
+      id
+      score
+      description
+      status
+      postDate
+      utilisateur {
+        id
+        email
+        nom
+        prenom
+        telephone
+      }
     }
   }
 `;

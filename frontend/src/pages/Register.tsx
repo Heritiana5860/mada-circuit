@@ -1,25 +1,32 @@
-import React, { useState, useEffect } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import { useAuth } from '@/contexts/AuthContext';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Alert, AlertDescription } from '@/components/ui/alert';
-import { Eye, EyeOff, Mail, Lock, User, Phone, MapPin } from 'lucide-react';
+import React, { useState, useEffect } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { useAuth } from "@/contexts/AuthContext";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import { Eye, EyeOff, Mail, Lock, User, Phone, MapPin } from "lucide-react";
 
 const Register = () => {
   const [formData, setFormData] = useState({
-    email: '',
-    password: '',
-    confirmPassword: '',
-    nom: '',
-    prenom: '',
-    telephone: ''
+    email: "",
+    password: "",
+    confirmPassword: "",
+    nom: "",
+    prenom: "",
+    telephone: "",
+    profileImage: null,
   });
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-  const [error, setError] = useState('');
+  const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
   const { register, isAuthenticated } = useAuth();
@@ -28,41 +35,46 @@ const Register = () => {
   // Rediriger si déjà connecté
   useEffect(() => {
     if (isAuthenticated) {
-      navigate('/', { replace: true });
+      navigate("/", { replace: true });
     }
   }, [isAuthenticated, navigate]);
 
   useEffect(() => {
     window.scrollTo(0, 0);
-    document.title = 'Inscription | Madagascar Voyage';
+    document.title = "Inscription | Madagascar Voyage";
   }, []);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({
       ...formData,
-      [e.target.name]: e.target.value
+      [e.target.name]: e.target.value,
     });
   };
 
   const validateForm = () => {
-    if (!formData.email || !formData.password || !formData.nom || !formData.prenom) {
-      setError('Veuillez remplir tous les champs obligatoires');
+    if (
+      !formData.email ||
+      !formData.password ||
+      !formData.nom ||
+      !formData.prenom
+    ) {
+      setError("Veuillez remplir tous les champs obligatoires");
       return false;
     }
 
     if (formData.password !== formData.confirmPassword) {
-      setError('Les mots de passe ne correspondent pas');
+      setError("Les mots de passe ne correspondent pas");
       return false;
     }
 
     if (formData.password.length < 6) {
-      setError('Le mot de passe doit contenir au moins 6 caractères');
+      setError("Le mot de passe doit contenir au moins 6 caractères");
       return false;
     }
 
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(formData.email)) {
-      setError('Veuillez entrer un email valide');
+      setError("Veuillez entrer un email valide");
       return false;
     }
 
@@ -71,7 +83,7 @@ const Register = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setError('');
+    setError("");
 
     if (!validateForm()) {
       return;
@@ -85,16 +97,17 @@ const Register = () => {
         password: formData.password,
         nom: formData.nom,
         prenom: formData.prenom,
-        telephone: formData.telephone || undefined
+        telephone: formData.telephone || undefined,
+        profileImage: formData.profileImage,
       });
-      
+
       if (result.success) {
-        navigate('/', { replace: true });
+        navigate("/", { replace: true });
       } else {
-        setError(result.error || 'Erreur lors de l\'inscription');
+        setError(result.error || "Erreur lors de l'inscription");
       }
     } catch (err) {
-      setError('Erreur de connexion au serveur');
+      setError("Erreur de connexion au serveur");
     } finally {
       setLoading(false);
     }
@@ -107,7 +120,9 @@ const Register = () => {
         <div className="text-center">
           <Link to="/" className="inline-flex items-center space-x-2 mb-6">
             <MapPin className="h-8 w-8 text-primary" />
-            <span className="text-2xl font-bold text-foreground">Madagascar Voyage</span>
+            <span className="text-2xl font-bold text-foreground">
+              Madagascar Voyage
+            </span>
           </Link>
         </div>
 
@@ -202,7 +217,7 @@ const Register = () => {
                   <Input
                     id="password"
                     name="password"
-                    type={showPassword ? 'text' : 'password'}
+                    type={showPassword ? "text" : "password"}
                     placeholder="Mot de passe (min. 6 caractères)"
                     value={formData.password}
                     onChange={handleChange}
@@ -214,19 +229,25 @@ const Register = () => {
                     onClick={() => setShowPassword(!showPassword)}
                     className="absolute right-3 top-3 text-muted-foreground hover:text-foreground"
                   >
-                    {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                    {showPassword ? (
+                      <EyeOff className="h-4 w-4" />
+                    ) : (
+                      <Eye className="h-4 w-4" />
+                    )}
                   </button>
                 </div>
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="confirmPassword">Confirmer le mot de passe *</Label>
+                <Label htmlFor="confirmPassword">
+                  Confirmer le mot de passe *
+                </Label>
                 <div className="relative">
                   <Lock className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
                   <Input
                     id="confirmPassword"
                     name="confirmPassword"
-                    type={showConfirmPassword ? 'text' : 'password'}
+                    type={showConfirmPassword ? "text" : "password"}
                     placeholder="Confirmer le mot de passe"
                     value={formData.confirmPassword}
                     onChange={handleChange}
@@ -238,22 +259,22 @@ const Register = () => {
                     onClick={() => setShowConfirmPassword(!showConfirmPassword)}
                     className="absolute right-3 top-3 text-muted-foreground hover:text-foreground"
                   >
-                    {showConfirmPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                    {showConfirmPassword ? (
+                      <EyeOff className="h-4 w-4" />
+                    ) : (
+                      <Eye className="h-4 w-4" />
+                    )}
                   </button>
                 </div>
               </div>
 
-              <Button
-                type="submit"
-                className="w-full"
-                disabled={loading}
-              >
-                {loading ? 'Inscription...' : 'S\'inscrire'}
+              <Button type="submit" className="w-full" disabled={loading}>
+                {loading ? "Inscription..." : "S'inscrire"}
               </Button>
 
               <div className="text-center">
                 <p className="text-sm text-muted-foreground">
-                  Déjà un compte ?{' '}
+                  Déjà un compte ?{" "}
                   <Link
                     to="/login"
                     className="text-primary hover:underline font-medium"

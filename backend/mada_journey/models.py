@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 from django.utils.translation import gettext_lazy as _
+from django.core.validators import MinValueValidator, MaxValueValidator
 from django.utils import timezone
 import uuid
 import os
@@ -65,6 +66,7 @@ class Utilisateur(AbstractUser):
     telephone = models.CharField(max_length=20, blank=True, null=True)
     role = models.CharField(max_length=20, choices=Role.choices, default=Role.CLIENT)
     date_inscription = models.DateTimeField(default=timezone.now)
+    # profileImage = models.ImageField(upload_to='photos_utilisateurs/', blank=True, null=True)
     
     # Ajout de related_name pour éviter les conflits
     groups = models.ManyToManyField(
@@ -72,7 +74,7 @@ class Utilisateur(AbstractUser):
         verbose_name='groups',
         blank=True,
         help_text='The groups this user belongs to.',
-        related_name='utilisateur_set',  # Nom personnalisé
+        related_name='utilisateur_set', 
         related_query_name='utilisateur'
     )
     user_permissions = models.ManyToManyField(
@@ -80,7 +82,7 @@ class Utilisateur(AbstractUser):
         verbose_name='user permissions',
         blank=True,
         help_text='Specific permissions for this user.',
-        related_name='utilisateur_set',  # Nom personnalisé
+        related_name='utilisateur_set',
         related_query_name='utilisateur'
     )
     
@@ -418,3 +420,41 @@ class BlogImage(models.Model):
     class Meta:
         ordering = ['ordre']   
              
+             
+# Testimonia Modele
+class Testimonia(models.Model):
+    id = models.UUIDField(
+        primary_key=True, 
+        default=uuid.uuid4, 
+        editable=False
+    )
+    score = models.PositiveIntegerField(
+        validators=[MinValueValidator(1), MaxValueValidator(6)],
+        help_text="Entrez un score entre 1 et 6",
+        verbose_name="Score"
+    )
+    description = models.TextField(
+        verbose_name="Description",
+        help_text="Un petit témoignage"
+    )
+    status = models.BooleanField(
+        default=False,
+        verbose_name="Statut"
+    )
+    post_date = models.DateTimeField(
+        auto_now_add=True,
+        verbose_name="Date de publication"
+    )
+    utilisateur = models.ForeignKey(
+        "Utilisateur", 
+        on_delete=models.CASCADE,
+        related_name='testimonia'
+    )
+
+    class Meta:
+        verbose_name = "Témoignage"
+        verbose_name_plural = "Témoignages"
+        ordering = ["-post_date"]
+
+    def __str__(self):
+        return f"{self.utilisateur.nom} - {self.score}/6"

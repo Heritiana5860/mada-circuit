@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { Menu, X, MapPin, Sun, Moon, User, LogOut } from "lucide-react";
+import { Menu, X, MapPin, Sun, Moon, User, LogOut, MailCheck, BookOpenText } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useAuth } from "@/contexts/AuthContext";
 import { Button } from "@/components/ui/button";
@@ -128,7 +128,16 @@ const NavBar = () => {
                       </Link>
                     </DropdownMenuItem>
                     <DropdownMenuItem>
-                      <Link to="/reservations">Mes réservations</Link>
+                      <Link to="/reservations" className="flex items-center">
+                      <BookOpenText className="mr-2 h-4 w-4"/>
+                      <span>Mes réservations</span>
+                      </Link>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem>
+                      <Link to="/testimonia" className="flex items-center">
+                      <MailCheck className="mr-2 h-4 w-4"/>
+                      <span>Temoignage</span>
+                      </Link>
                     </DropdownMenuItem>
                     <DropdownMenuSeparator />
                     <DropdownMenuItem onClick={logout}>
@@ -204,6 +213,12 @@ const NavBar = () => {
                   className="block px-3 py-2 rounded-md hover:bg-muted"
                 >
                   Mes réservations
+                </Link>
+                <Link
+                  to="/temoignage"
+                  className="block px-3 py-2 rounded-md hover:bg-muted"
+                >
+                  Temoignage
                 </Link>
                 <button
                   onClick={logout}

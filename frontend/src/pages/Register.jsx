@@ -1,43 +1,90 @@
-import React, { useState, useEffect } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import { useAuth } from '../contexts/AuthContext';
-import { Button } from '../components/ui/button';
-import { Input } from '../components/ui/input';
-import { Label } from '../components/ui/label';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../components/ui/card';
-import { Alert, AlertDescription } from '../components/ui/alert';
-import { Eye, EyeOff, Mail, Lock, User, Phone, MapPin } from 'lucide-react';
+import React, { useState, useEffect } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { useAuth } from "../contexts/AuthContext";
+import { Button } from "../components/ui/button";
+import { Input } from "../components/ui/input";
+import { Label } from "../components/ui/label";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "../components/ui/card";
+import { Alert, AlertDescription } from "../components/ui/alert";
+import {
+  Eye,
+  EyeOff,
+  Mail,
+  Lock,
+  User,
+  Phone,
+  MapPin,
+  Camera,
+  X,
+} from "lucide-react";
 
 const Register = () => {
-  const [formData, setFormData] = useState({
-    email: '',
-    password: '',
-    confirmPassword: '',
-    nom: '',
-    prenom: '',
-    telephone: ''
-  });
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const [errors, setErrors] = useState([]);
+  const [imagePreview, setImagePreview] = useState(null);
 
   const { register, isAuthenticated } = useAuth();
   const navigate = useNavigate();
 
+  const [formData, setFormData] = useState({
+    email: "",
+    password: "",
+    confirmPassword: "",
+    nom: "",
+    prenom: "",
+    telephone: "",
+  });
+
   // Rediriger si déjà connecté
   useEffect(() => {
     if (isAuthenticated) {
-      navigate('/', { replace: true });
+      navigate("/", { replace: true });
     }
   }, [isAuthenticated, navigate]);
 
   const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData(prev => ({
-      ...prev,
-      [name]: value
-    }));
+    const { name, value, files } = e.target;
+
+    if (name === "profileImage" && files && files[0]) {
+      const file = files[0];
+      // Vérifier la taille du fichier (max 5MB)
+      if (file.size > 5 * 1024 * 1024) {
+        setErrors(["L'image ne doit pas dépasser 5MB"]);
+        return;
+      }
+
+      // Vérifier le type de fichier
+      if (!file.type.startsWith("image/")) {
+        setErrors(["Veuillez sélectionner une image valide"]);
+        return;
+      }
+
+      setFormData((prev) => ({
+        ...prev,
+        [name]: file,
+      }));
+
+      // Créer l'aperçu de l'image
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        setImagePreview(e.target.result);
+      };
+      reader.readAsDataURL(file);
+    } else {
+      setFormData((prev) => ({
+        ...prev,
+        [name]: value,
+      }));
+    }
+
     // Effacer les erreurs quand l'utilisateur tape
     if (errors.length > 0) {
       setErrors([]);
@@ -47,24 +94,29 @@ const Register = () => {
   const validateForm = () => {
     const newErrors = [];
 
-    if (!formData.email || !formData.password || !formData.nom || !formData.prenom) {
-      newErrors.push('Veuillez remplir tous les champs obligatoires');
+    if (
+      !formData.email ||
+      !formData.password ||
+      !formData.nom ||
+      !formData.prenom
+    ) {
+      newErrors.push("Veuillez remplir tous les champs obligatoires");
     }
 
-    if (!formData.email.includes('@')) {
-      newErrors.push('Veuillez entrer une adresse email valide');
+    if (!formData.email.includes("@")) {
+      newErrors.push("Veuillez entrer une adresse email valide");
     }
 
     if (formData.password.length < 6) {
-      newErrors.push('Le mot de passe doit contenir au moins 6 caractères');
+      newErrors.push("Le mot de passe doit contenir au moins 6 caractères");
     }
 
     if (formData.password !== formData.confirmPassword) {
-      newErrors.push('Les mots de passe ne correspondent pas');
+      newErrors.push("Les mots de passe ne correspondent pas");
     }
 
     if (formData.telephone && !/^[0-9+\-\s()]+$/.test(formData.telephone)) {
-      newErrors.push('Veuillez entrer un numéro de téléphone valide');
+      newErrors.push("Veuillez entrer un numéro de téléphone valide");
     }
 
     return newErrors;
@@ -86,33 +138,46 @@ const Register = () => {
     try {
       const { confirmPassword, ...userData } = formData;
       const result = await register(userData);
+
+      console.log("Result: ", result);
+      console.log("formData: ", formData);
       
+
       if (result.success) {
-        navigate('/', { replace: true });
+        navigate("/", { replace: true });
       } else {
-        setErrors(result.errors || ['Erreur lors de la création du compte']);
+        setErrors(result.errors || ["Erreur lors de la création du compte"]);
       }
     } catch (error) {
-      console.error('Erreur d\'inscription:', error);
-      setErrors(['Une erreur est survenue. Veuillez réessayer.']);
+      console.error("Erreur d'inscription:", error);
+      setErrors(["Une erreur est survenue. Veuillez réessayer."]);
     } finally {
       setLoading(false);
     }
+  };
+
+  const handleImageRemove = () => {
+    setFormData((prev) => ({
+      ...prev,
+      profileImage: null,
+    }));
+    setImagePreview(null);
   };
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-primary/10 via-background to-secondary/10 px-4 py-8">
       {/* Image de fond avec overlay */}
       <div className="absolute inset-0 z-0">
-        <div 
+        <div
           className="w-full h-full bg-cover bg-center bg-fixed opacity-20"
           style={{
-            backgroundImage: "linear-gradient(to bottom, rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.1)), url('/canal_bac.jpg')"
+            backgroundImage:
+              "linear-gradient(to bottom, rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.1)), url('/canal_bac.jpg')",
           }}
         />
       </div>
 
-      <div className="relative z-10 w-full max-w-md">
+      <div className="relative z-10 w-full max-w-xl">
         <Card className="glass-card shadow-2xl border-0">
           <CardHeader className="space-y-1 text-center">
             <div className="flex items-center justify-center mb-4">
@@ -139,27 +204,56 @@ const Register = () => {
               </Alert>
             )}
 
-            <form onSubmit={handleSubmit} className="space-y-4">
-              <div className="grid grid-cols-2 gap-4">
-                <div className="space-y-2">
-                  <Label htmlFor="prenom" className="text-sm font-medium">
-                    Prénom *
-                  </Label>
-                  <div className="relative">
-                    <User className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
-                    <Input
-                      id="prenom"
-                      name="prenom"
-                      type="text"
-                      placeholder="Prénom"
-                      value={formData.prenom}
-                      onChange={handleChange}
-                      className="pl-10 h-12"
-                      required
-                    />
+            <form onSubmit={handleSubmit} className="space-y-5">
+              {/* Section Photo de profil */}
+              <div className="space-y-3">
+                <div className="flex flex-col items-center space-y-3">
+                  <div className="relative group">
+                    {imagePreview ? (
+                      <div className="relative w-20 h-20 sm:w-24 sm:h-24">
+                        <div className="w-full h-full rounded-full border-4 border-primary/20 shadow-lg overflow-hidden bg-card relative">
+                          <img
+                            src={imagePreview}
+                            alt="Aperçu"
+                            className="w-full h-full object-cover"
+                          />
+                        </div>
+                        <button
+                          type="button"
+                          onClick={handleImageRemove}
+                          className="absolute bottom-0 right-0  bg-destructive text-destructive-foreground rounded-full p-1 shadow-lg hover:bg-destructive/90 transition-colors"
+                        >
+                          <X className="h-4 w-4" />
+                        </button>
+                      </div>
+                    ) : (
+                      <div className="w-20 h-20 sm:w-24 sm:h-24 rounded-full border-2 border-dashed border-muted-foreground/30 bg-muted/30 flex items-center justify-center group-hover:border-primary/50 group-hover:bg-primary/5 transition-all">
+                        <Camera className="h-8 w-8 text-muted-foreground/50 group-hover:text-primary/70 transition-colors" />
+                      </div>
+                    )}
                   </div>
-                </div>
 
+                  <label className="cursor-pointer">
+                    <span className="inline-flex items-center px-3 py-1.5 text-xs font-medium text-primary bg-primary/10 border border-primary/20 rounded-full hover:bg-primary/20 transition-colors">
+                      <Camera className="h-3 w-3 mr-1.5" />
+                      <span className="ml-2">Choisir une photo</span>
+                    </span>
+                    <input
+                      type="file"
+                      name="profileImage"
+                      accept="image/*"
+                      onChange={handleChange}
+                      className="sr-only"
+                    />
+                  </label>
+
+                  <p className="text-xs text-muted-foreground text-center px-2">
+                    JPG, PNG, GIF (max. 5MB)
+                  </p>
+                </div>
+              </div>
+
+              <div className="grid grid-cols-2 gap-4 mt-6">
                 <div className="space-y-2">
                   <Label htmlFor="nom" className="text-sm font-medium">
                     Nom *
@@ -178,108 +272,136 @@ const Register = () => {
                     />
                   </div>
                 </div>
-              </div>
 
-              <div className="space-y-2">
-                <Label htmlFor="email" className="text-sm font-medium">
-                  Adresse email *
-                </Label>
-                <div className="relative">
-                  <Mail className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
-                  <Input
-                    id="email"
-                    name="email"
-                    type="email"
-                    placeholder="votre@email.com"
-                    value={formData.email}
-                    onChange={handleChange}
-                    className="pl-10 h-12"
-                    required
-                  />
+                <div className="space-y-2">
+                  <Label htmlFor="prenom" className="text-sm font-medium">
+                    Prénom *
+                  </Label>
+                  <div className="relative">
+                    <User className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
+                    <Input
+                      id="prenom"
+                      name="prenom"
+                      type="text"
+                      placeholder="Prénom"
+                      value={formData.prenom}
+                      onChange={handleChange}
+                      className="pl-10 h-12"
+                      required
+                    />
+                  </div>
                 </div>
               </div>
 
-              <div className="space-y-2">
-                <Label htmlFor="telephone" className="text-sm font-medium">
-                  Téléphone
-                </Label>
-                <div className="relative">
-                  <Phone className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
-                  <Input
-                    id="telephone"
-                    name="telephone"
-                    type="tel"
-                    placeholder="+261 XX XX XXX XX"
-                    value={formData.telephone}
-                    onChange={handleChange}
-                    className="pl-10 h-12"
-                  />
+              <div className="grid grid-cols-2 gap-4 mt-4">
+                <div className="space-y-2">
+                  <Label htmlFor="email" className="text-sm font-medium">
+                    Adresse email *
+                  </Label>
+                  <div className="relative">
+                    <Mail className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
+                    <Input
+                      id="email"
+                      name="email"
+                      type="email"
+                      placeholder="votre@email.com"
+                      value={formData.email}
+                      onChange={handleChange}
+                      className="pl-10 h-12"
+                      required
+                    />
+                  </div>
+                </div>
+
+                <div className="space-y-2">
+                  <Label htmlFor="telephone" className="text-sm font-medium">
+                    Téléphone
+                  </Label>
+                  <div className="relative">
+                    <Phone className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
+                    <Input
+                      id="telephone"
+                      name="telephone"
+                      type="tel"
+                      placeholder="+261 XX XX XXX XX"
+                      value={formData.telephone}
+                      onChange={handleChange}
+                      className="pl-10 h-12"
+                    />
+                  </div>
                 </div>
               </div>
 
-              <div className="space-y-2">
-                <Label htmlFor="password" className="text-sm font-medium">
-                  Mot de passe *
-                </Label>
-                <div className="relative">
-                  <Lock className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
-                  <Input
-                    id="password"
-                    name="password"
-                    type={showPassword ? "text" : "password"}
-                    placeholder="Minimum 6 caractères"
-                    value={formData.password}
-                    onChange={handleChange}
-                    className="pl-10 pr-10 h-12"
-                    required
-                  />
-                  <button
-                    type="button"
-                    onClick={() => setShowPassword(!showPassword)}
-                    className="absolute right-3 top-3 text-muted-foreground hover:text-foreground transition-colors"
+              <div className="grid grid-cols-2 gap-4 mt-4">
+                <div className="space-y-2">
+                  <Label htmlFor="password" className="text-sm font-medium">
+                    Mot de passe *
+                  </Label>
+                  <div className="relative">
+                    <Lock className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
+                    <Input
+                      id="password"
+                      name="password"
+                      type={showPassword ? "text" : "password"}
+                      placeholder="Minimum 6 caractères"
+                      value={formData.password}
+                      onChange={handleChange}
+                      className="pl-10 pr-10 h-12"
+                      required
+                    />
+                    <button
+                      type="button"
+                      onClick={() => setShowPassword(!showPassword)}
+                      className="absolute right-3 top-3 text-muted-foreground hover:text-foreground transition-colors"
+                    >
+                      {showPassword ? (
+                        <EyeOff className="h-4 w-4" />
+                      ) : (
+                        <Eye className="h-4 w-4" />
+                      )}
+                    </button>
+                  </div>
+                </div>
+
+                <div className="space-y-2">
+                  <Label
+                    htmlFor="confirmPassword"
+                    className="text-sm font-medium"
                   >
-                    {showPassword ? (
-                      <EyeOff className="h-4 w-4" />
-                    ) : (
-                      <Eye className="h-4 w-4" />
-                    )}
-                  </button>
-                </div>
-              </div>
-
-              <div className="space-y-2">
-                <Label htmlFor="confirmPassword" className="text-sm font-medium">
-                  Confirmer le mot de passe *
-                </Label>
-                <div className="relative">
-                  <Lock className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
-                  <Input
-                    id="confirmPassword"
-                    name="confirmPassword"
-                    type={showConfirmPassword ? "text" : "password"}
-                    placeholder="Confirmez votre mot de passe"
-                    value={formData.confirmPassword}
-                    onChange={handleChange}
-                    className="pl-10 pr-10 h-12"
-                    required
-                  />
-                  <button
-                    type="button"
-                    onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                    className="absolute right-3 top-3 text-muted-foreground hover:text-foreground transition-colors"
-                  >
-                    {showConfirmPassword ? (
-                      <EyeOff className="h-4 w-4" />
-                    ) : (
-                      <Eye className="h-4 w-4" />
-                    )}
-                  </button>
+                    Confirmer le mot de passe *
+                  </Label>
+                  <div className="relative">
+                    <Lock className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
+                    <Input
+                      id="confirmPassword"
+                      name="confirmPassword"
+                      type={showConfirmPassword ? "text" : "password"}
+                      placeholder="Confirmez votre mot de passe"
+                      value={formData.confirmPassword}
+                      onChange={handleChange}
+                      className="pl-10 pr-10 h-12"
+                      required
+                    />
+                    <button
+                      type="button"
+                      onClick={() =>
+                        setShowConfirmPassword(!showConfirmPassword)
+                      }
+                      className="absolute right-3 top-3 text-muted-foreground hover:text-foreground transition-colors"
+                    >
+                      {showConfirmPassword ? (
+                        <EyeOff className="h-4 w-4" />
+                      ) : (
+                        <Eye className="h-4 w-4" />
+                      )}
+                    </button>
+                  </div>
                 </div>
               </div>
 
               <Button
                 type="submit"
-                className="w-full h-12 bg-primary hover:bg-primary/90 text-primary-foreground font-medium"
+                className="w-full h-12 bg-primary mt-4 hover:bg-primary/90 text-primary-foreground font-medium"
                 disabled={loading}
               >
                 {loading ? (
@@ -288,7 +410,7 @@ const Register = () => {
                     <span>Création du compte...</span>
                   </div>
                 ) : (
-                  'Créer mon compte'
+                  "Créer mon compte"
                 )}
               </Button>
             </form>
@@ -318,7 +440,7 @@ const Register = () => {
         <div className="mt-6 text-center">
           <Link
             to="/"
-            className="text-sm text-muted-foreground hover:text-foreground transition-colors"
+            className="text-sm text-white hover:text-foreground transition-colors"
           >
             ← Retour à l'accueil
           </Link>

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import NavBar from "../components/NavBar";
 import Footer from "../components/Footer";
-import TestimonialCard from "../components/TestimonialCard";
+import TestimonialCard from "../components/testimonia/TestimonialCard";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
@@ -14,9 +14,29 @@ import {
   Compass,
   Check,
   Send,
+  Quote,
+  ChevronRight,
+  ChevronLeft,
 } from "lucide-react";
+import { useQuery } from "@apollo/client";
+import { GET_TESTIMONIA_BY_STATUS } from "@/graphql/queries";
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselNext,
+  CarouselPrevious,
+} from "@/components/ui/carousel";
 
 const VoyagesSurMesure = () => {
+  const { data, loading, error } = useQuery(GET_TESTIMONIA_BY_STATUS, {
+    variables: {
+      status: true,
+    },
+  });
+
+  const [currentIndex, setCurrentIndex] = useState(0);
+
   useEffect(() => {
     window.scrollTo(0, 0);
     document.title = "Voyages Sur Mesure | Madagascar Voyage";
@@ -96,6 +116,46 @@ const VoyagesSurMesure = () => {
       text: "L'équipe a créé un itinéraire parfait qui a répondu à toutes nos demandes. La découverte du Canal des Pangalanes était le point fort de notre séjour.",
     },
   ];
+
+  if (loading) {
+    return (
+      <section className="bg-gradient-to-br from-primary/5 via-accent/5 to-secondary/5 py-20">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center">
+            <div className="inline-block animate-spin rounded-full h-12 w-12 border-4 border-primary border-t-transparent"></div>
+            <p className="mt-4 text-lg text-gray-600">
+              Chargement des témoignages...
+            </p>
+          </div>
+        </div>
+      </section>
+    );
+  }
+
+  if (error) {
+    return (
+      <section className="bg-gradient-to-br from-primary/5 via-accent/5 to-secondary/5 py-20">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center">
+            <div className="bg-red-50 border border-red-200 rounded-lg p-6">
+              <h3 className="text-lg font-semibold text-red-800 mb-2">
+                Erreur lors du chargement
+              </h3>
+              <p className="text-red-600">{error.message}</p>
+            </div>
+          </div>
+        </div>
+      </section>
+    );
+  }
+
+  const allData = data?.allTestimoniaByStatus || [];
+  // Grouper les témoignages par lots de 3 pour chaque diapositive
+  const testimonialsPerSlide = 3;
+  const groupedTestimonials = [];
+  for (let i = 0; i < allData.length; i += testimonialsPerSlide) {
+    groupedTestimonials.push(allData.slice(i, i + testimonialsPerSlide));
+  }
 
   return (
     <div className="min-h-screen flex flex-col">
@@ -543,18 +603,87 @@ const VoyagesSurMesure = () => {
               </p>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              {testimonials.map((testimonial, index) => (
-                <TestimonialCard
-                  key={index}
-                  name={testimonial.name}
-                  avatar={testimonial.avatar}
-                  date={testimonial.date}
-                  rating={testimonial.rating}
-                  text={testimonial.text}
-                  className="h-full"
-                />
-              ))}
+            <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+              {/* Carousel de témoignages */}
+              {allData.length > 0 ? (
+                <Carousel
+                  className="w-full"
+                  opts={{
+                    align: "start",
+                    loop: true,
+                  }}
+                  setApi={(api) => {
+                    api?.on("select", () => {
+                      setCurrentIndex(api.selectedScrollSnap());
+                    });
+                  }}
+                >
+                  <CarouselContent>
+                    {groupedTestimonials.map((group, index) => (
+                      <CarouselItem key={index}>
+                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                          {group.map((testimonial, i) => (
+                            <div
+                              key={i}
+                              className="transform hover:scale-105 transition-all duration-300"
+                              style={{
+                                animationDelay: `${i * 0.1}s`,
+                              }}
+                            >
+                              <TestimonialCard allData={testimonial} />
+                            </div>
+                          ))}
+                        </div>
+                      </CarouselItem>
+                    ))}
+                  </CarouselContent>
+
+                  {/* Navigation */}
+                  {allData.length > testimonialsPerSlide && (
+                    <div className="flex justify-center items-center gap-4 mt-12">
+                      <CarouselPrevious
+                        className="p-3 rounded-full bg-white shadow-lg hover:shadow-xl transition-all duration-300 hover:bg-primary hover:text-white group"
+                        aria-label="Témoignage précédent"
+                      >
+                        <ChevronLeft className="w-5 h-5" />
+                      </CarouselPrevious>
+
+                      <div className="flex gap-2">
+                        {groupedTestimonials.map((_, i) => (
+                          <button
+                            key={i}
+                            onClick={() => setCurrentIndex(i)}
+                            className={`w-3 h-3 rounded-full transition-all duration-300 ${
+                              i === currentIndex
+                                ? "bg-primary scale-125"
+                                : "bg-gray-300 hover:bg-gray-400"
+                            }`}
+                            aria-label={`Page ${i + 1}`}
+                          />
+                        ))}
+                      </div>
+
+                      <CarouselNext
+                        className="p-3 rounded-full bg-white shadow-lg hover:shadow-xl transition-all duration-300 hover:bg-primary hover:text-white group"
+                        aria-label="Témoignage suivant"
+                      >
+                        <ChevronRight className="w-5 h-5" />
+                      </CarouselNext>
+                    </div>
+                  )}
+                </Carousel>
+              ) : (
+                <div className="text-center py-12">
+                  <Quote className="w-16 h-16 text-gray-300 mx-auto mb-4" />
+                  <h3 className="text-xl font-semibold text-gray-600 mb-2">
+                    Aucun témoignage disponible
+                  </h3>
+                  <p className="text-gray-500">
+                    Les témoignages de nos clients apparaîtront ici
+                    prochainement.
+                  </p>
+                </div>
+              )}
             </div>
           </div>
         </section>

@@ -36,9 +36,9 @@ const Index = () => {
 
         <Testimonials />
 
-        <section className="section-container z-10">
+        {/* <section className="section-container z-10">
           <NewsletterSignup />
-        </section>
+        </section> */}
       </main>
 
       <Footer />

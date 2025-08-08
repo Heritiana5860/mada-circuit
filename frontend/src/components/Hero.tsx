@@ -129,29 +129,6 @@ const Hero = () => {
             </div>
           </Link>
         </div>
-
-        {/* Points forts subtils */}
-        <div
-          className={`flex flex-wrap justify-center gap-8 mt-16 transition-all duration-1000 transform ${
-            isVisible ? "translate-y-0 opacity-100" : "translate-y-8 opacity-0"
-          }`}
-          style={{ animationDelay: "0.8s" }}
-        >
-          {[
-            { label: "Circuits personnalisés", value: "100%" },
-            { label: "Guides expérimentés", value: "15+ ans" },
-            { label: "Clients satisfaits", value: "2000+" },
-          ].map((stat, index) => (
-            <div key={index} className="text-center">
-              <div className="text-2xl md:text-3xl font-bold text-accent mb-1">
-                {stat.value}
-              </div>
-              <div className="text-sm text-white/80 font-medium">
-                {stat.label}
-              </div>
-            </div>
-          ))}
-        </div>
       </div>
 
       {/* Gradient de transition amélioré */}

@@ -45,32 +45,6 @@ const CarouselHeader = ({
             <p className="text-xl text-white/90 mb-8 drop-shadow-md">
               {description}
             </p>
-
-            {/* Statistiques */}
-            <div
-              className={`grid grid-cols-1 gap-6 mt-12 ${
-                showCircuitsCount
-                  ? "grid-cols-1 md:grid-cols-3"
-                  : "grid-cols-1 md:grid-cols-2"
-              }`}
-            >
-              {showCircuitsCount && (
-                <div className="text-center bg-white/10 backdrop-blur-sm rounded-lg p-6 border border-white/20">
-                  <div className="text-3xl font-bold mb-2">
-                    {circuitsData?.allCircuits?.length || 0}
-                  </div>
-                  <div className="text-white/80">Circuits disponibles</div>
-                </div>
-              )}
-              <div className="text-center bg-white/10 backdrop-blur-sm rounded-lg p-6 border border-white/20">
-                <div className="text-3xl font-bold mb-2">4.8</div>
-                <div className="text-white/80">Note moyenne</div>
-              </div>
-              <div className="text-center bg-white/10 backdrop-blur-sm rounded-lg p-6 border border-white/20">
-                <div className="text-3xl font-bold mb-2">500+</div>
-                <div className="text-white/80">Voyageurs satisfaits</div>
-              </div>
-            </div>
           </div>
         </div>
       </div>

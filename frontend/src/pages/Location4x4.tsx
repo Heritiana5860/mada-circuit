@@ -90,7 +90,6 @@ const Location4x4: React.FC = () => {
                 ) : (
                   filteredVehicles.map(
                     (vehicle) => (
-                      console.log("Vehicule: ", vehicle["images"]),
                       (<VehicleCard key={vehicle.id} vehicle={vehicle} />)
                     )
                   )

@@ -299,9 +299,13 @@ const VoyagesSurMesure = () => {
                           <div className="relative">
                             <input
                               type="date"
-                              className="w-full p-2 border rounded-lg"
+                              name="dateDebut"
+                              value=""
+                              // onChange={handleInputChange}
+                              className="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                              min={new Date().toISOString().split("T")[0]}
+                              required
                             />
-                            <Calendar className="absolute right-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-4 w-4" />
                           </div>
                         </div>
                         <div>
@@ -311,9 +315,16 @@ const VoyagesSurMesure = () => {
                           <div className="relative">
                             <input
                               type="date"
-                              className="w-full p-2 border rounded-lg"
+                              name="dateFin"
+                              value=""
+                              // onChange={handleInputChange}
+                              className="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                              // min={
+                              //   formData.dateDebut ||
+                              //   new Date().toISOString().split("T")[0]
+                              // }
+                              required
                             />
-                            <Calendar className="absolute right-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-4 w-4" />
                           </div>
                         </div>
                       </div>
@@ -342,7 +353,7 @@ const VoyagesSurMesure = () => {
                           <input
                             type="number"
                             min="1"
-                            max="20"
+                            max="1200"
                             defaultValue="2"
                             className="w-full p-2 border rounded-lg"
                           />

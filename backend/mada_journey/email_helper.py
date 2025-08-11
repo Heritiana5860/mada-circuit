@@ -1,4 +1,21 @@
-def message(utilisateur, date_depart, date_fin, duree, nombre_personnes, budget, commentaire):
+def message(utilisateur, date_depart, date_fin, duree, nombre_personnes, budget, commentaire, vehicule, circuit):
+    if vehicule is not None:
+        detail = (
+            f"Immatriculation: {vehicule.immatriculation}\n"
+            f"Marque: {vehicule.marque}\n"
+            f"Modèle: {vehicule.modele}\n"
+            f"Année: {vehicule.annee}\n"
+            f"Prix: {vehicule.prix} Ar /jour"
+        )
+        vehicule_ou_circuit = "Véhicule"
+    else:
+        detail = (
+            f"Titre: {circuit.titre}\n"
+            f"Durée: {circuit.duree}\n"
+            f"Prix: {circuit.prix} Ar /jour"
+        )
+        vehicule_ou_circuit = "Circuit"
+        
     return (
         f"Bonjour,\n\n"
         f"Une nouvelle demande de réservation a été effectuée via notre site.\n\n"
@@ -6,12 +23,17 @@ def message(utilisateur, date_depart, date_fin, duree, nombre_personnes, budget,
         f"Nom : {utilisateur.nom} {utilisateur.prenom}\n"
         f"E-mail : {utilisateur.email}\n"
         f"Téléphone : {utilisateur.telephone}\n\n"
+        
         f"Détails de la réservation :\n"
         f"- Dates : du {date_depart} au {date_fin}\n"
         f"- Durée : {duree} jour(s)\n"
         f"- Nombre de personnes : {nombre_personnes}\n"
         f"- Budget : {budget} Ar\n"
         f"- Demande personnalisée : {commentaire}\n\n"
+        
+        f"Détails du {vehicule_ou_circuit} :\n"
+        f"{detail} \n\n"
+        
         f"Veuillez contacter le client pour finaliser les détails.\n\n"
         f"Cordialement,\n"
         f"Madagascar Voyage Solidaire"
@@ -45,4 +67,4 @@ def objet_confirmation_message():
     return "✅ Confirmation de votre demande de réservation"
 
 def site_mail():
-    return 'heritianaronaldo@gmail.com'
+    return 'info@madagascar-voyagesolidaire.com'

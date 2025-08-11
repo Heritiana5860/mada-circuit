@@ -151,7 +151,6 @@ const CircuitDetail = () => {
     { loading: mutationLoading, error: mutationError },
   ] = useMutation(CREATE_RESERVATION, {
     onCompleted: (data) => {
-      console.log("Réservation créée avec succès:", data);
       setSuccessMessage(
         "Votre réservation a été enregistrée avec succès ! Nous vous contacterons bientôt."
       );

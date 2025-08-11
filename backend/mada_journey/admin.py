@@ -7,7 +7,7 @@ from .models import (
     Utilisateur, Destination, Saison, Circuit, PointInteret,
     TypeVehicule, Capacite, Vehicule, Reservation, Guide,
     Message, Blog, BlogCommentaire, Faq,
-    CircuitImage, VehiculeImage, DestinationImage, BlogImage, Itineraire, Testimonia
+    CircuitImage, VehiculeImage, DestinationImage, BlogImage, Itineraire, Testimonia, ContactUsModele
 )
 
 
@@ -494,6 +494,10 @@ class BlogImageAdmin(admin.ModelAdmin):
 class TestimoniaAdmin(admin.ModelAdmin):
     list_display = ('score', 'description', 'status', 'post_date')
     list_filter = ('description',)
+    
+@admin.register(ContactUsModele)
+class ContactUs(admin.ModelAdmin):
+    list_display = ('nom', 'prenom', 'email', 'tel', 'objet', 'message')
 
 # Configuration globale de l'admin
 admin.site.site_header = "Administration Tourisme Madagascar"

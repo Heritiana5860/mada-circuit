@@ -106,7 +106,7 @@ const PangalanesDetailPage = () => {
       return false;
     }
 
-    if (guestCount > 12) {
+    if (guestCount > 1200) {
       setErrors("Le nombre maximum de personnes est de 12");
       return false;
     }
@@ -217,7 +217,7 @@ const PangalanesDetailPage = () => {
   // Fonction pour gérer les boutons + et -
   const handleGuestCountChange = (increment: boolean) => {
     if (increment) {
-      setGuestCount(Math.min(12, guestCount + 1));
+      setGuestCount(Math.min(1200, guestCount + 1));
     } else {
       setGuestCount(Math.max(1, guestCount - 1));
     }

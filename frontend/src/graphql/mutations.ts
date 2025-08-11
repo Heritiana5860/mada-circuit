@@ -213,3 +213,37 @@ export const CREATE_TESTIMONIA = gql`
     }
   }
 `;
+
+// Mutation pour créer contacter nous
+export const CREATE_CONTACT_US = gql`
+  mutation CreateContactUsMutation(
+    $nom: String!
+    $prenom: String!
+    $email: String!
+    $contact: String!
+    $objet: String!
+    $message: String!
+  ) {
+    createContactUsMutation(
+      nom: $nom
+      prenom: $prenom
+      email: $email
+      contact: $contact
+      objet: $objet
+      message: $message
+    ) {
+      success
+      message
+      contactUs {
+        id
+        nom
+        prenom
+        email
+        tel
+        objet
+        message
+        dateEnvoi
+      }
+    }
+  }
+`;

@@ -549,8 +549,8 @@ const VehicleDetailSimple = () => {
             <div>
               <Card className="shadow-lg">
                 <CardContent className="p-6">
-                  <h2 className="text-2xl font-semibold mb-4 text-gray-800">
-                    Réserver ce véhicule
+                  <h2 className="text-2xl text-center font-semibold mb-4 text-gray-800 border-b pb-3">
+                    Réservation
                   </h2>
 
                   <form onSubmit={handleReservation} className="space-y-4">

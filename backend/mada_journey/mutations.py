@@ -21,14 +21,14 @@ from .models import (
     TypeVehicule, Capacite, Vehicule, Reservation, Guide,
     Message, Blog, BlogCommentaire, Faq,
     CircuitImage, VehiculeImage, DestinationImage, BlogImage,
-    EtatVehicule, Testimonia
+    EtatVehicule, Testimonia, ContactUsModele
 )
 from .model_types import (
     UtilisateurType, DestinationType, SaisonType, CircuitType,
     PointInteretType, TypeVehiculeType, CapaciteType, VehiculeType,
     ReservationType, GuideType, MessageType, BlogType,
     BlogCommentaireType, FaqType,
-    CircuitImageType, VehiculeImageType, DestinationImageType, BlogImageType, TestimoniaType
+    CircuitImageType, VehiculeImageType, DestinationImageType, BlogImageType, TestimoniaType, ContactUsType
 )
 from graphql_relay import from_global_id
 
@@ -611,7 +611,7 @@ class CreateReservation(graphene.Mutation):
                 # Envoi au site
                 send_mail(
                     subject=email_subject,
-                    message=message(utilisateur, date_depart, date_fin, duree, nombre_personnes, budget, commentaire),
+                    message=message(utilisateur, date_depart, date_fin, duree, nombre_personnes, budget, commentaire, vehicule, circuit),
                     from_email=utilisateur.email,
                     recipient_list=[site_email],
                     fail_silently=False,
@@ -683,20 +683,15 @@ class CreateMessage(graphene.Mutation):
         telephone = graphene.String(required=True)
         sujet = graphene.String(required=True)
         contenu = graphene.String(required=True)
-        utilisateur_id = graphene.ID()
 
     message = graphene.Field(MessageType)
     success = graphene.Boolean()
     errors = graphene.List(graphene.String)
 
-    def mutate(self, info, nom, prenom, telephone, sujet, contenu, utilisateur_id=None):
+    def mutate(self, info, nom, prenom, telephone, sujet, contenu):
         try:
-            utilisateur = None
-            if utilisateur_id:
-                utilisateur = Utilisateur.objects.get(pk=utilisateur_id)
 
             message = Message.objects.create(
-                utilisateur=utilisateur,
                 nom=nom,
                 prenom=prenom,
                 telephone=telephone,
@@ -1535,6 +1530,7 @@ class CreateVehiculeReservation(graphene.Mutation):
                 vehicule=vehicule,
                 circuit=None,
                 date_depart=date_depart,
+                date_fin=date_fin,
                 duree=duree.days,
                 nombre_personnes=nombre_personnes,
                 budget=budget,
@@ -1547,12 +1543,12 @@ class CreateVehiculeReservation(graphene.Mutation):
                 statut=Reservation.ReservationStatus.EN_ATTENTE
             )
             
-            site_email = site_mail
+            site_email = site_mail()
             
             # Envoi au site
             send_mail(
                 subject=objet_message("location voiture"),
-                message=message(utilisateur, date_depart, date_fin, duree, nombre_personnes, budget, commentaire),
+                message=message(utilisateur, date_depart, date_fin, duree, nombre_personnes, budget, commentaire, vehicule, circuit=None),
                 from_email= utilisateur.email,
                 recipient_list=[site_email],
                 fail_silently=False,
@@ -1600,110 +1596,6 @@ class CreateVehiculeReservation(graphene.Mutation):
         except Exception as e:
             raise Exception(f'Erreur lors de la création de la réservation: {str(e)}')
 
-# Réservation Circuit 
-class CreateCircuitReservation(graphene.Mutation):
-    class Arguments:
-        circuit_id = graphene.ID(required=True)
-        utilisateur_id = graphene.ID(required=True) 
-        date_depart = graphene.Date(required=True)
-        date_fin = graphene.Date(required=True)
-        nombre_personnes = graphene.Int(required=True)
-        budget = graphene.String(required=False)
-        commentaire = graphene.String(required=False)
-        
-    # Champs de retour
-    reservation = graphene.Field(ReservationType)
-    success = graphene.Boolean()
-    message = graphene.String()
-
-    def mutate(self, info, circuit_id, utilisateur_id, date_depart, date_fin, nombre_personnes,
-               budget=None, commentaire=None):
-
-        try:
-            
-            # Décoder avec la fonction Relay
-            utilisateur_type, real_utilisateur_id = from_global_id(utilisateur_id)
-            circuit_type, real_circuit_id = from_global_id(circuit_id)
-            
-            logger.debug(f"DEBUG - Type: {utilisateur_type}, UUID: {real_utilisateur_id}")  
-            
-            # Récupération des objets nécessaires
-            circuit = Circuit.objects.get(id=real_circuit_id)
-            utilisateur = Utilisateur.objects.get(id=real_utilisateur_id)
-
-            duree = date_fin - date_depart
-
-            # Création de la réservation avec le type VEHICULE
-            reservation = Reservation.objects.create(
-                type=Reservation.ReservationType.CIRUIT,
-                utilisateur=utilisateur,
-                vehicule=None,
-                circuit=circuit,
-                date_depart=date_depart,
-                date_fin=date_fin,
-                duree=duree.days,
-                nombre_personnes=nombre_personnes,
-                budget=budget,
-                nom=utilisateur.nom,
-                prenom=utilisateur.prenom,
-                telephone=utilisateur.telephone,
-                email=utilisateur.email,
-                commentaire=commentaire,
-                date_reservation=timezone.now(),
-                statut=Reservation.ReservationStatus.EN_ATTENTE
-            )
-            
-            site_email = site_mail
-            
-            # Envoi au site
-            send_mail(
-                subject=objet_message("circuit"),
-                message=message(utilisateur, date_depart, date_fin, duree, nombre_personnes, budget, commentaire),
-                from_email= utilisateur.email,
-                recipient_list=[site_email],
-                fail_silently=False,
-            )
-            
-            # Envoi de confirmation au client            
-            send_mail(
-                subject=objet_confirmation_message(),
-                message=confirmation_message(utilisateur, date_depart, date_fin, duree, nombre_personnes, budget, commentaire, type_circuit=True),
-                from_email=site_email,
-                recipient_list=[utilisateur.email],
-                fail_silently=False,
-            )
-
-            return CreateCircuitReservation(
-                reservation=reservation,
-                success=True,
-                message="Réservation de véhicule créée avec succès"
-            )
-
-        except Circuit.DoesNotExist:
-            return CreateCircuitReservation(
-                reservation=None,
-                success=False,
-                message="Circuit introuvable"
-            )
-
-        except Utilisateur.DoesNotExist:
-            return CreateCircuitReservation(
-                reservation=None,
-                success=False,
-                message="Utilisateur introuvable"
-            )
-
-        except Exception as e:
-            return CreateCircuitReservation(
-                reservation=None,
-                success=False,
-                message=f"Erreur lors de la création de la réservation: {str(e)}"
-            )
-            
-        except Circuit.DoesNotExist:
-            raise Exception('Circuit non trouvé')
-        except Exception as e:
-            raise Exception(f'Erreur lors de la création de la réservation: {str(e)}')
 
 # Testimonia 
 class CreateTestimonia(graphene.Mutation):
@@ -1746,6 +1638,72 @@ class CreateTestimonia(graphene.Mutation):
                 message=f"Erreur lors de la création du témoignage : {str(e)}"
             )
             
+
+# Create Contact us
+class CreateContactUsMutation(graphene.Mutation):
+    class Arguments:
+        nom = graphene.String(required=True)
+        prenom = graphene.String(required=True)
+        email = graphene.String(required=True)
+        contact = graphene.String(required=True)
+        objet = graphene.String(required=True)
+        message = graphene.String(required=True)
+    
+    # Champs de retour
+    contact_us = graphene.Field(ContactUsType)
+    success = graphene.Boolean()
+    message = graphene.String() 
+    
+    def mutate(self, info, nom, prenom, email, contact, objet, message):
+        try:
+            
+            new_contact = ContactUsModele.objects.create(
+                nom=nom,
+                prenom=prenom,
+                email=email,
+                tel=contact,
+                objet=objet,
+                message=message,
+            )
+            
+            site_mail = "info@madagascar-voyagesolidaire.com"
+            
+            email_body = (
+                f"📩 Un client souhaite vous contacter\n\n"
+                f"Informations du client :\n"
+                f"- Nom : {nom}\n"
+                f"- Prénom : {prenom}\n"
+                f"- Email : {email}\n"
+                f"- Téléphone : {contact}\n\n"
+                f"📌 Objet : {objet}\n"
+                f"💬 Message :\n{message}\n\n"
+                f"Veuillez répondre à ce client pour plus d'informations.\n\n"
+                f"Cordialement,\n"
+                f"Madagascar Voyage Solidaire"
+            )
+            
+            send_mail(
+                subject= "📩 Nouveau message via le formulaire de contact",
+                message= email_body,
+                from_email= email,
+                recipient_list=[site_mail],
+                fail_silently=False,
+            )
+            
+            return CreateContactUsMutation(contact_us=new_contact, success=True, message="Contact us créée avec succès")
+        
+        except Utilisateur.DoesNotExist:
+            return CreateTestimonia(
+                success=False,
+                message="Utilisateur introuvable"
+            )
+        except Exception as e:
+            return CreateTestimonia(
+                success=False,
+                message=f"Erreur lors de la création du témoignage : {str(e)}"
+            )
+        
+    
             
 # Classe principale des mutations
 class Mutation(graphene.ObjectType):
@@ -1786,7 +1744,7 @@ class Mutation(graphene.ObjectType):
     create_reservation = CreateReservation.Field()
     update_reservation_status = UpdateReservationStatus.Field()
     create_vehicule_reservation = CreateVehiculeReservation.Field()
-    create_circuit_reservation = CreateCircuitReservation.Field()
+    # create_circuit_reservation = CreateCircuitReservation.Field()
 
     # Mutations messages
     create_message = CreateMessage.Field()
@@ -1826,4 +1784,5 @@ class Mutation(graphene.ObjectType):
     # Add mutation Testimonia
     create_testimonia = CreateTestimonia.Field()
     
-
+    # Create contact us
+    create_contact_us_mutation = CreateContactUsMutation.Field()

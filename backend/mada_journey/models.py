@@ -458,3 +458,22 @@ class Testimonia(models.Model):
 
     def __str__(self):
         return f"{self.utilisateur.nom} - {self.score}/6"
+    
+    
+# Contact us Modele
+class ContactUsModele(models.Model):
+    id = models.UUIDField(
+        primary_key=True, 
+        default=uuid.uuid4, 
+        editable=False
+    )
+    nom = models.CharField(max_length=200, verbose_name="Nom")
+    prenom = models.CharField(max_length=200, verbose_name="Prenom")
+    email = models.CharField(max_length=200, verbose_name="Email")
+    tel = models.CharField(max_length=200, verbose_name="Contact")
+    objet = models.CharField(max_length=200, verbose_name="Objet")
+    message = models.TextField(verbose_name="Message")
+    date_envoi = models.DateTimeField(auto_now_add=True, verbose_name="Date d'envoi")
+    
+    def __str__(self):
+        return f"{self.objet}"

@@ -5,8 +5,7 @@ from django.urls import reverse
 from django.contrib.auth.admin import UserAdmin
 from .models import (
     Utilisateur, Destination, Saison, Circuit, PointInteret,
-    TypeVehicule, Capacite, Vehicule, Reservation, Guide,
-    Message, Blog, BlogCommentaire, Faq,
+    TypeVehicule, Capacite, Vehicule, Reservation, Guide, Blog, BlogCommentaire, Faq,
     CircuitImage, VehiculeImage, DestinationImage, BlogImage, Itineraire, Testimonia, ContactUsModele
 )
 
@@ -14,7 +13,7 @@ from .models import (
 # Configuration de l'admin pour l'utilisateur personnalisé
 @admin.register(Utilisateur)
 class UtilisateurAdmin(UserAdmin):
-    list_display = ('email', 'nom', 'prenom', 'role', 'is_active', 'date_inscription')
+    list_display = ('email', 'nom', 'prenom', 'role', 'image', 'is_active', 'date_inscription')
     list_filter = ('role', 'is_active', 'is_staff', 'date_inscription')
     search_fields = ('email', 'nom', 'prenom', 'telephone')
     ordering = ('-date_inscription',)
@@ -23,7 +22,7 @@ class UtilisateurAdmin(UserAdmin):
 
     fieldsets = UserAdmin.fieldsets + (
         ('Informations personnelles', {
-            'fields': ('nom', 'prenom', 'telephone', 'role')
+            'fields': ('nom', 'prenom', 'telephone', 'role', 'image')
         }),
         ('Dates importantes', {
             'fields': ('date_inscription',)
@@ -32,7 +31,7 @@ class UtilisateurAdmin(UserAdmin):
 
     add_fieldsets = UserAdmin.add_fieldsets + (
         ('Informations personnelles', {
-            'fields': ('email', 'nom', 'prenom', 'telephone', 'role')
+            'fields': ('email', 'nom', 'prenom', 'telephone', 'role', 'image')
         }),
     )
 
@@ -309,39 +308,6 @@ class GuideAdmin(admin.ModelAdmin):
         today = date.today()
         return today.year - obj.date_naissance.year - ((today.month, today.day) < (obj.date_naissance.month, obj.date_naissance.day))
     age.short_description = "Âge"
-
-
-@admin.register(Message)
-class MessageAdmin(admin.ModelAdmin):
-    list_display = ('nom', 'prenom', 'sujet', 'date_envoi', 'lu', 'utilisateur')
-    list_filter = ('lu', 'date_envoi')
-    search_fields = ('nom', 'prenom', 'sujet', 'contenu')
-    date_hierarchy = 'date_envoi'
-    readonly_fields = ('date_envoi',)
-    
-    fieldsets = (
-        ('Expéditeur', {
-            'fields': ('utilisateur', 'nom', 'prenom', 'telephone')
-        }),
-        ('Message', {
-            'fields': ('sujet', 'contenu', 'date_envoi')
-        }),
-        ('Statut', {
-            'fields': ('lu',)
-        }),
-    )
-    
-    actions = ['marquer_lu', 'marquer_non_lu']
-    
-    def marquer_lu(self, request, queryset):
-        queryset.update(lu=True)
-        self.message_user(request, f"{queryset.count()} message(s) marqué(s) comme lu(s).")
-    marquer_lu.short_description = "Marquer comme lu"
-    
-    def marquer_non_lu(self, request, queryset):
-        queryset.update(lu=False)
-        self.message_user(request, f"{queryset.count()} message(s) marqué(s) comme non lu(s).")
-    marquer_non_lu.short_description = "Marquer comme non lu"
 
 
 class BlogCommentaireInline(admin.TabularInline):

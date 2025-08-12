@@ -9,24 +9,20 @@ from django.core.exceptions import ValidationError
 from django.core.mail import send_mail
 from django.db import transaction
 from decimal import Decimal
-import hashlib
-import time
-import base64
 import logging
 
 from .email_helper import message, confirmation_message, objet_message, objet_confirmation_message, site_mail
 
 from .models import (
-    Utilisateur, Destination, Saison, Circuit, PointInteret, Itineraire,
-    TypeVehicule, Capacite, Vehicule, Reservation, Guide,
-    Message, Blog, BlogCommentaire, Faq,
+    Utilisateur, Destination, Saison, Circuit, Itineraire,
+    TypeVehicule, Capacite, Vehicule, Reservation, Blog, BlogCommentaire, Faq,
     CircuitImage, VehiculeImage, DestinationImage, BlogImage,
     EtatVehicule, Testimonia, ContactUsModele
 )
 from .model_types import (
     UtilisateurType, DestinationType, SaisonType, CircuitType,
-    PointInteretType, TypeVehiculeType, CapaciteType, VehiculeType,
-    ReservationType, GuideType, MessageType, BlogType,
+    TypeVehiculeType, CapaciteType, VehiculeType,
+    ReservationType, BlogType,
     BlogCommentaireType, FaqType,
     CircuitImageType, VehiculeImageType, DestinationImageType, BlogImageType, TestimoniaType, ContactUsType
 )
@@ -675,73 +671,6 @@ class UpdateReservationStatus(graphene.Mutation):
         except Exception as e:
             return UpdateReservationStatus(success=False, errors=[str(e)])
 
-# Mutations pour les messages
-class CreateMessage(graphene.Mutation):
-    class Arguments:
-        nom = graphene.String(required=True)
-        prenom = graphene.String(required=True)
-        telephone = graphene.String(required=True)
-        sujet = graphene.String(required=True)
-        contenu = graphene.String(required=True)
-
-    message = graphene.Field(MessageType)
-    success = graphene.Boolean()
-    errors = graphene.List(graphene.String)
-
-    def mutate(self, info, nom, prenom, telephone, sujet, contenu):
-        try:
-
-            message = Message.objects.create(
-                nom=nom,
-                prenom=prenom,
-                telephone=telephone,
-                sujet=sujet,
-                contenu=contenu
-            )
-            return CreateMessage(message=message, success=True)
-        except Utilisateur.DoesNotExist:
-            return CreateMessage(success=False, errors=["Utilisateur non trouvé"])
-        except Exception as e:
-            return CreateMessage(success=False, errors=[str(e)])
-
-class UpdateMessage(graphene.Mutation):
-    class Arguments:
-        id = graphene.ID(required=True)
-        lu = graphene.Boolean()
-
-    message = graphene.Field(MessageType)
-    success = graphene.Boolean()
-    errors = graphene.List(graphene.String)
-
-    def mutate(self, info, id, lu=None):
-        try:
-            message = Message.objects.get(pk=id)
-            if lu is not None:
-                message.lu = lu
-            message.save()
-            return UpdateMessage(message=message, success=True)
-        except Message.DoesNotExist:
-            return UpdateMessage(success=False, errors=["Message non trouvé"])
-        except Exception as e:
-            return UpdateMessage(success=False, errors=[str(e)])
-
-class DeleteMessage(graphene.Mutation):
-    class Arguments:
-        id = graphene.ID(required=True)
-
-    success = graphene.Boolean()
-    errors = graphene.List(graphene.String)
-
-    def mutate(self, info, id):
-        try:
-            message = Message.objects.get(pk=id)
-            message.delete()
-            return DeleteMessage(success=True)
-        except Message.DoesNotExist:
-            return DeleteMessage(success=False, errors=["Message non trouvé"])
-        except Exception as e:
-            return DeleteMessage(success=False, errors=[str(e)])
-
 # Mutations pour les blogs
 class CreateBlog(graphene.Mutation):
     class Arguments:
@@ -990,14 +919,14 @@ class RegisterUser(graphene.Mutation):
         nom = graphene.String(required=True)
         prenom = graphene.String(required=True)
         telephone = graphene.String()
-        # profileImage = Upload(required=False)
+        image = Upload(required=True)
 
     utilisateur = graphene.Field(UtilisateurType)
     success = graphene.Boolean()
     errors = graphene.List(graphene.String)
     token = graphene.String()
 
-    def mutate(self, info, email, password, nom, prenom, telephone=None):
+    def mutate(self, info, email, password, nom, prenom, image, telephone=None):
         try:
             with transaction.atomic():
                 # Vérifier si l'utilisateur existe déjà
@@ -1021,32 +950,6 @@ class RegisterUser(graphene.Mutation):
                         errors=["Le mot de passe doit contenir au moins 6 caractères"]
                     )
                 
-                # Validation de la photo (required)
-                # if not profileImage or not hasattr(profileImage, 'name'):
-                #     logger.error(f"Invalid profileImage: type={type(profileImage)}, value={profileImage}")
-                #     return RegisterUser(
-                #         success=False,
-                #         errors=["Une image de profil valide est requise"]
-                #     )
-                    
-                # Validation de la photo si fournie
-                # if profileImage:
-                #     # Vérifier la taille du fichier (max 5MB)
-                #     if profileImage.size > 5 * 1024 * 1024:
-                #         return RegisterUser(success=False, errors=["L'image ne doit pas dépasser 5MB"])
-                    
-                # Type MIME
-                # if not profileImage.content_type.startswith('image/'):
-                #     return RegisterUser(success=False, errors=["Le fichier doit être une image (JPG, PNG, GIF)"])
-
-                # Vérification extension
-                # ext = os.path.splitext(profileImage.name)[1].lower()
-                # if ext not in ['.jpg', '.jpeg', '.png', '.gif']:
-                #     return RegisterUser(success=False, errors=["Extension d'image non supportée"])
-                        
-                    
-                # logger.debug(f"profileImage type: {type(profileImage)}, name: {getattr(profileImage, 'name', None)}, size: {profileImage.size}, content_type: {profileImage.content_type}")
-                
                 # Créer l'utilisateur avec tous les champs
                 utilisateur = Utilisateur(
                     username=email,
@@ -1056,10 +959,10 @@ class RegisterUser(graphene.Mutation):
                     prenom=prenom,
                     telephone=telephone,
                     role='CLIENT',
+                    image=image,
                 )
                 
                 utilisateur.set_password(password)
-                # utilisateur.profileImage = profileImage
                 utilisateur.save()
 
                 # Générer un token simple (optionnel)
@@ -1744,12 +1647,6 @@ class Mutation(graphene.ObjectType):
     create_reservation = CreateReservation.Field()
     update_reservation_status = UpdateReservationStatus.Field()
     create_vehicule_reservation = CreateVehiculeReservation.Field()
-    # create_circuit_reservation = CreateCircuitReservation.Field()
-
-    # Mutations messages
-    create_message = CreateMessage.Field()
-    update_message = UpdateMessage.Field()
-    delete_message = DeleteMessage.Field()
 
     # Mutations blogs
     create_blog = CreateBlog.Field()

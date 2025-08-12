@@ -66,7 +66,7 @@ class Utilisateur(AbstractUser):
     telephone = models.CharField(max_length=20, blank=True, null=True)
     role = models.CharField(max_length=20, choices=Role.choices, default=Role.CLIENT)
     date_inscription = models.DateTimeField(default=timezone.now)
-    # profileImage = models.ImageField(upload_to='photos_utilisateurs/', blank=True, null=True)
+    image = models.ImageField(upload_to='photos/', blank=True, null=True)
     
     # Ajout de related_name pour éviter les conflits
     groups = models.ManyToManyField(
@@ -301,21 +301,6 @@ class Guide(models.Model):
 
     def __str__(self):
         return f"{self.prenom} {self.nom}"
-
-
-class Message(models.Model):
-    id = models.CharField(primary_key=True, default=uuid.uuid4, editable=False, max_length=36)
-    utilisateur = models.ForeignKey(Utilisateur, on_delete=models.CASCADE, related_name='messages')
-    nom = models.CharField(max_length=100)
-    prenom = models.CharField(max_length=100)
-    telephone = models.CharField(max_length=20)
-    sujet = models.CharField(max_length=200)
-    contenu = models.TextField()
-    date_envoi = models.DateTimeField(default=timezone.now)
-    lu = models.BooleanField(default=False)
-    
-    def __str__(self):
-        return f"Message de {self.nom} {self.prenom}: {self.sujet}"
 
 
 class Blog(models.Model):

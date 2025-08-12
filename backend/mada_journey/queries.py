@@ -8,15 +8,14 @@ from django.core.exceptions import ValidationError
 
 from .models import (
     Utilisateur, Destination, Saison, Circuit, PointInteret,
-    TypeVehicule, Capacite, Vehicule, Reservation, Guide,
-    Message, Blog, BlogCommentaire, Faq,
+    TypeVehicule, Capacite, Vehicule, Reservation, Guide, Blog, BlogCommentaire, Faq,
     CircuitImage, VehiculeImage, DestinationImage, BlogImage,
     EtatVehicule, Itineraire, Testimonia
 )
 from .model_types import (
     UtilisateurType, DestinationType, SaisonType, CircuitType,
     PointInteretType, TypeVehiculeType, CapaciteType, VehiculeType,
-    ReservationType, GuideType, MessageType, BlogType,
+    ReservationType, GuideType, BlogType,
     BlogCommentaireType, FaqType,
     CircuitImageType, VehiculeImageType, DestinationImageType, BlogImageType, ItineraireType, TestimoniaType
 )
@@ -98,13 +97,6 @@ class Query(graphene.ObjectType):
     guides_disponibles = graphene.List(GuideType)
     guides_by_specialite = graphene.List(GuideType, specialite=graphene.String())
     guides_by_langue = graphene.List(GuideType, langue=graphene.String())
-    
-    # Queries pour les messages
-    all_messages = graphene.List(MessageType)
-    message = graphene.Field(MessageType, id=graphene.ID())
-    messages_non_lus = graphene.List(MessageType)
-    messages_by_user = graphene.List(MessageType, user_id=graphene.ID())
-    messages_by_sujet = graphene.List(MessageType, sujet=graphene.String())
     
     # Queries pour les blogs
     all_blogs = graphene.List(BlogType)
@@ -396,25 +388,6 @@ class Query(graphene.ObjectType):
 
     def resolve_guides_by_langue(self, info, langue):
         return Guide.objects.filter(langues__contains=[langue])
-
-    # Resolvers pour les messages
-    def resolve_all_messages(self, info):
-        return Message.objects.all().select_related('utilisateur').order_by('-date_envoi')
-
-    def resolve_message(self, info, id):
-        try:
-            return Message.objects.select_related('utilisateur').get(pk=id)
-        except Message.DoesNotExist:
-            return None
-
-    def resolve_messages_non_lus(self, info):
-        return Message.objects.filter(lu=False).select_related('utilisateur').order_by('-date_envoi')
-
-    def resolve_messages_by_user(self, info, user_id):
-        return Message.objects.filter(utilisateur_id=user_id).select_related('utilisateur').order_by('-date_envoi')
-
-    def resolve_messages_by_sujet(self, info, sujet):
-        return Message.objects.filter(sujet__icontains=sujet).select_related('utilisateur').order_by('-date_envoi')
 
     # Resolvers pour les blogs
     def resolve_all_blogs(self, info):

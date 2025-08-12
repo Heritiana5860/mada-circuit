@@ -38,6 +38,7 @@ interface RegisterData {
   nom: string;
   prenom: string;
   telephone?: string;
+  image: File;
 }
 
 // Mutations GraphQL
@@ -65,6 +66,7 @@ const REGISTER_MUTATION = gql`
     $nom: String!
     $prenom: String!
     $telephone: String
+    $image: Upload!
   ) {
     registerUser(
       email: $email
@@ -72,6 +74,7 @@ const REGISTER_MUTATION = gql`
       nom: $nom
       prenom: $prenom
       telephone: $telephone
+      image: $image
     ) {
       success
       errors
@@ -82,6 +85,7 @@ const REGISTER_MUTATION = gql`
         nom
         prenom
         role
+        image
       }
     }
   }
@@ -153,7 +157,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
         variables: userData,
       });
 
-      console.log("Mutation response:", data);
+      console.log("Mutation response:", userData);
 
       if (data.registerUser.success) {
         const { token: newToken, utilisateur } = data.registerUser;

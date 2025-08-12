@@ -29,19 +29,18 @@ const Register = () => {
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const [errors, setErrors] = useState([]);
-  const [imagePreview, setImagePreview] = useState(null);
+
+  const [nom, setNom] = useState("");
+  const [prenom, setPrenom] = useState("");
+  const [email, setEmail] = useState("");
+  const [tel, setTel] = useState("");
+  const [mdp, setMdp] = useState("");
+  const [confirm, setConfirm] = useState("");
+  const [image, setImage] = useState(null); 
+  const [imagePreview, setImagePreview] = useState(null); 
 
   const { register, isAuthenticated } = useAuth();
   const navigate = useNavigate();
-
-  const [formData, setFormData] = useState({
-    email: "",
-    password: "",
-    confirmPassword: "",
-    nom: "",
-    prenom: "",
-    telephone: "",
-  });
 
   // Rediriger si déjà connecté
   useEffect(() => {
@@ -50,11 +49,19 @@ const Register = () => {
     }
   }, [isAuthenticated, navigate]);
 
-  const handleChange = (e) => {
-    const { name, value, files } = e.target;
+  // Nettoyer l'URL de l'aperçu quand le composant se démonte
+  useEffect(() => {
+    return () => {
+      if (imagePreview) {
+        URL.revokeObjectURL(imagePreview);
+      }
+    };
+  }, [imagePreview]);
 
-    if (name === "profileImage" && files && files[0]) {
-      const file = files[0];
+  const handleChange = (e) => {
+    const file = e.target.files[0];
+
+    if (file) {
       // Vérifier la taille du fichier (max 5MB)
       if (file.size > 5 * 1024 * 1024) {
         setErrors(["L'image ne doit pas dépasser 5MB"]);
@@ -67,55 +74,53 @@ const Register = () => {
         return;
       }
 
-      setFormData((prev) => ({
-        ...prev,
-        [name]: file,
-      }));
+      // Nettoyer l'ancienne URL si elle existe
+      if (imagePreview) {
+        URL.revokeObjectURL(imagePreview);
+      }
 
-      // Créer l'aperçu de l'image
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        setImagePreview(e.target.result);
-      };
-      reader.readAsDataURL(file);
-    } else {
-      setFormData((prev) => ({
-        ...prev,
-        [name]: value,
-      }));
+      // Stocker le fichier et créer l'aperçu
+      setImage(file);
+      const previewUrl = URL.createObjectURL(file);
+      setImagePreview(previewUrl);
+
+      // Effacer les erreurs
+      if (errors.length > 0) {
+        setErrors([]);
+      }
+    }
+  };
+
+  const handleImageRemove = () => {
+    // Nettoyer l'URL de l'aperçu
+    if (imagePreview) {
+      URL.revokeObjectURL(imagePreview);
     }
 
-    // Effacer les erreurs quand l'utilisateur tape
-    if (errors.length > 0) {
-      setErrors([]);
-    }
+    setImage(null);
+    setImagePreview(null);
   };
 
   const validateForm = () => {
     const newErrors = [];
 
-    if (
-      !formData.email ||
-      !formData.password ||
-      !formData.nom ||
-      !formData.prenom
-    ) {
+    if (!email || !mdp || !nom || !prenom) {
       newErrors.push("Veuillez remplir tous les champs obligatoires");
     }
 
-    if (!formData.email.includes("@")) {
+    if (!email.includes("@")) {
       newErrors.push("Veuillez entrer une adresse email valide");
     }
 
-    if (formData.password.length < 6) {
+    if (mdp.length < 6) {
       newErrors.push("Le mot de passe doit contenir au moins 6 caractères");
     }
 
-    if (formData.password !== formData.confirmPassword) {
+    if (mdp !== confirm) {
       newErrors.push("Les mots de passe ne correspondent pas");
     }
 
-    if (formData.telephone && !/^[0-9+\-\s()]+$/.test(formData.telephone)) {
+    if (tel && !/^[0-9+\-\s()]+$/.test(tel)) {
       newErrors.push("Veuillez entrer un numéro de téléphone valide");
     }
 
@@ -136,12 +141,19 @@ const Register = () => {
     }
 
     try {
-      const { confirmPassword, ...userData } = formData;
+      const userData = {
+        nom: nom,
+        prenom: prenom,
+        telephone: tel,
+        email: email,
+        password: mdp,
+        image: image, // Le fichier sera envoyé
+      };
+
       const result = await register(userData);
 
       console.log("Result: ", result);
-      console.log("formData: ", formData);
-      
+      console.log("Image is File:", image instanceof File);
 
       if (result.success) {
         navigate("/", { replace: true });
@@ -154,14 +166,6 @@ const Register = () => {
     } finally {
       setLoading(false);
     }
-  };
-
-  const handleImageRemove = () => {
-    setFormData((prev) => ({
-      ...prev,
-      profileImage: null,
-    }));
-    setImagePreview(null);
   };
 
   return (
@@ -221,7 +225,7 @@ const Register = () => {
                         <button
                           type="button"
                           onClick={handleImageRemove}
-                          className="absolute bottom-0 right-0  bg-destructive text-destructive-foreground rounded-full p-1 shadow-lg hover:bg-destructive/90 transition-colors"
+                          className="absolute bottom-0 right-0 bg-destructive text-destructive-foreground rounded-full p-1 shadow-lg hover:bg-destructive/90 transition-colors"
                         >
                           <X className="h-4 w-4" />
                         </button>
@@ -236,11 +240,15 @@ const Register = () => {
                   <label className="cursor-pointer">
                     <span className="inline-flex items-center px-3 py-1.5 text-xs font-medium text-primary bg-primary/10 border border-primary/20 rounded-full hover:bg-primary/20 transition-colors">
                       <Camera className="h-3 w-3 mr-1.5" />
-                      <span className="ml-2">Choisir une photo</span>
+                      <span className="ml-2">
+                        {imagePreview
+                          ? "Changer la photo"
+                          : "Choisir une photo"}
+                      </span>
                     </span>
                     <input
                       type="file"
-                      name="profileImage"
+                      name="image"
                       accept="image/*"
                       onChange={handleChange}
                       className="sr-only"
@@ -265,8 +273,8 @@ const Register = () => {
                       name="nom"
                       type="text"
                       placeholder="Nom"
-                      value={formData.nom}
-                      onChange={handleChange}
+                      value={nom}
+                      onChange={(e) => setNom(e.target.value)}
                       className="pl-10 h-12"
                       required
                     />
@@ -284,8 +292,8 @@ const Register = () => {
                       name="prenom"
                       type="text"
                       placeholder="Prénom"
-                      value={formData.prenom}
-                      onChange={handleChange}
+                      value={prenom}
+                      onChange={(e) => setPrenom(e.target.value)}
                       className="pl-10 h-12"
                       required
                     />
@@ -305,8 +313,8 @@ const Register = () => {
                       name="email"
                       type="email"
                       placeholder="votre@email.com"
-                      value={formData.email}
-                      onChange={handleChange}
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
                       className="pl-10 h-12"
                       required
                     />
@@ -324,8 +332,8 @@ const Register = () => {
                       name="telephone"
                       type="tel"
                       placeholder="+261 XX XX XXX XX"
-                      value={formData.telephone}
-                      onChange={handleChange}
+                      value={tel}
+                      onChange={(e) => setTel(e.target.value)}
                       className="pl-10 h-12"
                     />
                   </div>
@@ -344,8 +352,8 @@ const Register = () => {
                       name="password"
                       type={showPassword ? "text" : "password"}
                       placeholder="Minimum 6 caractères"
-                      value={formData.password}
-                      onChange={handleChange}
+                      value={mdp}
+                      onChange={(e) => setMdp(e.target.value)}
                       className="pl-10 pr-10 h-12"
                       required
                     />
@@ -377,8 +385,8 @@ const Register = () => {
                       name="confirmPassword"
                       type={showConfirmPassword ? "text" : "password"}
                       placeholder="Confirmez votre mot de passe"
-                      value={formData.confirmPassword}
-                      onChange={handleChange}
+                      value={confirm}
+                      onChange={(e) => setConfirm(e.target.value)}
                       className="pl-10 pr-10 h-12"
                       required
                     />

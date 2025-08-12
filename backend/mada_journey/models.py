@@ -477,3 +477,34 @@ class ContactUsModele(models.Model):
     
     def __str__(self):
         return f"{self.objet}"
+    
+    
+# Modele sur mesure
+class SurMesure(models.Model):
+    
+    class TypeHebergement(models.TextChoices):
+        STANDARD = 'STANDARD', 'standard'
+        CONFORT = 'CONFORT', 'confort'
+        LUXE = 'LUXE', 'luxe'
+    
+    id = models.UUIDField(
+        primary_key=True, 
+        default=uuid.uuid4, 
+        editable=False
+    )
+    destination = models.CharField(verbose_name="Destination")
+    date_debut = models.DateField(verbose_name="Date de depart")
+    date_fin = models.DateField(verbose_name="Date de retour")
+    duree = models.PositiveIntegerField(verbose_name="Duree")
+    nombre_de_personne = models.PositiveIntegerField(verbose_name="Nombre de personne")
+    hebergement = models.CharField(choices=TypeHebergement.choices, default=TypeHebergement.STANDARD, verbose_name="Hebergement")
+    activite = models.CharField(verbose_name="Activité")
+    budget = models.CharField(verbose_name="Budget")
+    nom = models.CharField(max_length=200, verbose_name="Nom")
+    prenom = models.CharField(max_length=200, verbose_name="Prenom")
+    email = models.CharField(max_length=200, verbose_name="Email")
+    contact = models.CharField(max_length=20, verbose_name="Contact")
+    commentaire = models.TextField(verbose_name="Commentaire")
+    
+    def __str__(self):
+        return self.destination

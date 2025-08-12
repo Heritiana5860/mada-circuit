@@ -166,7 +166,7 @@ const Contact = () => {
                     <Input
                       type="number"
                       id="contact"
-                      placeholder="+261 34 123 4567"
+                      placeholder="+261 34 00 000 00"
                       value={formData.contact}
                       onChange={handleChange}
                       required
@@ -244,11 +244,7 @@ const Contact = () => {
                       <div>
                         <h3 className="font-semibold text-lg mb-1">Adresse</h3>
                         <p className="text-muted-foreground">
-                          123 Avenue de l'Indépendance
-                          <br />
-                          Antananarivo 101
-                          <br />
-                          Madagascar
+                          Antananarivo Madagascar
                         </p>
                       </div>
                     </div>
@@ -274,9 +270,9 @@ const Contact = () => {
                           Téléphone
                         </h3>
                         <p className="text-muted-foreground">
-                          +261 34 123 4567
+                          0033601903524 | +33 7 83 39 91 41
                           <br />
-                          +261 32 987 6543
+                          +261 34 52 981 05 | +261 32 72 731 67
                         </p>
                       </div>
                     </div>
@@ -316,7 +312,7 @@ const Contact = () => {
                       className="inline-flex items-center px-6 py-3 bg-primary text-primary-foreground rounded-lg font-medium"
                     >
                       <Phone className="mr-2 h-5 w-5" />
-                      +261 34 567 8910
+                      +261 34 92 898 40
                     </a>
                   </div>
                 </div>

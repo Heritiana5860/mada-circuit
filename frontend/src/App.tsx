@@ -29,6 +29,7 @@ import PangalanesDetailPage from "./pages/pangalanes/PangalanesDetail";
 import ProgrammeSolidaireDetail from "./pages/ProgrammeSolidaireDetail";
 import Testimonia from "./pages/Testimonia";
 
+
 const queryClient = new QueryClient();
 
 const App = () => (

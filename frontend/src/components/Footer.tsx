@@ -52,7 +52,7 @@ const Footer = () => {
             <ul className="space-y-4">
               <li className="flex items-start">
                 <MapPin className="h-5 w-5 mr-2 text-primary mt-0.5" />
-                <span className="text-muted-foreground">123 Rue de l'Indépendance, Antananarivo, Madagascar</span>
+                <span className="text-muted-foreground">Antananarivo, Madagascar</span>
               </li>
               <li className="flex items-center">
                 <Phone className="h-5 w-5 mr-2 text-primary" />
@@ -64,7 +64,7 @@ const Footer = () => {
               </li>
               <li className="flex items-center">
                 <Mail className="h-5 w-5 mr-2 text-primary" />
-                <span className="text-muted-foreground">contact@madagascar-voyage.mg</span>
+                <span className="text-muted-foreground">info@madagascar-voyagesolidaire.com</span>
               </li>
             </ul>
           </div>

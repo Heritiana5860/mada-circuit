@@ -27,6 +27,7 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from "@/components/ui/carousel";
+import NombrePersonneDetail from "@/components/detail/NombrePersonneDetail";
 
 const VoyagesSurMesure = () => {
   const { data, loading, error } = useQuery(GET_TESTIMONIA_BY_STATUS, {
@@ -36,6 +37,23 @@ const VoyagesSurMesure = () => {
   });
 
   const [currentIndex, setCurrentIndex] = useState(0);
+  const [errors, setErrors] = useState<string | null>(null);
+  const [successMessage, setSuccessMessage] = useState<string | null>(null);
+  const [guestCount, setGuestCount] = useState(1);
+  const [formData, setFormData] = useState({
+    dateDebut: "",
+    dateFin: "",
+    voyageur: 1,
+    duree: "",
+    hebergement: "",
+    activité: [],
+    budget: "",
+    nom: "",
+    prenom: "",
+    email: "",
+    contact: "",
+    commentaire: "",
+  });
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -49,38 +67,32 @@ const VoyagesSurMesure = () => {
     {
       name: "Antananarivo",
       region: "Hautes Terres Centrales",
-      image:
-        "https://images.unsplash.com/photo-1543465077-db45d34b88a5?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2000&q=80",
+      image: "vam.JPG",
     },
     {
       name: "Nosy Be",
       region: "Nord",
-      image:
-        "https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2000&q=80",
+      image: "piscine.jpg",
     },
     {
       name: "Isalo",
       region: "Sud-Ouest",
-      image:
-        "https://images.unsplash.com/photo-1516815231560-8f41ec531527?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2000&q=80",
+      image: "isalo.jpg",
     },
     {
       name: "Pangalanes",
-      region: "Est",
-      image:
-        "https://images.unsplash.com/photo-1506744038136-46273834b3fb?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2000&q=80",
+      region: "Sud-Est",
+      image: "canal.JPG",
     },
     {
       name: "Diego Suarez",
       region: "Nord",
-      image:
-        "https://images.unsplash.com/photo-1433086966358-54859d0ed716?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2000&q=80",
+      image: "vorogna.png",
     },
     {
       name: "Tuléar",
       region: "Sud-Ouest",
-      image:
-        "https://images.unsplash.com/photo-1465146344425-f00d5f5c8f07?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2000&q=80",
+      image: "toliara.png",
     },
   ];
 
@@ -91,30 +103,6 @@ const VoyagesSurMesure = () => {
     { name: "Plongée", icon: <Compass className="h-5 w-5" /> },
     { name: "Culture", icon: <Compass className="h-5 w-5" /> },
     { name: "Gastronomie", icon: <Compass className="h-5 w-5" /> },
-  ];
-
-  const testimonials = [
-    {
-      name: "Jean Dupont",
-      avatar: "https://randomuser.me/api/portraits/men/32.jpg",
-      date: "Avril 2023",
-      rating: 5,
-      text: "Notre voyage sur mesure à Madagascar était parfait ! Notre guide était exceptionnel et les itinéraires proposés correspondaient exactement à nos attentes. Je recommande vivement.",
-    },
-    {
-      name: "Sophie Martin",
-      avatar: "https://randomuser.me/api/portraits/women/44.jpg",
-      date: "Janvier 2023",
-      rating: 5,
-      text: "La flexibilité du voyage sur mesure nous a permis de découvrir des endroits extraordinaires hors des sentiers battus. Une expérience inoubliable à Madagascar.",
-    },
-    {
-      name: "David Lee",
-      avatar: "https://randomuser.me/api/portraits/men/62.jpg",
-      date: "Décembre 2022",
-      rating: 4,
-      text: "L'équipe a créé un itinéraire parfait qui a répondu à toutes nos demandes. La découverte du Canal des Pangalanes était le point fort de notre séjour.",
-    },
   ];
 
   if (loading) {
@@ -148,6 +136,70 @@ const VoyagesSurMesure = () => {
       </section>
     );
   }
+
+  const validateForm = (): boolean => {
+    if (!formData.dateDebut) {
+      setErrors("Veuillez sélectionner une date de début");
+      return false;
+    }
+
+    if (!formData.dateFin) {
+      setErrors("Veuillez sélectionner une date de fin");
+      return false;
+    }
+
+    const startDate = new Date(formData.dateDebut);
+    const endDate = new Date(formData.dateFin);
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
+    if (startDate < today) {
+      setErrors("La date de début ne peut pas être dans le passé");
+      return false;
+    }
+
+    if (startDate >= endDate) {
+      setErrors("La date de fin doit être postérieure à la date de début");
+      return false;
+    }
+
+    return true;
+  };
+
+  // Gestion des changements dans le formulaire
+  const handleInputChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+
+    // Réinitialiser les messages quand l'utilisateur modifie les champs
+    if (errors) setErrors(null);
+    if (successMessage) setSuccessMessage(null);
+  };
+
+  // Fonction pour calculer le nombre de jours
+  const calculateDays = (dateDebut: string, dateFin: string): number => {
+    if (!dateDebut || !dateFin) return 0;
+    const start = new Date(dateDebut);
+    const end = new Date(dateFin);
+    const diffTime = end.getTime() - start.getTime();
+    return Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+  };
+
+  // Fonction pour gérer les boutons + et -
+  const handleGuestCountChange = (increment: boolean) => {
+    if (increment) {
+      setGuestCount(Math.min(1200, guestCount + 1));
+    } else {
+      setGuestCount(Math.max(1, guestCount - 1));
+    }
+  };
+
+  const days = calculateDays(formData.dateDebut, formData.dateFin);
 
   const allData = data?.allTestimoniaByStatus || [];
   // Grouper les témoignages par lots de 3 pour chaque diapositive
@@ -300,8 +352,8 @@ const VoyagesSurMesure = () => {
                             <input
                               type="date"
                               name="dateDebut"
-                              value=""
-                              // onChange={handleInputChange}
+                              value={formData.dateDebut}
+                              onChange={handleInputChange}
                               className="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                               min={new Date().toISOString().split("T")[0]}
                               required
@@ -316,13 +368,13 @@ const VoyagesSurMesure = () => {
                             <input
                               type="date"
                               name="dateFin"
-                              value=""
-                              // onChange={handleInputChange}
+                              value={formData.dateFin}
+                              onChange={handleInputChange}
                               className="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                              // min={
-                              //   formData.dateDebut ||
-                              //   new Date().toISOString().split("T")[0]
-                              // }
+                              min={
+                                formData.dateDebut ||
+                                new Date().toISOString().split("T")[0]
+                              }
                               required
                             />
                           </div>
@@ -336,30 +388,24 @@ const VoyagesSurMesure = () => {
                         <div className="relative">
                           <input
                             type="number"
+                            name="duree"
                             min="1"
                             max="30"
-                            defaultValue="7"
+                            value={days}
+                            defaultValue="1"
+                            disabled
                             className="w-full p-2 border rounded-lg"
                           />
                           <Clock className="absolute right-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-4 w-4" />
                         </div>
                       </div>
 
-                      <div>
-                        <label className="block text-sm font-medium mb-1">
-                          Nombre de voyageurs
-                        </label>
-                        <div className="relative">
-                          <input
-                            type="number"
-                            min="1"
-                            max="1200"
-                            defaultValue="2"
-                            className="w-full p-2 border rounded-lg"
-                          />
-                          <Users className="absolute right-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-4 w-4" />
-                        </div>
-                      </div>
+                      <NombrePersonneDetail
+                        label="Nombre de personne"
+                        name="voyageur"
+                        guestCount={guestCount}
+                        handleGuestCountChange={handleGuestCountChange}
+                      />
                     </div>
                   </div>
                 )}

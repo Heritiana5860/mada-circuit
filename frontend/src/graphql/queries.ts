@@ -389,8 +389,6 @@ export const GET_ALL_FAQS = gql`
       id
       question
       reponse
-      categorie
-      ordre
     }
   }
 `;
@@ -430,3 +428,5 @@ export const GET_UTILISATEUR_BY_EMAIL = gql`
     }
   }
 `;
+
+

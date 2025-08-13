@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import NavBar from "../components/NavBar";
 import Footer from "../components/Footer";
 import { Button } from "@/components/ui/button";
@@ -6,11 +6,25 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Separator } from "@/components/ui/separator";
-import { Phone, Mail, MapPin, Clock, Send } from "lucide-react";
-import { useMutation, gql } from "@apollo/client";
+import {
+  Phone,
+  Mail,
+  MapPin,
+  Clock,
+  Send,
+  Divide,
+  Heading1,
+} from "lucide-react";
+import { useMutation, gql, useQuery } from "@apollo/client";
 import { useToast } from "@/components/ui/use-toast";
 import { useAuth } from "../contexts/AuthContext";
 import { CREATE_CONTACT_US } from "@/graphql/mutations";
+import { GET_ALL_FAQS } from "@/graphql/queries";
+import ContentLoading from "@/components/Loading";
+import ContentError from "@/components/error";
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import { error } from "console";
+import { FaqContext } from "@/provider/DataContext";
 
 const Contact = () => {
   // État du formulaire
@@ -26,6 +40,15 @@ const Contact = () => {
   const { toast } = useToast();
 
   const [CreateContactUsMutation, { loading }] = useMutation(CREATE_CONTACT_US);
+
+  // Query faq
+  // const {
+  //   loading: faqLoading,
+  //   error: faqError,
+  //   data: allFaq,
+  // } = useQuery(GET_ALL_FAQS);
+
+  const { allDataFaq, faqLoading, faqError } = useContext(FaqContext);
 
   const resetForm = () => {
     setFormData({
@@ -89,11 +112,19 @@ const Contact = () => {
     document.title = "Contact | Madagascar Voyage";
   }, []);
 
+  if (faqLoading) {
+    return <ContentLoading />;
+  }
+  if (faqError) {
+    return <ContentError />;
+  }
+
   return (
     <div className="min-h-screen flex flex-col">
       <NavBar />
 
       <main className="flex-grow">
+        {/* Contactez-nous */}
         <section className="relative h-[40vh] overflow-hidden">
           <img
             src="https://images.unsplash.com/photo-1516815231560-8f41ec531527?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2000&q=80"
@@ -116,6 +147,7 @@ const Contact = () => {
           </div>
         </section>
 
+        {/* Envoyez-nous un message */}
         <section className="py-16">
           <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
@@ -231,7 +263,7 @@ const Contact = () => {
                 </form>
               </div>
 
-              {/* Le reste du code reste inchangé */}
+              {/* Nos coordonnées*/}
               <div className="flex flex-col">
                 <div className="glass-card p-8 rounded-lg mb-6">
                   <h2 className="text-2xl font-bold mb-6">Nos coordonnées</h2>
@@ -321,83 +353,27 @@ const Contact = () => {
           </div>
         </section>
 
-        <section className="py-16 bg-muted">
-          <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-            <h2 className="text-3xl font-bold mb-6">Foire Aux Questions</h2>
-            <p className="text-muted-foreground max-w-2xl mx-auto mb-12">
-              Retrouvez ci-dessous les réponses aux questions les plus
-              fréquemment posées par nos clients.
-            </p>
+        {/* Foire Aux Questions */}
+        {allDataFaq.length > 0 && (
+          <section className="py-16 bg-muted">
+            <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+              <h2 className="text-3xl font-bold mb-6">Foire Aux Questions</h2>
+              <p className="text-muted-foreground max-w-2xl mx-auto mb-12">
+                Retrouvez ci-dessous les réponses aux questions les plus
+                fréquemment posées par nos clients.
+              </p>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 text-left">
-              <div className="bg-card p-6 rounded-lg shadow-sm">
-                <h3 className="font-bold text-lg mb-2">
-                  Comment réserver un circuit ?
-                </h3>
-                <p className="text-muted-foreground">
-                  Vous pouvez réserver un circuit directement via notre site
-                  web, par email ou par téléphone. Un acompte de 30% est
-                  généralement demandé pour confirmer la réservation.
-                </p>
-              </div>
-
-              <div className="bg-card p-6 rounded-lg shadow-sm">
-                <h3 className="font-bold text-lg mb-2">
-                  Quelle est la meilleure période pour visiter Madagascar ?
-                </h3>
-                <p className="text-muted-foreground">
-                  La meilleure période s'étend d'avril à novembre, pendant la
-                  saison sèche. La haute saison touristique se situe entre
-                  juillet et août.
-                </p>
-              </div>
-
-              <div className="bg-card p-6 rounded-lg shadow-sm">
-                <h3 className="font-bold text-lg mb-2">
-                  Faut-il un visa pour visiter Madagascar ?
-                </h3>
-                <p className="text-muted-foreground">
-                  Oui, un visa est nécessaire pour la plupart des nationalités.
-                  Il peut être obtenu à l'arrivée à l'aéroport ou auprès des
-                  ambassades malgaches.
-                </p>
-              </div>
-
-              <div className="bg-card p-6 rounded-lg shadow-sm">
-                <h3 className="font-bold text-lg mb-2">
-                  Quelles vaccinations sont recommandées ?
-                </h3>
-                <p className="text-muted-foreground">
-                  Il est recommandé d'être à jour dans ses vaccinations
-                  habituelles. La vaccination contre la fièvre jaune est exigée
-                  si vous venez d'un pays où elle est endémique.
-                </p>
-              </div>
-
-              <div className="bg-card p-6 rounded-lg shadow-sm">
-                <h3 className="font-bold text-lg mb-2">
-                  Peut-on louer une voiture sans chauffeur ?
-                </h3>
-                <p className="text-muted-foreground">
-                  Oui, mais nous recommandons fortement les locations avec
-                  chauffeur compte tenu de l'état des routes et des conditions
-                  de circulation particulières à Madagascar.
-                </p>
-              </div>
-
-              <div className="bg-card p-6 rounded-lg shadow-sm">
-                <h3 className="font-bold text-lg mb-2">
-                  Comment annuler ou modifier ma réservation ?
-                </h3>
-                <p className="text-muted-foreground">
-                  Pour toute annulation ou modification, veuillez nous contacter
-                  par email ou téléphone au moins 30 jours avant la date prévue
-                  du voyage.
-                </p>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 text-left">
+                {allDataFaq.map((faq, index) => (
+                  <div key={index} className="bg-card p-6 rounded-lg shadow-sm">
+                    <h3 className="font-bold text-lg mb-2">{faq.question}</h3>
+                    <p className="text-muted-foreground">{faq.reponse}</p>
+                  </div>
+                ))}
               </div>
             </div>
-          </div>
-        </section>
+          </section>
+        )}
       </main>
 
       <Footer />
@@ -406,3 +382,14 @@ const Contact = () => {
 };
 
 export default Contact;
+
+{
+  /* <div className="bg-card p-6 rounded-lg shadow-sm">
+  <h3 className="font-bold text-lg mb-2">Comment réserver un circuit ?</h3>
+  <p className="text-muted-foreground">
+    Vous pouvez réserver un circuit directement via notre site web, par email ou
+    par téléphone. Un acompte de 30% est généralement demandé pour confirmer la
+    réservation.
+  </p>
+</div>; */
+}

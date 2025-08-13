@@ -366,29 +366,15 @@ class FaqAdmin(admin.ModelAdmin):
     list_display = ('question', 'reponse', 'is_active')
     list_filter = ('is_active',)
     search_fields = ('question', 'reponse')
-    list_editable = ('is_active',)
-    ordering = ('created_at',)
     
     fieldsets = (
         ('Question et réponse', {
             'fields': ('question', 'reponse')
         }),
         ('Organisation', {
-            'fields': ('is_active', 'updated_at')
+            'fields': ('is_active',)
         }),
     )
-    
-    actions = ['activer', 'desactiver']
-    
-    def activer(self, request, queryset):
-        queryset.update(active=True)
-        self.message_user(request, f"{queryset.count()} FAQ activée(s).")
-    activer.short_description = "Activer"
-    
-    def desactiver(self, request, queryset):
-        queryset.update(active=False)
-        self.message_user(request, f"{queryset.count()} FAQ désactivée(s).")
-    desactiver.short_description = "Désactiver"
 
 
 # Admins pour les galeries d'images

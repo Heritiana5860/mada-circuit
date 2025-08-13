@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import NavBar from "../components/NavBar";
 import Footer from "../components/Footer";
 import TestimonialCard from "../components/testimonia/TestimonialCard";
@@ -28,6 +28,7 @@ import {
   CarouselPrevious,
 } from "@/components/ui/carousel";
 import NombrePersonneDetail from "@/components/detail/NombrePersonneDetail";
+import { DataContext, FaqContext } from "@/provider/DataContext";
 
 const VoyagesSurMesure = () => {
   const { data, loading, error } = useQuery(GET_TESTIMONIA_BY_STATUS, {
@@ -54,6 +55,16 @@ const VoyagesSurMesure = () => {
     contact: "",
     commentaire: "",
   });
+
+  // Recuperer l'utilisateur afin d'afficher son image sur testimonia
+  const {
+    loading: utilisateurLoading,
+    error: utilisateurError,
+    utilisateur,
+  } = useContext(DataContext);
+
+  // Recuperer les FAQ
+  const { allDataFaq, faqLoading, faqError } = useContext(FaqContext);
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -105,7 +116,7 @@ const VoyagesSurMesure = () => {
     { name: "Gastronomie", icon: <Compass className="h-5 w-5" /> },
   ];
 
-  if (loading) {
+  if (loading || utilisateurLoading || faqLoading) {
     return (
       <section className="bg-gradient-to-br from-primary/5 via-accent/5 to-secondary/5 py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -120,7 +131,7 @@ const VoyagesSurMesure = () => {
     );
   }
 
-  if (error) {
+  if (error || utilisateurError || faqError) {
     return (
       <section className="bg-gradient-to-br from-primary/5 via-accent/5 to-secondary/5 py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -208,6 +219,10 @@ const VoyagesSurMesure = () => {
   for (let i = 0; i < allData.length; i += testimonialsPerSlide) {
     groupedTestimonials.push(allData.slice(i, i + testimonialsPerSlide));
   }
+
+  const utilisateurImage = utilisateur?.image
+    ? `http://localhost:8000/media/${utilisateur.image}`
+    : null;
 
   return (
     <div className="min-h-screen flex flex-col">
@@ -648,172 +663,129 @@ const VoyagesSurMesure = () => {
           </div>
         </section>
 
-        <section className="py-16">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="text-center max-w-3xl mx-auto mb-12">
-              <h2 className="text-3xl font-bold mb-4">
-                Ce que disent nos voyageurs
-              </h2>
-              <p className="text-muted-foreground">
-                Découvrez les expériences de ceux qui ont déjà profité de nos
-                services de voyages personnalisés.
-              </p>
-            </div>
+        {allData.length > 0 && (
+          <section className="py-16">
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+              <div className="text-center max-w-3xl mx-auto mb-12">
+                <h2 className="text-3xl font-bold mb-4">
+                  Ce que disent nos voyageurs
+                </h2>
+                <p className="text-muted-foreground">
+                  Découvrez les expériences de ceux qui ont déjà profité de nos
+                  services de voyages personnalisés.
+                </p>
+              </div>
 
-            <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-              {/* Carousel de témoignages */}
-              {allData.length > 0 ? (
-                <Carousel
-                  className="w-full"
-                  opts={{
-                    align: "start",
-                    loop: true,
-                  }}
-                  setApi={(api) => {
-                    api?.on("select", () => {
-                      setCurrentIndex(api.selectedScrollSnap());
-                    });
-                  }}
-                >
-                  <CarouselContent>
-                    {groupedTestimonials.map((group, index) => (
-                      <CarouselItem key={index}>
-                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                          {group.map((testimonial, i) => (
-                            <div
+              <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                {/* Carousel de témoignages */}
+                {allData.length > 0 ? (
+                  <Carousel
+                    className="w-full"
+                    opts={{
+                      align: "start",
+                      loop: true,
+                    }}
+                    setApi={(api) => {
+                      api?.on("select", () => {
+                        setCurrentIndex(api.selectedScrollSnap());
+                      });
+                    }}
+                  >
+                    <CarouselContent>
+                      {groupedTestimonials.map((group, index) => (
+                        <CarouselItem key={index}>
+                          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                            {group.map((testimonial, i) => (
+                              <div
+                                key={i}
+                                className="transform hover:scale-105 transition-all duration-300"
+                                style={{
+                                  animationDelay: `${i * 0.1}s`,
+                                }}
+                              >
+                                <TestimonialCard
+                                  allData={testimonial}
+                                  image={utilisateurImage}
+                                />
+                              </div>
+                            ))}
+                          </div>
+                        </CarouselItem>
+                      ))}
+                    </CarouselContent>
+
+                    {/* Navigation */}
+                    {allData.length > testimonialsPerSlide && (
+                      <div className="flex justify-center items-center gap-4 mt-12">
+                        <CarouselPrevious
+                          className="p-3 rounded-full bg-white shadow-lg hover:shadow-xl transition-all duration-300 hover:bg-primary hover:text-white group"
+                          aria-label="Témoignage précédent"
+                        >
+                          <ChevronLeft className="w-5 h-5" />
+                        </CarouselPrevious>
+
+                        <div className="flex gap-2">
+                          {groupedTestimonials.map((_, i) => (
+                            <button
                               key={i}
-                              className="transform hover:scale-105 transition-all duration-300"
-                              style={{
-                                animationDelay: `${i * 0.1}s`,
-                              }}
-                            >
-                              <TestimonialCard allData={testimonial} />
-                            </div>
+                              onClick={() => setCurrentIndex(i)}
+                              className={`w-3 h-3 rounded-full transition-all duration-300 ${
+                                i === currentIndex
+                                  ? "bg-primary scale-125"
+                                  : "bg-gray-300 hover:bg-gray-400"
+                              }`}
+                              aria-label={`Page ${i + 1}`}
+                            />
                           ))}
                         </div>
-                      </CarouselItem>
-                    ))}
-                  </CarouselContent>
 
-                  {/* Navigation */}
-                  {allData.length > testimonialsPerSlide && (
-                    <div className="flex justify-center items-center gap-4 mt-12">
-                      <CarouselPrevious
-                        className="p-3 rounded-full bg-white shadow-lg hover:shadow-xl transition-all duration-300 hover:bg-primary hover:text-white group"
-                        aria-label="Témoignage précédent"
-                      >
-                        <ChevronLeft className="w-5 h-5" />
-                      </CarouselPrevious>
-
-                      <div className="flex gap-2">
-                        {groupedTestimonials.map((_, i) => (
-                          <button
-                            key={i}
-                            onClick={() => setCurrentIndex(i)}
-                            className={`w-3 h-3 rounded-full transition-all duration-300 ${
-                              i === currentIndex
-                                ? "bg-primary scale-125"
-                                : "bg-gray-300 hover:bg-gray-400"
-                            }`}
-                            aria-label={`Page ${i + 1}`}
-                          />
-                        ))}
+                        <CarouselNext
+                          className="p-3 rounded-full bg-white shadow-lg hover:shadow-xl transition-all duration-300 hover:bg-primary hover:text-white group"
+                          aria-label="Témoignage suivant"
+                        >
+                          <ChevronRight className="w-5 h-5" />
+                        </CarouselNext>
                       </div>
-
-                      <CarouselNext
-                        className="p-3 rounded-full bg-white shadow-lg hover:shadow-xl transition-all duration-300 hover:bg-primary hover:text-white group"
-                        aria-label="Témoignage suivant"
-                      >
-                        <ChevronRight className="w-5 h-5" />
-                      </CarouselNext>
-                    </div>
-                  )}
-                </Carousel>
-              ) : (
-                <div className="text-center py-12">
-                  <Quote className="w-16 h-16 text-gray-300 mx-auto mb-4" />
-                  <h3 className="text-xl font-semibold text-gray-600 mb-2">
-                    Aucun témoignage disponible
-                  </h3>
-                  <p className="text-gray-500">
-                    Les témoignages de nos clients apparaîtront ici
-                    prochainement.
-                  </p>
-                </div>
-              )}
+                    )}
+                  </Carousel>
+                ) : (
+                  <div className="text-center py-12">
+                    <Quote className="w-16 h-16 text-gray-300 mx-auto mb-4" />
+                    <h3 className="text-xl font-semibold text-gray-600 mb-2">
+                      Aucun témoignage disponible
+                    </h3>
+                    <p className="text-gray-500">
+                      Les témoignages de nos clients apparaîtront ici
+                      prochainement.
+                    </p>
+                  </div>
+                )}
+              </div>
             </div>
-          </div>
-        </section>
+          </section>
+        )}
 
-        <section className="py-16 bg-muted">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="text-center max-w-3xl mx-auto mb-12">
-              <h2 className="text-3xl font-bold mb-4">Questions fréquentes</h2>
-              <p className="text-muted-foreground">
-                Vous avez des questions sur nos voyages sur mesure ? Consultez
-                nos réponses aux questions les plus fréquentes.
+        {/* Foire Aux Questions */}
+        {allDataFaq.length > 0 && (
+          <section className="py-16 bg-muted">
+            <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+              <h2 className="text-3xl font-bold mb-6">Foire Aux Questions</h2>
+              <p className="text-muted-foreground max-w-2xl mx-auto mb-12">
+                Retrouvez ci-dessous les réponses aux questions les plus
+                fréquemment posées par nos clients.
               </p>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 text-left">
+                {allDataFaq.map((faq, index) => (
+                  <div key={index} className="bg-card p-6 rounded-lg shadow-sm">
+                    <h3 className="font-bold text-lg mb-2">{faq.question}</h3>
+                    <p className="text-muted-foreground">{faq.reponse}</p>
+                  </div>
+                ))}
+              </div>
             </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <Card>
-                <CardContent className="p-6">
-                  <h3 className="text-xl font-bold mb-2">
-                    Comment fonctionne un voyage sur mesure ?
-                  </h3>
-                  <p className="text-muted-foreground">
-                    Vous précisez vos préférences via notre formulaire, nous
-                    élaborons une proposition d'itinéraire personnalisé, puis
-                    nous affinons ensemble jusqu'à obtenir le voyage idéal qui
-                    répond parfaitement à vos attentes.
-                  </p>
-                </CardContent>
-              </Card>
-
-              <Card>
-                <CardContent className="p-6">
-                  <h3 className="text-xl font-bold mb-2">
-                    Combien coûte un voyage sur mesure ?
-                  </h3>
-                  <p className="text-muted-foreground">
-                    Le prix varie selon vos choix de destinations,
-                    d'hébergements et d'activités. Nous vous proposons une
-                    estimation détaillée après réception de votre demande, sans
-                    engagement de votre part.
-                  </p>
-                </CardContent>
-              </Card>
-
-              <Card>
-                <CardContent className="p-6">
-                  <h3 className="text-xl font-bold mb-2">
-                    Peut-on modifier l'itinéraire en cours de voyage ?
-                  </h3>
-                  <p className="text-muted-foreground">
-                    Oui, dans la mesure du possible, des ajustements peuvent
-                    être effectués pendant votre séjour. Nos guides locaux sont
-                    flexibles et s'adaptent à vos souhaits, tout en respectant
-                    les réservations déjà effectuées.
-                  </p>
-                </CardContent>
-              </Card>
-
-              <Card>
-                <CardContent className="p-6">
-                  <h3 className="text-xl font-bold mb-2">
-                    Les guides parlent-ils français ?
-                  </h3>
-                  <p className="text-muted-foreground">
-                    Oui, tous nos guides sont bilingues et parlent couramment
-                    français et anglais. Certains guides maîtrisent également
-                    d'autres langues comme l'allemand, l'italien ou l'espagnol,
-                    sur demande.
-                  </p>
-                </CardContent>
-              </Card>
-            </div>
-          </div>
-        </section>
+          </section>
+        )}
       </main>
 
       <Footer />

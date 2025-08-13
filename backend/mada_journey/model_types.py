@@ -4,7 +4,7 @@ from graphene import relay
 from django.contrib.auth import get_user_model
 from .models import (
     Utilisateur, Destination, Saison, Circuit, PointInteret,
-    TypeVehicule, Capacite, Vehicule, Reservation, Guide, Blog, BlogCommentaire, Faq,
+    TypeVehicule, Capacite, Vehicule, Reservation, Personnel, Blog, BlogCommentaire, Faq,
     CircuitImage, VehiculeImage, DestinationImage, BlogImage,
     Role, Difficulte, EtatVehicule, Hebergement, Activite, Itineraire, Testimonia, ContactUsModele
 )
@@ -15,7 +15,6 @@ User = get_user_model()
 class RoleEnum(graphene.Enum):
     CLIENT = Role.CLIENT
     ADMIN = Role.ADMIN
-    GUIDE = Role.GUIDE
     COMMERCIAL = Role.COMMERCIAL
 
 class DifficulteEnum(graphene.Enum):
@@ -238,29 +237,16 @@ class ReservationType(DjangoObjectType):
         prix_vehicule = float(self.vehicule.prix) if self.vehicule else 0
         return (prix_circuit + prix_vehicule) * self.nombre_personnes
 
-class GuideType(DjangoObjectType):
+class PersonnelType(DjangoObjectType):
     age = graphene.Int()
     langues_parlees = graphene.List(graphene.String)
     
     class Meta:
-        model = Guide
+        model = Personnel
         fields = (
-            'id', 'nom', 'prenom', 'date_naissance', 'specialite',
-            'langues', 'biographie', 'photo', 'disponibilite'
+            'id', 'nom', 'prenom', 'contact', 'email', 'adresse', 'specialite',
+            'langues', 'biographie', 'photo'
         )
-        interfaces = (relay.Node,)
-    
-    def resolve_age(self, info):
-        from datetime import date
-        if self.date_naissance:
-            today = date.today()
-            return today.year - self.date_naissance.year - (
-                (today.month, today.day) < (self.date_naissance.month, self.date_naissance.day)
-            )
-        return None
-    
-    def resolve_langues_parlees(self, info):
-        return self.langues if isinstance(self.langues, list) else []
 
 class BlogType(DjangoObjectType):
     commentaires = graphene.List(lambda: BlogCommentaireType)

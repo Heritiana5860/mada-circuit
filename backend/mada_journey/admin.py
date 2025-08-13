@@ -5,7 +5,7 @@ from django.urls import reverse
 from django.contrib.auth.admin import UserAdmin
 from .models import (
     Utilisateur, Destination, Saison, Circuit, PointInteret,
-    TypeVehicule, Capacite, Vehicule, Reservation, Guide, Blog, BlogCommentaire, Faq,
+    TypeVehicule, Capacite, Vehicule, Reservation, Personnel, Blog, BlogCommentaire, Faq,
     CircuitImage, VehiculeImage, DestinationImage, BlogImage, Itineraire, Testimonia, ContactUsModele
 )
 
@@ -278,36 +278,23 @@ class ReservationAdmin(admin.ModelAdmin):
     marquer_annulee.short_description = "Annuler les réservations"
 
 
-@admin.register(Guide)
-class GuideAdmin(admin.ModelAdmin):
-    list_display = ('nom', 'prenom', 'specialite', 'disponibilite', 'photo_preview', 'age')
-    list_filter = ('disponibilite', 'specialite')
+@admin.register(Personnel)
+class PersonnelAdmin(admin.ModelAdmin):
+    list_display = ('nom', 'prenom', 'contact', 'email', 'adresse', 'specialite', 'langues', 'biographie', 'photo')
+    list_filter = ('langues', 'specialite')
     search_fields = ('nom', 'prenom', 'specialite', 'biographie')
-    readonly_fields = ('photo_preview', 'age')
     
     fieldsets = (
         ('Informations personnelles', {
-            'fields': ('nom', 'prenom', 'date_naissance', 'age')
+            'fields': ('nom', 'prenom', 'contact', 'email', 'adresse')
         }),
         ('Informations professionnelles', {
-            'fields': ('specialite', 'langues', 'biographie', 'disponibilite')
+            'fields': ('specialite', 'langues', 'biographie')
         }),
         ('Photo', {
-            'fields': ('photo', 'photo_preview')
+            'fields': ('photo',)
         }),
     )
-    
-    def photo_preview(self, obj):
-        if obj.photo:
-            return format_html('<img src="{}" width="50" height="50" style="border-radius: 50%;" />', obj.photo.url)
-        return "Pas de photo"
-    photo_preview.short_description = "Aperçu"
-    
-    def age(self, obj):
-        from datetime import date
-        today = date.today()
-        return today.year - obj.date_naissance.year - ((today.month, today.day) < (obj.date_naissance.month, obj.date_naissance.day))
-    age.short_description = "Âge"
 
 
 class BlogCommentaireInline(admin.TabularInline):

@@ -8,14 +8,14 @@ from django.core.exceptions import ValidationError
 
 from .models import (
     Utilisateur, Destination, Saison, Circuit, PointInteret,
-    TypeVehicule, Capacite, Vehicule, Reservation, Guide, Blog, BlogCommentaire, Faq,
+    TypeVehicule, Capacite, Vehicule, Reservation, Personnel, Blog, BlogCommentaire, Faq,
     CircuitImage, VehiculeImage, DestinationImage, BlogImage,
     EtatVehicule, Itineraire, Testimonia
 )
 from .model_types import (
     UtilisateurType, DestinationType, SaisonType, CircuitType,
     PointInteretType, TypeVehiculeType, CapaciteType, VehiculeType,
-    ReservationType, GuideType, BlogType,
+    ReservationType, PersonnelType, BlogType,
     BlogCommentaireType, FaqType,
     CircuitImageType, VehiculeImageType, DestinationImageType, BlogImageType, ItineraireType, TestimoniaType
 )
@@ -92,11 +92,7 @@ class Query(graphene.ObjectType):
     confirmed_reservations = graphene.List(ReservationType)
     
     # Queries pour les guides
-    all_guides = graphene.List(GuideType)
-    guide = graphene.Field(GuideType, id=graphene.ID())
-    guides_disponibles = graphene.List(GuideType)
-    guides_by_specialite = graphene.List(GuideType, specialite=graphene.String())
-    guides_by_langue = graphene.List(GuideType, langue=graphene.String())
+    all_personnels = graphene.List(PersonnelType)
     
     # Queries pour les blogs
     all_blogs = graphene.List(BlogType)
@@ -371,23 +367,8 @@ class Query(graphene.ObjectType):
         return Reservation.objects.filter(statut=Reservation.ReservationStatus.CONFIRMEE).select_related('utilisateur', 'circuit', 'vehicule')
 
     # Resolvers pour les guides
-    def resolve_all_guides(self, info):
-        return Guide.objects.all()
-
-    def resolve_guide(self, info, id):
-        try:
-            return Guide.objects.get(pk=id)
-        except Guide.DoesNotExist:
-            return None
-
-    def resolve_guides_disponibles(self, info):
-        return Guide.objects.filter(disponibilite=True)
-
-    def resolve_guides_by_specialite(self, info, specialite):
-        return Guide.objects.filter(specialite__icontains=specialite)
-
-    def resolve_guides_by_langue(self, info, langue):
-        return Guide.objects.filter(langues__contains=[langue])
+    def resolve_all_personnels(self, info):
+        return Personnel.objects.all()
 
     # Resolvers pour les blogs
     def resolve_all_blogs(self, info):
@@ -438,7 +419,7 @@ class Query(graphene.ObjectType):
 
     # Resolvers pour les FAQs
     def resolve_all_faqs(self, info):
-        return Faq.objects.all().order_by('order_affichage')
+        return Faq.objects.all()
 
     def resolve_faq(self, info, id):
         try:
@@ -447,10 +428,10 @@ class Query(graphene.ObjectType):
             return None
 
     def resolve_faqs_by_categorie(self, info, categorie):
-        return Faq.objects.filter(categorie__icontains=categorie).order_by('order_affichage')
+        return Faq.objects.filter(categorie__icontains=categorie)
 
     def resolve_active_faqs(self, info):
-        return Faq.objects.filter(active=True).order_by('order_affichage')
+        return Faq.objects.filter(active=True)
 
     # Resolvers pour les galeries d'images
     def resolve_all_circuit_images(self, info):

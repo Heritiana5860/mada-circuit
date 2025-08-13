@@ -54,7 +54,6 @@ def blog_image_path(instance, filename):
 class Role(models.TextChoices):
     CLIENT = 'CLIENT', 'Client'
     ADMIN = 'ADMIN', 'Admin'
-    GUIDE = 'GUIDE', 'Guide'
     COMMERCIAL = 'COMMERCIAL', 'Commercial'
 
 
@@ -288,16 +287,17 @@ class Reservation(models.Model):
         return f"Réservation {self.id} - {self.nom} {self.prenom}"
 
 
-class Guide(models.Model):
-    id = models.CharField(primary_key=True, default=uuid.uuid4, editable=False, max_length=36)
+class Personnel(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     nom = models.CharField(max_length=100)
     prenom = models.CharField(max_length=100)
-    date_naissance = models.DateField()
+    contact = models.CharField(max_length=14)
+    email = models.CharField(max_length=200)
+    adresse = models.CharField(max_length=200)
     specialite = models.CharField(max_length=100)
-    langues = models.JSONField()
+    langues = models.CharField(max_length=200)
     biographie = models.TextField(blank=True, null=True)
-    photo = models.ImageField(upload_to=guide_photo_path, blank=True, null=True)
-    disponibilite = models.BooleanField(default=True)
+    photo = models.ImageField(upload_to='personnel_image')
 
     def __str__(self):
         return f"{self.prenom} {self.nom}"

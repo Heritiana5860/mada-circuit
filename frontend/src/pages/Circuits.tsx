@@ -437,10 +437,12 @@ const Circuits = () => {
               circuit parfait selon vos envies.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Button size="lg" className="flex items-center">
-                <Users className="h-5 w-5 mr-2" />
-                Parler à un expert
-              </Button>
+              <Link to={"/guides"}>
+                <Button size="lg" className="flex items-center">
+                  <Users className="h-5 w-5 mr-2" />
+                  Parler à un expert
+                </Button>
+              </Link>
               <Link to={"/voyages-sur-mesure"}>
                 <Button
                   variant="outline"

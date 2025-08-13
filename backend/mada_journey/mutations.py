@@ -24,7 +24,7 @@ from .model_types import (
     TypeVehiculeType, CapaciteType, VehiculeType,
     ReservationType, BlogType,
     BlogCommentaireType, FaqType,
-    CircuitImageType, VehiculeImageType, DestinationImageType, BlogImageType, TestimoniaType, ContactUsType
+    CircuitImageType, VehiculeImageType, DestinationImageType, BlogImageType, TestimoniaType, ContactUsType, Personnel
 )
 from graphql_relay import from_global_id
 
@@ -1600,7 +1600,44 @@ class CreateContactUsMutation(graphene.Mutation):
                 message=f"Erreur lors de la création du témoignage : {str(e)}"
             )
         
-    
+  
+# Creation des Personnels
+class CreatePersonnel(graphene.Mutation):
+    class Arguments:
+        nom = graphene.String(required=True)
+        prenom = graphene.String(required=True)
+        contact = graphene.String(required=True)
+        email = graphene.String(required=True)
+        adresse = graphene.String(required=True)
+        specialite = graphene.String(required=True) 
+        langues = graphene.String(required=True) 
+        biographie = graphene.String(required=True) 
+        photo = Upload(required=True)
+        
+    personnel = graphene.Field(UtilisateurType)
+    success = graphene.Boolean()
+    errors = graphene.List(graphene.String)
+        
+    def mutate(self, info, nom, prenom, contact, email, adresse, specialite, langues, biographie, photo): 
+        try:
+            
+            with transaction.atomic():
+                personnel = Personnel.objects.create(
+                    nom=nom,
+                    prenom=prenom,
+                    contact=contact,
+                    email=email,
+                    adresse=adresse,
+                    specialite=specialite,
+                    langues=langues,
+                    biographie=biographie,
+                    photo=photo,
+                )
+                
+                return CreatePersonnel(personnel=personnel, success=True)
+                
+        except Exception as e:
+            return CreatePersonnel(success=False, errors=[str(e)])
             
 # Classe principale des mutations
 class Mutation(graphene.ObjectType):
@@ -1677,3 +1714,6 @@ class Mutation(graphene.ObjectType):
     
     # Create contact us
     create_contact_us_mutation = CreateContactUsMutation.Field()
+
+    # Create personnal
+    create_personnel = CreatePersonnel.Field()

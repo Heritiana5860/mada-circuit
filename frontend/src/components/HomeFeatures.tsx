@@ -106,20 +106,20 @@ const HomeFeatures = () => {
       icon: <Truck className="h-7 w-7" />,
       lien: "/location-4x4",
     },
-    {
-      title: "Guides Locaux",
-      description:
-        "Nos guides expérimentés vous feront découvrir la culture et l'histoire locales.",
-      icon: <Users className="h-7 w-7" />,
-      lien: "/guides",
-    },
-    {
-      title: "Service 5 Étoiles",
-      description:
-        "Nous nous engageons à offrir un service d'excellence pour un voyage sans souci.",
-      icon: <Star className="h-7 w-7" />,
-      lien: "/service-5-etoiles",
-    },
+    // {
+    //   title: "Guides Locaux",
+    //   description:
+    //     "Nos guides expérimentés vous feront découvrir la culture et l'histoire locales.",
+    //   icon: <Users className="h-7 w-7" />,
+    //   lien: "/guides",
+    // },
+    // {
+    //   title: "Service 5 Étoiles",
+    //   description:
+    //     "Nous nous engageons à offrir un service d'excellence pour un voyage sans souci.",
+    //   icon: <Star className="h-7 w-7" />,
+    //   lien: "/service-5-etoiles",
+    // },
   ];
 
   return (

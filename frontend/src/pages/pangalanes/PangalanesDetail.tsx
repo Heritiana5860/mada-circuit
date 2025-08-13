@@ -11,11 +11,12 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useAuth } from "@/contexts/AuthContext";
 import { useMutation, gql } from "@apollo/client";
 import { formatPrice } from "@/helper/formatage";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { CREATE_RESERVATION } from "@/graphql/mutations";
 import { Calendar, Loader2 } from "lucide-react";
 import { getCircuitImages } from "@/helper/GestionImages";
+import { StatistiqueReservationContext } from "@/provider/DataContext";
 
 const PangalanesDetailPage = () => {
   const { id } = useParams();
@@ -36,6 +37,9 @@ const PangalanesDetailPage = () => {
     voyageur: 1,
     commentaire: "",
   });
+
+  // Actualiser l'affichage de la liste reservation
+  const { refetchReservations } = useContext(StatistiqueReservationContext);
 
   // Données de détail
   const dataFromState = location.state?.dataState;
@@ -183,6 +187,7 @@ const PangalanesDetailPage = () => {
       await pangalaneReservation({
         variables: reservationData,
       });
+      await refetchReservations();
     } catch (err) {
       console.error("Erreur lors de la réservation:", err);
     } finally {

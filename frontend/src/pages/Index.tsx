@@ -35,10 +35,6 @@ const Index = () => {
         <Vehicles4x4 />
 
         <Testimonials />
-
-        {/* <section className="section-container z-10">
-          <NewsletterSignup />
-        </section> */}
       </main>
 
       <Footer />

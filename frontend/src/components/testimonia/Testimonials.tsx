@@ -1,7 +1,7 @@
 import { useQuery } from "@apollo/client";
 import TestimonialCard from "./TestimonialCard";
 import { GET_TESTIMONIA_BY_STATUS } from "@/graphql/queries";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { ChevronLeft, ChevronRight, Quote } from "lucide-react";
 import {
   Carousel,
@@ -10,6 +10,7 @@ import {
   CarouselPrevious,
   CarouselNext,
 } from "../ui/carousel";
+import { DataContext } from "@/provider/DataContext";
 
 const Testimonials = () => {
   const { data, loading, error } = useQuery(GET_TESTIMONIA_BY_STATUS, {
@@ -18,9 +19,15 @@ const Testimonials = () => {
     },
   });
 
+  const {
+    loading: utilisateurLoading,
+    error: utilisateurError,
+    utilisateur,
+  } = useContext(DataContext);
+
   const [currentIndex, setCurrentIndex] = useState(0);
 
-  if (loading) {
+  if (loading || utilisateurLoading) {
     return (
       <section className="bg-gradient-to-br from-primary/5 via-accent/5 to-secondary/5 py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -35,7 +42,7 @@ const Testimonials = () => {
     );
   }
 
-  if (error) {
+  if (error || utilisateurError) {
     return (
       <section className="bg-gradient-to-br from-primary/5 via-accent/5 to-secondary/5 py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -53,6 +60,9 @@ const Testimonials = () => {
   }
 
   const allData = data?.allTestimoniaByStatus || [];
+  const utilisateurImage = utilisateur?.image
+    ? `http://localhost:8000/media/${utilisateur.image}`
+    : null;
 
   // Grouper les témoignages par lots de 3 pour chaque diapositive
   const testimonialsPerSlide = 3;
@@ -116,7 +126,10 @@ const Testimonials = () => {
                           animationDelay: `${i * 0.1}s`,
                         }}
                       >
-                        <TestimonialCard allData={testimonial} />
+                        <TestimonialCard
+                          allData={testimonial}
+                          image={utilisateurImage}
+                        />
                       </div>
                     ))}
                   </div>

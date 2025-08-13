@@ -19,6 +19,8 @@ import { useQuery } from "@apollo/client";
 import { Circuit, User, Vehicule } from "@/types";
 import { GET_USER_RESERVATIONS } from "@/graphql/queries";
 import { formatPrice } from "@/helper/formatage";
+import { useContext } from "react";
+import { StatistiqueReservationContext } from "@/provider/DataContext";
 
 interface Reservation {
   id: string;
@@ -34,15 +36,8 @@ interface Reservation {
 }
 
 const Reservation = () => {
-  const { isAuthenticated, user } = useAuth();
-
-  const { loading, error, data } = useQuery<{
-    reservationsByUser: Reservation[];
-  }>(GET_USER_RESERVATIONS, {
-    variables: { userId: user?.id },
-    skip: !isAuthenticated || !user?.id,
-    fetchPolicy: "network-only",
-  });
+  const { loading, errorReservation, reservation, user, isAuthenticated } =
+    useContext(StatistiqueReservationContext);
 
   if (!isAuthenticated) {
     return (
@@ -86,7 +81,7 @@ const Reservation = () => {
     );
   }
 
-  if (error) {
+  if (errorReservation) {
     return (
       <div className="min-h-screen bg-gray-50">
         <NavBar />
@@ -102,7 +97,7 @@ const Reservation = () => {
               Impossible de récupérer vos réservations.
             </p>
             <p className="text-sm text-red-600 bg-red-50 px-3 py-2 rounded">
-              {error.message}
+              {errorReservation.message}
             </p>
           </div>
         </div>
@@ -111,7 +106,7 @@ const Reservation = () => {
     );
   }
 
-  const reservations = data?.reservationsByUser || [];
+  const reservations = reservation || [];
 
   if (reservations.length === 0) {
     return (

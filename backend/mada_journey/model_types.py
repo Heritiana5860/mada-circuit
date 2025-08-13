@@ -315,8 +315,7 @@ class FaqType(DjangoObjectType):
     class Meta:
         model = Faq
         fields = (
-            'id', 'question', 'reponse', 'categorie',
-            'order_affichage', 'active'
+            'id', 'question', 'reponse', 'is_active'
         )
         interfaces = (relay.Node,)
 

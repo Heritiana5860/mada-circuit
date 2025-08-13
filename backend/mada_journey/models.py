@@ -331,18 +331,19 @@ class BlogCommentaire(models.Model):
 
 
 class Faq(models.Model):
-    id = models.CharField(primary_key=True, default=uuid.uuid4, editable=False, max_length=36)
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     question = models.CharField(max_length=255)
     reponse = models.TextField()
-    categorie = models.CharField(max_length=100, blank=True, null=True)
-    order_affichage = models.IntegerField(default=0)
-    active = models.BooleanField(default=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    is_active = models.BooleanField(default=True)
     
     def __str__(self):
         return self.question
     
     class Meta:
-        ordering = ['order_affichage']
+        ordering = ['created_at']
+        verbose_name = "FAQ"
+        verbose_name_plural = "FAQs"
 
 
 # Modèles pour les galeries d'images

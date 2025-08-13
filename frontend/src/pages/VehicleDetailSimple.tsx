@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useQuery } from "@apollo/client";
 import { GET_VEHICULE_BY_ID, GET_VEHICULE_BY_NODE_ID } from "@/graphql/queries";
@@ -21,6 +21,7 @@ import {
 } from "lucide-react";
 import { useVehicleReservation } from "@/hooks/useVehicleReservation";
 import { formatPrice } from "@/helper/formatage";
+import { StatistiqueReservationContext } from "@/provider/DataContext";
 
 // Fonction pour décoder l'ID Relay
 const decodeRelayId = (relayId: string): string => {
@@ -95,6 +96,9 @@ const VehicleDetailSimple = () => {
   const { id: rawId } = useParams();
   const navigate = useNavigate();
   const { isAuthenticated, user } = useAuth();
+
+  // Actualiser l'affichage de la liste reservation
+  const { refetchReservations } = useContext(StatistiqueReservationContext);
 
   // Décoder l'ID si c'est un ID Relay
   const id = rawId ? decodeRelayId(rawId) : rawId;
@@ -241,6 +245,7 @@ const VehicleDetailSimple = () => {
       console.log("Données user:", user);
 
       await createReservation(reservationData);
+      await refetchReservations();
 
       // Réinitialiser le formulaire après succès
       setFormData({

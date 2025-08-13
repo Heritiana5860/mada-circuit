@@ -30,7 +30,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@radix-ui/react-tabs";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { Circuit } from "@/types";
 import { formatPrice } from "@/helper/formatage";
 import { useAuth } from "@/contexts/AuthContext";
@@ -46,6 +46,7 @@ import DateDetail from "@/components/detail/DateDetail";
 import NombrePersonneDetail from "@/components/detail/NombrePersonneDetail";
 import ContactInfoDetail from "@/components/detail/ContactInfoDetail";
 import { getCircuitImages } from "@/helper/GestionImages";
+import { StatistiqueReservationContext } from "@/provider/DataContext";
 
 const CircuitDetail = () => {
   const { id } = useParams();
@@ -67,6 +68,9 @@ const CircuitDetail = () => {
     voyageur: 1,
     commentaire: "",
   });
+
+  // Actualiser l'affichage de la liste reservation
+  const { refetchReservations } = useContext(StatistiqueReservationContext);
 
   const circuitFromState = location.state?.dataState;
 
@@ -214,6 +218,7 @@ const CircuitDetail = () => {
       await circuitReservation({
         variables: reservationData,
       });
+      await refetchReservations();
     } catch (err) {
       console.error("Erreur lors de la réservation:", err);
     } finally {

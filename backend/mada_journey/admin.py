@@ -363,18 +363,18 @@ class BlogCommentaireAdmin(admin.ModelAdmin):
 
 @admin.register(Faq)
 class FaqAdmin(admin.ModelAdmin):
-    list_display = ('question', 'categorie', 'order_affichage', 'active')
-    list_filter = ('active', 'categorie')
-    search_fields = ('question', 'reponse', 'categorie')
-    list_editable = ('order_affichage', 'active')
-    ordering = ('order_affichage',)
+    list_display = ('question', 'reponse', 'is_active')
+    list_filter = ('is_active',)
+    search_fields = ('question', 'reponse')
+    list_editable = ('is_active',)
+    ordering = ('created_at',)
     
     fieldsets = (
         ('Question et réponse', {
             'fields': ('question', 'reponse')
         }),
         ('Organisation', {
-            'fields': ('categorie', 'order_affichage', 'active')
+            'fields': ('is_active', 'updated_at')
         }),
     )
     

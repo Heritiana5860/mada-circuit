@@ -414,3 +414,19 @@ export const GET_TESTIMONIA_BY_STATUS = gql`
     }
   }
 `;
+
+// Query pour recuperer l'utilisateur selon son email pour afficher l'image profile
+export const GET_UTILISATEUR_BY_EMAIL = gql`
+  query UtilisateurByEmail($email: String!) {
+    utilisateurByEmail(email: $email) {
+      id
+      email
+      nom
+      prenom
+      telephone
+      role
+      image
+      dateInscription
+    }
+  }
+`;

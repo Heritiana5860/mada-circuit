@@ -812,22 +812,16 @@ class CreateFaq(graphene.Mutation):
     class Arguments:
         question = graphene.String(required=True)
         reponse = graphene.String(required=True)
-        categorie = graphene.String()
-        order_affichage = graphene.Int()
-        active = graphene.Boolean()
 
     faq = graphene.Field(FaqType)
     success = graphene.Boolean()
     errors = graphene.List(graphene.String)
 
-    def mutate(self, info, question, reponse, categorie=None, order_affichage=0, active=True):
+    def mutate(self, info, question, reponse):
         try:
             faq = Faq.objects.create(
                 question=question,
                 reponse=reponse,
-                categorie=categorie,
-                order_affichage=order_affichage,
-                active=active
             )
             return CreateFaq(faq=faq, success=True)
         except Exception as e:

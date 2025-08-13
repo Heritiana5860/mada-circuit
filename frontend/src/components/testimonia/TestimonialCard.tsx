@@ -15,9 +15,13 @@ interface TestimonialTypes {
 
 interface TestimonialCardProps {
   allData: TestimonialTypes;
+  image: string;
 }
 
-const TestimonialCard: React.FC<TestimonialCardProps> = ({ allData }) => {
+const TestimonialCard: React.FC<TestimonialCardProps> = ({
+  allData,
+  image,
+}) => {
   const user = allData.utilisateur || { nom: "Inconnu", prenom: "" };
   const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -71,6 +75,8 @@ const TestimonialCard: React.FC<TestimonialCardProps> = ({ allData }) => {
     ? allData.description.substring(0, CHAR_LIMIT) + "..."
     : allData.description;
 
+  const initial = getInitials(user.nom, user.prenom);
+
   return (
     <>
       {/* Carte principale */}
@@ -82,7 +88,12 @@ const TestimonialCard: React.FC<TestimonialCardProps> = ({ allData }) => {
               user.nom + user.prenom
             )}`}
           >
-            {getInitials(user.nom, user.prenom)}
+            <img 
+            src={image} 
+            alt={initial}
+            className="w-full h-full object-cover rounded-full" 
+            />
+            {/* {getInitials(user.nom, user.prenom)} */}
           </div>
 
           <div className="flex-1">

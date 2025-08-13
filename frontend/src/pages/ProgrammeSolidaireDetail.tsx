@@ -10,11 +10,12 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useAuth } from "@/contexts/AuthContext";
 import { formatPrice } from "@/helper/formatage";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { useMutation, gql } from "@apollo/client";
 import { CREATE_RESERVATION } from "@/graphql/mutations";
 import { Calendar, Loader2 } from "lucide-react";
+import { StatistiqueReservationContext } from "@/provider/DataContext";
 
 const ProgrammeSolidaireDetail = () => {
   const { id } = useParams();
@@ -35,6 +36,9 @@ const ProgrammeSolidaireDetail = () => {
     voyageur: 1,
     commentaire: "",
   });
+
+  // Actualiser l'affichage de la liste reservation
+  const { refetchReservations } = useContext(StatistiqueReservationContext);
 
   // Données de détail
   const dataFromState = location.state?.pangalanes;
@@ -204,6 +208,7 @@ const ProgrammeSolidaireDetail = () => {
       await pangalaneReservation({
         variables: reservationData,
       });
+      await refetchReservations();
     } catch (err) {
       console.error("Erreur lors de la réservation:", err);
     } finally {

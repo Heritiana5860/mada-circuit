@@ -24,7 +24,7 @@ const DetailCarousel: React.FC<DetailCarouselProps> = ({
 }) => {
   return (
     <div className="relative mb-8">
-      <div className="relative h-64 md:h-96 lg:h-[500px] overflow-hidden rounded-xl bg-gray-200">
+      <div className="relative h-64 box-border md:h-96 lg:h-[500px] overflow-hidden rounded-xl bg-gray-200">
         {isImageLoading && (
           <div className="absolute inset-0 flex items-center justify-center bg-gray-100">
             <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
@@ -79,29 +79,6 @@ const DetailCarousel: React.FC<DetailCarouselProps> = ({
           </>
         )}
       </div>
-      {/* Miniatures */}
-      {allImages.length > 1 && (
-        <div className="flex space-x-2 mt-4 overflow-x-auto pb-2">
-          {allImages.map((image, index) => (
-            <button
-              key={index}
-              className={`flex-shrink-0 w-20 h-20 rounded-lg overflow-hidden border-2 transition-all ${
-                index === selectedImageIndex
-                  ? "border-primary"
-                  : "border-gray-200 hover:border-gray-300"
-              }`}
-              onClick={() => goToSlide(index)}
-            >
-              <img
-                src={image}
-                className="w-full h-full object-cover"
-                alt={`Miniature ${index + 1}`}
-                loading="lazy"
-              />
-            </button>
-          ))}
-        </div>
-      )}
     </div>
   );
 };

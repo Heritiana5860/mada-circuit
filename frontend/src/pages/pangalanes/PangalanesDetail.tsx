@@ -11,12 +11,36 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useAuth } from "@/contexts/AuthContext";
 import { useMutation, gql } from "@apollo/client";
 import { formatPrice } from "@/helper/formatage";
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { CREATE_RESERVATION } from "@/graphql/mutations";
 import { Calendar, Loader2 } from "lucide-react";
 import { getCircuitImages } from "@/helper/GestionImages";
 import { StatistiqueReservationContext } from "@/provider/DataContext";
+import {
+  calculateMapBounds,
+  geocodeAllRegions,
+  getConnectionCoordinates,
+} from "@/helper/FonctionMap";
+import {
+  MapContainer,
+  TileLayer,
+  Marker,
+  Popup,
+  Polyline,
+} from "react-leaflet";
+import "leaflet/dist/leaflet.css";
+import L from "leaflet";
+
+import iconUrl from "leaflet/dist/images/marker-icon.png";
+import iconShadowUrl from "leaflet/dist/images/marker-shadow.png";
+
+const defaultIcon = L.icon({
+  iconUrl,
+  shadowUrl: iconShadowUrl,
+  iconAnchor: [12, 41],
+});
+L.Marker.prototype.options.icon = defaultIcon;
 
 const PangalanesDetailPage = () => {
   const { id } = useParams();
@@ -26,7 +50,6 @@ const PangalanesDetailPage = () => {
 
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
   const [isImageLoading, setIsImageLoading] = useState(true);
-  const [isFavorite, setIsFavorite] = useState(false);
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
   const [errors, setErrors] = useState<string | null>(null);
   const [guestCount, setGuestCount] = useState(1);
@@ -37,6 +60,13 @@ const PangalanesDetailPage = () => {
     voyageur: 1,
     commentaire: "",
   });
+
+  // State pour le map
+  const [locations, setLocations] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [progress, setProgress] = useState(0);
+  const [mapErrors, setMapErrors] = useState([]);
+  const [showConnections, setShowConnections] = useState(true);
 
   // Actualiser l'affichage de la liste reservation
   const { refetchReservations } = useContext(StatistiqueReservationContext);
@@ -197,13 +227,6 @@ const PangalanesDetailPage = () => {
     if (mutationLoading) return <p>Loading...</p>;
     if (mutationError) return <p>Error: {mutationError.message}</p>;
   };
-
-  // Gestion des favoris
-  const toggleFavorite = () => {
-    setIsFavorite(!isFavorite);
-    // Logique pour sauvegarder en favoris
-  };
-
   // Gestion des changements dans le formulaire
   const handleInputChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -240,6 +263,35 @@ const PangalanesDetailPage = () => {
   const days = calculateDays(formData.dateDepart, formData.dateArrive);
   const totalPrice = dataFromState.prix * guestCount;
 
+  const regions = dataFromState.destination.nom;
+  const regionsCircuit = regions.split(",");
+
+  // Géocoder toutes les régions
+  useEffect(() => {
+    geocodeAllRegions(
+      regionsCircuit,
+      setLoading,
+      setLocations,
+      setMapErrors,
+      setProgress
+    );
+  }, []);
+
+  // Créer les coordonnées pour les lignes
+  getConnectionCoordinates(locations);
+  // Calculer le centre de la carte
+  calculateMapBounds(locations);
+
+  //Créer des icônes numérotées pour montrer l'ordre
+  const createNumberedIcon = (number) => {
+    return L.divIcon({
+      html: `<div style="background-color: #3B82F6; color: white; border-radius: 50%; width: 25px; height: 25px; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 12px; border: 2px solid white; box-shadow: 0 2px 4px rgba(0,0,0,0.3);">${number}</div>`,
+      className: "custom-div-icon",
+      iconSize: [25, 25],
+      iconAnchor: [12, 12],
+    });
+  };
+
   return (
     <div className="min-h-screen flex flex-col bg-gray-50 ">
       <NavBar />
@@ -249,19 +301,134 @@ const PangalanesDetailPage = () => {
 
       <main className="flex-1">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-          {/* Carousel d'images amélioré */}
-          <DetailCarousel
-            isImageLoading={isImageLoading}
-            allImages={allPangalaneImages}
-            selectedImageIndex={selectedImageIndex}
-            handleImageError={handleImageError}
-            handleImageLoad={handleImageLoad}
-            toggleFavorite={toggleFavorite}
-            isFavorite={isFavorite}
-            prevImage={prevImage}
-            nextImage={nextImage}
-            goToSlide={goToSlide}
-          />
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <div className="grid-cols-1 lg:col-span-2">
+              <DetailCarousel
+                isImageLoading={isImageLoading}
+                allImages={allPangalaneImages}
+                selectedImageIndex={selectedImageIndex}
+                handleImageError={handleImageError}
+                handleImageLoad={handleImageLoad}
+                prevImage={prevImage}
+                nextImage={nextImage}
+                goToSlide={goToSlide}
+              />
+            </div>
+
+            {/* map */}
+            <div className="grid-cols-1 mb-3 lg:col-span-1">
+              {loading ? (
+                <div className="mb-3 p-4 bg-white rounded-lg shadow border border-gray-200 ">
+                  <div className="flex items-center gap-3 mb-2">
+                    {/* Spinner */}
+                    <div className="w-5 h-5 border-2 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
+
+                    {/* Texte de progression */}
+                    <div className="flex flex-col">
+                      <span className="text-sm font-medium text-gray-800">
+                        Affichage de destination en cours...
+                      </span>
+                      <span className="text-xs text-gray-500">
+                        Veuillez patienter, traitement des données en cours.
+                      </span>
+                    </div>
+
+                    {/* Pourcentage */}
+                    <div className="ml-auto text-sm font-semibold text-blue-600">
+                      {progress.toFixed(0)}%
+                    </div>
+                  </div>
+
+                  {/* Barre de progression */}
+                  <div className="w-full bg-gray-200 rounded-full h-2 overflow-hidden">
+                    <div
+                      className="bg-blue-600 h-2 rounded-full transition-all duration-300"
+                      style={{ width: `${progress}%` }}
+                    ></div>
+                  </div>
+                </div>
+              ) : (
+                <MapContainer
+                  center={
+                    locations.length > 0
+                      ? calculateMapBounds(locations)
+                      : [-18.8792, 47.5079]
+                  }
+                  zoom={locations.length > 0 ? 6 : 6}
+                  scrollWheelZoom={true}
+                  // style={{ height: "400px", width: "100%" }}
+                  className="rounded-lg h-64 md:h-96 lg:h-[500px]"
+                >
+                  <TileLayer
+                    attribution="&copy; OpenStreetMap contributors"
+                    url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                  />
+
+                  {/* Les lignes de connexion (Polyline) */}
+                  {showConnections && locations.length > 1 && (
+                    <Polyline
+                      positions={getConnectionCoordinates(locations)}
+                      pathOptions={{
+                        color: "#3B82F6",
+                        weight: 3,
+                        opacity: 0.8,
+                        dashArray: "10, 5",
+                      }}
+                    />
+                  )}
+
+                  {/* Les marqueurs numérotés */}
+                  {locations.map((location, index) => (
+                    <Marker
+                      key={index}
+                      position={[location.lat, location.lng]}
+                      icon={createNumberedIcon(index + 1)}
+                    >
+                      <Popup maxWidth={280} className="custom-popup">
+                        <div className="p-3">
+                          <div className="flex items-center gap-2 mb-2">
+                            <span className="bg-blue-500 text-white px-2 py-1 rounded-full text-xs font-semibold">
+                              #{index + 1}
+                            </span>
+                            {index === 0 && (
+                              <span className="bg-green-100 text-green-800 px-2 py-1 rounded-full text-xs font-medium">
+                                🚀 DÉPART
+                              </span>
+                            )}
+                            {index === locations.length - 1 && (
+                              <span className="bg-red-100 text-red-800 px-2 py-1 rounded-full text-xs font-medium">
+                                🏁 ARRIVÉE
+                              </span>
+                            )}
+                            {index > 0 && index < locations.length - 1 && (
+                              <span className="bg-orange-100 text-orange-800 px-2 py-1 rounded-full text-xs font-medium">
+                                🛑 ÉTAPE
+                              </span>
+                            )}
+                          </div>
+
+                          <h4 className="font-semibold text-gray-800 mb-1 text-sm">
+                            {location.name}
+                          </h4>
+
+                          {location.fullName && (
+                            <p className="text-sm text-gray-600 mb-2">
+                              {location.fullName}
+                            </p>
+                          )}
+
+                          <div className="text-xs text-gray-500 bg-gray-50 p-2 rounded mt-2">
+                            Lat: {location.lat.toFixed(4)}, Lng:{" "}
+                            {location.lng.toFixed(4)}
+                          </div>
+                        </div>
+                      </Popup>
+                    </Marker>
+                  ))}
+                </MapContainer>
+              )}
+            </div>
+          </div>
 
           <div className="grid lg:grid-cols-3 gap-8">
             {/* Contenu principal */}

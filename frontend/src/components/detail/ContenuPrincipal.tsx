@@ -1,4 +1,4 @@
-import { Car, Clock, MapPin, Ship } from "lucide-react";
+import { Car, Clock, MapPin, Ship, Waves } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
 import { Badge } from "../ui/badge";
 
@@ -10,6 +10,8 @@ interface Itineraire {
   lieuDepart: string;
   lieuArrivee: string;
   description: string;
+  distanceKm: string;
+  dureeTrajet: string;
 }
 
 interface DataProps {
@@ -37,7 +39,7 @@ const ContenuPrincipal: React.FC<ContenuPrincipalProps> = ({
       <div>
         <div className="flex items-start justify-between mb-4">
           <div>
-            <h1 className="text-3xl font-bold text-gray-900 mb-2">
+            <h1 className="text-lg lg:text-3xl font-bold text-gray-900 mb-2">
               {dataFromState?.titre || "Circuit Pangalanes"}
             </h1>
             {dataFromState?.destination?.nom && (
@@ -106,6 +108,20 @@ const ContenuPrincipal: React.FC<ContenuPrincipalProps> = ({
                     <h4 className="font-semibold text-gray-900 font-sans pb-3">
                       {item.lieuDepart} → {item.lieuArrivee}
                     </h4>
+                    <div className="mb-4">
+                      {item.distanceKm && (
+                        <span className="inline-flex items-center text-sm">
+                          <Waves className="text-gray-600 h-4 w-4 mr-1" />
+                          {item.distanceKm} Km
+                        </span>
+                      )}
+                      {item.dureeTrajet && (
+                        <span className="inline-flex items-center text-sm ml-3">
+                          <Clock className="text-gray-600 h-4 w-4 mr-1"/>
+                          {item.dureeTrajet} H
+                        </span>
+                      )}
+                    </div>
                     <p className="text-gray-600">{item.description}</p>
                   </div>
                 </div>

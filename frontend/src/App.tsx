@@ -31,6 +31,7 @@ import Testimonia from "./pages/Testimonia";
 import { UtilisateurProvider } from "./provider/UtilisateurProvider";
 import { ReservationProvider } from "./provider/ReservationProvider";
 import { FaqProvider } from "./provider/FaqProvider";
+import 'leaflet/dist/leaflet.css';
 
 const queryClient = new QueryClient();
 

@@ -7,8 +7,6 @@ interface DetailCarouselProps {
   selectedImageIndex: number;
   handleImageError: (index: number) => void;
   handleImageLoad: () => void;
-  toggleFavorite: () => void;
-  isFavorite: boolean;
   prevImage: () => void;
   nextImage: () => void;
   goToSlide: (index: number) => void;
@@ -20,8 +18,6 @@ const DetailCarousel: React.FC<DetailCarouselProps> = ({
   selectedImageIndex,
   handleImageError,
   handleImageLoad,
-  toggleFavorite,
-  isFavorite,
   prevImage,
   nextImage,
   goToSlide,
@@ -43,21 +39,6 @@ const DetailCarousel: React.FC<DetailCarouselProps> = ({
           onLoad={handleImageLoad}
           style={{ opacity: isImageLoading ? 0 : 1 }}
         />
-
-        {/* Bouton favori */}
-        <Button
-          type="button"
-          variant="ghost"
-          size="sm"
-          className="absolute top-4 right-4 bg-white/80 hover:bg-white"
-          onClick={toggleFavorite}
-        >
-          <Heart
-            className={`h-5 w-5 ${
-              isFavorite ? "fill-red-500 text-red-500" : "text-gray-600"
-            }`}
-          />
-        </Button>
 
         {/* Navigation du carousel */}
         {allImages.length > 1 && (

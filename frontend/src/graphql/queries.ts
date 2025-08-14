@@ -14,6 +14,7 @@ export const GET_ALL_CIRCUITS = gql`
       image
       type
       difficulte
+      transport
       reservationsCount
       isAvailable
       imagesCount
@@ -64,6 +65,7 @@ export const GET_CIRCUIT_BY_ID = gql`
       nonInclus
       image
       difficulte
+      transport
       reservationsCount
       isAvailable
       imagesCount
@@ -366,18 +368,20 @@ export const GET_USER_RESERVATIONS = gql`
 `;
 
 // Queries pour les guides
-export const GET_ALL_GUIDES = gql`
-  query GetAllGuides {
-    allGuides {
+export const GET_ALL_PERSONNELS = gql`
+  query AllPersonnels {
+    allPersonnels {
       id
       nom
       prenom
-      telephone
+      contact
       email
+      adresse
+      specialite
       langues
-      specialites
-      tarif
-      disponible
+      biographie
+      status
+      photo
     }
   }
 `;
@@ -428,5 +432,3 @@ export const GET_UTILISATEUR_BY_EMAIL = gql`
     }
   }
 `;
-
-

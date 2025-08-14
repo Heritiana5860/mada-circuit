@@ -137,7 +137,7 @@ class CircuitType(DjangoObjectType):
     class Meta:
         model = Circuit
         fields = (
-            'id', 'titre', 'description', 'duree', 'prix', 'inclus', 'non_inclus', 'type', 'image',
+            'id', 'titre', 'description', 'duree', 'transport', 'prix', 'inclus', 'non_inclus', 'type', 'image',
             'difficulte', 'destination', 'saison', 'vehicule_recommande'   
         )
         interfaces = (relay.Node,)
@@ -245,7 +245,7 @@ class PersonnelType(DjangoObjectType):
         model = Personnel
         fields = (
             'id', 'nom', 'prenom', 'contact', 'email', 'adresse', 'specialite',
-            'langues', 'biographie', 'photo'
+            'langues', 'biographie', 'status', 'photo'
         )
 
 class BlogType(DjangoObjectType):

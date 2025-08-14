@@ -2,8 +2,6 @@ import {
   Map,
   Calendar,
   Compass,
-  Users,
-  Star,
   Truck,
   ArrowRight,
 } from "lucide-react";

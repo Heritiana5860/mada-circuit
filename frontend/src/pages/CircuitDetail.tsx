@@ -1,44 +1,14 @@
-import { useQuery } from "@apollo/client";
 import { useParams, useNavigate, useLocation } from "react-router-dom";
-import { GET_CIRCUIT_BY_ID } from "../graphql/queries";
 import NavBar from "@/components/NavBar";
-import {
-  Clock,
-  Compass,
-  Loader2,
-  MapPin,
-  Star,
-  Users,
-  Calendar,
-  Heart,
-  Share2,
-  Camera,
-  CheckCircle2,
-  XCircle,
-  Phone,
-  Mail,
-  ArrowLeft,
-  Zap,
-  Shield,
-  Award,
-  Info,
-  ChevronLeft,
-  ChevronRight,
-} from "lucide-react";
+import { Loader2, Calendar } from "lucide-react";
 import Footer from "../components/Footer";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@radix-ui/react-tabs";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
-import { useContext, useEffect, useState } from "react";
-import { Circuit } from "@/types";
+import { useContext, useState } from "react";
 import { formatPrice } from "@/helper/formatage";
 import { useAuth } from "@/contexts/AuthContext";
-import { useMutation, gql } from "@apollo/client";
-import {
-  CREATE_CIRCUIT_RESERVATION,
-  CREATE_RESERVATION,
-} from "@/graphql/mutations";
+import { useMutation } from "@apollo/client";
+import { CREATE_RESERVATION } from "@/graphql/mutations";
 import BoutonRetoureDetail from "@/components/detail/BoutonRetourDetail";
 import DetailCarousel from "@/components/detail/DetailCarousel";
 import ContenuPrincipal from "@/components/detail/ContenuPrincipal";
@@ -54,7 +24,6 @@ const CircuitDetail = () => {
   const { isAuthenticated, user } = useAuth();
 
   const location = useLocation();
-  const [circuit, setCircuit] = useState<Circuit | null>(null);
   const [isImageLoading, setIsImageLoading] = useState(true);
   const [isFavorite, setIsFavorite] = useState(false);
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
@@ -253,7 +222,7 @@ const CircuitDetail = () => {
   // Fonction pour gérer les boutons + et -
   const handleGuestCountChange = (increment: boolean) => {
     if (increment) {
-      setGuestCount(Math.min(12, guestCount + 1));
+      setGuestCount(Math.min(1200, guestCount + 1));
     } else {
       setGuestCount(Math.max(1, guestCount - 1));
     }

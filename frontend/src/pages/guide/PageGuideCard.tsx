@@ -19,15 +19,9 @@ const PageGuideCard = ({
   Biographie,
   contact,
   email,
-  rating = 4.8,
-  reviewCount = 127,
-  price = "À partir de 50€",
-  availability = "Disponible",
   handleCardClick,
   onContact,
   onEmail,
-  onFavorite,
-  isFavorite = false,
 }) => {
   // Gestion des données manquantes
   const handleContactClick = (e) => {
@@ -45,13 +39,6 @@ const PageGuideCard = ({
       onEmail(email);
     } else {
       alert("Email non disponible");
-    }
-  };
-
-  const handleFavoriteClick = (e) => {
-    e.stopPropagation();
-    if (onFavorite && lien) {
-      onFavorite(lien);
     }
   };
 
@@ -79,61 +66,13 @@ const PageGuideCard = ({
         <img
           src={
             url ||
-            "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=300&fit=crop&crop=face"
+            "https://plus.unsplash.com/premium_photo-1666739388590-72762edf76ac?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8aW1hZ2UlMjBwbGFjZWhvbGRlcnxlbnwwfHwwfHx8MA%3D%3D"
           }
           alt={nom || "Guide"}
           className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
           loading="lazy"
-          // onError={(e) => {
-          //   e.target.src =
-          //     "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=300&fit=crop&crop=face";
-          // }}
         />
         <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
-
-        {/* Badge note et favoris */}
-        <div className="absolute top-4 left-4 right-4 flex justify-between items-start">
-          <div className="bg-white/95 backdrop-blur-sm rounded-full px-3 py-1 flex items-center gap-1 shadow-lg">
-            <Star className="w-4 h-4 text-yellow-500 fill-current" />
-            <span className="text-sm font-semibold text-gray-900">
-              {rating}
-            </span>
-            <span className="text-xs text-gray-600">({reviewCount})</span>
-          </div>
-
-          <button
-            onClick={handleFavoriteClick}
-            className="bg-white/95 backdrop-blur-sm rounded-full p-2 shadow-lg hover:bg-white transition-all duration-200"
-          >
-            <Heart
-              className={`w-4 h-4 transition-colors ${
-                isFavorite
-                  ? "text-red-500 fill-current"
-                  : "text-gray-600 hover:text-red-500"
-              }`}
-            />
-          </button>
-        </div>
-
-        {/* Badge disponibilité */}
-        <div className="absolute bottom-4 left-4">
-          <div
-            className={`px-3 py-1 rounded-full text-xs font-medium backdrop-blur-sm ${
-              availability === "Disponible"
-                ? "bg-green-500/90 text-white"
-                : "bg-yellow-500/90 text-white"
-            }`}
-          >
-            {availability}
-          </div>
-        </div>
-
-        {/* Prix */}
-        <div className="absolute bottom-4 right-4">
-          <div className="bg-black/80 backdrop-blur-sm text-white px-3 py-1 rounded-full text-sm font-semibold">
-            {price}
-          </div>
-        </div>
       </div>
 
       {/* Contenu de la carte */}

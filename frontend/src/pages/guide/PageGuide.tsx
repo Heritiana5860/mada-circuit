@@ -1,8 +1,9 @@
 import NavBar from "@/components/NavBar";
 import PageGuideCard from "./PageGuideCard";
 import Footer from "@/components/Footer";
-import { useNavigate } from "react-router-dom";
-import { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { useQuery } from "@apollo/client";
+import { GET_ALL_PERSONNELS } from "@/graphql/queries";
 
 const PageGuide = () => {
   const guideData = [
@@ -84,8 +85,13 @@ const PageGuide = () => {
     },
   ];
 
+  const {
+    loading: peronnelLoading,
+    error: personnelError,
+    data: personnelData,
+  } = useQuery(GET_ALL_PERSONNELS);
+
   const navigate = useNavigate();
-  const [favorites, setFavorites] = useState(new Set());
 
   const handleCardClick = (guide) => {
     navigate(`/guidesprofile/${guide.id}`, {
@@ -101,151 +107,293 @@ const PageGuide = () => {
     window.open(`mailto:${email}`, "_self");
   };
 
-  const handleFavorite = (guide) => {
-    setFavorites((prev) => {
-      const newFavorites = new Set(prev);
-      if (newFavorites.has(guide.id)) {
-        newFavorites.delete(guide.id);
-      } else {
-        newFavorites.add(guide.id);
-      }
-      return newFavorites;
-    });
-  };
+  if (peronnelLoading) {
+    return (
+      <div className="min-h-screen bg-gray-50 dark:bg-gray-900 flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
+          <p className="text-gray-600 dark:text-gray-300">
+            Chargement de nos experts...
+          </p>
+        </div>
+      </div>
+    );
+  }
+
+  if (personnelError) {
+    return (
+      <div className="min-h-screen bg-gray-50 dark:bg-gray-900 flex items-center justify-center">
+        <div className="text-center">
+          <div className="text-red-500 mb-4">⚠️</div>
+          <p className="text-gray-600 dark:text-gray-300">
+            Erreur lors du chargement des données
+          </p>
+        </div>
+      </div>
+    );
+  }
+
+  const data = personnelData?.allPersonnels;
+
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
       {/* Navigation bar */}
       <NavBar />
 
       {/* Hero Section modernisé */}
-      <section className="relative bg-gradient-to-br from-blue-900 via-blue-800 to-indigo-900 text-white overflow-hidden bg-[url(/guide.png)] bg-cover bg-center">
-        <div className="absolute inset-0 bg-black/20" />
-        <div className="absolute inset-0" />
+      <section className="relative bg-gradient-to-br from-emerald-900 via-teal-800 to-cyan-900 text-white overflow-hidden bg-[url(/guide.png)] bg-cover bg-center">
+        <div className="absolute inset-0 bg-black/40" />
+        <div className="absolute inset-0 bg-gradient-to-r from-emerald-900/50 to-transparent" />
 
-        <div className="relative max-w-6xl mx-auto px-4 py-20 text-center">
-          <div className="mb-6">
-            <span className="inline-block bg-white/20 backdrop-blur-sm text-white px-4 py-2 rounded-full text-sm font-medium mb-4">
-              🇲🇬 Madagascar Authentique
+        <div className="relative max-w-7xl mx-auto px-4 py-24 text-center">
+          <div className="mb-8">
+            <span className="inline-flex items-center bg-white/15 backdrop-blur-sm text-white px-6 py-3 rounded-full text-sm font-medium mb-6 border border-white/20">
+              <span className="mr-2">🏝️</span>
+              Votre Équipe d'Experts Madagascar
             </span>
           </div>
 
-          <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold mb-6 leading-tight">
-            Découvrez nos
-            <span className="bg-gradient-to-r from-yellow-400 to-orange-500 bg-clip-text text-transparent">
+          <h1 className="text-5xl md:text-7xl lg:text-8xl font-bold mb-8 leading-tight">
+            Rencontrez nos
+            <span className="bg-gradient-to-r from-amber-400 via-orange-500 to-red-500 bg-clip-text text-transparent">
               {" "}
-              guides experts
+              Spécialistes
             </span>
           </h1>
 
-          <p className="text-lg md:text-xl text-blue-100 mb-8 max-w-3xl mx-auto leading-relaxed">
-            Des professionnels passionnés vous accompagnent pour une découverte
-            authentique de Madagascar. Chaque guide apporte son expertise unique
-            pour des expériences inoubliables.
+          <p className="text-xl md:text-2xl text-emerald-100 mb-12 max-w-4xl mx-auto leading-relaxed">
+            Une équipe de professionnels passionnés, chacun expert dans son
+            domaine, prêts à vous accompagner dans la création de votre voyage
+            sur mesure à Madagascar. De la planification à l'exploration, nous
+            sommes là pour vous.
           </p>
 
-          <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-            <button className="bg-white text-blue-900 hover:bg-gray-100 font-semibold py-3 px-8 rounded-xl transition-all duration-300 transform hover:scale-105 shadow-lg">
-              Explorer nos guides
+          <div className="flex flex-col sm:flex-row gap-6 justify-center items-center">
+            <button className="bg-white text-emerald-900 hover:bg-emerald-50 font-bold py-4 px-10 rounded-2xl transition-all duration-300 transform hover:scale-105 shadow-2xl hover:shadow-3xl">
+              <span className="flex items-center">
+                <span className="mr-2">👥</span>
+                Découvrir l'équipe
+              </span>
             </button>
-            <button className="border-2 border-white text-white hover:bg-white hover:text-blue-900 font-semibold py-3 px-8 rounded-xl transition-all duration-300">
-              Planifier mon voyage
-            </button>
+            <Link to="/contact">
+              <button className="border-2 border-white text-white hover:bg-white hover:text-emerald-900 font-bold py-4 px-10 rounded-2xl transition-all duration-300 shadow-lg">
+                <span className="flex items-center">
+                  <span className="mr-2">💬</span>
+                  Demander conseil
+                </span>
+              </button>
+            </Link>
           </div>
         </div>
       </section>
 
-      {/* Section des statistiques */}
-      <section className="bg-white dark:bg-gray-800 py-16">
-        <div className="max-w-6xl mx-auto px-4">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
-            <div className="group">
-              <div className="text-3xl font-bold text-blue-600 dark:text-blue-400 mb-2 group-hover:scale-110 transition-transform">
-                15+
-              </div>
-              <div className="text-gray-600 dark:text-gray-300 font-medium">
-                Années d'expérience
-              </div>
-            </div>
-            <div className="group">
-              <div className="text-3xl font-bold text-green-600 dark:text-green-400 mb-2 group-hover:scale-110 transition-transform">
-                500+
-              </div>
-              <div className="text-gray-600 dark:text-gray-300 font-medium">
-                Voyageurs satisfaits
-              </div>
-            </div>
-            <div className="group">
-              <div className="text-3xl font-bold text-purple-600 dark:text-purple-400 mb-2 group-hover:scale-110 transition-transform">
-                25+
-              </div>
-              <div className="text-gray-600 dark:text-gray-300 font-medium">
-                Destinations uniques
-              </div>
-            </div>
-            <div className="group">
-              <div className="text-3xl font-bold text-orange-600 dark:text-orange-400 mb-2 group-hover:scale-110 transition-transform">
-                4.9★
-              </div>
-              <div className="text-gray-600 dark:text-gray-300 font-medium">
-                Note moyenne
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Section des guides */}
-      <section className="py-16 px-4">
-        <div className="max-w-6xl mx-auto">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-4">
-              Nos Guides Experts
+      {/* Section d'introduction des services */}
+      <section className="py-20 px-4 bg-white dark:bg-gray-800">
+        <div className="max-w-7xl mx-auto">
+          <div className="text-center mb-16">
+            <h2 className="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white mb-6">
+              Comment Nous Vous Aidons
             </h2>
-            <p className="text-gray-600 dark:text-gray-300 text-lg max-w-2xl mx-auto">
-              Chaque guide possède une expertise unique et une passion
-              authentique pour partager les merveilles de Madagascar
+            <p className="text-xl text-gray-600 dark:text-gray-300 max-w-4xl mx-auto leading-relaxed">
+              Chaque membre de notre équipe apporte une expertise unique pour
+              faire de votre voyage une expérience extraordinaire
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
+            <div className="text-center group">
+              <div className="bg-gradient-to-br from-blue-500 to-cyan-600 w-20 h-20 rounded-2xl flex items-center justify-center mx-auto mb-6 group-hover:scale-110 transition-all duration-300 shadow-lg">
+                <span className="text-3xl">🗺️</span>
+              </div>
+              <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">
+                Planification sur Mesure
+              </h3>
+              <p className="text-gray-600 dark:text-gray-300 leading-relaxed">
+                Nos conseillers voyage créent des itinéraires personnalisés
+                selon vos envies, votre budget et vos centres d'intérêt.
+              </p>
+            </div>
+
+            <div className="text-center group">
+              <div className="bg-gradient-to-br from-emerald-500 to-teal-600 w-20 h-20 rounded-2xl flex items-center justify-center mx-auto mb-6 group-hover:scale-110 transition-all duration-300 shadow-lg">
+                <span className="text-3xl">🌿</span>
+              </div>
+              <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">
+                Expertise Locale
+              </h3>
+              <p className="text-gray-600 dark:text-gray-300 leading-relaxed">
+                Nos guides locaux vous font découvrir les secrets de Madagascar
+                : faune, flore, culture et traditions authentiques.
+              </p>
+            </div>
+
+            <div className="text-center group">
+              <div className="bg-gradient-to-br from-amber-500 to-orange-600 w-20 h-20 rounded-2xl flex items-center justify-center mx-auto mb-6 group-hover:scale-110 transition-all duration-300 shadow-lg">
+                <span className="text-3xl">🤝</span>
+              </div>
+              <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">
+                Accompagnement 24/7
+              </h3>
+              <p className="text-gray-600 dark:text-gray-300 leading-relaxed">
+                Notre équipe reste disponible avant, pendant et après votre
+                voyage pour garantir une expérience parfaite.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Section des experts */}
+      <section className="py-20 px-4 bg-gray-50 dark:bg-gray-900">
+        <div className="max-w-7xl mx-auto">
+          <div className="text-center mb-16">
+            <span className="inline-block bg-emerald-100 dark:bg-emerald-900 text-emerald-800 dark:text-emerald-200 px-6 py-2 rounded-full text-sm font-semibold mb-6">
+              Notre Équipe d'Experts
+            </span>
+            <h2 className="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white mb-6">
+              Faites Connaissance avec Nos Spécialistes
+            </h2>
+            <p className="text-xl text-gray-600 dark:text-gray-300 max-w-4xl mx-auto leading-relaxed">
+              Chaque expert possède des compétences uniques et une passion
+              authentique pour partager les merveilles de Madagascar. Cliquez
+              sur un profil pour découvrir comment ils peuvent vous aider à
+              planifier votre voyage idéal.
             </p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {guideData.map((guide, index) => (
+            {data.map((guide, index) => (
               <PageGuideCard
                 key={guide.id}
-                url={guide.url}
-                nom={guide.nom}
-                lieu={guide.lieu}
-                languages={guide.languages}
-                Biographie={guide.Biographie}
+                url={`http://localhost:8000/media/${guide.photo}`}
+                nom={`${guide.nom} ${guide.prenom}`}
+                lieu={guide.adresse}
+                languages={guide.langues}
+                Biographie={guide.biographie}
                 lien={guide}
                 handleCardClick={handleCardClick}
-                rating={guide.rating}
-                reviewCount={guide.reviewCount}
-                price={guide.prix}
                 contact={guide.contact}
-                availability={guide.availability}
                 email={guide.email}
                 onContact={handleContact}
                 onEmail={handleEmail}
-                onFavorite={handleFavorite}
-                isFavorite={favorites.has(guide.id)}
               />
             ))}
           </div>
         </div>
       </section>
 
-      {/* Section CTA */}
-      <section className="bg-gradient-to-r from-gray-400 to-gray-500 text-white py-16">
-        <div className="max-w-4xl mx-auto text-center px-4">
-          <h3 className="text-2xl md:text-3xl font-bold mb-4">
-            Prêt pour votre aventure malgache ?
+      {/* Section pourquoi nous choisir */}
+      <section className="py-20 px-4 bg-white dark:bg-gray-800">
+        <div className="max-w-7xl mx-auto">
+          <div className="text-center mb-16">
+            <h2 className="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white mb-6">
+              Pourquoi Choisir Notre Équipe ?
+            </h2>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+            <div className="text-center">
+              <div className="bg-emerald-100 dark:bg-emerald-900 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
+                <span className="text-2xl">🎓</span>
+              </div>
+              <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-2">
+                Expertise Certifiée
+              </h3>
+              <p className="text-gray-600 dark:text-gray-300">
+                Guides professionnels certifiés et conseillers expérimentés
+              </p>
+            </div>
+
+            <div className="text-center">
+              <div className="bg-blue-100 dark:bg-blue-900 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
+                <span className="text-2xl">🗣️</span>
+              </div>
+              <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-2">
+                Multilingues
+              </h3>
+              <p className="text-gray-600 dark:text-gray-300">
+                Communication fluide en français, anglais, et langues locales
+              </p>
+            </div>
+
+            <div className="text-center">
+              <div className="bg-amber-100 dark:bg-amber-900 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
+                <span className="text-2xl">⭐</span>
+              </div>
+              <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-2">
+                Excellence Reconnue
+              </h3>
+              <p className="text-gray-600 dark:text-gray-300">
+                Notes exceptionnelles et témoignages clients élogieux
+              </p>
+            </div>
+
+            <div className="text-center">
+              <div className="bg-purple-100 dark:bg-purple-900 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
+                <span className="text-2xl">💚</span>
+              </div>
+              <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-2">
+                Engagement Local
+              </h3>
+              <p className="text-gray-600 dark:text-gray-300">
+                Soutien aux communautés et tourisme responsable
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Section CTA améliorée */}
+      <section className="bg-gradient-to-r from-emerald-600 via-teal-600 to-cyan-600 text-white py-20">
+        <div className="max-w-5xl mx-auto text-center px-4">
+          <h3 className="text-3xl md:text-4xl font-bold mb-6">
+            Prêt à Planifier Votre Aventure Malgache ?
           </h3>
-          <p className="text-lg mb-8 text-blue-100">
-            Contactez nos guides pour planifier votre voyage sur mesure
+          <p className="text-xl mb-8 text-emerald-100 leading-relaxed">
+            Nos experts sont là pour vous accompagner dans chaque étape de votre
+            projet. Que vous ayez une idée précise ou besoin d'inspiration,
+            contactez-nous pour un conseil personnalisé gratuit.
           </p>
-          <button className="bg-white text-blue-600 hover:bg-gray-100 font-semibold py-3 px-8 rounded-xl transition-all duration-300 transform hover:scale-105 shadow-lg">
-            Commencer la planification
-          </button>
+
+          <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-8">
+            <Link to="/contact">
+              <button className="bg-white text-emerald-600 hover:bg-emerald-50 font-bold py-4 px-8 rounded-2xl transition-all duration-300 transform hover:scale-105 shadow-lg">
+                <span className="flex items-center">
+                  <span className="mr-2">📞</span>
+                  Demander un conseil gratuit
+                </span>
+              </button>
+            </Link>
+            <Link to="/voyages-sur-mesure">
+              <button className="border-2 border-white text-white hover:bg-white hover:text-emerald-600 font-bold py-4 px-8 rounded-2xl transition-all duration-300">
+                <span className="flex items-center">
+                  <span className="mr-2">✈️</span>
+                  Créer mon voyage sur mesure
+                </span>
+              </button>
+            </Link>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mt-12 text-center">
+            <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-6 border border-white/20">
+              <h4 className="font-bold text-lg mb-2">Réponse Rapide</h4>
+              <p className="text-emerald-100">
+                Réponse sous 24h à toutes vos demandes
+              </p>
+            </div>
+            <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-6 border border-white/20">
+              <h4 className="font-bold text-lg mb-2">Conseil Gratuit</h4>
+              <p className="text-emerald-100">
+                Première consultation sans engagement
+              </p>
+            </div>
+            <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-6 border border-white/20">
+              <h4 className="font-bold text-lg mb-2">Sur Mesure</h4>
+              <p className="text-emerald-100">
+                Voyage adapté à vos envies et budget
+              </p>
+            </div>
+          </div>
         </div>
       </section>
 

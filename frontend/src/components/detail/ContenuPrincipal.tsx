@@ -1,4 +1,4 @@
-import { Clock, MapPin } from "lucide-react";
+import { Car, Clock, MapPin, Ship } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
 import { Badge } from "../ui/badge";
 
@@ -17,6 +17,7 @@ interface DataProps {
   destination?: Destination;
   duree?: number;
   difficulte?: string;
+  transport?: string;
   description?: string;
   itineraires?: Itineraire[];
   inclus?: string;
@@ -59,6 +60,16 @@ const ContenuPrincipal: React.FC<ContenuPrincipalProps> = ({
           {dataFromState?.difficulte && (
             <Badge variant="outline">
               Difficulté : {dataFromState.difficulte}
+            </Badge>
+          )}
+          {dataFromState?.transport && (
+            <Badge variant="secondary" className="flex items-center">
+              {dataFromState?.transport == "VOITURE" ? (
+                <Car className="h-3 w-3 mr-1" />
+              ) : (
+                <Ship className="h-3 w-3 mr-1" />
+              )}
+              En {dataFromState.transport.toLowerCase()}
             </Badge>
           )}
         </div>
@@ -115,7 +126,7 @@ const ContenuPrincipal: React.FC<ContenuPrincipalProps> = ({
             </CardHeader>
             <CardContent>
               <ul className="space-y-2">
-                {dataFromState.inclus.split(",").map((item, index) => (
+                {dataFromState.inclus.split(";").map((item, index) => (
                   <li key={index} className="flex items-center text-green-700">
                     <span className="w-2 h-2 bg-green-600 rounded-full mr-3" />
                     {item.trim()}
@@ -135,7 +146,7 @@ const ContenuPrincipal: React.FC<ContenuPrincipalProps> = ({
             </CardHeader>
             <CardContent>
               <ul className="space-y-2">
-                {dataFromState.nonInclus.split(",").map((item, index) => (
+                {dataFromState.nonInclus.split(";").map((item, index) => (
                   <li key={index} className="flex items-center text-red-700">
                     <span className="w-2 h-2 bg-red-600 rounded-full mr-3" />
                     {item.trim()}

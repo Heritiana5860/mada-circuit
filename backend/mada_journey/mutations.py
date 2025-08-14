@@ -17,14 +17,14 @@ from .models import (
     Utilisateur, Destination, Saison, Circuit, Itineraire,
     TypeVehicule, Capacite, Vehicule, Reservation, Blog, BlogCommentaire, Faq,
     CircuitImage, VehiculeImage, DestinationImage, BlogImage,
-    EtatVehicule, Testimonia, ContactUsModele
+    EtatVehicule, Testimonia, ContactUsModele, Personnel
 )
 from .model_types import (
     UtilisateurType, DestinationType, SaisonType, CircuitType,
     TypeVehiculeType, CapaciteType, VehiculeType,
     ReservationType, BlogType,
     BlogCommentaireType, FaqType,
-    CircuitImageType, VehiculeImageType, DestinationImageType, BlogImageType, TestimoniaType, ContactUsType, Personnel
+    CircuitImageType, VehiculeImageType, DestinationImageType, BlogImageType, TestimoniaType, ContactUsType, PersonnelType
 )
 from graphql_relay import from_global_id
 
@@ -278,6 +278,7 @@ class CreateCircuit(graphene.Mutation):
         duree = graphene.Int(required=True)
         prix = graphene.Float(required=True)
         type = graphene.String(required=True)
+        transport = graphene.String(required=True)
         image = Upload()
         difficulte = graphene.String(required=True)
         destination_id = graphene.ID(required=True)
@@ -288,7 +289,7 @@ class CreateCircuit(graphene.Mutation):
     success = graphene.Boolean()
     errors = graphene.List(graphene.String)
 
-    def mutate(self, info, titre, description, duree, prix, type, difficulte, destination_id, saison_id, itineraire_id, image=None):
+    def mutate(self, info, titre, description, duree, prix, type, transport, difficulte, destination_id, saison_id, itineraire_id, image=None):
         try:
             with transaction.atomic():
                 destination = Destination.objects.get(pk=destination_id)
@@ -301,6 +302,7 @@ class CreateCircuit(graphene.Mutation):
                     duree=duree,
                     prix=Decimal(str(prix)),
                     type=type,
+                    transport=transport,
                     image=image,
                     difficulte=difficulte,
                     destination=destination,
@@ -1612,13 +1614,14 @@ class CreatePersonnel(graphene.Mutation):
         specialite = graphene.String(required=True) 
         langues = graphene.String(required=True) 
         biographie = graphene.String(required=True) 
+        status = graphene.String(required=True)
         photo = Upload(required=True)
         
-    personnel = graphene.Field(UtilisateurType)
+    personnel = graphene.Field(PersonnelType)
     success = graphene.Boolean()
     errors = graphene.List(graphene.String)
         
-    def mutate(self, info, nom, prenom, contact, email, adresse, specialite, langues, biographie, photo): 
+    def mutate(self, info, nom, prenom, contact, email, adresse, specialite, langues, biographie, status, photo): 
         try:
             
             with transaction.atomic():
@@ -1631,6 +1634,7 @@ class CreatePersonnel(graphene.Mutation):
                     specialite=specialite,
                     langues=langues,
                     biographie=biographie,
+                    status=status,
                     photo=photo,
                 )
                 

@@ -123,14 +123,18 @@ class Circuit(models.Model):
         PANGALANE = "pangalane", _("Pangalane")
         CIRCUIT = "circuit", _("Circuit")
         SOLIDAIRE = "solidaire", _("Solidaire")
+        
+    class CircuitTransport(models.TextChoices):
+        VOITURE = "voiture", _("Voiture")
+        BATEAU = "bateau", _("Bateau")
     
     id = models.CharField(primary_key=True, default=uuid.uuid4, editable=False, max_length=36)
     titre = models.CharField(max_length=200)
     description = models.TextField()
     duree = models.IntegerField(help_text="Durée en jours")
     prix = models.DecimalField(max_digits=10, decimal_places=2)
-    inclus = models.TextField(blank=True, help_text="Services inclus (ex: hébergement, guide, petit-déjeuner)")
-    non_inclus = models.TextField(blank=True, help_text="Services non inclus (ex: essence, péages)")
+    inclus = models.TextField(blank=True, help_text="Services inclus (ex: hébergement, guide, petit-déjeuner), lister en separant par ';'")
+    non_inclus = models.TextField(blank=True, help_text="Services non inclus (ex: essence, péages), lister en separant par ';'")
     
     image = models.ImageField(upload_to=circuit_image_path, blank=True, null=True)
     
@@ -141,6 +145,11 @@ class Circuit(models.Model):
         default=CircuitType.CIRCUIT, 
         verbose_name=_("Type de circuit"), 
         help_text="circuit avec voiture, circuit sur canal de pangalanes avec bateau, circuit pour la visite solidaire")
+    transport = models.CharField(
+        choices=CircuitTransport,
+        max_length=255, 
+        default=CircuitTransport.VOITURE, 
+        verbose_name='Transport')
     
     destination = models.ForeignKey(Destination, on_delete=models.CASCADE, related_name='circuits')
     saison = models.ForeignKey(Saison, on_delete=models.CASCADE, related_name='circuits')
@@ -291,12 +300,13 @@ class Personnel(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     nom = models.CharField(max_length=100)
     prenom = models.CharField(max_length=100)
-    contact = models.CharField(max_length=14)
+    contact = models.CharField(max_length=20)
     email = models.CharField(max_length=200)
     adresse = models.CharField(max_length=200)
-    specialite = models.CharField(max_length=100)
-    langues = models.CharField(max_length=200)
+    specialite = models.CharField(max_length=100, help_text="Lister les specialitées en separant par ';'")
+    langues = models.CharField(max_length=200, help_text="Lister les langues en separant par ';'")
     biographie = models.TextField(blank=True, null=True)
+    status = models.CharField(max_length=200)
     photo = models.ImageField(upload_to='personnel_image')
 
     def __str__(self):

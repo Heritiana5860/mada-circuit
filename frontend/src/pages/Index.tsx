@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 import NavBar from "../components/NavBar";
 import Hero from "../components/Hero";
 import HomeFeatures from "../components/HomeFeatures";
@@ -6,7 +6,6 @@ import PopularCircuits from "../components/PopularCircuits";
 import PangalanesSection from "../components/PangalanesSection";
 import Vehicles4x4 from "../components/Vehicles4x4";
 import Testimonials from "../components/testimonia/Testimonials";
-import NewsletterSignup from "../components/NewsletterSignup";
 import Footer from "../components/Footer";
 
 const Index = () => {

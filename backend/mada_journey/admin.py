@@ -152,7 +152,7 @@ class BlogImageInline(admin.TabularInline):
 
 @admin.register(Circuit)
 class CircuitAdmin(admin.ModelAdmin):
-    list_display = ('titre', 'destination', 'duree', 'prix', 'inclus', 'non_inclus', 'type', 'difficulte', 'saison', 'vehicule_recommande', 'image_preview', 'nombre_reservations')
+    list_display = ('titre', 'destination', 'duree', 'prix', 'inclus', 'non_inclus', 'type', 'transport', 'difficulte', 'saison', 'vehicule_recommande', 'image_preview', 'nombre_reservations')
     list_filter = ('difficulte', 'destination', 'saison', 'vehicule_recommande')
     search_fields = ('titre', 'description')
     readonly_fields = ('image_preview',)
@@ -163,7 +163,7 @@ class CircuitAdmin(admin.ModelAdmin):
             'fields': ('titre', 'description', 'destination', 'saison', 'vehicule_recommande')
         }),
         ('Détails du circuit', {
-            'fields': ('duree', 'prix', 'type', 'difficulte', 'inclus', 'non_inclus')
+            'fields': ('duree', 'prix', 'type', 'transport', 'difficulte', 'inclus', 'non_inclus')
         }),
         ('Image', {
             'fields': ('image', 'image_preview')
@@ -280,16 +280,16 @@ class ReservationAdmin(admin.ModelAdmin):
 
 @admin.register(Personnel)
 class PersonnelAdmin(admin.ModelAdmin):
-    list_display = ('nom', 'prenom', 'contact', 'email', 'adresse', 'specialite', 'langues', 'biographie', 'photo')
-    list_filter = ('langues', 'specialite')
-    search_fields = ('nom', 'prenom', 'specialite', 'biographie')
+    list_display = ('nom', 'prenom', 'contact', 'email', 'adresse', 'specialite', 'langues', 'biographie', 'status', 'photo')
+    list_filter = ('langues', 'specialite', 'status')
+    search_fields = ('nom', 'prenom', 'specialite', 'biographie', 'status')
     
     fieldsets = (
         ('Informations personnelles', {
             'fields': ('nom', 'prenom', 'contact', 'email', 'adresse')
         }),
         ('Informations professionnelles', {
-            'fields': ('specialite', 'langues', 'biographie')
+            'fields': ('specialite', 'langues', 'biographie', 'status')
         }),
         ('Photo', {
             'fields': ('photo',)

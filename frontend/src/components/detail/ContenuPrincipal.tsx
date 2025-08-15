@@ -105,9 +105,16 @@ const ContenuPrincipal: React.FC<ContenuPrincipalProps> = ({
                     {index + 1}
                   </div>
                   <div>
-                    <h4 className="font-semibold text-gray-900 font-sans pb-3">
-                      {item.lieuDepart} → {item.lieuArrivee}
-                    </h4>
+                    {item.lieuArrivee ? (
+                      <h4 className="font-semibold text-gray-900 font-sans pb-3">
+                        {item.lieuDepart} → {item.lieuArrivee}
+                      </h4>
+                    ) : (
+                      <h4 className="font-semibold text-gray-900 font-sans pb-3">
+                        {item.lieuDepart}
+                      </h4>
+                    )}
+
                     <div className="mb-4">
                       {item.distanceKm && (
                         <span className="inline-flex items-center text-sm">
@@ -117,7 +124,7 @@ const ContenuPrincipal: React.FC<ContenuPrincipalProps> = ({
                       )}
                       {item.dureeTrajet && (
                         <span className="inline-flex items-center text-sm ml-3">
-                          <Clock className="text-gray-600 h-4 w-4 mr-1"/>
+                          <Clock className="text-gray-600 h-4 w-4 mr-1" />
                           {item.dureeTrajet} H
                         </span>
                       )}

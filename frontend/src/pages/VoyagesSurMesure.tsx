@@ -17,6 +17,13 @@ import {
   Quote,
   ChevronRight,
   ChevronLeft,
+  Navigation,
+  Route,
+  Trash2,
+  Plus,
+  ArrowDown,
+  Plane,
+  X,
 } from "lucide-react";
 import { useQuery } from "@apollo/client";
 import { GET_TESTIMONIA_BY_STATUS } from "@/graphql/queries";
@@ -29,6 +36,7 @@ import {
 } from "@/components/ui/carousel";
 import NombrePersonneDetail from "@/components/detail/NombrePersonneDetail";
 import { DataContext, FaqContext } from "@/provider/DataContext";
+import { destinations } from "@/helper/AllRegions";
 
 const VoyagesSurMesure = () => {
   const { data, loading, error } = useQuery(GET_TESTIMONIA_BY_STATUS, {
@@ -56,6 +64,13 @@ const VoyagesSurMesure = () => {
     commentaire: "",
   });
 
+  // State pour les destinations
+  const [pointDepart, setPointDepart] = useState("");
+  const [pointArrivee, setPointArrivee] = useState("");
+  const [lieuxAVisiter, setLieuxAVisiter] = useState([]);
+  const [showDestinationsList, setShowDestinationsList] = useState(false);
+  const [activeSelection, setActiveSelection] = useState("");
+
   // Recuperer l'utilisateur afin d'afficher son image sur testimonia
   const {
     loading: utilisateurLoading,
@@ -73,39 +88,6 @@ const VoyagesSurMesure = () => {
 
   const [step, setStep] = useState(1);
   const totalSteps = 4;
-
-  const destinations = [
-    {
-      name: "Antananarivo",
-      region: "Hautes Terres Centrales",
-      image: "vam.JPG",
-    },
-    {
-      name: "Nosy Be",
-      region: "Nord",
-      image: "piscine.jpg",
-    },
-    {
-      name: "Isalo",
-      region: "Sud-Ouest",
-      image: "isalo.jpg",
-    },
-    {
-      name: "Pangalanes",
-      region: "Sud-Est",
-      image: "canal.JPG",
-    },
-    {
-      name: "Diego Suarez",
-      region: "Nord",
-      image: "vorogna.png",
-    },
-    {
-      name: "Tuléar",
-      region: "Sud-Ouest",
-      image: "toliara.png",
-    },
-  ];
 
   const activities = [
     { name: "Randonnée", icon: <Compass className="h-5 w-5" /> },
@@ -224,6 +206,57 @@ const VoyagesSurMesure = () => {
     ? `http://localhost:8000/media/${utilisateur.image}`
     : null;
 
+  const handleDestinationSelect = (destination) => {
+    if (activeSelection === "depart") {
+      setPointDepart(destination.name);
+    } else if (activeSelection === "arrivee") {
+      setPointArrivee(destination.name);
+    } else if (activeSelection === "visite") {
+      if (!lieuxAVisiter.find((lieu) => lieu.name === destination.name)) {
+        setLieuxAVisiter([...lieuxAVisiter, destination]);
+      }
+    }
+    setShowDestinationsList(false);
+    setActiveSelection("");
+  };
+
+  const openDestinationsList = (type) => {
+    setActiveSelection(type);
+    setShowDestinationsList(true);
+  };
+
+  const removeLieuAVisiter = (indexToRemove) => {
+    setLieuxAVisiter(
+      lieuxAVisiter.filter((_, index) => index !== indexToRemove)
+    );
+  };
+
+  const getTypeIcon = (type) => {
+    switch (type) {
+      case "city":
+        return <MapPin className="h-4 w-4" />;
+      case "island":
+        return <Navigation className="h-4 w-4" />;
+      case "park":
+        return <Route className="h-4 w-4" />;
+      default:
+        return <MapPin className="h-4 w-4" />;
+    }
+  };
+
+  const getTypeColor = (type) => {
+    switch (type) {
+      case "city":
+        return "bg-blue-100 text-blue-600";
+      case "island":
+        return "bg-green-100 text-green-600";
+      case "park":
+        return "bg-orange-100 text-orange-600";
+      default:
+        return "bg-gray-100 text-gray-600";
+    }
+  };
+
   return (
     <div className="min-h-screen flex flex-col">
       <NavBar />
@@ -271,79 +304,342 @@ const VoyagesSurMesure = () => {
 
               <div className="p-6">
                 {step === 1 && (
-                  <div>
-                    <h3 className="text-xl font-bold mb-4">
-                      Choisissez vos destinations
-                    </h3>
-                    <p className="text-muted-foreground mb-6">
-                      Sélectionnez les régions et les lieux que vous souhaitez
-                      visiter pendant votre voyage.
-                    </p>
+                  <div className="space-y-6">
+                    <div className="text-center">
+                      <h3 className="text-2xl font-bold text-gray-900 mb-2">
+                        Planifiez votre itinéraire
+                      </h3>
+                      <p className="text-gray-600">
+                        Définissez votre point de départ, d'arrivée et les lieux
+                        que vous souhaitez visiter
+                      </p>
+                    </div>
 
-                    <Tabs defaultValue="regions">
-                      <TabsList className="mb-6">
-                        <TabsTrigger value="regions">Par région</TabsTrigger>
-                        <TabsTrigger value="destinations">
-                          Toutes les destinations
-                        </TabsTrigger>
-                      </TabsList>
+                    {/* Interface principale */}
+                    <div className="max-w-2xl mx-auto space-y-6">
+                      {/* Point de départ */}
+                      <Card className="border-2 border-green-200 bg-green-50">
+                        <CardContent className="p-4">
+                          <div className="flex items-center justify-between mb-3">
+                            <div className="flex items-center space-x-2">
+                              <div className="w-8 h-8 bg-green-500 rounded-full flex items-center justify-center">
+                                <Plane className="h-4 w-4 text-white rotate-45" />
+                              </div>
+                              <span className="font-semibold text-green-800">
+                                Point de départ
+                              </span>
+                            </div>
+                            {pointDepart && (
+                              <Button
+                                variant="ghost"
+                                size="sm"
+                                onClick={() => setPointDepart("")}
+                                className="text-green-600 hover:text-green-800"
+                              >
+                                <X className="h-4 w-4" />
+                              </Button>
+                            )}
+                          </div>
 
-                      <TabsContent value="regions">
-                        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
-                          {[
-                            "Nord",
-                            "Sud",
-                            "Est",
-                            "Ouest",
-                            "Hautes Terres",
-                            "Sud-Ouest",
-                            "Nord-Ouest",
-                            "Nord-Est",
-                          ].map((region) => (
-                            <label
-                              key={region}
-                              className="flex items-center p-3 border rounded-lg cursor-pointer hover:bg-primary/5"
-                            >
-                              <input type="checkbox" className="mr-2" />
-                              <span>{region}</span>
-                            </label>
-                          ))}
-                        </div>
-                      </TabsContent>
-
-                      <TabsContent value="destinations">
-                        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-                          {destinations.map((destination) => (
-                            <label
-                              key={destination.name}
-                              className="relative cursor-pointer"
-                            >
-                              <input type="checkbox" className="sr-only peer" />
-                              <div className="overflow-hidden rounded-lg peer-checked:ring-2 peer-checked:ring-primary">
-                                <img
-                                  src={destination.image}
-                                  alt={destination.name}
-                                  className="w-full h-32 object-cover"
-                                />
-                                <div className="absolute inset-0 bg-black/30 flex items-end">
-                                  <div className="p-3 text-white">
-                                    <h4 className="font-bold">
-                                      {destination.name}
-                                    </h4>
-                                    <p className="text-xs opacity-80">
-                                      {destination.region}
-                                    </p>
-                                  </div>
+                          {pointDepart ? (
+                            <div className="flex items-center space-x-3 p-3 bg-white rounded-lg border">
+                              <div className="w-12 h-8 bg-green-100 rounded flex items-center justify-center">
+                                <MapPin className="h-4 w-4 text-green-600" />
+                              </div>
+                              <div>
+                                <div className="font-medium text-gray-800">
+                                  {pointDepart}
                                 </div>
-                                <div className="absolute top-2 right-2 w-5 h-5 bg-white rounded-full flex items-center justify-center opacity-0 peer-checked:opacity-100">
-                                  <Check className="h-3 w-3 text-primary" />
+                                <div className="text-sm text-gray-500">
+                                  Ville de départ
                                 </div>
                               </div>
-                            </label>
-                          ))}
+                            </div>
+                          ) : (
+                            <Button
+                              variant="outline"
+                              onClick={() => openDestinationsList("depart")}
+                              className="w-full p-6 border-2 border-dashed border-green-300 hover:border-green-400 hover:bg-green-50"
+                            >
+                              <Plus className="h-5 w-5 mr-2 text-green-600" />
+                              <span className="text-green-700">
+                                Sélectionner le point de départ
+                              </span>
+                            </Button>
+                          )}
+                        </CardContent>
+                      </Card>
+
+                      {/* Flèche vers le bas */}
+                      <div className="flex justify-center">
+                        <div className="w-8 h-8 bg-gray-200 rounded-full flex items-center justify-center">
+                          <ArrowDown className="h-4 w-4 text-gray-600" />
                         </div>
-                      </TabsContent>
-                    </Tabs>
+                      </div>
+
+                      {/* Lieux à visiter */}
+                      <Card className="border-2 border-blue-200 bg-blue-50">
+                        <CardContent className="p-4">
+                          <div className="flex items-center space-x-2 mb-3">
+                            <div className="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center">
+                              <Route className="h-4 w-4 text-white" />
+                            </div>
+                            <span className="font-semibold text-blue-800">
+                              Lieux à visiter
+                            </span>
+                            <span className="text-sm text-blue-600">
+                              ({lieuxAVisiter.length})
+                            </span>
+                          </div>
+
+                          <div className="space-y-3">
+                            {lieuxAVisiter.map((lieu, index) => (
+                              <div
+                                key={index}
+                                className="flex items-center justify-between p-3 bg-white rounded-lg border"
+                              >
+                                <div className="flex items-center space-x-3">
+                                  <div
+                                    className={`w-8 h-8 rounded-full flex items-center justify-center ${getTypeColor(
+                                      lieu.type
+                                    )}`}
+                                  >
+                                    {getTypeIcon(lieu.type)}
+                                  </div>
+                                  <div>
+                                    <div className="font-medium text-gray-800">
+                                      {lieu.name}
+                                    </div>
+                                    <div className="text-sm text-gray-500">
+                                      {lieu.region}
+                                    </div>
+                                  </div>
+                                </div>
+                                <Button
+                                  variant="ghost"
+                                  size="sm"
+                                  onClick={() => removeLieuAVisiter(index)}
+                                  className="text-red-500 hover:text-red-700 hover:bg-red-50"
+                                >
+                                  <Trash2 className="h-4 w-4" />
+                                </Button>
+                              </div>
+                            ))}
+
+                            <Button
+                              variant="outline"
+                              onClick={() => openDestinationsList("visite")}
+                              className="w-full p-4 border-2 border-dashed border-blue-300 hover:border-blue-400 hover:bg-blue-50"
+                            >
+                              <Plus className="h-5 w-5 mr-2 text-blue-600" />
+                              <span className="text-blue-700">
+                                Ajouter un lieu à visiter
+                              </span>
+                            </Button>
+                          </div>
+                        </CardContent>
+                      </Card>
+
+                      {/* Flèche vers le bas */}
+                      <div className="flex justify-center">
+                        <div className="w-8 h-8 bg-gray-200 rounded-full flex items-center justify-center">
+                          <ArrowDown className="h-4 w-4 text-gray-600" />
+                        </div>
+                      </div>
+
+                      {/* Point d'arrivée */}
+                      <Card className="border-2 border-red-200 bg-red-50">
+                        <CardContent className="p-4">
+                          <div className="flex items-center justify-between mb-3">
+                            <div className="flex items-center space-x-2">
+                              <div className="w-8 h-8 bg-red-500 rounded-full flex items-center justify-center">
+                                <Plane className="h-4 w-4 text-white -rotate-45" />
+                              </div>
+                              <span className="font-semibold text-red-800">
+                                Point d'arrivée
+                              </span>
+                            </div>
+                            {pointArrivee && (
+                              <Button
+                                variant="ghost"
+                                size="sm"
+                                onClick={() => setPointArrivee("")}
+                                className="text-red-600 hover:text-red-800"
+                              >
+                                <X className="h-4 w-4" />
+                              </Button>
+                            )}
+                          </div>
+
+                          {pointArrivee ? (
+                            <div className="flex items-center space-x-3 p-3 bg-white rounded-lg border">
+                              <div className="w-12 h-8 bg-red-100 rounded flex items-center justify-center">
+                                <MapPin className="h-4 w-4 text-red-600" />
+                              </div>
+                              <div>
+                                <div className="font-medium text-gray-800">
+                                  {pointArrivee}
+                                </div>
+                                <div className="text-sm text-gray-500">
+                                  Ville d'arrivée
+                                </div>
+                              </div>
+                            </div>
+                          ) : (
+                            <Button
+                              variant="outline"
+                              onClick={() => openDestinationsList("arrivee")}
+                              className="w-full p-6 border-2 border-dashed border-red-300 hover:border-red-400 hover:bg-red-50"
+                            >
+                              <Plus className="h-5 w-5 mr-2 text-red-600" />
+                              <span className="text-red-700">
+                                Sélectionner le point d'arrivée
+                              </span>
+                            </Button>
+                          )}
+                        </CardContent>
+                      </Card>
+                    </div>
+
+                    {/* Modal de sélection des destinations */}
+                    {showDestinationsList && (
+                      <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50">
+                        <div className="bg-white rounded-xl max-w-4xl w-full max-h-[80vh] overflow-hidden">
+                          <div className="p-6 border-b">
+                            <div className="flex items-center justify-between">
+                              <h3 className="text-xl font-bold">
+                                Choisissez{" "}
+                                {activeSelection === "depart"
+                                  ? "votre point de départ"
+                                  : activeSelection === "arrivee"
+                                  ? "votre point d'arrivée"
+                                  : "un lieu à visiter"}
+                              </h3>
+                              <Button
+                                variant="ghost"
+                                onClick={() => {
+                                  setShowDestinationsList(false);
+                                  setActiveSelection("");
+                                }}
+                              >
+                                <X className="h-5 w-5" />
+                              </Button>
+                            </div>
+                          </div>
+
+                          <div className="p-6 overflow-y-auto max-h-96">
+                            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                              {destinations
+                                .filter((dest) => {
+                                  // Filtrer les destinations déjà sélectionnées si c'est pour "lieux à visiter"
+                                  if (activeSelection === "visite") {
+                                    return !lieuxAVisiter.find(
+                                      (lieu) => lieu.name === dest.name
+                                    );
+                                  }
+                                  return true;
+                                })
+                                .map((destination) => (
+                                  <div
+                                    key={destination.name}
+                                    onClick={() =>
+                                      handleDestinationSelect(destination)
+                                    }
+                                    className="relative cursor-pointer rounded-lg overflow-hidden border-2 border-gray-200 hover:border-blue-400 hover:shadow-lg transition-all duration-200"
+                                  >
+                                    <div
+                                      className="aspect-video p-4 text-white"
+                                      style={{
+                                        backgroundImage: `url(${destination.image})`,
+                                        backgroundSize: "cover",
+                                        backgroundPosition: "center",
+                                      }}
+                                    >
+                                      <div className="absolute top-2 right-2">
+                                        <div
+                                          className={`w-8 h-8 rounded-full flex items-center justify-center ${getTypeColor(
+                                            destination.type
+                                          )}`}
+                                        >
+                                          {getTypeIcon(destination.type)}
+                                        </div>
+                                      </div>
+                                      <div className="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-black/60 to-transparent">
+                                        <h4 className="font-bold text-white">
+                                          {destination.name}
+                                        </h4>
+                                        <p className="text-white/80 text-sm">
+                                          {destination.region}
+                                        </p>
+                                        <div className="text-xs text-white/60 mt-1">
+                                          {destination.code}
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </div>
+                                ))}
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    )}
+
+                    {/* Résumé de l'itinéraire */}
+                    {(pointDepart ||
+                      pointArrivee ||
+                      lieuxAVisiter.length > 0) && (
+                      <Card className="mt-6 bg-gradient-to-r from-blue-50 to-green-50 border border-blue-200">
+                        <CardContent className="p-6">
+                          <h4 className="text-lg font-bold text-gray-800 mb-4 flex items-center">
+                            <Route className="h-5 w-5 mr-2 text-blue-600" />
+                            Résumé de votre itinéraire
+                          </h4>
+
+                          <div className="space-y-2 text-sm">
+                            {pointDepart && (
+                              <div className="flex items-center space-x-2">
+                                <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                                <span className="text-gray-600">Départ:</span>
+                                <span className="font-medium text-gray-800">
+                                  {pointDepart}
+                                </span>
+                              </div>
+                            )}
+
+                            {lieuxAVisiter.length > 0 && (
+                              <div className="flex items-start space-x-2">
+                                <div className="w-2 h-2 bg-blue-500 rounded-full mt-1"></div>
+                                <div>
+                                  <span className="text-gray-600">
+                                    Visites:
+                                  </span>
+                                  <div className="ml-2">
+                                    {lieuxAVisiter.map((lieu, index) => (
+                                      <div
+                                        key={index}
+                                        className="font-medium text-gray-800"
+                                      >
+                                        {index + 1}. {lieu.name}
+                                      </div>
+                                    ))}
+                                  </div>
+                                </div>
+                              </div>
+                            )}
+
+                            {pointArrivee && (
+                              <div className="flex items-center space-x-2">
+                                <div className="w-2 h-2 bg-red-500 rounded-full"></div>
+                                <span className="text-gray-600">Arrivée:</span>
+                                <span className="font-medium text-gray-800">
+                                  {pointArrivee}
+                                </span>
+                              </div>
+                            )}
+                          </div>
+                        </CardContent>
+                      </Card>
+                    )}
                   </div>
                 )}
 

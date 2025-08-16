@@ -431,7 +431,7 @@ class BlogImageAdmin(admin.ModelAdmin):
 
 @admin.register(Testimonia)
 class TestimoniaAdmin(admin.ModelAdmin):
-    list_display = ('score', 'description', 'status', 'post_date')
+    list_display = ('score', 'description', 'type', 'status', 'post_date')
     list_filter = ('description',)
     
 @admin.register(ContactUsModele)

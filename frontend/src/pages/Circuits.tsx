@@ -32,8 +32,13 @@ import ContentLoading from "@/components/Loading";
 import ContentError from "@/components/error";
 import { formatPrice } from "@/helper/formatage";
 import CardContentDetail from "@/components/detail/CardContentDetail";
-import { FaqContext } from "@/provider/DataContext";
+import {
+  DataContext,
+  FaqContext,
+  TestimoniaContext,
+} from "@/provider/DataContext";
 import { FaqCard } from "@/components/FaqCard";
+import { TestimoniaCarousel } from "@/components/TestimoniaCarousel";
 
 const Circuits = () => {
   const [selectedRegion, setSelectedRegion] = useState<string>("all");
@@ -43,6 +48,7 @@ const Circuits = () => {
   const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
   const [sortBy, setSortBy] = useState("popular");
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const [currentIndex, setCurrentIndex] = useState(0);
 
   // Images de fond pour le carousel (remplacez par vos vraies images)
   const backgroundImages = [
@@ -72,6 +78,15 @@ const Circuits = () => {
 
   // Recuperer les FAQ
   const { allDataFaq, faqLoading, faqError } = useContext(FaqContext);
+  // Recuperer l'utilisateur afin d'afficher son image sur testimonia
+  const {
+    loading: utilisateurLoading,
+    error: utilisateurError,
+    utilisateur,
+  } = useContext(DataContext);
+  // Recuperer les Testimonias
+  const { testimoniaData, testimoniaLoading, testimoniaError } =
+    useContext(TestimoniaContext);
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -188,15 +203,32 @@ const Circuits = () => {
     (searchQuery ? 1 : 0) +
     (selectedRegion !== "all" ? 1 : 0);
 
-  if (circuitsLoading || faqLoading) {
+  if (
+    circuitsLoading ||
+    faqLoading ||
+    utilisateurLoading ||
+    testimoniaLoading
+  ) {
     return <ContentLoading />;
   }
 
-  if (circuitsError || faqError) {
+  if (circuitsError || faqError || utilisateurError || testimoniaError) {
     return <ContentError />;
   }
 
   const faqCircuit = allDataFaq.filter((faq) => faq.faqType === "CIRCUIT");
+  const allData = testimoniaData.filter((data) => data.type === "CIRCUIT");
+
+  // Grouper les témoignages par lots de 3 pour chaque diapositive
+  const testimonialsPerSlide = 3;
+  const groupedTestimonials = [];
+  for (let i = 0; i < allData.length; i += testimonialsPerSlide) {
+    groupedTestimonials.push(allData.slice(i, i + testimonialsPerSlide));
+  }
+
+  const utilisateurImage = utilisateur?.image
+    ? `http://localhost:8000/media/${utilisateur.image}`
+    : null;
 
   return (
     <div className="min-h-screen flex flex-col bg-gray-50">
@@ -463,6 +495,15 @@ const Circuits = () => {
             </div>
           </div>
         </section>
+
+        <TestimoniaCarousel
+          currentIndex={currentIndex}
+          datas={allData}
+          groupedTestimonials={groupedTestimonials}
+          setCurrentIndex={setCurrentIndex}
+          testimonialsPerSlide={testimonialsPerSlide}
+          utilisateurImage={utilisateurImage}
+        />
 
         {/* Foire Aux Questions */}
         {faqCircuit.length > 0 && <FaqCard faq={faqCircuit} />}

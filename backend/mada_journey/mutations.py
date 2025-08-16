@@ -1511,6 +1511,7 @@ class CreateTestimonia(graphene.Mutation):
     class Arguments:
         score = graphene.Int(required=True)
         description = graphene.String(required=True)
+        type = graphene.String(required=True)
         utilisateur_id = graphene.ID(required=True)
         
     # Champs de retour
@@ -1518,7 +1519,7 @@ class CreateTestimonia(graphene.Mutation):
     success = graphene.Boolean()
     message = graphene.String() 
     
-    def mutate(self, info, score, description, utilisateur_id):
+    def mutate(self, info, score, description, type, utilisateur_id):
         
         try:
             # Décoder avec la fonction Relay
@@ -1528,7 +1529,8 @@ class CreateTestimonia(graphene.Mutation):
             new_testimonia = Testimonia.objects.create(
                 score=score,
                 description=description,
-                utilisateur=utilisateur
+                type=type,
+                utilisateur=utilisateur,
             )
 
             return CreateTestimonia(

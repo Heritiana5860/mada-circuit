@@ -317,7 +317,7 @@ class AvailabilityTYpe(graphene.ObjectType):
 class TestimoniaType(DjangoObjectType):
     class Meta:
         model = Testimonia
-        fields = ("id", "score", "description", "post_date", "status", "utilisateur")
+        fields = ("id", "score", "description", "type", "post_date", "status", "utilisateur")
         
 class ContactUsType(DjangoObjectType):
     class Meta:

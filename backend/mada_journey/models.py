@@ -425,6 +425,12 @@ class BlogImage(models.Model):
              
 # Testimonia Modele
 class Testimonia(models.Model):
+    class TemoignageTypes(models.TextChoices):
+        CIRCUIT = "CIRCUIT", "circuit"
+        VEHICULE = "VEHICULE", "vehicule"
+        SURMESURE = "SURMESURE", "surMesure"
+        PANGALANES = "PANGALANES", "pangalanes"
+        
     id = models.UUIDField(
         primary_key=True, 
         default=uuid.uuid4, 
@@ -439,6 +445,11 @@ class Testimonia(models.Model):
         verbose_name="Description",
         help_text="Un petit témoignage"
     )
+    type = models.CharField(
+        max_length=30, 
+        choices=TemoignageTypes.choices, 
+        default=TemoignageTypes.CIRCUIT, 
+        verbose_name="Type")
     status = models.BooleanField(
         default=False,
         verbose_name="Statut"
@@ -459,8 +470,7 @@ class Testimonia(models.Model):
         ordering = ["-post_date"]
 
     def __str__(self):
-        return f"{self.utilisateur.nom} - {self.score}/6"
-    
+        return f"{self.utilisateur.nom} - {self.score}/6"    
     
 # Contact us Modele
 class ContactUsModele(models.Model):

@@ -194,11 +194,13 @@ export const CREATE_TESTIMONIA = gql`
   mutation CreateTestimonia(
     $description: String!
     $score: Int!
+    $type: String!
     $utilisateurId: ID!
   ) {
     createTestimonia(
       description: $description
       score: $score
+      type: $type
       utilisateurId: $utilisateurId
     ) {
       success
@@ -207,6 +209,7 @@ export const CREATE_TESTIMONIA = gql`
         id
         score
         description
+        type
         status
         postDate
       }

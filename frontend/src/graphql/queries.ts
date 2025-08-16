@@ -405,6 +405,7 @@ export const GET_TESTIMONIA_BY_STATUS = gql`
       id
       score
       description
+      type
       status
       postDate
       utilisateur {

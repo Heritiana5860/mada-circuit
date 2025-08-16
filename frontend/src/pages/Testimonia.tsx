@@ -15,6 +15,10 @@ const Testimonia = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
   const { isAuthenticated, user } = useAuth();
+  const [tem, setTem] = useState("circuit");
+  const handleChange = (event) => {
+    setTem(event.target.value);
+  };
 
   const [creationTestimonia, { loading, error, data }] =
     useMutation(CREATE_TESTIMONIA);
@@ -35,7 +39,10 @@ const Testimonia = () => {
       utilisateurId: user.id,
       score: parseInt(formData.score),
       description: formData.description,
+      type: tem ,
     };
+
+    console.log("tem: ", tem);
 
     // Simulate API call
     await creationTestimonia({
@@ -170,6 +177,26 @@ const Testimonia = () => {
                   {formData.description.length}/500 caractères
                 </div>
               </div>
+            </div>
+
+            <div>
+              <label
+                htmlFor="myDropdown"
+                className="block text-sm font-medium text-gray-700 mb-2"
+              >
+                Temoignage pour:
+              </label>
+              <select
+                id="tem"
+                name="tem"
+                value={tem}
+                onChange={handleChange}
+                className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors resize-vertical"
+              >
+                <option value="CIRCUIT">Circuit</option>
+                <option value="VEHICULE">Vehicule</option>
+                <option value="SURMESURE">Sur mesure</option>
+              </select>
             </div>
 
             <div className="pt-4">

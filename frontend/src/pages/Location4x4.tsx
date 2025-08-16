@@ -5,8 +5,13 @@ import VehicleCard from "@/components/VehicleCard.new";
 import NavBar from "@/components/NavBar";
 import Footer from "@/components/Footer";
 import { Filter } from "lucide-react";
-import { FaqContext } from "@/provider/DataContext";
+import {
+  DataContext,
+  FaqContext,
+  TestimoniaContext,
+} from "@/provider/DataContext";
 import { FaqCard } from "@/components/FaqCard";
+import { TestimoniaCarousel } from "@/components/TestimoniaCarousel";
 
 const Location4x4: React.FC = () => {
   const { loading, error, data } = useQuery(GET_ALL_VEHICULES);
@@ -16,15 +21,31 @@ const Location4x4: React.FC = () => {
   const vehicles = data?.allVehicules || [];
   const vehicleTypes = typesData?.allTypesVehicule || [];
   const [filter, setFilter] = useState<string>("");
+  const [currentIndex, setCurrentIndex] = useState(0);
 
   // Recuperer les FAQ
   const { allDataFaq, faqLoading, faqError } = useContext(FaqContext);
+  // Recuperer l'utilisateur afin d'afficher son image sur testimonia
+  const {
+    loading: utilisateurLoading,
+    error: utilisateurError,
+    utilisateur,
+  } = useContext(DataContext);
+  // Recuperer les Testimonias
+  const { testimoniaData, testimoniaLoading, testimoniaError } =
+    useContext(TestimoniaContext);
 
   const filteredVehicles = filter
     ? vehicles.filter((v) => v.type?.libelle === filter)
     : vehicles;
 
-  if (loading || typesLoading || faqLoading)
+  if (
+    loading ||
+    typesLoading ||
+    faqLoading ||
+    utilisateurLoading ||
+    testimoniaLoading
+  )
     return (
       <div className="min-h-screen flex flex-col">
         <NavBar />
@@ -35,7 +56,7 @@ const Location4x4: React.FC = () => {
       </div>
     );
 
-  if (error || faqError)
+  if (error || faqError || utilisateurError || testimoniaError)
     return (
       <div className="min-h-screen flex flex-col">
         <NavBar />
@@ -47,6 +68,18 @@ const Location4x4: React.FC = () => {
     );
 
   const faqVehicule = allDataFaq.filter((faq) => faq.faqType === "VEHICULE");
+  const allData = testimoniaData.filter((data) => data.type === "VEHICULE");
+
+  // Grouper les témoignages par lots de 3 pour chaque diapositive
+  const testimonialsPerSlide = 3;
+  const groupedTestimonials = [];
+  for (let i = 0; i < allData.length; i += testimonialsPerSlide) {
+    groupedTestimonials.push(allData.slice(i, i + testimonialsPerSlide));
+  }
+
+  const utilisateurImage = utilisateur?.image
+    ? `http://localhost:8000/media/${utilisateur.image}`
+    : null;
 
   return (
     <div className="min-h-screen flex flex-col">
@@ -103,6 +136,16 @@ const Location4x4: React.FC = () => {
             </div>
           </div>
         </div>
+
+        <TestimoniaCarousel
+          currentIndex={currentIndex}
+          datas={allData}
+          groupedTestimonials={groupedTestimonials}
+          setCurrentIndex={setCurrentIndex}
+          testimonialsPerSlide={testimonialsPerSlide}
+          utilisateurImage={utilisateurImage}
+        />
+
         {/* Foire Aux Questions */}
         {faqVehicule.length > 0 && <FaqCard faq={faqVehicule} />}
       </main>

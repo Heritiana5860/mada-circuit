@@ -189,12 +189,22 @@ const ProgrammeSolidairePage = () => {
                   auprès des populations locales sur les rives du fameux Canal
                   des Pangalanes.
                 </p>
-                <Button size="lg" className="mr-4">
+                <Button
+                  onClick={() => {
+                    document.getElementById("projet")?.scrollIntoView({
+                      behavior: "smooth",
+                    });
+                  }}
+                  size="lg"
+                  className="mr-4"
+                >
                   Découvrir nos projets
                 </Button>
-                <Button size="lg" variant="secondary">
-                  Faire un don
-                </Button>
+                <Link to="/contact">
+                  <Button size="lg" variant="secondary">
+                    Faire un don
+                  </Button>
+                </Link>
               </div>
             </div>
           </div>
@@ -283,7 +293,7 @@ const ProgrammeSolidairePage = () => {
           </div>
         </section>
 
-        <section className="py-16 bg-primary/5">
+        <section className="py-16 bg-primary/5" id="projet">
           <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center max-w-3xl mx-auto mb-12">
               <h2 className="text-3xl font-bold mb-4">

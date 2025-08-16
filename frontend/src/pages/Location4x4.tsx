@@ -1,10 +1,12 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { useQuery } from "@apollo/client";
 import { GET_ALL_VEHICULES, GET_ALL_TYPES_VEHICULES } from "@/graphql/queries";
 import VehicleCard from "@/components/VehicleCard.new";
 import NavBar from "@/components/NavBar";
 import Footer from "@/components/Footer";
 import { Filter } from "lucide-react";
+import { FaqContext } from "@/provider/DataContext";
+import { FaqCard } from "@/components/FaqCard";
 
 const Location4x4: React.FC = () => {
   const { loading, error, data } = useQuery(GET_ALL_VEHICULES);
@@ -15,11 +17,14 @@ const Location4x4: React.FC = () => {
   const vehicleTypes = typesData?.allTypesVehicule || [];
   const [filter, setFilter] = useState<string>("");
 
+  // Recuperer les FAQ
+  const { allDataFaq, faqLoading, faqError } = useContext(FaqContext);
+
   const filteredVehicles = filter
     ? vehicles.filter((v) => v.type?.libelle === filter)
     : vehicles;
 
-  if (loading || typesLoading)
+  if (loading || typesLoading || faqLoading)
     return (
       <div className="min-h-screen flex flex-col">
         <NavBar />
@@ -30,7 +35,7 @@ const Location4x4: React.FC = () => {
       </div>
     );
 
-  if (error)
+  if (error || faqError)
     return (
       <div className="min-h-screen flex flex-col">
         <NavBar />
@@ -40,6 +45,8 @@ const Location4x4: React.FC = () => {
         <Footer />
       </div>
     );
+
+  const faqVehicule = allDataFaq.filter((faq) => faq.faqType === "VEHICULE");
 
   return (
     <div className="min-h-screen flex flex-col">
@@ -88,16 +95,16 @@ const Location4x4: React.FC = () => {
                     Aucun véhicule disponible.
                   </div>
                 ) : (
-                  filteredVehicles.map(
-                    (vehicle) => (
-                      (<VehicleCard key={vehicle.id} vehicle={vehicle} />)
-                    )
-                  )
+                  filteredVehicles.map((vehicle) => (
+                    <VehicleCard key={vehicle.id} vehicle={vehicle} />
+                  ))
                 )}
               </div>
             </div>
           </div>
         </div>
+        {/* Foire Aux Questions */}
+        {faqVehicule.length > 0 && <FaqCard faq={faqVehicule} />}
       </main>
       <Footer />
     </div>

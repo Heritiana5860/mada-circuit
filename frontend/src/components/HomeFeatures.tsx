@@ -1,11 +1,5 @@
-import {
-  Map,
-  Calendar,
-  Compass,
-  Truck,
-  ArrowRight,
-} from "lucide-react";
-import { useState } from "react";
+import { Map, Calendar, Compass, Truck, ArrowRight } from "lucide-react";
+import { useContext, useState } from "react";
 import { Link } from "react-router-dom";
 
 const FeatureCard = ({

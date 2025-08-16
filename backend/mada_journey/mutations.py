@@ -823,16 +823,18 @@ class CreateFaq(graphene.Mutation):
     class Arguments:
         question = graphene.String(required=True)
         reponse = graphene.String(required=True)
+        faq_type = graphene.String(required=True)
 
     faq = graphene.Field(FaqType)
     success = graphene.Boolean()
     errors = graphene.List(graphene.String)
 
-    def mutate(self, info, question, reponse):
+    def mutate(self, info, question, reponse, faq_type):
         try:
             faq = Faq.objects.create(
                 question=question,
                 reponse=reponse,
+                faq_type=faq_type,
             )
             return CreateFaq(faq=faq, success=True)
         except Exception as e:
@@ -1504,7 +1506,6 @@ class CreateVehiculeReservation(graphene.Mutation):
         except Exception as e:
             raise Exception(f'Erreur lors de la création de la réservation: {str(e)}')
 
-
 # Testimonia 
 class CreateTestimonia(graphene.Mutation):
     class Arguments:
@@ -1546,7 +1547,6 @@ class CreateTestimonia(graphene.Mutation):
                 message=f"Erreur lors de la création du témoignage : {str(e)}"
             )
             
-
 # Create Contact us
 class CreateContactUsMutation(graphene.Mutation):
     class Arguments:
@@ -1611,8 +1611,7 @@ class CreateContactUsMutation(graphene.Mutation):
                 message=f"Erreur lors de la création du témoignage : {str(e)}"
             )
         
-  
-# Creation des Personnels
+  # Creation des Personnels
 class CreatePersonnel(graphene.Mutation):
     class Arguments:
         nom = graphene.String(required=True)

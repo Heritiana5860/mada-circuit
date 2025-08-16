@@ -301,7 +301,7 @@ class FaqType(DjangoObjectType):
     class Meta:
         model = Faq
         fields = (
-            'id', 'question', 'reponse', 'is_active'
+            'id', 'question', 'reponse', 'faq_type'
         )
         interfaces = (relay.Node,)
 

@@ -110,10 +110,7 @@ class Query(graphene.ObjectType):
     
     # Queries pour les FAQs
     all_faqs = graphene.List(FaqType)
-    faq = graphene.Field(FaqType, id=graphene.ID())
-    faqs_by_categorie = graphene.List(FaqType, categorie=graphene.String())
-    active_faqs = graphene.List(FaqType)
-
+    
     # Queries pour les galeries d'images
     all_circuit_images = graphene.List(CircuitImageType)
     circuit_image = graphene.Field(CircuitImageType, id=graphene.ID())
@@ -300,7 +297,6 @@ class Query(graphene.ObjectType):
         return queryset
 
     # Resolvers pour les véhicules
-
     def resolve_all_vehicules(self, info):
         return Vehicule.objects.all().select_related('type', 'capacite').prefetch_related('images')
 
@@ -420,18 +416,6 @@ class Query(graphene.ObjectType):
     # Resolvers pour les FAQs
     def resolve_all_faqs(self, info):
         return Faq.objects.all()
-
-    def resolve_faq(self, info, id):
-        try:
-            return Faq.objects.get(pk=id)
-        except Faq.DoesNotExist:
-            return None
-
-    def resolve_faqs_by_categorie(self, info, categorie):
-        return Faq.objects.filter(categorie__icontains=categorie)
-
-    def resolve_active_faqs(self, info):
-        return Faq.objects.filter(active=True)
 
     # Resolvers pour les galeries d'images
     def resolve_all_circuit_images(self, info):

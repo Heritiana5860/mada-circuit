@@ -341,11 +341,17 @@ class BlogCommentaire(models.Model):
 
 
 class Faq(models.Model):
+    class TypeFaq(models.TextChoices):
+        SOLIDAIRE = 'SOLIDAIRE', 'solidaire'
+        SURMESURE = 'SURMESURE', 'surMesure'
+        CIRCUIT = 'CIRCUIT', 'circuit'
+        VEHICULE = 'VEHICULE', 'vehicule'
+        
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    question = models.CharField(max_length=255)
-    reponse = models.TextField()
+    question = models.CharField(max_length=255, verbose_name="Question")
+    reponse = models.TextField(verbose_name="Reponse")
+    faq_type = models.CharField(max_length=20, choices=TypeFaq.choices, default=TypeFaq.CIRCUIT, verbose_name="Type")
     created_at = models.DateTimeField(auto_now_add=True)
-    is_active = models.BooleanField(default=True)
     
     def __str__(self):
         return self.question

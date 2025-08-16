@@ -131,10 +131,6 @@ const Hero = () => {
         </div>
       </div>
 
-      {/* Gradient de transition amélioré */}
-      <div className="absolute bottom-0 left-0 right-0 h-20 bg-gradient-to-t from-white/95 via-white/60 to-transparent"></div>
-      <div className="absolute bottom-0 left-0 right-0 h-8 bg-gradient-to-t from-white to-transparent"></div>
-
       {/* Indicateur de scroll repositionné */}
       <div
         className={`absolute bottom-24 left-1/2 transform -translate-x-1/2 transition-all duration-1000 ${

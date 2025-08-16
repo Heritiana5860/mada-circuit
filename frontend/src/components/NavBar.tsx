@@ -1,6 +1,16 @@
 import { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { Menu, X, MapPin, Sun, Moon, User, LogOut, MailCheck, BookOpenText } from "lucide-react";
+import {
+  Menu,
+  X,
+  MapPin,
+  Sun,
+  Moon,
+  User,
+  LogOut,
+  MailCheck,
+  BookOpenText,
+} from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useAuth } from "@/contexts/AuthContext";
 import { Button } from "@/components/ui/button";
@@ -15,7 +25,6 @@ import {
 const NavBar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
-  const [isDarkMode, setIsDarkMode] = useState(false);
   const { user, isAuthenticated, logout } = useAuth();
   const location = useLocation();
 
@@ -28,11 +37,6 @@ const NavBar = () => {
   }, []);
 
   const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
-
-  const toggleTheme = () => {
-    document.documentElement.classList.toggle("dark");
-    setIsDarkMode(!isDarkMode);
-  };
 
   const navItems = [
     { to: "/", label: "Accueil" },
@@ -96,18 +100,6 @@ const NavBar = () => {
           </div>
 
           <div className="flex items-center space-x-2">
-            <button
-              onClick={toggleTheme}
-              className="p-2 rounded-full hover:bg-muted transition-colors"
-              aria-label="Toggle theme"
-            >
-              {isDarkMode ? (
-                <Sun className="h-5 w-5 text-accent" />
-              ) : (
-                <Moon className="h-5 w-5 text-secondary" />
-              )}
-            </button>
-
             <div className="hidden md:flex items-center space-x-2">
               {isAuthenticated ? (
                 <DropdownMenu>
@@ -129,14 +121,14 @@ const NavBar = () => {
                     </DropdownMenuItem>
                     <DropdownMenuItem>
                       <Link to="/reservations" className="flex items-center">
-                      <BookOpenText className="mr-2 h-4 w-4"/>
-                      <span>Mes réservations</span>
+                        <BookOpenText className="mr-2 h-4 w-4" />
+                        <span>Mes réservations</span>
                       </Link>
                     </DropdownMenuItem>
                     <DropdownMenuItem>
                       <Link to="/testimonia" className="flex items-center">
-                      <MailCheck className="mr-2 h-4 w-4"/>
-                      <span>Temoignage</span>
+                        <MailCheck className="mr-2 h-4 w-4" />
+                        <span>Temoignage</span>
                       </Link>
                     </DropdownMenuItem>
                     <DropdownMenuSeparator />

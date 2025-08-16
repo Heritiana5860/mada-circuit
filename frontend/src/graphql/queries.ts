@@ -388,11 +388,12 @@ export const GET_ALL_PERSONNELS = gql`
 
 // Queries pour les FAQ
 export const GET_ALL_FAQS = gql`
-  query GetAllFaqs {
+  query AllFaqs {
     allFaqs {
       id
       question
       reponse
+      faqType
     }
   }
 `;

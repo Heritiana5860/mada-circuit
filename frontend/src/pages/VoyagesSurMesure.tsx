@@ -38,6 +38,7 @@ import NombrePersonneDetail from "@/components/detail/NombrePersonneDetail";
 import { DataContext, FaqContext } from "@/provider/DataContext";
 import { destinations } from "@/helper/AllRegions";
 import { CREATE_SUR_MESURE } from "@/graphql/mutations";
+import { FaqCard } from "@/components/FaqCard";
 
 const VoyagesSurMesure = () => {
   const { data, loading, error } = useQuery(GET_TESTIMONIA_BY_STATUS, {
@@ -332,6 +333,8 @@ const VoyagesSurMesure = () => {
     if (surmesureLoading) return <p>Loading...</p>;
     if (surmesureError) return <p>Error: {surmesureError.message}</p>;
   };
+
+  const faqSurMesure = allDataFaq.filter((faq) => faq.faqType === "SURMESURE");
 
   return (
     <div className="min-h-screen flex flex-col">
@@ -1189,26 +1192,7 @@ const VoyagesSurMesure = () => {
         )}
 
         {/* Foire Aux Questions */}
-        {allDataFaq.length > 0 && (
-          <section className="py-16 bg-muted">
-            <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-              <h2 className="text-3xl font-bold mb-6">Foire Aux Questions</h2>
-              <p className="text-muted-foreground max-w-2xl mx-auto mb-12">
-                Retrouvez ci-dessous les réponses aux questions les plus
-                fréquemment posées par nos clients.
-              </p>
-
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 text-left">
-                {allDataFaq.map((faq, index) => (
-                  <div key={index} className="bg-card p-6 rounded-lg shadow-sm">
-                    <h3 className="font-bold text-lg mb-2">{faq.question}</h3>
-                    <p className="text-muted-foreground">{faq.reponse}</p>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </section>
-        )}
+        {faqSurMesure.length > 0 && <FaqCard faq={faqSurMesure} />}
       </main>
 
       <Footer />

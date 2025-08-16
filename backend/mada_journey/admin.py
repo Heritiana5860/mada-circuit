@@ -350,8 +350,8 @@ class BlogCommentaireAdmin(admin.ModelAdmin):
 
 @admin.register(Faq)
 class FaqAdmin(admin.ModelAdmin):
-    list_display = ('question', 'reponse', 'is_active')
-    list_filter = ('is_active',)
+    list_display = ('question', 'reponse', 'faq_type')
+    list_filter = ('faq_type',)
     search_fields = ('question', 'reponse')
     
     fieldsets = (
@@ -359,7 +359,7 @@ class FaqAdmin(admin.ModelAdmin):
             'fields': ('question', 'reponse')
         }),
         ('Organisation', {
-            'fields': ('is_active',)
+            'fields': ('faq_type',)
         }),
     )
 

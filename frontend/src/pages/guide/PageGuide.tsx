@@ -141,7 +141,7 @@ const PageGuide = () => {
       <NavBar />
 
       {/* Hero Section modernisé */}
-      <section className="relative bg-gradient-to-br from-emerald-900 via-teal-800 to-cyan-900 text-white overflow-hidden bg-[url(/guide.png)] bg-cover bg-center">
+      <section className="relative bg-green-100 text-white overflow-hidden bg-[url(/guide.png)] bg-cover bg-center">
         <div className="absolute inset-0 bg-black/40" />
         <div className="absolute inset-0 bg-gradient-to-r from-emerald-900/50 to-transparent" />
 
@@ -169,7 +169,14 @@ const PageGuide = () => {
           </p>
 
           <div className="flex flex-col sm:flex-row gap-6 justify-center items-center">
-            <button className="bg-white text-emerald-900 hover:bg-emerald-50 font-bold py-4 px-10 rounded-2xl transition-all duration-300 transform hover:scale-105 shadow-2xl hover:shadow-3xl">
+            <button
+              onClick={() => {
+                document.getElementById("equipe")?.scrollIntoView({
+                  behavior: "smooth",
+                });
+              }}
+              className="bg-white text-emerald-900 hover:bg-emerald-50 font-bold py-4 px-10 rounded-2xl transition-all duration-300 transform hover:scale-105 shadow-2xl hover:shadow-3xl"
+            >
               <span className="flex items-center">
                 <span className="mr-2">👥</span>
                 Découvrir l'équipe
@@ -244,7 +251,7 @@ const PageGuide = () => {
       </section>
 
       {/* Section des experts */}
-      <section className="py-20 px-4 bg-gray-50 dark:bg-gray-900">
+      <section className="py-20 px-4 bg-gray-50 dark:bg-gray-900" id="equipe">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-16">
             <span className="inline-block bg-emerald-100 dark:bg-emerald-900 text-emerald-800 dark:text-emerald-200 px-6 py-2 rounded-full text-sm font-semibold mb-6">
@@ -344,12 +351,12 @@ const PageGuide = () => {
       </section>
 
       {/* Section CTA améliorée */}
-      <section className="bg-gradient-to-r from-emerald-600 via-teal-600 to-cyan-600 text-white py-20">
+      <section className="bg-secondary/5 text-black py-20">
         <div className="max-w-5xl mx-auto text-center px-4">
           <h3 className="text-3xl md:text-4xl font-bold mb-6">
             Prêt à Planifier Votre Aventure Malgache ?
           </h3>
-          <p className="text-xl mb-8 text-emerald-100 leading-relaxed">
+          <p className="text-xl mb-8 text-gray-500 leading-relaxed">
             Nos experts sont là pour vous accompagner dans chaque étape de votre
             projet. Que vous ayez une idée précise ou besoin d'inspiration,
             contactez-nous pour un conseil personnalisé gratuit.
@@ -365,7 +372,7 @@ const PageGuide = () => {
               </button>
             </Link>
             <Link to="/voyages-sur-mesure">
-              <button className="border-2 border-white text-white hover:bg-white hover:text-emerald-600 font-bold py-4 px-8 rounded-2xl transition-all duration-300">
+              <button className="border-2 border-white text-gray-500 hover:bg-white hover:text-emerald-600 font-bold py-4 px-8 rounded-2xl transition-all duration-300">
                 <span className="flex items-center">
                   <span className="mr-2">✈️</span>
                   Créer mon voyage sur mesure
@@ -377,19 +384,19 @@ const PageGuide = () => {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mt-12 text-center">
             <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-6 border border-white/20">
               <h4 className="font-bold text-lg mb-2">Réponse Rapide</h4>
-              <p className="text-emerald-100">
+              <p className="text-gray-500">
                 Réponse sous 24h à toutes vos demandes
               </p>
             </div>
             <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-6 border border-white/20">
               <h4 className="font-bold text-lg mb-2">Conseil Gratuit</h4>
-              <p className="text-emerald-100">
+              <p className="text-gray-500">
                 Première consultation sans engagement
               </p>
             </div>
             <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-6 border border-white/20">
               <h4 className="font-bold text-lg mb-2">Sur Mesure</h4>
-              <p className="text-emerald-100">
+              <p className="text-gray-500">
                 Voyage adapté à vos envies et budget
               </p>
             </div>

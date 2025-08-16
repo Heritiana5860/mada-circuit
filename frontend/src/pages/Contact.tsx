@@ -41,15 +41,6 @@ const Contact = () => {
 
   const [CreateContactUsMutation, { loading }] = useMutation(CREATE_CONTACT_US);
 
-  // Query faq
-  // const {
-  //   loading: faqLoading,
-  //   error: faqError,
-  //   data: allFaq,
-  // } = useQuery(GET_ALL_FAQS);
-
-  const { allDataFaq, faqLoading, faqError } = useContext(FaqContext);
-
   const resetForm = () => {
     setFormData({
       nom: "",
@@ -111,13 +102,6 @@ const Contact = () => {
     window.scrollTo(0, 0);
     document.title = "Contact | Madagascar Voyage";
   }, []);
-
-  if (faqLoading) {
-    return <ContentLoading />;
-  }
-  if (faqError) {
-    return <ContentError />;
-  }
 
   return (
     <div className="min-h-screen flex flex-col">
@@ -265,7 +249,7 @@ const Contact = () => {
 
               {/* Nos coordonnées*/}
               <div className="flex flex-col">
-                <div className="glass-card p-8 rounded-lg mb-6">
+                <div className="bg-card shadow-md p-8 rounded-lg mb-6">
                   <h2 className="text-2xl font-bold mb-6">Nos coordonnées</h2>
 
                   <div className="space-y-6">
@@ -352,28 +336,6 @@ const Contact = () => {
             </div>
           </div>
         </section>
-
-        {/* Foire Aux Questions */}
-        {allDataFaq.length > 0 && (
-          <section className="py-16 bg-muted">
-            <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-              <h2 className="text-3xl font-bold mb-6">Foire Aux Questions</h2>
-              <p className="text-muted-foreground max-w-2xl mx-auto mb-12">
-                Retrouvez ci-dessous les réponses aux questions les plus
-                fréquemment posées par nos clients.
-              </p>
-
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 text-left">
-                {allDataFaq.map((faq, index) => (
-                  <div key={index} className="bg-card p-6 rounded-lg shadow-sm">
-                    <h3 className="font-bold text-lg mb-2">{faq.question}</h3>
-                    <p className="text-muted-foreground">{faq.reponse}</p>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </section>
-        )}
       </main>
 
       <Footer />
@@ -382,14 +344,3 @@ const Contact = () => {
 };
 
 export default Contact;
-
-{
-  /* <div className="bg-card p-6 rounded-lg shadow-sm">
-  <h3 className="font-bold text-lg mb-2">Comment réserver un circuit ?</h3>
-  <p className="text-muted-foreground">
-    Vous pouvez réserver un circuit directement via notre site web, par email ou
-    par téléphone. Un acompte de 30% est généralement demandé pour confirmer la
-    réservation.
-  </p>
-</div>; */
-}

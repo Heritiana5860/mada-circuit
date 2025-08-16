@@ -195,7 +195,9 @@ const PangalanesPage = () => {
                 </p>
                 <Button
                   onClick={() => {
-                    window.location.href = "#offres";
+                    document.getElementById("offres")?.scrollIntoView({
+                      behavior: "smooth",
+                    });
                   }}
                   className="mr-5"
                 >
@@ -205,7 +207,11 @@ const PangalanesPage = () => {
                   size="lg"
                   variant="secondary"
                   onClick={() => {
-                    window.location.href = "#pangalanesVoyages";
+                    document
+                      .getElementById("pangalanesVoyages")
+                      ?.scrollIntoView({
+                        behavior: "smooth",
+                      });
                   }}
                 >
                   Pourquoi choisir pangalanes voyages?
@@ -445,17 +451,16 @@ const PangalanesPage = () => {
               Canal des Pangalanes et vivre une expérience inoubliable au cœur
               de Madagascar.
             </p>
-            <div className="flex flex-col sm:flex-row justify-center gap-4">
-              <Button size="lg" variant="default">
-                Réserver maintenant
-              </Button>
-              <Button
-                size="lg"
-                variant="outline"
-                className="bg-transparent border-white text-white hover:bg-white hover:text-black"
-              >
-                Nous contacter
-              </Button>
+            <div>
+              <Link to="/contact">
+                <Button
+                  size="lg"
+                  variant="outline"
+                  className="bg-transparent border-white text-white hover:bg-white hover:text-black"
+                >
+                  Nous contacter
+                </Button>
+              </Link>
             </div>
           </div>
         </section>

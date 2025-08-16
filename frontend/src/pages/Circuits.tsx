@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useQuery } from "@apollo/client";
 import NavBar from "../components/NavBar";
 import Footer from "../components/Footer";
@@ -32,6 +32,8 @@ import ContentLoading from "@/components/Loading";
 import ContentError from "@/components/error";
 import { formatPrice } from "@/helper/formatage";
 import CardContentDetail from "@/components/detail/CardContentDetail";
+import { FaqContext } from "@/provider/DataContext";
+import { FaqCard } from "@/components/FaqCard";
 
 const Circuits = () => {
   const [selectedRegion, setSelectedRegion] = useState<string>("all");
@@ -67,6 +69,9 @@ const Circuits = () => {
   } = useQuery(GET_ALL_CIRCUITS, {
     variables: { type: "circuit" },
   });
+
+  // Recuperer les FAQ
+  const { allDataFaq, faqLoading, faqError } = useContext(FaqContext);
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -183,13 +188,15 @@ const Circuits = () => {
     (searchQuery ? 1 : 0) +
     (selectedRegion !== "all" ? 1 : 0);
 
-  if (circuitsLoading) {
+  if (circuitsLoading || faqLoading) {
     return <ContentLoading />;
   }
 
-  if (circuitsError) {
+  if (circuitsError || faqError) {
     return <ContentError />;
   }
+
+  const faqCircuit = allDataFaq.filter((faq) => faq.faqType === "CIRCUIT");
 
   return (
     <div className="min-h-screen flex flex-col bg-gray-50">
@@ -456,6 +463,9 @@ const Circuits = () => {
             </div>
           </div>
         </section>
+
+        {/* Foire Aux Questions */}
+        {faqCircuit.length > 0 && <FaqCard faq={faqCircuit} />}
       </main>
 
       <Footer />

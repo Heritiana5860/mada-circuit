@@ -25,7 +25,7 @@ import {
   Plane,
   X,
 } from "lucide-react";
-import { useQuery } from "@apollo/client";
+import { useMutation, useQuery } from "@apollo/client";
 import { GET_TESTIMONIA_BY_STATUS } from "@/graphql/queries";
 import {
   Carousel,
@@ -37,6 +37,7 @@ import {
 import NombrePersonneDetail from "@/components/detail/NombrePersonneDetail";
 import { DataContext, FaqContext } from "@/provider/DataContext";
 import { destinations } from "@/helper/AllRegions";
+import { CREATE_SUR_MESURE } from "@/graphql/mutations";
 
 const VoyagesSurMesure = () => {
   const { data, loading, error } = useQuery(GET_TESTIMONIA_BY_STATUS, {
@@ -55,7 +56,7 @@ const VoyagesSurMesure = () => {
     voyageur: 1,
     duree: "",
     hebergement: "",
-    activité: [],
+    activite: [],
     budget: "",
     nom: "",
     prenom: "",
@@ -70,6 +71,36 @@ const VoyagesSurMesure = () => {
   const [lieuxAVisiter, setLieuxAVisiter] = useState([]);
   const [showDestinationsList, setShowDestinationsList] = useState(false);
   const [activeSelection, setActiveSelection] = useState("");
+
+  const [
+    createSurMesure,
+    { loading: surmesureLoading, error: surmesureError },
+  ] = useMutation(CREATE_SUR_MESURE, {
+    onCompleted: () => {
+      setFormData({
+        dateDebut: "",
+        dateFin: "",
+        voyageur: 1,
+        duree: "",
+        hebergement: "",
+        activite: [],
+        budget: "",
+        nom: "",
+        prenom: "",
+        email: "",
+        contact: "",
+        commentaire: "",
+      });
+      setPointDepart("");
+      setPointArrivee("");
+
+      console.log("createSurMesure: ", createSurMesure);
+    },
+    onError: (err) => {
+      // Handle errors
+      console.error("Erreur lors de la creation du circuit sur mesure:", err);
+    },
+  });
 
   // Recuperer l'utilisateur afin d'afficher son image sur testimonia
   const {
@@ -174,6 +205,20 @@ const VoyagesSurMesure = () => {
     if (successMessage) setSuccessMessage(null);
   };
 
+  // Fonction pour gérer les checkboxes des activités
+  const handleActivityChange = (activityName: string, isChecked: boolean) => {
+    setFormData((prev) => ({
+      ...prev,
+      activite: isChecked
+        ? [...prev.activite, activityName]
+        : prev.activite.filter((name) => name !== activityName),
+    }));
+
+    // Réinitialiser les messages
+    if (errors) setErrors(null);
+    if (successMessage) setSuccessMessage(null);
+  };
+
   // Fonction pour calculer le nombre de jours
   const calculateDays = (dateDebut: string, dateFin: string): number => {
     if (!dateDebut || !dateFin) return 0;
@@ -255,6 +300,40 @@ const VoyagesSurMesure = () => {
       default:
         return "bg-gray-100 text-gray-600";
     }
+  };
+
+  // Creation sur mesure
+  const handleCreateSurMesure = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    try {
+      const surMesureDatas = {
+        activite: formData.activite.map((a) => a),
+        budget: formData.budget,
+        commentaire: formData.commentaire || "",
+        contact: formData.contact,
+        dateDebut: formData.dateDebut,
+        dateFin: formData.dateFin,
+        duree: days,
+        email: formData.email,
+        hebergement: formData.hebergement,
+        lieuVisiter: lieuxAVisiter.map((lieu) => lieu.name),
+        nom: formData.nom,
+        nombreDePersonne: formData.voyageur,
+        pointArrivee: pointArrivee,
+        pointDepart: pointDepart,
+        prenom: formData.prenom,
+      };
+      const res = await createSurMesure({ variables: surMesureDatas });
+      if (!res.data.createSurMesure.success) {
+        console.error("Erreur GraphQL:", res.data.createSurMesure.errors);
+      }
+      console.log("surMesureDatas: ", surMesureDatas);
+    } catch (err) {
+      console.error("Erreur lors de la réservation:", err);
+    }
+    if (surmesureLoading) return <p>Loading...</p>;
+    if (surmesureError) return <p>Error: {surmesureError.message}</p>;
   };
 
   return (
@@ -703,7 +782,6 @@ const VoyagesSurMesure = () => {
                             min="1"
                             max="30"
                             value={days}
-                            defaultValue="1"
                             disabled
                             className="w-full p-2 border rounded-lg"
                           />
@@ -735,14 +813,26 @@ const VoyagesSurMesure = () => {
                       <div>
                         <h4 className="font-medium mb-3">Type d'hébergement</h4>
                         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                          {["Standard", "Confort", "Luxe"].map((type) => (
+                          {["STANDARD", "CONFORT", "LUXE  "].map((type) => (
                             <label
                               key={type}
                               className="flex items-center p-3 border rounded-lg cursor-pointer hover:bg-primary/5"
                             >
                               <input
                                 type="radio"
-                                name="accommodation"
+                                name="hebergement"
+                                value={type}
+                                checked={formData.hebergement === type}
+                                onChange={(e) => {
+                                  setFormData((prev) => ({
+                                    ...prev,
+                                    hebergement: e.target.value,
+                                  }));
+
+                                  // Réinitialiser les messages
+                                  if (errors) setErrors(null);
+                                  if (successMessage) setSuccessMessage(null);
+                                }}
                                 className="mr-2"
                               />
                               <span>{type}</span>
@@ -761,7 +851,20 @@ const VoyagesSurMesure = () => {
                               key={activity.name}
                               className="flex items-center p-3 border rounded-lg cursor-pointer hover:bg-primary/5"
                             >
-                              <input type="checkbox" className="mr-2" />
+                              <input
+                                type="checkbox"
+                                name="activite"
+                                checked={formData.activite.includes(
+                                  activity.name
+                                )}
+                                onChange={(e) =>
+                                  handleActivityChange(
+                                    activity.name,
+                                    e.target.checked
+                                  )
+                                }
+                                className="mr-2"
+                              />
                               <div className="flex items-center">
                                 {activity.icon}
                                 <span className="ml-2">{activity.name}</span>
@@ -775,23 +878,40 @@ const VoyagesSurMesure = () => {
                         <h4 className="font-medium mb-3">
                           Budget estimé par personne
                         </h4>
-                        <div className="space-x-4">
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                           {[
-                            "< 2M Ar",
-                            "2M - 5M Ar",
-                            "5M - 10M Ar",
-                            "> 10M Ar",
+                            "Moins de 5 000 000 Ar",
+                            "De 5 000 000 à 10 000 000 Ar",
+                            "De 10 000 000 à 15 000 000 Ar",
+                            "Plus de 15 000 000 Ar",
                           ].map((budget) => (
                             <label
                               key={budget}
-                              className="inline-flex items-center"
+                              className={`flex items-center p-3 border rounded-lg cursor-pointer transition hover:bg-blue-50 hover:border-blue-400
+                              ${
+                                formData.budget === budget
+                                  ? "border-blue-500 bg-blue-100"
+                                  : "border-gray-300"
+                              }`}
                             >
                               <input
                                 type="radio"
                                 name="budget"
-                                className="mr-1"
+                                value={budget}
+                                checked={formData.budget === budget}
+                                onChange={(e) => {
+                                  setFormData((prev) => ({
+                                    ...prev,
+                                    budget: e.target.value,
+                                  }));
+                                  if (errors) setErrors(null);
+                                  if (successMessage) setSuccessMessage(null);
+                                }}
+                                className="mr-2"
                               />
-                              <span>{budget}</span>
+                              <span className="text-gray-800 font-medium">
+                                {budget}
+                              </span>
                             </label>
                           ))}
                         </div>
@@ -816,6 +936,9 @@ const VoyagesSurMesure = () => {
                           </label>
                           <input
                             type="text"
+                            name="nom"
+                            value={formData.nom}
+                            onChange={handleInputChange}
                             className="w-full p-2 border rounded-lg"
                             placeholder="Votre nom"
                           />
@@ -826,6 +949,9 @@ const VoyagesSurMesure = () => {
                           </label>
                           <input
                             type="text"
+                            name="prenom"
+                            value={formData.prenom}
+                            onChange={handleInputChange}
                             className="w-full p-2 border rounded-lg"
                             placeholder="Votre prénom"
                           />
@@ -838,6 +964,9 @@ const VoyagesSurMesure = () => {
                         </label>
                         <input
                           type="email"
+                          name="email"
+                          value={formData.email}
+                          onChange={handleInputChange}
                           className="w-full p-2 border rounded-lg"
                           placeholder="votre.email@exemple.com"
                         />
@@ -849,6 +978,9 @@ const VoyagesSurMesure = () => {
                         </label>
                         <input
                           type="tel"
+                          name="contact"
+                          value={formData.contact}
+                          onChange={handleInputChange}
                           className="w-full p-2 border rounded-lg"
                           placeholder="+261 34 12 345 67"
                         />
@@ -860,18 +992,12 @@ const VoyagesSurMesure = () => {
                         </label>
                         <textarea
                           rows={4}
+                          name="commentaire"
+                          value={formData.commentaire}
+                          onChange={handleInputChange}
                           className="w-full p-2 border rounded-lg"
                           placeholder="Précisez toute demande particulière ou information supplémentaire pour votre voyage..."
                         ></textarea>
-                      </div>
-
-                      <div className="flex items-start">
-                        <input type="checkbox" className="mt-1 mr-2" />
-                        <span className="text-sm text-muted-foreground">
-                          J'accepte de recevoir mon devis personnalisé et les
-                          communications de Madagascar Voyage concernant mon
-                          voyage sur mesure.
-                        </span>
                       </div>
                     </div>
                   </div>
@@ -889,7 +1015,10 @@ const VoyagesSurMesure = () => {
                   {step < totalSteps ? (
                     <Button onClick={() => setStep(step + 1)}>Continuer</Button>
                   ) : (
-                    <Button className="flex items-center">
+                    <Button
+                      onClick={handleCreateSurMesure}
+                      className="flex items-center"
+                    >
                       <Send className="mr-2 h-4 w-4" />
                       <span>Envoyer ma demande</span>
                     </Button>

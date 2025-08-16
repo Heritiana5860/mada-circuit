@@ -247,3 +247,67 @@ export const CREATE_CONTACT_US = gql`
     }
   }
 `;
+
+// Mutation pour la creation de circuit sur mesure
+export const CREATE_SUR_MESURE = gql`
+  mutation CreateSurMesure(
+    $pointDepart: String!
+    $pointArrivee: String!
+    $dateDebut: Date!
+    $dateFin: Date!
+    $duree: Int
+    $nombreDePersonne: Int!
+    $hebergement: String!
+    $budget: String!
+    $nom: String!
+    $prenom: String!
+    $email: String!
+    $contact: String!
+    $commentaire: String
+    $lieuVisiter: [String]
+    $activite: [String]
+  ) {
+    createSurMesure(
+      pointDepart: $pointDepart
+      pointArrivee: $pointArrivee
+      dateDebut: $dateDebut
+      dateFin: $dateFin
+      duree: $duree
+      nombreDePersonne: $nombreDePersonne
+      hebergement: $hebergement
+      budget: $budget
+      nom: $nom
+      prenom: $prenom
+      email: $email
+      contact: $contact
+      commentaire: $commentaire
+      lieuVisiter: $lieuVisiter
+      activite: $activite
+    ) {
+      success
+      errors
+      surMesure {
+        id
+        pointDepart
+        pointArrivee
+        dateDebut
+        dateFin
+        duree
+        nombreDePersonne
+        hebergement
+        budget
+        nom
+        prenom
+        email
+        contact
+        commentaire
+        lieuVisiter {
+          nom
+        }
+        activite {
+          nom
+        }
+      }
+    }
+  }
+`;

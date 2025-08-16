@@ -1,7 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 from django.utils.translation import gettext_lazy as _
-from django.core.validators import MinValueValidator, MaxValueValidator
+from django.core.validators import MinValueValidator, MaxValueValidator, EmailValidator
 from django.utils import timezone
 import uuid
 import os
@@ -475,6 +475,31 @@ class ContactUsModele(models.Model):
         return f"{self.objet}"
     
     
+class SurMesureActivite(models.Model):
+    """Activités disponibles"""
+    nom = models.CharField(max_length=100, unique=True)
+    description = models.TextField(blank=True)
+    
+    class Meta:
+        verbose_name = "Activité"
+        verbose_name_plural = "Activités"
+    
+    def __str__(self):
+        return self.nom
+
+
+class LieuAVisiter(models.Model):
+    """Lieux touristiques"""
+    nom = models.CharField(max_length=200, unique=True)
+    description = models.TextField(blank=True)
+    
+    class Meta:
+        verbose_name = "Lieu à visiter"
+        verbose_name_plural = "Lieux à visiter"
+    
+    def __str__(self):
+        return self.nom
+    
 # Modele sur mesure
 class SurMesure(models.Model):
     
@@ -488,19 +513,61 @@ class SurMesure(models.Model):
         default=uuid.uuid4, 
         editable=False
     )
-    destination = models.CharField(verbose_name="Destination")
-    date_debut = models.DateField(verbose_name="Date de depart")
-    date_fin = models.DateField(verbose_name="Date de retour")
-    duree = models.PositiveIntegerField(verbose_name="Duree")
-    nombre_de_personne = models.PositiveIntegerField(verbose_name="Nombre de personne")
-    hebergement = models.CharField(choices=TypeHebergement.choices, default=TypeHebergement.STANDARD, verbose_name="Hebergement")
-    activite = models.CharField(verbose_name="Activité")
+    point_depart = models.CharField(max_length=200, verbose_name="Point de depart", null=True, blank=True)
+    lieu_visiter = models.ManyToManyField(
+        LieuAVisiter,
+        verbose_name="Lieux à visiter",
+        blank=True,
+        help_text="Liste des lieux que le client souhaite visiter"
+    )
+    point_arrivee = models.CharField(max_length=200, verbose_name="Point d'arrivée", null=True, blank=True)
+    date_debut = models.DateField(
+        verbose_name="Date de départ",
+        help_text="Date de début du voyage"
+    )
+    date_fin = models.DateField(
+        verbose_name="Date de retour",
+        help_text="Date de fin du voyage"
+    )
+    duree = models.PositiveIntegerField(
+        verbose_name="Durée (jours)",
+        validators=[MinValueValidator(1)],
+        help_text="Durée du voyage en jours"
+    )
+    nombre_de_personne = models.PositiveIntegerField(
+        verbose_name="Nombre de personnes",
+        validators=[MinValueValidator(1)],
+        default=1
+    )
+    hebergement = models.CharField(
+        max_length=20,
+        choices=TypeHebergement.choices,
+        default=TypeHebergement.STANDARD,
+        verbose_name="Type d'hébergement"
+    )
+    activite = models.ManyToManyField(
+        SurMesureActivite,
+        verbose_name="Activités souhaitées",
+        blank=True,
+        help_text="Liste des activités que le client souhaite faire"
+    )
     budget = models.CharField(verbose_name="Budget")
     nom = models.CharField(max_length=200, verbose_name="Nom")
     prenom = models.CharField(max_length=200, verbose_name="Prenom")
-    email = models.CharField(max_length=200, verbose_name="Email")
-    contact = models.CharField(max_length=20, verbose_name="Contact")
-    commentaire = models.TextField(verbose_name="Commentaire")
+    email = models.EmailField(
+        verbose_name="Adresse e-mail",
+        validators=[EmailValidator()]
+    )
+    contact = models.CharField(
+        max_length=20,
+        verbose_name="Numéro de contact",
+        help_text="Numéro de téléphone"
+    )
+    commentaire = models.TextField(
+        verbose_name="Commentaires supplémentaires",
+        blank=True,
+        help_text="Informations ou demandes particulières"
+    )
     
     def __str__(self):
-        return self.destination
+        return f"{self.point_depart} - {self.point_arrivee}"

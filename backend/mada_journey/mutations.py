@@ -17,14 +17,14 @@ from .models import (
     Utilisateur, Destination, Saison, Circuit, Itineraire,
     TypeVehicule, Capacite, Vehicule, Reservation, Blog, BlogCommentaire, Faq,
     CircuitImage, VehiculeImage, DestinationImage, BlogImage,
-    EtatVehicule, Testimonia, ContactUsModele, Personnel
+    EtatVehicule, Testimonia, ContactUsModele, Personnel, SurMesure, LieuAVisiter, SurMesureActivite
 )
 from .model_types import (
     UtilisateurType, DestinationType, SaisonType, CircuitType,
     TypeVehiculeType, CapaciteType, VehiculeType,
     ReservationType, BlogType,
     BlogCommentaireType, FaqType,
-    CircuitImageType, VehiculeImageType, DestinationImageType, BlogImageType, TestimoniaType, ContactUsType, PersonnelType
+    CircuitImageType, VehiculeImageType, DestinationImageType, BlogImageType, TestimoniaType, ContactUsType, PersonnelType, SurMesureType
 )
 from graphql_relay import from_global_id
 
@@ -1642,6 +1642,97 @@ class CreatePersonnel(graphene.Mutation):
                 
         except Exception as e:
             return CreatePersonnel(success=False, errors=[str(e)])
+        
+# Mutation pour la création de circuit sur mesure
+class CreateSurMesure(graphene.Mutation):
+    class Arguments:
+        point_depart = graphene.String(required=True)
+        point_arrivee = graphene.String(required=True)
+        date_debut = graphene.Date(required=True)
+        date_fin = graphene.Date(required=True)
+        duree = graphene.Int()
+        nombre_de_personne = graphene.Int(required=True)
+        hebergement = graphene.String(required=True)
+        budget = graphene.String(required=True)
+        nom = graphene.String(required=True)
+        prenom = graphene.String(required=True)
+        email = graphene.String(required=True)
+        contact = graphene.String(required=True)
+        commentaire = graphene.String()
+        
+        lieu_visiter = graphene.List(graphene.String)
+        activite = graphene.List(graphene.String)
+        
+    sur_mesure = graphene.Field(SurMesureType)
+    success = graphene.Boolean()
+    errors = graphene.List(graphene.String)
+    
+    def mutate(self, info, point_depart, point_arrivee, date_debut, date_fin, 
+               nombre_de_personne, hebergement, budget, nom, prenom, email, contact,
+               duree=None, lieu_visiter=None, activite=None, commentaire=""):
+        
+        errors = []
+        
+        try:
+            
+            if errors:
+                return CreateSurMesure(success=False, errors=errors)
+            
+            with transaction.atomic():
+                sur_mesure = SurMesure.objects.create(
+                    point_depart=point_depart,
+                    point_arrivee=point_arrivee,
+                    date_debut=date_debut,
+                    date_fin=date_fin,
+                    duree=duree,
+                    nombre_de_personne=nombre_de_personne,
+                    hebergement=hebergement,
+                    budget=budget,
+                    nom=nom,
+                    prenom=prenom,
+                    email=email,
+                    contact=contact,
+                    commentaire=commentaire or "",
+                )
+                
+                if lieu_visiter:
+                    lieux_objets = []
+                    for lieu_nom in lieu_visiter:
+                        if lieu_nom.strip():  
+                            lieu, created = LieuAVisiter.objects.get_or_create(
+                                nom=lieu_nom.strip()
+                            )
+                            lieux_objets.append(lieu)
+                    
+                    sur_mesure.lieu_visiter.set(lieux_objets)
+                
+                if activite:
+                    activites_objets = []
+                    for activite_nom in activite:
+                        if activite_nom.strip():
+                            activite_obj, created = SurMesureActivite.objects.get_or_create(
+                                nom=activite_nom.strip()
+                            )
+                            activites_objets.append(activite_obj)
+                    
+                    sur_mesure.activite.set(activites_objets)
+                
+                sur_mesure.full_clean()
+                
+                return CreateSurMesure(sur_mesure=sur_mesure, success=True, errors=[])
+            
+        except ValidationError as e:
+            error_messages = []
+            if hasattr(e, 'message_dict'):
+                for field, messages in e.message_dict.items():
+                    error_messages.extend([f"{field}: {msg}" for msg in messages])
+            else:
+                error_messages.append(str(e))
+            
+            return CreateSurMesure(success=False, errors=error_messages)
+        
+        except Exception as e:
+            return CreateSurMesure(success=False, errors=[f"Erreur inattendue: {str(e)}"])
             
 # Classe principale des mutations
 class Mutation(graphene.ObjectType):
@@ -1721,3 +1812,6 @@ class Mutation(graphene.ObjectType):
 
     # Create personnal
     create_personnel = CreatePersonnel.Field()
+    
+    # Create sur mesure
+    create_sur_mesure = CreateSurMesure.Field()

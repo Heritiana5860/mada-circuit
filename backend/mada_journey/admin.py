@@ -6,7 +6,7 @@ from django.contrib.auth.admin import UserAdmin
 from .models import (
     Utilisateur, Destination, Saison, Circuit, PointInteret,
     TypeVehicule, Capacite, Vehicule, Reservation, Personnel, Blog, BlogCommentaire, Faq,
-    CircuitImage, VehiculeImage, DestinationImage, BlogImage, Itineraire, Testimonia, ContactUsModele
+    CircuitImage, VehiculeImage, DestinationImage, BlogImage, Itineraire, Testimonia, ContactUsModele, SurMesure, SurMesureActivite, LieuAVisiter
 )
 
 
@@ -437,6 +437,104 @@ class TestimoniaAdmin(admin.ModelAdmin):
 @admin.register(ContactUsModele)
 class ContactUs(admin.ModelAdmin):
     list_display = ('nom', 'prenom', 'email', 'tel', 'objet', 'message')
+
+
+@admin.register(SurMesureActivite)
+class SurMesureActiviteAdmin(admin.ModelAdmin):
+    list_display = ('nom',)
+    search_fields = ('nom',)
+    ordering = ('nom',)
+
+
+@admin.register(LieuAVisiter)
+class LieuAVisiterAdmin(admin.ModelAdmin):
+    list_display = ('nom',)
+    search_fields = ('nom',)
+    ordering = ('nom',)
+    
+@admin.register(SurMesure)
+class SurMesureAdmin(admin.ModelAdmin):
+    list_display = (
+        'point_depart', 
+        'get_lieux_visiter',
+        'point_arrivee', 
+        'date_debut',
+        'date_fin', 
+        'duree', 
+        'nombre_de_personne', 
+        'hebergement', 
+        'get_activites',
+        'budget', 
+        'nom', 
+        'prenom', 
+        'email'
+    )
+    
+    def get_lieux_visiter(self, obj):
+        """Affiche les lieux à visiter sous forme de liste"""
+        lieux = obj.lieu_visiter.all()
+        if lieux:
+            lieux_list = [lieu.nom for lieu in lieux[:3]]
+            result = ", ".join(lieux_list)
+            if lieux.count() > 3:
+                result += f" (+{lieux.count() - 3} autres)"
+            return result
+        return "Aucun lieu spécifié"
+    get_lieux_visiter.short_description = "Lieux à visiter"
+    
+    def get_activites(self, obj):
+        """Affiche les activités sous forme de liste"""
+        activites = obj.activite.all()
+        if activites:
+            activites_list = [activite.nom for activite in activites[:3]]
+            result = ", ".join(activites_list)
+            if activites.count() > 3:
+                result += f" (+{activites.count() - 3} autres)"
+            return result
+        return "Aucune activité spécifiée"
+    get_activites.short_description = "Activités"
+    
+    # Configuration des filtres et recherche (adaptée à votre modèle)
+    list_filter = (
+        'hebergement',
+        'date_debut',
+        'nombre_de_personne'
+    )
+    
+    search_fields = (
+        'nom',
+        'prenom', 
+        'email',
+        'point_depart',
+        'point_arrivee',
+        'contact',
+        'budget'
+    )
+    
+    fieldsets = (
+        ('Informations du voyage', {
+            'fields': (
+                ('point_depart', 'point_arrivee'),
+                ('date_debut', 'date_fin'),
+                ('duree', 'nombre_de_personne'),
+                'hebergement',
+                'budget',
+            )
+        }),
+        ('Lieux et activités', {
+            'fields': (
+                'lieu_visiter',
+                'activite',
+            )
+        }),
+        ('Informations client', {
+            'fields': (
+                ('nom', 'prenom'),
+                ('email', 'contact'),
+                'commentaire',
+            )
+        }),
+    )
 
 # Configuration globale de l'admin
 admin.site.site_header = "Administration Tourisme Madagascar"

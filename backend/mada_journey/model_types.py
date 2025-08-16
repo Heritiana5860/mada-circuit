@@ -6,7 +6,7 @@ from .models import (
     Utilisateur, Destination, Saison, Circuit, PointInteret,
     TypeVehicule, Capacite, Vehicule, Reservation, Personnel, Blog, BlogCommentaire, Faq,
     CircuitImage, VehiculeImage, DestinationImage, BlogImage,
-    Role, Difficulte, EtatVehicule, Hebergement, Activite, Itineraire, Testimonia, ContactUsModele
+    Role, Difficulte, EtatVehicule, Hebergement, Activite, Itineraire, Testimonia, ContactUsModele, SurMesure, LieuAVisiter, SurMesureActivite
 )
 
 User = get_user_model()
@@ -323,3 +323,19 @@ class ContactUsType(DjangoObjectType):
     class Meta:
         model = ContactUsModele
         fields = ("id", "nom", "prenom", "email", "tel", "objet", "message", "date_envoi")
+ 
+class LieuAVisiterType(DjangoObjectType):
+    class Meta:
+        model = LieuAVisiter
+        fields = "__all__"
+
+
+class SurMesureActiviteType(DjangoObjectType):
+    class Meta:
+        model = SurMesureActivite
+        fields = "__all__"
+        
+class SurMesureType(DjangoObjectType):
+    class Meta:
+        model = SurMesure
+        fields = "__all__"

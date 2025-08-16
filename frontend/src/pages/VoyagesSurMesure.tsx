@@ -93,8 +93,6 @@ const VoyagesSurMesure = () => {
       });
       setPointDepart("");
       setPointArrivee("");
-
-      console.log("createSurMesure: ", createSurMesure);
     },
     onError: (err) => {
       // Handle errors
@@ -319,7 +317,7 @@ const VoyagesSurMesure = () => {
         hebergement: formData.hebergement,
         lieuVisiter: lieuxAVisiter.map((lieu) => lieu.name),
         nom: formData.nom,
-        nombreDePersonne: formData.voyageur,
+        nombreDePersonne: guestCount,
         pointArrivee: pointArrivee,
         pointDepart: pointDepart,
         prenom: formData.prenom,
@@ -328,7 +326,6 @@ const VoyagesSurMesure = () => {
       if (!res.data.createSurMesure.success) {
         console.error("Erreur GraphQL:", res.data.createSurMesure.errors);
       }
-      console.log("surMesureDatas: ", surMesureDatas);
     } catch (err) {
       console.error("Erreur lors de la réservation:", err);
     }
@@ -813,7 +810,7 @@ const VoyagesSurMesure = () => {
                       <div>
                         <h4 className="font-medium mb-3">Type d'hébergement</h4>
                         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                          {["STANDARD", "CONFORT", "LUXE  "].map((type) => (
+                          {["STANDARD", "CONFORT", "LUXE"].map((type) => (
                             <label
                               key={type}
                               className="flex items-center p-3 border rounded-lg cursor-pointer hover:bg-primary/5"
@@ -1017,6 +1014,7 @@ const VoyagesSurMesure = () => {
                   ) : (
                     <Button
                       onClick={handleCreateSurMesure}
+                      disabled={surmesureLoading}
                       className="flex items-center"
                     >
                       <Send className="mr-2 h-4 w-4" />

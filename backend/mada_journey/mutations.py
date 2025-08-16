@@ -11,7 +11,16 @@ from django.db import transaction
 from decimal import Decimal
 import logging
 
-from .email_helper import message, confirmation_message, objet_message, objet_confirmation_message, site_mail
+from .email_helper import (
+    message, 
+    confirmation_message, 
+    objet_message, 
+    objet_confirmation_message, 
+    site_mail, 
+    objet_message_sur_mesure, 
+    sur_mesure_message, 
+    confirmation_message_sur_mesure,
+    objet_confirmation_message_sur_mesure)
 
 from .models import (
     Utilisateur, Destination, Saison, Circuit, Itineraire,
@@ -1718,6 +1727,53 @@ class CreateSurMesure(graphene.Mutation):
                     sur_mesure.activite.set(activites_objets)
                 
                 sur_mesure.full_clean()
+                
+                site_email = site_mail()
+                send_mail(
+                    subject=objet_message_sur_mesure,
+                    message=sur_mesure_message(
+                        point_depart, 
+                        point_arrivee, 
+                        lieu_visiter,
+                        activite, 
+                        date_debut, 
+                        date_fin, 
+                        duree, 
+                        nombre_de_personne, 
+                        hebergement, 
+                        budget, 
+                        nom, 
+                        prenom, 
+                        email, 
+                        contact, 
+                        commentaire
+                        ),
+                    from_email=email,
+                    recipient_list=[site_email],
+                    fail_silently=False,
+                )
+                
+                # Envoi de confirmation au client            
+                send_mail(
+                    subject=objet_confirmation_message_sur_mesure(),
+                    message=confirmation_message_sur_mesure(
+                        point_depart, 
+                        point_arrivee, 
+                        lieu_visiter, 
+                        activite,
+                        date_debut, 
+                        date_fin, 
+                        duree, 
+                        nombre_de_personne, 
+                        hebergement, 
+                        budget, 
+                        prenom, 
+                        commentaire
+                        ),
+                    from_email=site_email,
+                    recipient_list=[email],
+                    fail_silently=False,
+                )
                 
                 return CreateSurMesure(sur_mesure=sur_mesure, success=True, errors=[])
             

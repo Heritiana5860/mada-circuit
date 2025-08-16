@@ -15,7 +15,7 @@ const Testimonia = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
   const { isAuthenticated, user } = useAuth();
-  const [tem, setTem] = useState("circuit");
+  const [tem, setTem] = useState("vide");
   const handleChange = (event) => {
     setTem(event.target.value);
   };
@@ -39,26 +39,24 @@ const Testimonia = () => {
       utilisateurId: user.id,
       score: parseInt(formData.score),
       description: formData.description,
-      type: tem ,
+      type: tem,
     };
-
-    console.log("tem: ", tem);
 
     // Simulate API call
     await creationTestimonia({
       variables: dataTestimonia,
     });
-
-    console.log("Testimonial submitted:", formData);
     setSubmitted(true);
     setIsSubmitting(false);
 
     // Reset form after 3 seconds
     setSubmitted(false);
     setFormData({ score: "", description: "" });
+    setTem("vide");
   };
 
-  const isFormValid = formData.score && formData.description.trim();
+  const isFormValid =
+    formData.score && formData.description.trim() && tem !== "vide";
 
   if (submitted) {
     return (
@@ -193,6 +191,7 @@ const Testimonia = () => {
                 onChange={handleChange}
                 className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors resize-vertical"
               >
+                <option value="vide"></option>
                 <option value="CIRCUIT">Circuit</option>
                 <option value="VEHICULE">Vehicule</option>
                 <option value="SURMESURE">Sur mesure</option>

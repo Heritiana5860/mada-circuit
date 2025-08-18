@@ -484,16 +484,7 @@ const ProgrammeSolidairePage = () => {
           </div>
         </section>
 
-        <section className="relative py-20 overflow-hidden">
-          <div className="absolute inset-0 z-0">
-            <img
-              src="https://images.unsplash.com/photo-1544117519-31a4d6a6bec1?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2000&q=80"
-              alt="Background"
-              className="w-full h-full object-cover"
-            />
-            <div className="absolute inset-0 bg-black/60"></div>
-          </div>
-
+        <section className="relative py-20 overflow-hidden bg-black/60">
           <div className="relative z-10 max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 text-white text-center">
             <h2 className="text-3xl md:text-4xl font-bold mb-6">
               Prêt à devenir un voyageur solidaire ?
@@ -503,18 +494,6 @@ const ProgrammeSolidairePage = () => {
               solidaire sur le Canal des Pangalanes et contribuer au
               développement durable des communautés locales.
             </p>
-            <div className="flex flex-col sm:flex-row justify-center gap-4">
-              <Button size="lg" variant="default">
-                Réserver un voyage solidaire
-              </Button>
-              <Button
-                size="lg"
-                variant="outline"
-                className="bg-transparent border-white text-white hover:bg-white hover:text-black"
-              >
-                Faire un don
-              </Button>
-            </div>
           </div>
         </section>
       </main>

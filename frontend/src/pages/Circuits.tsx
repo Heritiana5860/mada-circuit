@@ -2,35 +2,23 @@ import { useContext, useEffect, useState } from "react";
 import { useQuery } from "@apollo/client";
 import NavBar from "../components/NavBar";
 import Footer from "../components/Footer";
-import CircuitCard from "../components/CircuitCard";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
 import {
-  Calendar,
-  MapPin,
-  Clock,
-  Loader2,
   Search,
-  Filter,
   SlidersHorizontal,
   X,
-  Grid3X3,
-  List,
   Star,
   Users,
-  TrendingUp,
   Compass,
-  Variable,
-  ArrowRight,
 } from "lucide-react";
-import { GET_ALL_CIRCUITS, GET_ALL_DESTINATIONS } from "@/graphql/queries";
+import { GET_ALL_CIRCUITS } from "@/graphql/queries";
 import CarouselHeader from "@/components/CarouselHeader";
 import { Link } from "react-router-dom";
 import ContentLoading from "@/components/Loading";
 import ContentError from "@/components/error";
-import { formatPrice } from "@/helper/formatage";
 import CardContentDetail from "@/components/detail/CardContentDetail";
 import {
   DataContext,

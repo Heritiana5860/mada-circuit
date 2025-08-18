@@ -32,8 +32,6 @@ const Index = () => {
         <PangalanesSection />
 
         <Vehicles4x4 />
-
-        <Testimonials />
       </main>
 
       <Footer />

@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from "react";
+import { useContext, useEffect } from "react";
 import NavBar from "../components/NavBar";
 import Footer from "../components/Footer";
 import { Button } from "@/components/ui/button";
@@ -12,59 +12,19 @@ import {
   TreePine,
   Mail,
   Globe,
-  ArrowRight,
 } from "lucide-react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { FaqContext } from "@/provider/DataContext";
 import { FaqCard } from "@/components/FaqCard";
+import { objectifs } from "@/helper/ObjectifsAssociations";
 
 const ObjectifsAssociationPage = () => {
-  const navigate = useNavigate();
   const { allDataFaq, faqLoading, faqError } = useContext(FaqContext);
 
   useEffect(() => {
     window.scrollTo(0, 0);
     document.title = "Objectifs de l'Association | Madagascar Voyage";
   }, []);
-
-  const objectifs = [
-    {
-      title: "Parrainage d'enfants",
-      description:
-        "Aider des enfants qui vivent dans des villages au bord du canal des pangalanes entre Tamatave-Mahanoro-Mananjary-Manakara à trouver des parrains pour subvenir à leurs études complètes et leurs besoins vitaux dès la classe primaire, secondaire ou lycée.",
-      icon: <Heart className="h-6 w-6 text-primary" />,
-    },
-    {
-      title: "Soutien aux établissements scolaires",
-      description:
-        "L'association a pour objet de participer à aider les établissements scolaires en construisant de nouvelles infrastructures et en fournissant des matériels scolaires.",
-      icon: <School className="h-6 w-6 text-primary" />,
-    },
-    {
-      title: "Droit à l'éducation",
-      description:
-        "Elle a pour but de protéger le principal droit des enfants à l'éducation, en leur donnant accès à un enseignement de qualité.",
-      icon: <BookOpen className="h-6 w-6 text-primary" />,
-    },
-    {
-      title: "Respect des traditions",
-      description:
-        "Elle a pour but de prioriser l'école en gardant la religion, la tradition et les coutumes locales.",
-      icon: <Landmark className="h-6 w-6 text-primary" />,
-    },
-    {
-      title: "Protection de l'environnement",
-      description:
-        "Elle a pour but de protéger l'environnement et la nature ainsi que les biens publics.",
-      icon: <TreePine className="h-6 w-6 text-primary" />,
-    },
-    {
-      title: "Développement communautaire",
-      description:
-        "Contribuer au développement des communautés locales à travers l'éducation des enfants qui deviendront les forces vives de demain.",
-      icon: <Users className="h-6 w-6 text-primary" />,
-    },
-  ];
 
   if (faqLoading) {
     return (
@@ -219,37 +179,6 @@ const ObjectifsAssociationPage = () => {
           </div>
         </section>
 
-        {/* Témoignage Section */}
-        <section className="py-16 bg-primary/5">
-          <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="bg-white p-8 rounded-lg shadow-md">
-              <blockquote className="border-l-4 border-primary pl-6 italic text-lg text-muted-foreground">
-                "Un enfant de pêcheur sauvé par un touriste ! Dans un pays très
-                pauvre comme Madagascar et surtout sur les habitants au bord du
-                canal, le manque d'échange et d'éducation constituent la
-                principale misère des riverains qui, avec insouciance se mettent
-                à chanter, vivent le jour présent comme le premier jour, ne
-                savent pas de quoi ils vivront demain, espèrent, travaillent
-                parfois durement, mangent pas toujours à leur faim, n'ont pas
-                les moyens de se soigner mais font face avec dignité et
-                résistent ! Mais ils ont besoin de votre soutien pour aider
-                leurs enfants d'aller à l'école pour qu'ils soient au courant de
-                ce qu'ils vivront au futur, au moins ils sauront lire et écrire
-                leurs noms et faire face au monde d'aujourd'hui."
-              </blockquote>
-              <div className="mt-6">
-                <p className="font-bold">
-                  Beaucoup d'enfants dans des pays pauvres ont été sauvés par
-                  des gens comme vous. Ils ont donné une chance, permis de
-                  changer leur destin vers un meilleur avenir pour leur famille,
-                  village, ville, pays de se développer. C'est leur droit. Il
-                  est de notre devoir de les aider à réaliser leurs destins.
-                </p>
-              </div>
-            </div>
-          </div>
-        </section>
-
         {/* Citation Section */}
         <section className="py-12">
           <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
@@ -341,145 +270,6 @@ const ObjectifsAssociationPage = () => {
         {/* FAQ Section */}
         {/* Foire Aux Questions */}
         {faqSolidaire.length > 0 && <FaqCard faq={faqSolidaire} />}
-        <section className="py-16">
-          <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="text-center max-w-3xl mx-auto mb-12">
-              <h2 className="text-3xl font-bold mb-4">Questions Fréquentes</h2>
-              <p className="text-muted-foreground">
-                Découvrez les réponses aux questions les plus courantes sur
-                notre programme de parrainage.
-              </p>
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <Card>
-                <CardContent className="p-6">
-                  <h3 className="text-xl font-bold mb-2">
-                    Comment fonctionne le parrainage?
-                  </h3>
-                  <p className="text-muted-foreground">
-                    Le parrainage permet de financer la scolarité d'un enfant,
-                    ses fournitures scolaires, et parfois une partie de ses
-                    besoins vitaux. Vous recevrez régulièrement des nouvelles et
-                    pourrez communiquer avec l'enfant que vous parrainez.
-                  </p>
-                </CardContent>
-              </Card>
-
-              <Card>
-                <CardContent className="p-6">
-                  <h3 className="text-xl font-bold mb-2">
-                    Combien coûte un parrainage?
-                  </h3>
-                  <p className="text-muted-foreground">
-                    Le montant du parrainage est flexible selon vos
-                    possibilités. Nous recommandons une participation mensuelle
-                    qui sera entièrement consacrée à l'éducation et au bien-être
-                    de l'enfant.
-                  </p>
-                </CardContent>
-              </Card>
-
-              <Card>
-                <CardContent className="p-6">
-                  <h3 className="text-xl font-bold mb-2">
-                    Puis-je visiter l'enfant que je parraine?
-                  </h3>
-                  <p className="text-muted-foreground">
-                    Oui, nous encourageons les rencontres entre parrains et
-                    filleuls lorsque cela est possible. Nous pouvons organiser
-                    votre visite sur le canal des pangalanes dans le respect des
-                    communautés locales.
-                  </p>
-                </CardContent>
-              </Card>
-
-              <Card>
-                <CardContent className="p-6">
-                  <h3 className="text-xl font-bold mb-2">
-                    Comment sont utilisés les dons?
-                  </h3>
-                  <p className="text-muted-foreground">
-                    Tous les dons sont utilisés pour financer l'éducation des
-                    enfants, améliorer les infrastructures scolaires et soutenir
-                    le développement des communautés locales. Nous vous
-                    fournirons des rapports réguliers sur l'utilisation des
-                    fonds.
-                  </p>
-                </CardContent>
-              </Card>
-            </div>
-          </div>
-        </section>
-
-        {/* Testimonials Section */}
-        <section className="py-16 bg-primary/5">
-          <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="text-center max-w-3xl mx-auto mb-12">
-              <h2 className="text-3xl font-bold mb-4">Témoignages</h2>
-              <p className="text-muted-foreground">
-                Découvrez les histoires inspirantes d'enfants dont la vie a été
-                transformée grâce au parrainage.
-              </p>
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              <Card>
-                <CardContent className="p-6">
-                  <div className="flex justify-center mb-4">
-                    <div className="w-20 h-20 rounded-full bg-primary/20 flex items-center justify-center">
-                      <Users className="h-10 w-10 text-primary" />
-                    </div>
-                  </div>
-                  <h3 className="text-xl font-bold mb-2 text-center">
-                    Rakoto, 15 ans
-                  </h3>
-                  <p className="text-muted-foreground text-center">
-                    "Grâce à mon parrain, je peux continuer mes études au
-                    collège. Mon rêve est de devenir médecin pour aider mon
-                    village."
-                  </p>
-                </CardContent>
-              </Card>
-
-              <Card>
-                <CardContent className="p-6">
-                  <div className="flex justify-center mb-4">
-                    <div className="w-20 h-20 rounded-full bg-primary/20 flex items-center justify-center">
-                      <Users className="h-10 w-10 text-primary" />
-                    </div>
-                  </div>
-                  <h3 className="text-xl font-bold mb-2 text-center">
-                    Soa, 12 ans
-                  </h3>
-                  <p className="text-muted-foreground text-center">
-                    "Je suis la première fille de ma famille à aller à l'école.
-                    Maintenant je sais lire et écrire, et j'aide mes parents à
-                    lire les documents importants."
-                  </p>
-                </CardContent>
-              </Card>
-
-              <Card>
-                <CardContent className="p-6">
-                  <div className="flex justify-center mb-4">
-                    <div className="w-20 h-20 rounded-full bg-primary/20 flex items-center justify-center">
-                      <Users className="h-10 w-10 text-primary" />
-                    </div>
-                  </div>
-                  <h3 className="text-xl font-bold mb-2 text-center">
-                    Maminiaina, Directrice
-                  </h3>
-                  <p className="text-muted-foreground text-center">
-                    "Chaque parrainage est une lumière d'espoir pour un enfant
-                    et sa communauté. Nous voyons des changements concrets dans
-                    les villages où les enfants sont scolarisés."
-                  </p>
-                </CardContent>
-              </Card>
-            </div>
-          </div>
-        </section>
       </main>
 
       <Footer />

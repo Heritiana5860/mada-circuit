@@ -536,6 +536,7 @@ class SurMesureAdmin(admin.ModelAdmin):
         }),
     )
 
+
 # Configuration globale de l'admin
 admin.site.site_header = "Administration Tourisme Madagascar"
 admin.site.site_title = "Admin Tourisme"

@@ -164,8 +164,6 @@ const ProgrammeSolidairePage = () => {
   }
 
   const dataSolidaire = data?.allCircuitsByType;
-  console.log("Data solidaire: ", dataSolidaire);
-  console.log("Image solidaire: ", dataSolidaire.images);
 
   return (
     <div className="min-h-screen flex flex-col">

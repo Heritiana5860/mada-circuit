@@ -1,18 +1,24 @@
-import React, { useState, useEffect } from 'react';
-import { Link, useNavigate, useLocation } from 'react-router-dom';
-import { useAuth } from '@/contexts/AuthContext';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Alert, AlertDescription } from '@/components/ui/alert';
-import { Eye, EyeOff, Mail, Lock, MapPin } from 'lucide-react';
+import React, { useState, useEffect } from "react";
+import { Link, useNavigate, useLocation } from "react-router-dom";
+import { useAuth } from "@/contexts/AuthContext";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import { Eye, EyeOff, Mail, Lock, MapPin } from "lucide-react";
 
 const Login: React.FC = () => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
-  const [error, setError] = useState('');
+  const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
   const { login, isAuthenticated } = useAuth();
@@ -20,41 +26,63 @@ const Login: React.FC = () => {
   const location = useLocation();
 
   // Rediriger si déjà connecté
-  useEffect(() => {
-    if (isAuthenticated) {
-      const from = location.state?.from?.pathname || '/';
-      navigate(from, { replace: true });
-    }
-  }, [isAuthenticated, navigate, location]);
+  // useEffect(() => {
+  //   if (isAuthenticated) {
+  //     const from = location.state?.from?.pathname || "/";
+  //     navigate(from, { replace: true });
+  //   }
+  // }, [isAuthenticated, navigate, location]);
 
   useEffect(() => {
     window.scrollTo(0, 0);
-    document.title = 'Connexion | Madagascar Voyage';
+    document.title = "Connexion | Madagascar Voyage";
   }, []);
+
+  // const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+  //   e.preventDefault();
+  //   setError("");
+  //   setLoading(true);
+
+  //   if (!email || !password) {
+  //     setError("Veuillez remplir tous les champs");
+  //     setLoading(false);
+  //     return;
+  //   }
+
+  //   try {
+  //     const result = await login(email, password);
+
+  //     if (result.success) {
+  //       const from = location.state?.from?.pathname || "/";
+  //       navigate(from, { replace: true });
+  //     } else {
+  //       setError(result.error || "Erreur de connexion");
+  //     }
+  //   } catch (err: unknown) {
+  //     setError("Erreur de connexion au serveur");
+  //     console.error("Login error:", err);
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    setError('');
+    setError("");
     setLoading(true);
 
-    if (!email || !password) {
-      setError('Veuillez remplir tous les champs');
+    if (!email?.trim() || !password?.trim()) {
+      setError("Veuillez remplir tous les champs");
       setLoading(false);
       return;
     }
 
     try {
-      const result = await login(email, password);
-      
-      if (result.success) {
-        const from = location.state?.from?.pathname || '/';
-        navigate(from, { replace: true });
-      } else {
-        setError(result.error || 'Erreur de connexion');
-      }
+      const result = await login(email.trim(), password);
+      console.log("Result: ", result);
     } catch (err: unknown) {
-      setError('Erreur de connexion au serveur');
-      console.error('Login error:', err);
+      console.error("Login error:", err);
+      setError("Erreur de connexion au serveur");
     } finally {
       setLoading(false);
     }
@@ -67,7 +95,9 @@ const Login: React.FC = () => {
         <div className="text-center">
           <Link to="/" className="inline-flex items-center space-x-2 mb-6">
             <MapPin className="h-8 w-8 text-primary" />
-            <span className="text-2xl font-bold text-foreground">Madagascar Voyage</span>
+            <span className="text-2xl font-bold text-foreground">
+              Madagascar Voyage
+            </span>
           </Link>
         </div>
 
@@ -108,7 +138,7 @@ const Login: React.FC = () => {
                   <Lock className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
                   <Input
                     id="password"
-                    type={showPassword ? 'text' : 'password'}
+                    type={showPassword ? "text" : "password"}
                     placeholder="Votre mot de passe"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
@@ -120,22 +150,22 @@ const Login: React.FC = () => {
                     onClick={() => setShowPassword(!showPassword)}
                     className="absolute right-3 top-3 text-muted-foreground hover:text-foreground"
                   >
-                    {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                    {showPassword ? (
+                      <EyeOff className="h-4 w-4" />
+                    ) : (
+                      <Eye className="h-4 w-4" />
+                    )}
                   </button>
                 </div>
               </div>
 
-              <Button
-                type="submit"
-                className="w-full"
-                disabled={loading}
-              >
-                {loading ? 'Connexion...' : 'Se connecter'}
+              <Button type="submit" className="w-full" disabled={loading}>
+                {loading ? "Connexion..." : "Se connecter"}
               </Button>
 
               <div className="text-center space-y-2">
                 <p className="text-sm text-muted-foreground">
-                  Pas encore de compte ?{' '}
+                  Pas encore de compte ?{" "}
                   <Link
                     to="/register"
                     className="text-primary hover:underline font-medium"

@@ -1,21 +1,28 @@
-import React, { useState, useEffect } from 'react';
-import { Link, useNavigate, useLocation } from 'react-router-dom';
-import { useAuth } from '../contexts/AuthContext';
-import { Button } from '../components/ui/button';
-import { Input } from '../components/ui/input';
-import { Label } from '../components/ui/label';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../components/ui/card';
-import { Alert, AlertDescription } from '../components/ui/alert';
-import { Eye, EyeOff, Mail, Lock, MapPin } from 'lucide-react';
+import React, { useState, useEffect } from "react";
+import { Link, useNavigate, useLocation } from "react-router-dom";
+import { useAuth } from "../contexts/AuthContext";
+import { Button } from "../components/ui/button";
+import { Input } from "../components/ui/input";
+import { Label } from "../components/ui/label";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "../components/ui/card";
+import { Alert, AlertDescription } from "../components/ui/alert";
+import { Eye, EyeOff, Mail, Lock, MapPin } from "lucide-react";
 
 const Login = () => {
   const [formData, setFormData] = useState({
-    email: '',
-    password: ''
+    email: "",
+    password: "",
   });
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const [errors, setErrors] = useState([]);
+  const [error, setError] = useState("");
 
   const { login, isAuthenticated } = useAuth();
   const navigate = useNavigate();
@@ -24,16 +31,16 @@ const Login = () => {
   // Rediriger si déjà connecté
   useEffect(() => {
     if (isAuthenticated) {
-      const from = location.state?.from?.pathname || '/';
+      const from = location.state?.from?.pathname || "/";
       navigate(from, { replace: true });
     }
   }, [isAuthenticated, navigate, location]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
-      [name]: value
+      [name]: value,
     }));
     // Effacer les erreurs quand l'utilisateur tape
     if (errors.length > 0) {
@@ -43,34 +50,45 @@ const Login = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setError("");
     setLoading(true);
-    setErrors([]);
 
-    // Validation côté client
-    if (!formData.email || !formData.password) {
-      setErrors(['Veuillez remplir tous les champs']);
-      setLoading(false);
-      return;
-    }
-
-    if (!formData.email.includes('@')) {
-      setErrors(['Veuillez entrer une adresse email valide']);
+    // Validation des champs
+    if (!formData.email?.trim() || !formData.password?.trim()) {
+      setError("Veuillez remplir tous les champs");
       setLoading(false);
       return;
     }
 
     try {
-      const result = await login(formData.email, formData.password);
-      
-      if (result.success) {
-        const from = location.state?.from?.pathname || '/';
-        navigate(from, { replace: true });
+      const result = await login(formData.email.trim(), formData.password);
+
+      if (result.success && result.user) {
+        const userRole = result.user.role;
+        console.log("Login successful, user role:", userRole);
+
+        // Redirection immédiate basée sur le rôle
+        if (userRole === "ADMIN") {
+          console.log("Redirecting ADMIN to /admin");
+          navigate("/admin", { replace: true });
+        } else if (userRole === "CLIENT") {
+          console.log("Redirecting CLIENT to home");
+          navigate("/", { replace: true });
+        } else {
+          console.warn(`Unknown role: ${userRole}, redirecting to home`);
+          navigate("/", { replace: true });
+        }
       } else {
-        setErrors(result.errors || ['Erreur de connexion']);
+        setError(result.error || "Erreur de connexion");
       }
-    } catch (error) {
-      console.error('Erreur de connexion:', error);
-      setErrors(['Une erreur est survenue. Veuillez réessayer.']);
+    } catch (err) {
+      console.error("Login error:", err);
+
+      if (err instanceof Error) {
+        setError(`Erreur de connexion: ${err.message}`);
+      } else {
+        setError("Erreur de connexion au serveur");
+      }
     } finally {
       setLoading(false);
     }
@@ -80,10 +98,11 @@ const Login = () => {
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-primary/10 via-background to-secondary/10 px-4">
       {/* Image de fond avec overlay */}
       <div className="absolute inset-0 z-0">
-        <div 
+        <div
           className="w-full h-full bg-cover bg-center bg-fixed opacity-20"
           style={{
-            backgroundImage: "linear-gradient(to bottom, rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.1)), url('/canal_bac.jpg')"
+            backgroundImage:
+              "linear-gradient(to bottom, rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.1)), url('/canal_bac.jpg')",
           }}
         />
       </div>
@@ -176,7 +195,7 @@ const Login = () => {
                     <span>Connexion...</span>
                   </div>
                 ) : (
-                  'Se connecter'
+                  "Se connecter"
                 )}
               </Button>
             </form>

@@ -567,7 +567,7 @@ class SurMesure(models.Model):
         blank=True,
         help_text="Liste des activités que le client souhaite faire"
     )
-    budget = models.CharField(verbose_name="Budget")
+    budget = models.CharField(max_length=200, verbose_name="Budget")
     nom = models.CharField(max_length=200, verbose_name="Nom")
     prenom = models.CharField(max_length=200, verbose_name="Prenom")
     email = models.EmailField(

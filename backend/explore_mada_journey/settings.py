@@ -167,19 +167,6 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'explore_mada_journey.wsgi.application'
 
-# Configuration e-mail
-# EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-# EMAIL_HOST = 'smtp.madagascar-voyagesolidaire.com'
-# EMAIL_HOST = 'smtp.gmail.com'
-# EMAIL_PORT = 587
-# EMAIL_USE_TLS = True
-# EMAIL_USE_SSL = True
-# EMAIL_HOST_USER = 'reservation@madagascar-voyagesolidaire.com'
-# EMAIL_HOST_USER = 'heritianaronaldo@gmail.com'
-# EMAIL_HOST_PASSWORD = 'ifvm ehfy hqry fznb'
-# EMAIL_HOST_PASSWORD = 'bSTARTTLS'
-# DEFAULT_FROM_EMAIL = 'heritianaronaldo@gmail.com'
-
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'mail.madagascar-voyagesolidaire.com'
 EMAIL_PORT = 587

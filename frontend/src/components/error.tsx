@@ -9,8 +9,7 @@ const ContentError = () => {
       <main className="flex-grow flex items-center justify-center p-4">
         <Alert variant="destructive" className="max-w-md">
           <AlertDescription>
-            Erreur lors du chargement des circuits. Veuillez réessayer plus
-            tard.
+            Erreur lors du chargement. Veuillez réessayer plus tard.
           </AlertDescription>
         </Alert>
       </main>

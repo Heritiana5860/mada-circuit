@@ -32,6 +32,7 @@ import { ReservationProvider } from "./provider/ReservationProvider";
 import { FaqProvider } from "./provider/FaqProvider";
 import "leaflet/dist/leaflet.css";
 import { TestimoniaProvider } from "./provider/TestimoniaProvider";
+import Admin from "./Admin";
 
 const queryClient = new QueryClient();
 
@@ -48,6 +49,16 @@ const App = () => (
                 <BrowserRouter>
                   <Routes>
                     <Route path="/" element={<Index />} />
+
+                    {/* Route admin protégée - SEULEMENT pour les ADMIN */}
+                    <Route
+                      path="/admin"
+                      element={
+                        <ProtectedRoute requireAuth={true} requireRole="ADMIN">
+                          <Admin />
+                        </ProtectedRoute>
+                      }
+                    />
 
                     {/* Routes d'authentification */}
                     <Route

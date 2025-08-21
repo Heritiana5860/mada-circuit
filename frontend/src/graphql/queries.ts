@@ -418,6 +418,23 @@ export const GET_TESTIMONIA_BY_STATUS = gql`
     }
   }
 `;
+export const ALL_TESTIMONIA = gql`
+  query AllTestimonia {
+    allTestimonia {
+      id
+      score
+      description
+      type
+      status
+      postDate
+      utilisateur {
+        id
+        nom
+        prenom
+      }
+    }
+  }
+`;
 
 // Query pour recuperer l'utilisateur selon son email pour afficher l'image profile
 export const GET_UTILISATEUR_BY_EMAIL = gql`
@@ -431,6 +448,19 @@ export const GET_UTILISATEUR_BY_EMAIL = gql`
       role
       image
       dateInscription
+    }
+  }
+`;
+
+export const GET_ALL_USERS = gql`
+  query AllUtilisateurs {
+    allUtilisateurs {
+      id
+      email
+      nom
+      prenom
+      telephone
+      role
     }
   }
 `;

@@ -152,9 +152,6 @@ const Register = () => {
 
       const result = await register(userData);
 
-      console.log("Result: ", result);
-      console.log("Image is File:", image instanceof File);
-
       if (result.success) {
         navigate("/", { replace: true });
       } else {

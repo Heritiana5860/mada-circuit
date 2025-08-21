@@ -135,7 +135,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
         setUser(utilisateur);
         localStorage.setItem("authToken", newToken);
         localStorage.setItem("authUser", JSON.stringify(utilisateur));
-        return { success: true };
+        return { success: true, user: utilisateur };
       } else {
         return {
           success: false,

@@ -216,6 +216,30 @@ export const CREATE_TESTIMONIA = gql`
     }
   }
 `;
+export const UPDATE_TESTIMONIA = gql`
+  mutation UpdateTestimoniaStatus($id: ID!, $status: Boolean!) {
+    updateTestimoniaStatus(id: $id, status: $status) {
+      success
+      message
+      testimonia {
+        id
+        score
+        description
+        type
+        status
+        postDate
+      }
+    }
+  }
+`;
+export const DELETE_TESTIMONIA = gql`
+  mutation DeleteTestimonia($id: ID!) {
+    deleteTestimonia(id: $id) {
+      success
+      errors
+    }
+  }
+`;
 
 // Mutation pour créer contacter nous
 export const CREATE_CONTACT_US = gql`
@@ -309,6 +333,137 @@ export const CREATE_SUR_MESURE = gql`
         }
         activite {
           nom
+        }
+      }
+    }
+  }
+`;
+
+export const CREATE_FAQ = gql`
+  mutation CreateFaq($faqType: String!, $question: String!, $reponse: String!) {
+    createFaq(faqType: $faqType, question: $question, reponse: $reponse) {
+      success
+      errors
+      faq {
+        id
+        question
+        reponse
+        faqType
+      }
+    }
+  }
+`;
+
+export const CREATE_PERSONNEL = gql`
+  mutation CreatePersonnel(
+    $adresse: String!
+    $biographie: String!
+    $contact: String!
+    $email: String!
+    $langues: String!
+    $nom: String!
+    $photo: Upload!
+    $prenom: String!
+    $specialite: String!
+    $status: String!
+  ) {
+    createPersonnel(
+      adresse: $adresse
+      biographie: $biographie
+      contact: $contact
+      email: $email
+      langues: $langues
+      nom: $nom
+      photo: $photo
+      prenom: $prenom
+      specialite: $specialite
+      status: $status
+    ) {
+      success
+      errors
+      personnel {
+        id
+        nom
+        prenom
+        contact
+        email
+        adresse
+        specialite
+        langues
+        biographie
+        status
+        photo
+        age
+        languesParlees
+      }
+    }
+  }
+`;
+
+export const DELETE_USER = gql`
+  mutation DeleteUtilisateur($id: ID!) {
+    deleteUtilisateur(id: $id) {
+      success
+      errors
+    }
+  }
+`;
+
+export const CREATE_CIRCUIT = gql`
+  mutation CreateCircuit(
+    $titre: String!
+    $description: String!
+    $duree: Int!
+    $prix: Int!
+    $type: String!
+    $transport: String!
+    $difficulte: String!
+    $destinationNom: String!
+    $destinationRegion: String!
+    $saisonNom: String!
+    $itineraires: [ItineraireInput!]!
+    $image: Upload
+  ) {
+    createCircuit(
+      titre: $titre
+      description: $description
+      duree: $duree
+      prix: $prix
+      type: $type
+      transport: $transport
+      difficulte: $difficulte
+      destinationNom: $destinationNom
+      destinationRegion: $destinationRegion
+      saisonNom: $saisonNom
+      itineraires: $itineraires
+      image: $image
+    ) {
+      success
+      errors
+      circuit {
+        id
+        titre
+        description
+        duree
+        prix
+        type
+        transport
+        difficulte
+        destination {
+          nom
+          region
+        }
+        saison {
+          nom
+        }
+        itineraires {
+          jour
+          lieuDepart
+          lieuArrivee
+          distanceKm
+          dureeTrajet
+          description
+          carteGps
         }
       }
     }

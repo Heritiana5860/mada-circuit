@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useMemo, useCallback } from "react";
+import { useEffect, useState, useMemo, useCallback } from "react";
 import { useQuery } from "@apollo/client";
 import NavBar from "../components/NavBar";
 import Footer from "../components/Footer";
@@ -18,7 +18,6 @@ import {
 } from "lucide-react";
 import { Link } from "react-router-dom";
 import { GET_ALL_BLOGS } from "@/graphql/queries";
-import { Blog as BlogType } from "@/types";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
@@ -59,7 +58,7 @@ const Blog = () => {
   } = useQuery(GET_ALL_BLOGS, {
     errorPolicy: "all",
     notifyOnNetworkStatusChange: true,
-    fetchPolicy: "cache-and-network", 
+    fetchPolicy: "cache-and-network",
     onError: (error) => {
       console.error("Erreur lors du chargement des blogs:", error);
     },
@@ -286,32 +285,38 @@ const Blog = () => {
           />
           <div className="absolute inset-0 z-20 flex items-center">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
-              <div className="max-w-4xl">
-                <div className="mb-6">
+              <div className="max-w-6xl">
+                <div className="mb-3">
                   <Badge
                     variant="secondary"
-                    className="mb-4 bg-white/20 text-white border-white/30 backdrop-blur-sm"
+                    className="mb-2 bg-white/20 text-white border-white/30 backdrop-blur-sm"
                   >
                     <TrendingUp className="w-4 h-4 mr-2" />
-                    Articles & Guides
+                    Articles & Guides de Voyage
                   </Badge>
                 </div>
-                <h1 className="text-5xl md:text-4xl font-bold text-white mb-6 leading-tight">
-                  Explorez
+                <h1 className="text-3xl md:text-4xl font-bold text-white mb-6 leading-tight">
+                  Explorez l’île aux mille visages
                   <span className="text-transparent bg-clip-text bg-gradient-to-r from-green-400 to-blue-500 block">
                     Madagascar
                   </span>
                 </h1>
-                <p className="text-xl md:text-lg text-white/90 mb-8 max-w-2xl leading-relaxed">
-                  Découvrez nos guides experts, conseils exclusifs et récits
-                  d'aventure pour vivre une expérience inoubliable à Madagascar.
+                <p className="text-xl md:text-sm text-white/90 mb-8 max-w-2xl leading-relaxed">
+                  Préparez votre aventure avec nos{" "}
+                  <strong>guides de voyage complets</strong>, nos{" "}
+                  <strong>conseils exclusifs</strong> et des{" "}
+                  <strong>itinéraires sur mesure</strong>. Que vous voyagiez en{" "}
+                  <strong>voiture de location</strong> ou en{" "}
+                  <strong>circuit organisé</strong>, partez à la rencontre d’une
+                  île unique au monde : plages paradisiaques, forêts tropicales,
+                  parcs nationaux et une culture riche et authentique.
                 </p>
                 <div className="flex flex-col sm:flex-row gap-4">
                   <div className="relative flex-1 max-w-md">
                     <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-slate-400 h-5 w-5" />
                     <Input
                       type="text"
-                      placeholder="Rechercher un article..."
+                      placeholder="Rechercher un guide ou un article..."
                       value={searchTerm}
                       onChange={(e) => setSearchTerm(e.target.value)}
                       className="pl-10 bg-white/90 backdrop-blur-sm border-white/30 text-slate-900 placeholder:text-slate-500"
@@ -389,9 +394,9 @@ const Blog = () => {
                                   src={featuredBlog.image}
                                   alt={featuredBlog.titre}
                                   className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                                  onError={(e) => {
-                                    e.target.src = DEFAULT_IMAGE;
-                                  }}
+                                  // onError={(e) => {
+                                  //   e.target.src = DEFAULT_IMAGE;
+                                  // }}
                                 />
                                 <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent"></div>
                               </div>
@@ -472,16 +477,12 @@ const Blog = () => {
                                 key={blog.id}
                                 className="group bg-white rounded-xl overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300 border border-slate-100"
                               >
-                                
                                 <Link to={`/blog/${blog.id}`} className="block">
                                   <div className="relative h-56 overflow-hidden">
                                     <img
                                       src={blog.image}
                                       alt={blog.titre}
                                       className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                                      onError={(e) => {
-                                        e.target.src = DEFAULT_IMAGE;
-                                      }}
                                     />
                                     <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent"></div>
                                     <div className="absolute top-4 left-4">
@@ -540,27 +541,6 @@ const Blog = () => {
                 )}
               </>
             )}
-
-            {/* Section Newsletter */}
-            <div className="mt-20 bg-gradient-to-r from-gray-300/40 to-blue-100/40 rounded-2xl p-8 lg:p-12 text-center">
-              <h3 className="text-3xl font-bold text-black mb-4">
-                Restez informé de nos dernières aventures
-              </h3>
-              <p className="text-black/90 text-lg mb-8 max-w-2xl mx-auto">
-                Recevez nos nouveaux articles, guides exclusifs et conseils
-                d'experts directement dans votre boîte mail.
-              </p>
-              <div className="flex flex-col sm:flex-row gap-4 max-w-md mx-auto">
-                <Input
-                  type="email"
-                  placeholder="Votre adresse email"
-                  className="bg-white/90 backdrop-blur-sm border-white/30 text-slate-900 placeholder:text-slate-500"
-                />
-                <Button className="bg-green-800 text-white hover:bg-white/90 font-semibold px-8">
-                  S'abonner
-                </Button>
-              </div>
-            </div>
           </div>
         </section>
       </main>

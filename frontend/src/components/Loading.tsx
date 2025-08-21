@@ -10,10 +10,7 @@ const ContentLoading = () => {
         <div className="text-center space-y-4">
           <Loader2 className="h-12 w-12 animate-spin mx-auto text-primary" />
           <div>
-            <h3 className="text-lg font-semibold">Chargement des circuits</h3>
-            <p className="text-muted-foreground">
-              Découvrez nos destinations exceptionnelles...
-            </p>
+            <h3 className="text-lg font-semibold">Chargement en cours...</h3>
           </div>
         </div>
       </main>

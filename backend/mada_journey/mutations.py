@@ -125,11 +125,14 @@ class DeleteUtilisateur(graphene.Mutation):
     success = graphene.Boolean()
     errors = graphene.List(graphene.String)
 
-    def mutate(self, info, id):
+    @classmethod
+    def mutate(cls, root, info, id):
         try:
-            utilisateur = Utilisateur.objects.get(pk=id)
+            type_name, real_utilisateur_id = from_global_id(id)
+            utilisateur = Utilisateur.objects.get(id=real_utilisateur_id)
+            
             utilisateur.delete()
-            return DeleteUtilisateur(success=True)
+            return DeleteUtilisateur(success=True, errors=[])
         except Utilisateur.DoesNotExist:
             return DeleteUtilisateur(success=False, errors=["Utilisateur non trouvé"])
         except Exception as e:
@@ -279,32 +282,57 @@ class DeleteSaison(graphene.Mutation):
         except Exception as e:
             return DeleteSaison(success=False, errors=[str(e)])
 
+class ItineraireInput(graphene.InputObjectType):
+    jour = graphene.Int(required=True, description="Jour de l'itinéraire (ex: 1, 2, ...)")
+    lieu_depart = graphene.String(required=True, description="Lieu de départ")
+    lieu_arrivee = graphene.String(required=False, description="Lieu d'arrivée")
+    distance_km = graphene.Int(required=False, description="Distance en kilomètres")
+    duree_trajet = graphene.Int(required=False, description="Durée du trajet en heures")
+    description = graphene.String(required=False, description="Description de l'itinéraire")
+
 # Mutations pour les circuits
 class CreateCircuit(graphene.Mutation):
     class Arguments:
         titre = graphene.String(required=True)
         description = graphene.String(required=True)
         duree = graphene.Int(required=True)
-        prix = graphene.Float(required=True)
+        prix = graphene.Int(required=True)
         type = graphene.String(required=True)
         transport = graphene.String(required=True)
-        image = Upload()
+        image = Upload(required=False)
         difficulte = graphene.String(required=True)
-        destination_id = graphene.ID(required=True)
-        saison_id = graphene.ID(required=True)
-        itineraire_id = graphene.ID(required=True)
+        destination_nom = graphene.String(required=True)
+        destination_region = graphene.String(required=True)
+        saison_nom = graphene.String(required=True)
+        itineraires = graphene.List(ItineraireInput, required=True, description="Liste des itinéraires")
 
     circuit = graphene.Field(CircuitType)
     success = graphene.Boolean()
     errors = graphene.List(graphene.String)
 
-    def mutate(self, info, titre, description, duree, prix, type, transport, difficulte, destination_id, saison_id, itineraire_id, image=None):
+    def mutate(
+        self,
+        info,
+        titre,
+        description,
+        duree,
+        prix,
+        type,
+        transport,
+        difficulte,
+        destination_nom,
+        destination_region,
+        saison_nom,
+        itineraires,
+        image=None,
+    ):
         try:
             with transaction.atomic():
-                destination = Destination.objects.get(pk=destination_id)
-                saison = Saison.objects.get(pk=saison_id)
-                itineraire = Itineraire.objects.get(pk=itineraire_id)
+                # Vérifier l'existence de la destination et de la saison
+                destination = Destination.objects.get(nom=destination_nom, region=destination_region)
+                saison = Saison.objects.get(nom=saison_nom)
 
+                # Créer le circuit
                 circuit = Circuit.objects.create(
                     titre=titre,
                     description=description,
@@ -316,8 +344,21 @@ class CreateCircuit(graphene.Mutation):
                     difficulte=difficulte,
                     destination=destination,
                     saison=saison,
-                    itineraire=itineraire,
                 )
+
+                # Créer les itinéraires et les associer au circuit
+                for itineraire_data in itineraires:
+                    Itineraire.objects.create(
+                        circuit=circuit,
+                        jour=itineraire_data.jour,
+                        lieu_depart=itineraire_data.lieu_depart,
+                        lieu_arrivee=itineraire_data.lieu_arrivee,
+                        distance_km=itineraire_data.distance_km,
+                        duree_trajet=itineraire_data.duree_trajet,
+                        description=itineraire_data.description,
+                        carte_gps=itineraire_data.carte_gps,
+                    )
+
                 return CreateCircuit(circuit=circuit, success=True)
         except (Destination.DoesNotExist, Saison.DoesNotExist):
             return CreateCircuit(success=False, errors=["Destination ou saison non trouvée"])
@@ -1548,6 +1589,60 @@ class CreateTestimonia(graphene.Mutation):
                 success=False,
                 message=f"Erreur lors de la création du témoignage : {str(e)}"
             )
+class UpdateTestimoniaStatus(graphene.Mutation):
+    class Arguments:
+        id = graphene.ID(required=True)
+        status = graphene.Boolean(required=True)
+
+    testimonia = graphene.Field(TestimoniaType)
+    success = graphene.Boolean()
+    message = graphene.String()
+
+    def mutate(self, info, id, status):
+        try:
+            # Récupérer le témoignage
+            testimonia = Testimonia.objects.get(id=id)
+
+            # Mettre à jour le status
+            testimonia.status = status
+            testimonia.save()
+
+            return UpdateTestimoniaStatus(
+                testimonia=testimonia,
+                success=True,
+                message="Statut du témoignage mis à jour avec succès"
+            )
+
+        except Testimonia.DoesNotExist:
+            return UpdateTestimoniaStatus(
+                success=False,
+                message="Témoignage introuvable"
+            )
+        except Exception as e:
+            return UpdateTestimoniaStatus(
+                success=False,
+                message=f"Erreur lors de la mise à jour : {str(e)}"
+            )
+class DeleteTestimonia(graphene.Mutation):
+    class Arguments:
+        id = graphene.ID(required=True)
+    
+    success = graphene.Boolean()
+    errors = graphene.List(graphene.String)
+    
+    def mutate(self, info, id):
+        try:
+            # Récupérer le témoignage
+            testimonia = Testimonia.objects.get(id=id)
+
+            testimonia.delete()
+
+            return DeleteTestimonia(success=True, errors=[])
+        except Testimonia.DoesNotExist:
+            return DeleteTestimonia(success=False, errors=["Temoignage non trouvé"])
+        except Exception as e:
+            return DeleteTestimonia(success=False, errors=[str(e)])
+    
             
 # Create Contact us
 class CreateContactUsMutation(graphene.Mutation):
@@ -1863,6 +1958,8 @@ class Mutation(graphene.ObjectType):
     
     # Add mutation Testimonia
     create_testimonia = CreateTestimonia.Field()
+    update_testimonia_status = UpdateTestimoniaStatus.Field()
+    delete_testimonia = DeleteTestimonia.Field()
     
     # Create contact us
     create_contact_us_mutation = CreateContactUsMutation.Field()

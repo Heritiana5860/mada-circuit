@@ -18,6 +18,9 @@ const Index = () => {
       "Madagascar Voyage - Circuits, Canal des Pangalanes & Location 4x4";
   }, []);
 
+  const authUser = JSON.parse(localStorage.getItem("authUser") || "{}");
+  console.log("authUser: ", authUser);
+
   return (
     <div className="min-h-screen flex flex-col">
       <NavBar />

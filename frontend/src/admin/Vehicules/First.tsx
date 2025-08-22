@@ -1,4 +1,10 @@
-import { Captions } from "lucide-react";
+import {
+  Captions,
+  ClipboardType,
+  Component,
+  ShieldHalf,
+  Tag,
+} from "lucide-react";
 import Field from "../composants/Field";
 import { Dispatch, SetStateAction } from "react";
 
@@ -51,7 +57,7 @@ const First: React.FC<FirstType> = ({
           type="text"
           value={immatriculation}
           setValue={setImmatriculation}
-          icon={<Captions className="h-4 w-4" />}
+          icon={<ShieldHalf className="h-4 w-4" />}
         />
 
         <Field
@@ -62,7 +68,7 @@ const First: React.FC<FirstType> = ({
           type="text"
           value={marque}
           setValue={setMarque}
-          icon={<Captions className="h-4 w-4" />}
+          icon={<Tag className="h-4 w-4" />}
         />
 
         <Field
@@ -73,7 +79,7 @@ const First: React.FC<FirstType> = ({
           type="text"
           value={modele}
           setValue={setModele}
-          icon={<Captions className="h-4 w-4" />}
+          icon={<Component className="h-4 w-4" />}
         />
       </div>
 
@@ -87,7 +93,7 @@ const First: React.FC<FirstType> = ({
           type="text"
           value={types}
           setValue={setTypes}
-          icon={<Captions className="h-4 w-4" />}
+          icon={<ClipboardType className="h-4 w-4" />}
         />
 
         <div className="space-y-2">
@@ -138,7 +144,7 @@ const First: React.FC<FirstType> = ({
             <option value="">Choisissez un etat...</option>
             <option value="DISPONIBLE">Disponible</option>
             <option value="RESERVE">Réservé</option>
-            <option value="EN_MAINTENANCE">En maintenance</option>
+            <option value="MAINTENANCE">En maintenance</option>
           </select>
         </div>
 

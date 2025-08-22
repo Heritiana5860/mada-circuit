@@ -199,8 +199,6 @@ class CreateCircuit(graphene.Mutation):
                     region=region,
                     saison=saison,
                 )
-                
-                logger.debug(f"circuit: {circuit}")
 
                 # Créer les itinéraires et les associer au circuit
                 for itineraire_data in itineraires:
@@ -252,17 +250,17 @@ class CreateVehicule(graphene.Mutation):
         marque = graphene.String(required=True)
         modele = graphene.String(required=True)
         annee = graphene.Int(required=True)
-        type = graphene.ID(required=True)
-        capacite = graphene.ID(required=True)
+        type = graphene.String(required=True)
+        capacite = graphene.Int(required=True)
         prix = graphene.Float(required=True)
         etat = graphene.String()
-        image = Upload()
+        images = graphene.List(Upload, required=False)
 
     vehicule = graphene.Field(VehiculeType)
     success = graphene.Boolean()
     errors = graphene.List(graphene.String)
 
-    def mutate(self, info, immatriculation, marque, modele, annee, type, capacite, prix, etat="DISPONIBLE", image=None):
+    def mutate(self, info, immatriculation, marque, modele, annee, type, capacite, prix, etat="DISPONIBLE", images=None):
         try:
             with transaction.atomic():
                 if Vehicule.objects.filter(immatriculation=immatriculation).exists():
@@ -277,8 +275,15 @@ class CreateVehicule(graphene.Mutation):
                     capacite=capacite,
                     prix=Decimal(str(prix)),
                     etat=etat,
-                    image=image
                 )
+                
+                if images:
+                    for idx, img in enumerate(images):
+                        VehiculeImage.objects.create(
+                            vehicule=vehicule,
+                            image=img,
+                            ordre=idx,
+                        )
                 return CreateVehicule(vehicule=vehicule, success=True)
         except Exception as e:
             return CreateVehicule(success=False, errors=[str(e)])

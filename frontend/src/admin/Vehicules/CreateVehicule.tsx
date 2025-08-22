@@ -8,10 +8,14 @@ import { useState } from "react";
 import First from "./First";
 import Second from "./Second";
 import ThirdStep from "../Circuits/ThirdStep";
+import { useMutation } from "@apollo/client";
+import { CREATE_VEHICULE } from "@/graphql/mutations";
 
 const CreateVehicule = () => {
   const [currentStep, setCurrentStep] = useState(1);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
+
+  const [createAVehicule, { loading, error }] = useMutation(CREATE_VEHICULE);
 
   const [immatriculation, setImmatriculation] = useState("");
   const [marque, setMarque] = useState("");
@@ -32,19 +36,20 @@ const CreateVehicule = () => {
   const nextStep = () => {
     if (currentStep < steps.length) {
       // Validation de base avant de passer à l'étape suivante
-      //   if (
-      //     currentStep === 1 &&
-      //     (!titre || !description || !destination || !region || !saison)
-      //   ) {
-      //     setErrorMessage("Veuillez remplir tous les champs obligatoires.");
-      //     return;
-      //   }
-      //   if (currentStep === 2 && days.some((day) => !day.depart || !day.jour)) {
-      //     setErrorMessage(
-      //       "Veuillez remplir tous les champs obligatoires pour chaque itinéraire."
-      //     );
-      //     return;
-      //   }
+      if (
+        currentStep === 1 &&
+        (!immatriculation ||
+          !marque ||
+          !modele ||
+          !types ||
+          !annee ||
+          !capacite ||
+          !etat ||
+          !prix)
+      ) {
+        setErrorMessage("Veuillez remplir tous les champs obligatoires.");
+        return;
+      }
       setErrorMessage(null);
       setCurrentStep((prev) => prev + 1);
     }
@@ -54,6 +59,78 @@ const CreateVehicule = () => {
     if (currentStep > 1) {
       setCurrentStep((prev) => prev - 1);
       setErrorMessage(null);
+    }
+  };
+
+  if (loading) {
+    return <div>Loading...</div>;
+  }
+
+  if (error) {
+    return <div>Erreur lors de la création circuit!</div>;
+  }
+
+  const emptyFields = () => {
+    setImmatriculation("");
+    setAnnee(2000);
+    setPrix(0);
+    setMarque("");
+    setModele("");
+    setTypes("");
+    setEtat("");
+    setCapacite(4);
+    setPrix(0);
+    setSelectedImages(null);
+    setErrorMessage(null);
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    // Validation des données
+    if (
+      !immatriculation ||
+      !marque ||
+      !modele ||
+      !types ||
+      !annee ||
+      !capacite ||
+      !etat ||
+      prix === 0
+    ) {
+      setErrorMessage("Veuillez remplir tous les champs obligatoires.");
+      return;
+    }
+
+    const data = {
+      immatriculation: immatriculation,
+      marque: marque,
+      modele: modele,
+      type: types,
+      annee: annee,
+      capacite: capacite,
+      etat: etat,
+      prix: prix,
+      images: selectedImages.map((img) => img.file),
+    };
+
+    try {
+      const result = await createAVehicule({ variables: data });
+      console.log("Resultat de la mutation:", result);
+      console.log("Data:", data);
+
+      if (result.data.createVehicule.success) {
+        emptyFields();
+        setCurrentStep(1);
+        setErrorMessage("Circuit créé avec succès !");
+      } else {
+        setErrorMessage(result.data.createVehicule.errors.join(", "));
+      }
+    } catch (err) {
+      console.error("Erreur:", err);
+      setErrorMessage(
+        "Une erreur est survenue lors de la création du circuit."
+      );
     }
   };
   return (
@@ -134,7 +211,7 @@ const CreateVehicule = () => {
                 </button>
               ) : (
                 <button
-                  //   onClick={handleSubmit}
+                  onClick={handleSubmit}
                   className="px-4 py-2 bg-primary text-white rounded"
                 >
                   Terminer

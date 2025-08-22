@@ -472,3 +472,32 @@ export const CREATE_CIRCUIT = gql`
     }
   }
 `;
+
+export const CREATE_VEHICULE = gql`
+  mutation CreateVehicule(
+    $annee: Int!
+    $capacite: Int!
+    $immatriculation: String!
+    $marque: String!
+    $modele: String!
+    $prix: Float!
+    $type: String!
+    $etat: String
+    $images: [Upload]
+  ) {
+    createVehicule(
+      annee: $annee
+      capacite: $capacite
+      immatriculation: $immatriculation
+      marque: $marque
+      modele: $modele
+      prix: $prix
+      type: $type
+      etat: $etat
+      images: $images
+    ) {
+      success
+      errors
+    }
+  }
+`;

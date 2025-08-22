@@ -25,7 +25,7 @@ import CreateCircuit from "./admin/Circuits/CreateCircuit";
 import CreateBlog from "./admin/CreateBlog";
 import CreateFaq from "./admin/CreateFaq";
 import CreatePersonnel from "./admin/CreatePersonnel";
-import CreateVehicule from "./admin/CreateVehicule";
+import CreateVehicule from "./admin/Vehicules/CreateVehicule";
 import Reservations from "./admin/Reservations";
 import SurMesures from "./admin/SurMesures";
 import Utilisateurs from "./admin/Utilisateurs";

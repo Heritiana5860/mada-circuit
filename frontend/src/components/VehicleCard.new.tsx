@@ -1,7 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { cn } from "@/lib/utils";
-import { Car, Users, Fuel } from "lucide-react";
+import { Car, Users } from "lucide-react";
 import { CSSProperties } from "react";
 import { Vehicule } from "@/types";
 import { formatPrice } from "@/helper/formatage";
@@ -39,7 +39,7 @@ const VehicleCard: React.FC<VehicleCardProps> = ({
         />
         <div className="absolute top-3 left-3">
           <span className="bg-primary text-primary-foreground text-xs font-medium px-2 py-1 rounded-full">
-            {vehicle.type.libelle}
+            {vehicle.type}
           </span>
         </div>
       </div>
@@ -51,9 +51,7 @@ const VehicleCard: React.FC<VehicleCardProps> = ({
           <div className="flex items-center space-x-4">
             <div className="flex items-center text-muted-foreground">
               <Users className="h-4 w-4 mr-1" />
-              <span className="text-sm">
-                {vehicle.capacite.nombrePlaces} places
-              </span>
+              <span className="text-sm">{vehicle.capacite} places</span>
             </div>
             <div className="flex items-center text-muted-foreground">
               <Car className="h-4 w-4 mr-1" />

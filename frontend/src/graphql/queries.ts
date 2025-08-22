@@ -15,21 +15,11 @@ export const GET_ALL_CIRCUITS = gql`
       type
       difficulte
       transport
-      reservationsCount
-      isAvailable
-      imagesCount
+      destination
+      saison
       images {
         id
         image
-      }
-      destination {
-        id
-        nom
-        region
-      }
-      saison {
-        id
-        nom
       }
       pointsInteret {
         id
@@ -47,7 +37,6 @@ export const GET_ALL_CIRCUITS = gql`
         distanceKm
         dureeTrajet
         description
-        carteGps
       }
     }
   }
@@ -66,21 +55,11 @@ export const GET_CIRCUIT_BY_ID = gql`
       image
       difficulte
       transport
-      reservationsCount
-      isAvailable
-      imagesCount
+      destination
+      saison
       images {
         id
         image
-      }
-      destination {
-        id
-        nom
-        description
-        region
-        pays
-        circuitsCount
-        imagesCount
       }
       saison {
         id
@@ -108,57 +87,6 @@ export const GET_CIRCUIT_BY_ID = gql`
   }
 `;
 
-export const GET_CIRCUITS_BY_DESTINATION = gql`
-  query GetCircuitsByDestination($destinationId: ID!) {
-    circuitsByDestination(destinationId: $destinationId) {
-      id
-      titre
-      description
-      duree
-      prix
-      difficulte
-      images {
-        id
-        image
-      }
-      destination {
-        id
-        nom
-        region
-      }
-    }
-  }
-`;
-
-// Queries pour les destinations
-export const GET_ALL_DESTINATIONS = gql`
-  query GetAllDestinations {
-    allDestinations {
-      id
-      nom
-      description
-      region
-      pays
-      image
-      circuitsCount
-    }
-  }
-`;
-
-export const GET_POPULAR_DESTINATIONS = gql`
-  query GetPopularDestinations($limit: Int) {
-    popularDestinations(limit: $limit) {
-      id
-      nom
-      description
-      region
-      pays
-      image
-      circuitsCount
-    }
-  }
-`;
-
 // Queries pour les véhicules
 export const GET_ALL_VEHICULES = gql`
   query GetAllVehicules {
@@ -170,18 +98,11 @@ export const GET_ALL_VEHICULES = gql`
       annee
       prix
       etat
+      capacite
+      type
       images {
         id
         image
-      }
-      type {
-        id
-        libelle
-      }
-      capacite {
-        id
-        nombrePlaces
-        description
       }
     }
   }
@@ -197,18 +118,11 @@ export const GET_VEHICULE_BY_ID = gql`
       annee
       prix
       etat
+      capacite
+      type
       images {
         id
         image
-      }
-      type {
-        id
-        libelle
-      }
-      capacite {
-        id
-        nombrePlaces
-        description
       }
     }
   }
@@ -345,16 +259,8 @@ export const GET_USER_RESERVATIONS = gql`
         inclus
         nonInclus
         difficulte
-        destination {
-          id
-          nom
-          region
-          pays
-        }
-        saison {
-          id
-          nom
-        }
+        destination
+        saison
       }
       vehicule {
         id

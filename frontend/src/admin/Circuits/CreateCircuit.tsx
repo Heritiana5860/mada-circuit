@@ -143,27 +143,30 @@ const CreateCircuit = () => {
       type: types,
       transport,
       difficulte,
-      destinationNom: destination,
-      destinationRegion: region,
-      saisonNom: saison,
+      destination: destination,
+      region: region,
+      saison: saison,
       inclus,
       nonInclus,
       itineraires: days.map((day) => ({
         jour: day.jour,
         lieuDepart: day.depart,
         lieuArrivee: day.arrivee || null,
-        distanceKm: day.distance || null,
-        dureeTrajet: day.duree || null,
+        distanceKm: parseFloat(day.distance.toString()) || null,
+        dureeTrajet: parseFloat(day.duree.toString()) || null,
         description: day.description || null,
       })),
-      image: selectedImages,
+      images: selectedImages.map(img => img.file),
     };
 
     try {
       const result = await createACircuit({ variables: data });
+      console.log("Resultat de la mutation:", result);
+      console.log("Data:", data);
+
       if (result.data.createCircuit.success) {
         emptyFields();
-        setCurrentStep(1); // Revenir à la première étape
+        setCurrentStep(1);
         setErrorMessage("Circuit créé avec succès !");
       } else {
         setErrorMessage(result.data.createCircuit.errors.join(", "));

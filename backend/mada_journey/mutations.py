@@ -1,8 +1,5 @@
-from datetime import datetime, timedelta
-import os
 import graphene
 from graphene_file_upload.scalars import Upload
-from django.core.files.uploadedfile import UploadedFile
 from django.contrib.auth import authenticate
 from django.utils import timezone
 from django.core.exceptions import ValidationError
@@ -23,17 +20,15 @@ from .email_helper import (
     objet_confirmation_message_sur_mesure)
 
 from .models import (
-    Utilisateur, Destination, Saison, Circuit, Itineraire,
-    TypeVehicule, Capacite, Vehicule, Reservation, Blog, BlogCommentaire, Faq,
-    CircuitImage, VehiculeImage, DestinationImage, BlogImage,
+    Utilisateur, Circuit, Itineraire, Vehicule, Reservation, Blog, BlogCommentaire, Faq,
+    CircuitImage, VehiculeImage, BlogImage,
     EtatVehicule, Testimonia, ContactUsModele, Personnel, SurMesure, LieuAVisiter, SurMesureActivite
 )
 from .model_types import (
-    UtilisateurType, DestinationType, SaisonType, CircuitType,
-    TypeVehiculeType, CapaciteType, VehiculeType,
+    UtilisateurType, CircuitType, VehiculeType,
     ReservationType, BlogType,
     BlogCommentaireType, FaqType,
-    CircuitImageType, VehiculeImageType, DestinationImageType, BlogImageType, TestimoniaType, ContactUsType, PersonnelType, SurMesureType
+    CircuitImageType, VehiculeImageType, BlogImageType, TestimoniaType, ContactUsType, PersonnelType, SurMesureType
 )
 from graphql_relay import from_global_id
 
@@ -138,156 +133,12 @@ class DeleteUtilisateur(graphene.Mutation):
         except Exception as e:
             return DeleteUtilisateur(success=False, errors=[str(e)])
 
-# Mutations pour les destinations
-class CreateDestination(graphene.Mutation):
-    class Arguments:
-        nom = graphene.String(required=True)
-        description = graphene.String(required=True)
-        region = graphene.String(required=True)
-        pays = graphene.String()
-        image = Upload()
-
-    destination = graphene.Field(DestinationType)
-    success = graphene.Boolean()
-    errors = graphene.List(graphene.String)
-
-    def mutate(self, info, nom, description, region, pays="Madagascar", image=None):
-        try:
-            destination = Destination.objects.create(
-                nom=nom,
-                description=description,
-                region=region,
-                pays=pays,
-                image=image
-            )
-            return CreateDestination(destination=destination, success=True)
-        except Exception as e:
-            return CreateDestination(success=False, errors=[str(e)])
-
-class UpdateDestination(graphene.Mutation):
-    class Arguments:
-        id = graphene.ID(required=True)
-        nom = graphene.String()
-        description = graphene.String()
-        region = graphene.String()
-        pays = graphene.String()
-        image = Upload()
-
-    destination = graphene.Field(DestinationType)
-    success = graphene.Boolean()
-    errors = graphene.List(graphene.String)
-
-    def mutate(self, info, id, **kwargs):
-        try:
-            destination = Destination.objects.get(pk=id)
-            for field, value in kwargs.items():
-                if value is not None:
-                    setattr(destination, field, value)
-            destination.save()
-            return UpdateDestination(destination=destination, success=True)
-        except Destination.DoesNotExist:
-            return UpdateDestination(success=False, errors=["Destination non trouvée"])
-        except Exception as e:
-            return UpdateDestination(success=False, errors=[str(e)])
-
-class DeleteDestination(graphene.Mutation):
-    class Arguments:
-        id = graphene.ID(required=True)
-
-    success = graphene.Boolean()
-    errors = graphene.List(graphene.String)
-
-    def mutate(self, info, id):
-        try:
-            destination = Destination.objects.get(pk=id)
-            destination.delete()
-            return DeleteDestination(success=True)
-        except Destination.DoesNotExist:
-            return DeleteDestination(success=False, errors=["Destination non trouvée"])
-        except Exception as e:
-            return DeleteDestination(success=False, errors=[str(e)])
-
-# Mutations pour les saisons
-class CreateSaison(graphene.Mutation):
-    class Arguments:
-        nom = graphene.String(required=True)
-        date_debut = graphene.Date(required=True)
-        date_fin = graphene.Date(required=True)
-
-    saison = graphene.Field(SaisonType)
-    success = graphene.Boolean()
-    errors = graphene.List(graphene.String)
-
-    def mutate(self, info, nom, date_debut, date_fin):
-        try:
-            if date_debut >= date_fin:
-                return CreateSaison(success=False, errors=["La date de début doit être antérieure à la date de fin"])
-            
-            saison = Saison.objects.create(
-                nom=nom,
-                date_debut=date_debut,
-                date_fin=date_fin
-            )
-            return CreateSaison(saison=saison, success=True)
-        except Exception as e:
-            return CreateSaison(success=False, errors=[str(e)])
-
-class UpdateSaison(graphene.Mutation):
-    class Arguments:
-        id = graphene.ID(required=True)
-        nom = graphene.String()
-        date_debut = graphene.Date()
-        date_fin = graphene.Date()
-
-    saison = graphene.Field(SaisonType)
-    success = graphene.Boolean()
-    errors = graphene.List(graphene.String)
-
-    def mutate(self, info, id, **kwargs):
-        try:
-            saison = Saison.objects.get(pk=id)
-            
-            # Validation des dates
-            date_debut = kwargs.get('date_debut', saison.date_debut)
-            date_fin = kwargs.get('date_fin', saison.date_fin)
-            if date_debut >= date_fin:
-                return UpdateSaison(success=False, errors=["La date de début doit être antérieure à la date de fin"])
-            
-            for field, value in kwargs.items():
-                if value is not None:
-                    setattr(saison, field, value)
-            saison.save()
-            return UpdateSaison(saison=saison, success=True)
-        except Saison.DoesNotExist:
-            return UpdateSaison(success=False, errors=["Saison non trouvée"])
-        except Exception as e:
-            return UpdateSaison(success=False, errors=[str(e)])
-
-class DeleteSaison(graphene.Mutation):
-    class Arguments:
-        id = graphene.ID(required=True)
-
-    success = graphene.Boolean()
-    errors = graphene.List(graphene.String)
-
-    def mutate(self, info, id):
-        try:
-            saison = Saison.objects.get(pk=id)
-            if saison.circuits.exists():
-                return DeleteSaison(success=False, errors=["Impossible de supprimer une saison avec des circuits associés"])
-            saison.delete()
-            return DeleteSaison(success=True)
-        except Saison.DoesNotExist:
-            return DeleteSaison(success=False, errors=["Saison non trouvée"])
-        except Exception as e:
-            return DeleteSaison(success=False, errors=[str(e)])
-
 class ItineraireInput(graphene.InputObjectType):
     jour = graphene.Int(required=True, description="Jour de l'itinéraire (ex: 1, 2, ...)")
     lieu_depart = graphene.String(required=True, description="Lieu de départ")
     lieu_arrivee = graphene.String(required=False, description="Lieu d'arrivée")
-    distance_km = graphene.Int(required=False, description="Distance en kilomètres")
-    duree_trajet = graphene.Int(required=False, description="Durée du trajet en heures")
+    distance_km = graphene.Float(required=False, description="Distance en kilomètres")
+    duree_trajet = graphene.Float(required=False, description="Durée du trajet en heures")
     description = graphene.String(required=False, description="Description de l'itinéraire")
 
 # Mutations pour les circuits
@@ -299,11 +150,13 @@ class CreateCircuit(graphene.Mutation):
         prix = graphene.Int(required=True)
         type = graphene.String(required=True)
         transport = graphene.String(required=True)
-        image = Upload(required=False)
+        inclus = graphene.String()
+        non_inclus = graphene.String()
+        images = graphene.List(Upload, required=False)
         difficulte = graphene.String(required=True)
-        destination_nom = graphene.String(required=True)
-        destination_region = graphene.String(required=True)
-        saison_nom = graphene.String(required=True)
+        destination = graphene.String(required=True)
+        region = graphene.String(required=True)
+        saison = graphene.String(required=True)
         itineraires = graphene.List(ItineraireInput, required=True, description="Liste des itinéraires")
 
     circuit = graphene.Field(CircuitType)
@@ -319,18 +172,17 @@ class CreateCircuit(graphene.Mutation):
         prix,
         type,
         transport,
+        inclus,
+        non_inclus,
         difficulte,
-        destination_nom,
-        destination_region,
-        saison_nom,
+        destination,
+        region,
+        saison,
         itineraires,
-        image=None,
+        images=None
     ):
         try:
             with transaction.atomic():
-                # Vérifier l'existence de la destination et de la saison
-                destination = Destination.objects.get(nom=destination_nom, region=destination_region)
-                saison = Saison.objects.get(nom=saison_nom)
 
                 # Créer le circuit
                 circuit = Circuit.objects.create(
@@ -340,75 +192,39 @@ class CreateCircuit(graphene.Mutation):
                     prix=Decimal(str(prix)),
                     type=type,
                     transport=transport,
-                    image=image,
+                    inclus=inclus,
+                    non_inclus=non_inclus,
                     difficulte=difficulte,
                     destination=destination,
+                    region=region,
                     saison=saison,
                 )
+                
+                logger.debug(f"circuit: {circuit}")
 
                 # Créer les itinéraires et les associer au circuit
                 for itineraire_data in itineraires:
                     Itineraire.objects.create(
                         circuit=circuit,
-                        jour=itineraire_data.jour,
-                        lieu_depart=itineraire_data.lieu_depart,
-                        lieu_arrivee=itineraire_data.lieu_arrivee,
-                        distance_km=itineraire_data.distance_km,
-                        duree_trajet=itineraire_data.duree_trajet,
-                        description=itineraire_data.description,
-                        carte_gps=itineraire_data.carte_gps,
+                        jour=itineraire_data["jour"],
+                        lieu_depart=itineraire_data["lieu_depart"],
+                        lieu_arrivee=itineraire_data.get("lieu_arrivee"),
+                        distance_km=itineraire_data.get("distance_km"),
+                        duree_trajet=itineraire_data.get("duree_trajet"),
+                        description=itineraire_data.get("description"),
                     )
+                    
+                if images:
+                    for idx, img in enumerate(images):
+                        CircuitImage.objects.create(
+                            circuit=circuit,
+                            image=img,
+                            ordre=idx,
+                        )
 
                 return CreateCircuit(circuit=circuit, success=True)
-        except (Destination.DoesNotExist, Saison.DoesNotExist):
-            return CreateCircuit(success=False, errors=["Destination ou saison non trouvée"])
         except Exception as e:
             return CreateCircuit(success=False, errors=[str(e)])
-
-class UpdateCircuit(graphene.Mutation):
-    class Arguments:
-        id = graphene.ID(required=True)
-        titre = graphene.String()
-        description = graphene.String()
-        duree = graphene.Int()
-        prix = graphene.Float()
-        image = Upload()
-        difficulte = graphene.String()
-        destination_id = graphene.ID()
-        saison_id = graphene.ID()
-
-    circuit = graphene.Field(CircuitType)
-    success = graphene.Boolean()
-    errors = graphene.List(graphene.String)
-
-    def mutate(self, info, id, **kwargs):
-        try:
-            circuit = Circuit.objects.get(pk=id)
-
-            # Gestion des relations
-            if 'destination_id' in kwargs and kwargs['destination_id']:
-                circuit.destination = Destination.objects.get(pk=kwargs['destination_id'])
-                del kwargs['destination_id']
-
-            if 'saison_id' in kwargs and kwargs['saison_id']:
-                circuit.saison = Saison.objects.get(pk=kwargs['saison_id'])
-                del kwargs['saison_id']
-
-            # Conversion du prix
-            if 'prix' in kwargs and kwargs['prix'] is not None:
-                kwargs['prix'] = Decimal(str(kwargs['prix']))
-
-            for field, value in kwargs.items():
-                if value is not None:
-                    setattr(circuit, field, value)
-            circuit.save()
-            return UpdateCircuit(circuit=circuit, success=True)
-        except Circuit.DoesNotExist:
-            return UpdateCircuit(success=False, errors=["Circuit non trouvé"])
-        except (Destination.DoesNotExist, Saison.DoesNotExist):
-            return UpdateCircuit(success=False, errors=["Destination ou saison non trouvée"])
-        except Exception as e:
-            return UpdateCircuit(success=False, errors=[str(e)])
 
 class DeleteCircuit(graphene.Mutation):
     class Arguments:
@@ -436,8 +252,8 @@ class CreateVehicule(graphene.Mutation):
         marque = graphene.String(required=True)
         modele = graphene.String(required=True)
         annee = graphene.Int(required=True)
-        type_id = graphene.ID(required=True)
-        capacite_id = graphene.ID(required=True)
+        type = graphene.ID(required=True)
+        capacite = graphene.ID(required=True)
         prix = graphene.Float(required=True)
         etat = graphene.String()
         image = Upload()
@@ -446,90 +262,26 @@ class CreateVehicule(graphene.Mutation):
     success = graphene.Boolean()
     errors = graphene.List(graphene.String)
 
-    def mutate(self, info, immatriculation, marque, modele, annee, type_id, capacite_id, prix, etat="DISPONIBLE", image=None):
+    def mutate(self, info, immatriculation, marque, modele, annee, type, capacite, prix, etat="DISPONIBLE", image=None):
         try:
             with transaction.atomic():
                 if Vehicule.objects.filter(immatriculation=immatriculation).exists():
                     return CreateVehicule(success=False, errors=["Un véhicule avec cette immatriculation existe déjà"])
-
-                type_vehicule = TypeVehicule.objects.get(pk=type_id)
-                capacite = Capacite.objects.get(pk=capacite_id)
 
                 vehicule = Vehicule.objects.create(
                     immatriculation=immatriculation,
                     marque=marque,
                     modele=modele,
                     annee=annee,
-                    type=type_vehicule,
+                    type=type,
                     capacite=capacite,
                     prix=Decimal(str(prix)),
                     etat=etat,
                     image=image
                 )
                 return CreateVehicule(vehicule=vehicule, success=True)
-        except (TypeVehicule.DoesNotExist, Capacite.DoesNotExist):
-            return CreateVehicule(success=False, errors=["Type de véhicule ou capacité non trouvé"])
         except Exception as e:
             return CreateVehicule(success=False, errors=[str(e)])
-
-class UpdateVehicule(graphene.Mutation):
-    class Arguments:
-        id = graphene.ID(required=True)
-        immatriculation = graphene.String()
-        marque = graphene.String()
-        modele = graphene.String()
-        annee = graphene.Int()
-        type_id = graphene.ID()
-        capacite_id = graphene.ID()
-        prix = graphene.Float()
-        etat = graphene.String()
-        image = Upload()
-
-    vehicule = graphene.Field(VehiculeType)
-    success = graphene.Boolean()
-    errors = graphene.List(graphene.String)
-
-    def mutate(self, info, id, **kwargs):
-        try:
-            vehicule = Vehicule.objects.get(pk=id)
-
-            # Vérifier l'unicité de l'immatriculation si elle est modifiée
-            if 'immatriculation' in kwargs and kwargs['immatriculation']:
-                if Vehicule.objects.filter(immatriculation=kwargs['immatriculation']).exclude(pk=id).exists():
-                    return UpdateVehicule(success=False, errors=["Un véhicule avec cette immatriculation existe déjà"])
-
-            # Gérer les relations
-            if 'type_id' in kwargs and kwargs['type_id']:
-                try:
-                    type_vehicule = TypeVehicule.objects.get(pk=kwargs['type_id'])
-                    vehicule.type = type_vehicule
-                    del kwargs['type_id']
-                except TypeVehicule.DoesNotExist:
-                    return UpdateVehicule(success=False, errors=["Type de véhicule non trouvé"])
-
-            if 'capacite_id' in kwargs and kwargs['capacite_id']:
-                try:
-                    capacite = Capacite.objects.get(pk=kwargs['capacite_id'])
-                    vehicule.capacite = capacite
-                    del kwargs['capacite_id']
-                except Capacite.DoesNotExist:
-                    return UpdateVehicule(success=False, errors=["Capacité non trouvée"])
-
-            # Convertir le prix en Decimal si fourni
-            if 'prix' in kwargs and kwargs['prix'] is not None:
-                kwargs['prix'] = Decimal(str(kwargs['prix']))
-
-            # Mettre à jour les autres champs
-            for field, value in kwargs.items():
-                if value is not None:
-                    setattr(vehicule, field, value)
-
-            vehicule.save()
-            return UpdateVehicule(vehicule=vehicule, success=True)
-        except Vehicule.DoesNotExist:
-            return UpdateVehicule(success=False, errors=["Véhicule non trouvé"])
-        except Exception as e:
-            return UpdateVehicule(success=False, errors=[str(e)])
 
 # Mutations pour les réservations
 class CreateReservation(graphene.Mutation):
@@ -924,41 +676,6 @@ class DeleteFaq(graphene.Mutation):
         except Exception as e:
             return DeleteFaq(success=False, errors=[str(e)])
 
-# Mutations pour les types de véhicules et capacités
-class CreateTypeVehicule(graphene.Mutation):
-    class Arguments:
-        libelle = graphene.String(required=True)
-
-    type_vehicule = graphene.Field(TypeVehiculeType)
-    success = graphene.Boolean()
-    errors = graphene.List(graphene.String)
-
-    def mutate(self, info, libelle):
-        try:
-            type_vehicule = TypeVehicule.objects.create(libelle=libelle)
-            return CreateTypeVehicule(type_vehicule=type_vehicule, success=True)
-        except Exception as e:
-            return CreateTypeVehicule(success=False, errors=[str(e)])
-
-class CreateCapacite(graphene.Mutation):
-    class Arguments:
-        nombre_places = graphene.Int(required=True)
-        description = graphene.String()
-
-    capacite = graphene.Field(CapaciteType)
-    success = graphene.Boolean()
-    errors = graphene.List(graphene.String)
-
-    def mutate(self, info, nombre_places, description=None):
-        try:
-            capacite = Capacite.objects.create(
-                nombre_places=nombre_places,
-                description=description
-            )
-            return CreateCapacite(capacite=capacite, success=True)
-        except Exception as e:
-            return CreateCapacite(success=False, errors=[str(e)])
-
 # Mutations d'authentification
 class RegisterUser(graphene.Mutation):
     class Arguments:
@@ -1016,8 +733,6 @@ class RegisterUser(graphene.Mutation):
                 # Générer un token simple (optionnel)
                 import uuid
                 token = f"token_{utilisateur.id}_{uuid.uuid4().hex[:8]}"
-                
-                logger.debug(f"Utilisateur: {utilisateur}")
 
                 return RegisterUser(
                     utilisateur=utilisateur,
@@ -1289,76 +1004,6 @@ class DeleteVehiculeImage(graphene.Mutation):
             return DeleteVehiculeImage(success=False, errors=["Image de véhicule non trouvée"])
         except Exception as e:
             return DeleteVehiculeImage(success=False, errors=[str(e)])
-
-class CreateDestinationImage(graphene.Mutation):
-    class Arguments:
-        destination_id = graphene.ID(required=True)
-        image = Upload(required=True)
-        titre = graphene.String()
-        description = graphene.String()
-        ordre = graphene.Int()
-
-    destination_image = graphene.Field(DestinationImageType)
-    success = graphene.Boolean()
-    errors = graphene.List(graphene.String)
-
-    def mutate(self, info, destination_id, image, titre=None, description=None, ordre=0):
-        try:
-            destination = Destination.objects.get(pk=destination_id)
-            destination_image = DestinationImage.objects.create(
-                destination=destination,
-                image=image,
-                titre=titre,
-                description=description,
-                ordre=ordre
-            )
-            return CreateDestinationImage(destination_image=destination_image, success=True)
-        except Destination.DoesNotExist:
-            return CreateDestinationImage(success=False, errors=["Destination non trouvée"])
-        except Exception as e:
-            return CreateDestinationImage(success=False, errors=[str(e)])
-
-class UpdateDestinationImage(graphene.Mutation):
-    class Arguments:
-        id = graphene.ID(required=True)
-        image = Upload()
-        titre = graphene.String()
-        description = graphene.String()
-        ordre = graphene.Int()
-
-    destination_image = graphene.Field(DestinationImageType)
-    success = graphene.Boolean()
-    errors = graphene.List(graphene.String)
-
-    def mutate(self, info, id, **kwargs):
-        try:
-            destination_image = DestinationImage.objects.get(pk=id)
-            for field, value in kwargs.items():
-                if value is not None:
-                    setattr(destination_image, field, value)
-            destination_image.save()
-            return UpdateDestinationImage(destination_image=destination_image, success=True)
-        except DestinationImage.DoesNotExist:
-            return UpdateDestinationImage(success=False, errors=["Image de destination non trouvée"])
-        except Exception as e:
-            return UpdateDestinationImage(success=False, errors=[str(e)])
-
-class DeleteDestinationImage(graphene.Mutation):
-    class Arguments:
-        id = graphene.ID(required=True)
-
-    success = graphene.Boolean()
-    errors = graphene.List(graphene.String)
-
-    def mutate(self, info, id):
-        try:
-            destination_image = DestinationImage.objects.get(pk=id)
-            destination_image.delete()
-            return DeleteDestinationImage(success=True)
-        except DestinationImage.DoesNotExist:
-            return DeleteDestinationImage(success=False, errors=["Image de destination non trouvée"])
-        except Exception as e:
-            return DeleteDestinationImage(success=False, errors=[str(e)])
 
 class CreateBlogImage(graphene.Mutation):
     class Arguments:
@@ -1900,26 +1545,12 @@ class Mutation(graphene.ObjectType):
     update_utilisateur = UpdateUtilisateur.Field()
     delete_utilisateur = DeleteUtilisateur.Field()
 
-    # Mutations destinations
-    create_destination = CreateDestination.Field()
-    update_destination = UpdateDestination.Field()
-    delete_destination = DeleteDestination.Field()
-
-    # Mutations saisons
-    create_saison = CreateSaison.Field()
-    update_saison = UpdateSaison.Field()
-    delete_saison = DeleteSaison.Field()
-
     # Mutations circuits
     create_circuit = CreateCircuit.Field()
-    update_circuit = UpdateCircuit.Field()
     delete_circuit = DeleteCircuit.Field()
 
     # Mutations véhicules
     create_vehicule = CreateVehicule.Field()
-    update_vehicule = UpdateVehicule.Field()
-    create_type_vehicule = CreateTypeVehicule.Field()
-    create_capacite = CreateCapacite.Field()
 
     # Mutations réservations
     create_reservation = CreateReservation.Field()
@@ -1946,10 +1577,6 @@ class Mutation(graphene.ObjectType):
     create_vehicule_image = CreateVehiculeImage.Field()
     update_vehicule_image = UpdateVehiculeImage.Field()
     delete_vehicule_image = DeleteVehiculeImage.Field()
-
-    create_destination_image = CreateDestinationImage.Field()
-    update_destination_image = UpdateDestinationImage.Field()
-    delete_destination_image = DeleteDestinationImage.Field()
 
     create_blog_image = CreateBlogImage.Field()
     update_blog_image = UpdateBlogImage.Field()

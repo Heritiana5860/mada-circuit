@@ -418,11 +418,13 @@ export const CREATE_CIRCUIT = gql`
     $type: String!
     $transport: String!
     $difficulte: String!
-    $destinationNom: String!
-    $destinationRegion: String!
-    $saisonNom: String!
-    $itineraires: [ItineraireInput!]!
-    $image: Upload
+    $inclus: String
+    $nonInclus: String
+    $destination: String!
+    $region: String!
+    $saison: String!
+    $itineraires: [ItineraireInput]!
+    $images: [Upload]
   ) {
     createCircuit(
       titre: $titre
@@ -432,11 +434,13 @@ export const CREATE_CIRCUIT = gql`
       type: $type
       transport: $transport
       difficulte: $difficulte
-      destinationNom: $destinationNom
-      destinationRegion: $destinationRegion
-      saisonNom: $saisonNom
+      inclus: $inclus
+      nonInclus: $nonInclus
+      destination: $destination
+      region: $region
+      saison: $saison
       itineraires: $itineraires
-      image: $image
+      images: $images
     ) {
       success
       errors
@@ -446,24 +450,23 @@ export const CREATE_CIRCUIT = gql`
         description
         duree
         prix
+        inclus
+        nonInclus
+        destination
+        saison
+        difficulte
         type
         transport
-        difficulte
-        destination {
-          nom
-          region
-        }
-        saison {
-          nom
-        }
+        reservationsCount
+        isAvailable
         itineraires {
+          id
           jour
           lieuDepart
           lieuArrivee
           distanceKm
           dureeTrajet
           description
-          carteGps
         }
       }
     }

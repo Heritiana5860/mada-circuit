@@ -1,20 +1,15 @@
-import CircuitCard from "./CircuitCard";
-import { ArrowRight, Loader2, MapPin } from "lucide-react";
+import { ArrowRight, Loader2 } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useQuery } from "@apollo/client";
 import { GET_ALL_CIRCUITS } from "@/graphql/queries";
-import { Circuit } from "@/types";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import CardContentDetail from "./detail/CardContentDetail";
-import { Card, CardContent } from "./ui/card";
-import { Button } from "./ui/button";
-import { formatPrice } from "@/helper/formatage";
 import { useState } from "react";
 
 const PopularCircuits = () => {
   // Requête GraphQL pour récupérer tous les circuits (on prendra les 3 premiers)
   const { data, loading, error } = useQuery(GET_ALL_CIRCUITS, {
-    variables: { type: "circuit" },
+    variables: { type: "CIRCUIT" },
   });
 
   const [viewMode, setViewMode] = useState<"grid" | "list">("grid");

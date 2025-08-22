@@ -56,11 +56,11 @@ const getEtatIcon = (etat: string) => {
 
 // Fonction pour générer une description enrichie
 const generateDescription = (vehicle) => {
-  const typeVehicule = vehicle.type.libelle.toLowerCase();
+  const typeVehicule = vehicle.type.toLowerCase();
   const marque = vehicle.marque;
   const modele = vehicle.modele;
   const annee = vehicle.annee;
-  const places = vehicle.capacite.nombrePlaces;
+  const places = vehicle.capacite;
 
   let description = `Découvrez notre ${typeVehicule} ${marque} ${modele} de ${annee}, `;
 
@@ -350,11 +350,11 @@ const VehicleDetailSimple = () => {
       <NavBar />
       <main className="flex-grow">
         <div className="container mx-auto px-4 py-8">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+          <div>
             {/* Informations du véhicule */}
             <div>
-              <div className="relative mb-6">
-                <div className="aspect-[4/3] relative overflow-hidden rounded-2xl group">
+              <div className="relative mb-10">
+                <div className="h-96 relative overflow-hidden rounded-2xl group">
                   <img
                     src={allVehiculeImages[selectedImageIndex]}
                     alt={`${vehicle.marque} ${vehicle.modele} - Image ${
@@ -364,27 +364,6 @@ const VehicleDetailSimple = () => {
                     onError={() => handleImageError(selectedImageIndex)}
                     loading="lazy"
                   />
-                  <div className="absolute top-4 right-4 flex gap-2">
-                    <Button
-                      size="sm"
-                      variant="secondary"
-                      className="bg-white/20 hover:bg-white/40"
-                      onClick={() => setIsWishlisted(!isWishlisted)}
-                    >
-                      <Heart
-                        className={`h-4 w-4 ${
-                          isWishlisted ? "fill-red-500 text-red-500" : ""
-                        }`}
-                      />
-                    </Button>
-                    <Button
-                      size="sm"
-                      variant="secondary"
-                      className="bg-white/20 hover:bg-white/40"
-                    >
-                      <Share2 className="h-4 w-4" />
-                    </Button>
-                  </div>
 
                   {/* Indicateur du nombre d'images */}
                   {allVehiculeImages.length > 1 && (
@@ -393,38 +372,6 @@ const VehicleDetailSimple = () => {
                     </div>
                   )}
                 </div>
-
-                {/* Miniatures */}
-                {allVehiculeImages.length > 1 && (
-                  <div className="flex gap-2 mt-4 overflow-x-auto pb-2">
-                    {allVehiculeImages.slice(0, 8).map((img, index) => (
-                      <button
-                        key={index}
-                        onClick={() => setSelectedImageIndex(index)}
-                        className={`flex-shrink-0 w-20 h-16 rounded-lg overflow-hidden border-2 transition-all hover:scale-105 ${
-                          selectedImageIndex === index
-                            ? "border-primary ring-2 ring-primary/20"
-                            : "border-gray-200 hover:border-gray-300"
-                        }`}
-                      >
-                        <img
-                          src={img}
-                          alt={`Vue ${index + 1}`}
-                          className="w-full h-full object-cover"
-                          onError={() =>
-                            console.warn(`Erreur miniature ${index}`)
-                          }
-                          loading="lazy"
-                        />
-                      </button>
-                    ))}
-                    {allVehiculeImages.length > 8 && (
-                      <div className="flex-shrink-0 w-20 h-16 rounded-lg border-2 border-gray-200 bg-gray-100 flex items-center justify-center text-xs font-medium text-gray-600">
-                        +{allVehiculeImages.length - 8}
-                      </div>
-                    )}
-                  </div>
-                )}
 
                 {/* Navigation par flèches (optionnel) */}
                 {allVehiculeImages.length > 1 && (
@@ -478,7 +425,10 @@ const VehicleDetailSimple = () => {
                   </>
                 )}
               </div>
+            </div>
 
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+              {/* Description */}
               <div className="bg-white rounded-lg shadow-md p-6">
                 <h1 className="text-3xl font-bold mb-4 text-gray-800">
                   {vehicle.marque} {vehicle.modele} ({vehicle.annee})
@@ -489,9 +439,7 @@ const VehicleDetailSimple = () => {
                     <Car className="w-5 h-5 mr-3 text-blue-600" />
                     <div>
                       <span className="text-sm text-gray-500 block">Type</span>
-                      <span className="font-medium">
-                        {vehicle.type.libelle}
-                      </span>
+                      <span className="font-medium">{vehicle.type}</span>
                     </div>
                   </div>
 
@@ -502,7 +450,7 @@ const VehicleDetailSimple = () => {
                         Capacité
                       </span>
                       <span className="font-medium">
-                        {vehicle.capacite.nombrePlaces} places
+                        {vehicle.capacite} places
                       </span>
                     </div>
                   </div>
@@ -548,143 +496,143 @@ const VehicleDetailSimple = () => {
                   </div>
                 </div>
               </div>
-            </div>
 
-            {/* Réservation */}
-            <div>
-              <Card className="shadow-lg">
-                <CardContent className="p-6">
-                  <h2 className="text-2xl text-center font-semibold mb-4 text-gray-800 border-b pb-3">
-                    Réservation
-                  </h2>
+              {/* Réservation */}
+              <div>
+                <Card className="shadow-lg">
+                  <CardContent className="p-6">
+                    <h2 className="text-2xl text-center font-semibold mb-4 text-gray-800 border-b pb-3">
+                      Réservation
+                    </h2>
 
-                  <form onSubmit={handleReservation} className="space-y-4">
-                    <div>
-                      <label className="block text-sm font-medium mb-2 text-gray-700">
-                        Date de début
-                      </label>
-                      <input
-                        type="date"
-                        name="dateDebut"
-                        value={formData.dateDebut}
-                        onChange={handleInputChange}
-                        className="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                        min={new Date().toISOString().split("T")[0]}
-                        required
-                      />
-                    </div>
-
-                    <div>
-                      <label className="block text-sm font-medium mb-2 text-gray-700">
-                        Date de fin
-                      </label>
-                      <input
-                        type="date"
-                        name="dateFin"
-                        value={formData.dateFin}
-                        onChange={handleInputChange}
-                        className="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                        min={
-                          formData.dateDebut ||
-                          new Date().toISOString().split("T")[0]
-                        }
-                        required
-                      />
-                    </div>
-
-                    <div>
-                      <label className="block text-sm font-medium mb-2 text-gray-700">
-                        Nombre de personnes
-                      </label>
-                      <input
-                        type="number"
-                        name="personne"
-                        value={formData.personne}
-                        onChange={handleInputChange}
-                        min="1"
-                        max={vehicle.capacite.nombrePlaces}
-                        placeholder="Combien de personnes ?"
-                        className="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                        required
-                      />
-                    </div>
-
-                    <div>
-                      <label className="block text-sm font-medium mb-2 text-gray-700">
-                        Message (optionnel)
-                      </label>
-                      <textarea
-                        name="commentaire"
-                        value={formData.commentaire}
-                        onChange={handleInputChange}
-                        placeholder="Ajouter un message ou une demande spéciale"
-                        className="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                        rows={3}
-                      />
-                    </div>
-
-                    {error && (
-                      <Alert variant="destructive">
-                        <XCircle className="w-4 h-4" />
-                        <AlertDescription>{error}</AlertDescription>
-                      </Alert>
-                    )}
-
-                    <div className="pt-4 border-t">
-                      <div className="flex justify-between items-center mb-4">
-                        <span className="text-sm text-gray-600">
-                          Prix par jour
-                        </span>
-                        <span className="font-semibold text-lg">
-                          {formatPrice(vehicle.prix)}
-                        </span>
+                    <form onSubmit={handleReservation} className="space-y-4">
+                      <div>
+                        <label className="block text-sm font-medium mb-2 text-gray-700">
+                          Date de début
+                        </label>
+                        <input
+                          type="date"
+                          name="dateDebut"
+                          value={formData.dateDebut}
+                          onChange={handleInputChange}
+                          className="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                          min={new Date().toISOString().split("T")[0]}
+                          required
+                        />
                       </div>
 
-                      {days > 0 && (
-                        <>
-                          <div className="flex justify-between items-center mb-4">
-                            <span className="text-sm text-gray-600">
-                              Nombre de jours
-                            </span>
-                            <span className="font-semibold">
-                              {days} {days > 1 ? "jours" : "jour"}
-                            </span>
-                          </div>
-                          <div className="flex justify-between items-center mb-6 p-3 bg-blue-50 rounded-lg">
-                            <span className="text-lg font-semibold text-gray-800">
-                              Total
-                            </span>
-                            <span className="text-2xl font-bold text-blue-600">
-                              {total.toLocaleString("fr-FR")} Ar
-                            </span>
-                          </div>
-                        </>
+                      <div>
+                        <label className="block text-sm font-medium mb-2 text-gray-700">
+                          Date de fin
+                        </label>
+                        <input
+                          type="date"
+                          name="dateFin"
+                          value={formData.dateFin}
+                          onChange={handleInputChange}
+                          className="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                          min={
+                            formData.dateDebut ||
+                            new Date().toISOString().split("T")[0]
+                          }
+                          required
+                        />
+                      </div>
+
+                      <div>
+                        <label className="block text-sm font-medium mb-2 text-gray-700">
+                          Nombre de personnes
+                        </label>
+                        <input
+                          type="number"
+                          name="personne"
+                          value={formData.personne}
+                          onChange={handleInputChange}
+                          min="1"
+                          max={vehicle.capacite.nombrePlaces}
+                          placeholder="Combien de personnes ?"
+                          className="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                          required
+                        />
+                      </div>
+
+                      <div>
+                        <label className="block text-sm font-medium mb-2 text-gray-700">
+                          Message (optionnel)
+                        </label>
+                        <textarea
+                          name="commentaire"
+                          value={formData.commentaire}
+                          onChange={handleInputChange}
+                          placeholder="Ajouter un message ou une demande spéciale"
+                          className="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                          rows={3}
+                        />
+                      </div>
+
+                      {error && (
+                        <Alert variant="destructive">
+                          <XCircle className="w-4 h-4" />
+                          <AlertDescription>{error}</AlertDescription>
+                        </Alert>
                       )}
 
-                      <Button
-                        type="submit"
-                        className="w-full bg-blue-600 hover:bg-blue-700 text-white py-3"
-                        size="lg"
-                        disabled={
-                          !isAuthenticated
-                            ? false
-                            : isSubmitting ||
-                              reservationLoading ||
-                              !formData.dateDebut ||
-                              !formData.dateFin ||
-                              formData.personne < 1
-                        }
-                      >
-                        {isSubmitting || reservationLoading
-                          ? "Réservation en cours..."
-                          : !isAuthenticated
-                          ? "Se connecter pour réserver"
-                          : "Réserver maintenant"}
-                      </Button>
-                    </div>
-                  </form>
-                </CardContent>
-              </Card>
+                      <div className="pt-4 border-t">
+                        <div className="flex justify-between items-center mb-4">
+                          <span className="text-sm text-gray-600">
+                            Prix par jour
+                          </span>
+                          <span className="font-semibold text-lg">
+                            {formatPrice(vehicle.prix)}
+                          </span>
+                        </div>
+
+                        {days > 0 && (
+                          <>
+                            <div className="flex justify-between items-center mb-4">
+                              <span className="text-sm text-gray-600">
+                                Nombre de jours
+                              </span>
+                              <span className="font-semibold">
+                                {days} {days > 1 ? "jours" : "jour"}
+                              </span>
+                            </div>
+                            <div className="flex justify-between items-center mb-6 p-3 bg-blue-50 rounded-lg">
+                              <span className="text-lg font-semibold text-gray-800">
+                                Total
+                              </span>
+                              <span className="text-2xl font-bold text-blue-600">
+                                {total.toLocaleString("fr-FR")} Ar
+                              </span>
+                            </div>
+                          </>
+                        )}
+
+                        <Button
+                          type="submit"
+                          className="w-full bg-blue-600 hover:bg-blue-700 text-white py-3"
+                          size="lg"
+                          disabled={
+                            !isAuthenticated
+                              ? false
+                              : isSubmitting ||
+                                reservationLoading ||
+                                !formData.dateDebut ||
+                                !formData.dateFin ||
+                                formData.personne < 1
+                          }
+                        >
+                          {isSubmitting || reservationLoading
+                            ? "Réservation en cours..."
+                            : !isAuthenticated
+                            ? "Se connecter pour réserver"
+                            : "Réserver maintenant"}
+                        </Button>
+                      </div>
+                    </form>
+                  </CardContent>
+                </Card>
+              </div>
             </div>
           </div>
         </div>

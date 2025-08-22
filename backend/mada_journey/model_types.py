@@ -3,9 +3,8 @@ from graphene_django import DjangoObjectType
 from graphene import relay
 from django.contrib.auth import get_user_model
 from .models import (
-    Utilisateur, Destination, Saison, Circuit, PointInteret,
-    TypeVehicule, Capacite, Vehicule, Reservation, Personnel, Blog, BlogCommentaire, Faq,
-    CircuitImage, VehiculeImage, DestinationImage, BlogImage,
+    Utilisateur, Circuit, PointInteret, Vehicule, Reservation, Personnel, Blog, BlogCommentaire, Faq,
+    CircuitImage, VehiculeImage, BlogImage,
     Role, Difficulte, EtatVehicule, Hebergement, Activite, Itineraire, Testimonia, ContactUsModele, SurMesure, LieuAVisiter, SurMesureActivite
 )
 
@@ -59,11 +58,6 @@ class VehiculeImageType(DjangoObjectType):
         fields = ('id', 'vehicule', 'image', 'titre', 'description', 'ordre')
         interfaces = (relay.Node,)
 
-class DestinationImageType(DjangoObjectType):
-    class Meta:
-        model = DestinationImage
-        fields = ('id', 'destination', 'image', 'titre', 'description', 'ordre')
-        interfaces = (relay.Node,)
 
 class BlogImageType(DjangoObjectType):
     class Meta:
@@ -83,35 +77,6 @@ class UtilisateurType(DjangoObjectType):
         )
         interfaces = (relay.Node,)
 
-class DestinationType(DjangoObjectType):
-    circuits_count = graphene.Int()
-    images = graphene.List(DestinationImageType)
-    images_count = graphene.Int()
-
-    class Meta:
-        model = Destination
-        fields = ('id', 'nom', 'description', 'region', 'pays', 'image')
-        interfaces = (relay.Node,)
-
-    def resolve_circuits_count(self, info):
-        return self.circuits.count()
-
-    def resolve_images(self, info):
-        return self.images.all().order_by('ordre')
-
-    def resolve_images_count(self, info):
-        return self.images.count()
-
-class SaisonType(DjangoObjectType):
-    circuits_count = graphene.Int()
-    
-    class Meta:
-        model = Saison
-        fields = ('id', 'nom', 'date_debut', 'date_fin')
-        interfaces = (relay.Node,)
-    
-    def resolve_circuits_count(self, info):
-        return self.circuits.count()
 
 class PointInteretType(DjangoObjectType):
     class Meta:
@@ -138,7 +103,7 @@ class CircuitType(DjangoObjectType):
         model = Circuit
         fields = (
             'id', 'titre', 'description', 'duree', 'transport', 'prix', 'inclus', 'non_inclus', 'type', 'image',
-            'difficulte', 'destination', 'saison', 'vehicule_recommande'   
+            'difficulte', 'destination', 'saison'  
         )
         interfaces = (relay.Node,)
 
@@ -160,33 +125,11 @@ class CircuitType(DjangoObjectType):
 
     def resolve_images_count(self, info):
         return self.images.count()
-
-class TypeVehiculeType(DjangoObjectType):
-    vehicules_count = graphene.Int()
-    
-    class Meta:
-        model = TypeVehicule
-        fields = ('id', 'libelle')
-        interfaces = (relay.Node,)
-    
-    def resolve_vehicules_count(self, info):
-        return self.vehicules.count()
     
 class VehiculeImageType(DjangoObjectType):
     class Meta:
         model = VehiculeImage
         fields = ('id', 'image', 'ordre')
-
-class CapaciteType(DjangoObjectType):
-    vehicules_count = graphene.Int()
-    
-    class Meta:
-        model = Capacite
-        fields = ('id', 'nombre_places', 'description')
-        interfaces = (relay.Node,)
-    
-    def resolve_vehicules_count(self, info):
-        return self.vehicules.count()
 
 class VehiculeType(DjangoObjectType):
     etat = graphene.Field(EtatVehiculeEnum)
@@ -328,7 +271,6 @@ class LieuAVisiterType(DjangoObjectType):
     class Meta:
         model = LieuAVisiter
         fields = "__all__"
-
 
 class SurMesureActiviteType(DjangoObjectType):
     class Meta:

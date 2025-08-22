@@ -1,11 +1,10 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { cn } from "@/lib/utils";
-import { Car, Users, Fuel } from "lucide-react";
+import { Car, Users } from "lucide-react";
 import { CSSProperties } from "react";
 import { Vehicule } from "@/types";
 
-import { VehiculeImage } from "@/types";
 import { formatPrice } from "@/helper/formatage";
 
 interface VehicleCardProps {
@@ -56,11 +55,11 @@ const VehicleCard: React.FC<VehicleCardProps> = ({
           <div className="flex items-center gap-4 text-sm text-gray-600 mb-4">
             <div className="flex items-center">
               <Car className="w-4 h-4 mr-1" />
-              <span>{type.libelle}</span>
+              <span>{type}</span>
             </div>
             <div className="flex items-center">
               <Users className="w-4 h-4 mr-1" />
-              <span>{capacite.nombrePlaces} places</span>
+              <span>{capacite} places</span>
             </div>
           </div>
 

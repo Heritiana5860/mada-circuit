@@ -8,17 +8,13 @@ interface ImageType {
   image: string;
 }
 
-interface DestinationType {
-  nom: string;
-}
-
 interface PackType {
   id: number;
   titre: string;
   duree: number;
   prix: number;
   images: ImageType[];
-  destination: DestinationType;
+  destination: string;
   description: string;
 }
 
@@ -51,7 +47,7 @@ const CardContentDetail: React.FC<CardContentDetailProps> = ({
         <CardContent className="p-6">
           <div className="flex items-center mb-2 text-sm text-muted-foreground">
             <MapPin className="h-4 w-4 mr-1" />
-            <span>{pack.destination?.nom ?? "Destination inconnue"}</span>
+            <span>{pack?.destination ?? "Destination inconnue"}</span>
           </div>
           <h3 className="text-xl font-bold mb-2">{pack.titre}</h3>
           <p className="text-muted-foreground mb-4 line-clamp-2">{pack.description}</p>

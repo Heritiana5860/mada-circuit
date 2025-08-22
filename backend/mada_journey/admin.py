@@ -1,12 +1,9 @@
 from django.contrib import admin
 from django.utils.html import format_html
-from django.utils.safestring import mark_safe
-from django.urls import reverse
 from django.contrib.auth.admin import UserAdmin
 from .models import (
-    Utilisateur, Destination, Saison, Circuit, PointInteret,
-    TypeVehicule, Capacite, Vehicule, Reservation, Personnel, Blog, BlogCommentaire, Faq,
-    CircuitImage, VehiculeImage, DestinationImage, BlogImage, Itineraire, Testimonia, ContactUsModele, SurMesure, SurMesureActivite, LieuAVisiter
+    Utilisateur, Circuit, PointInteret, Vehicule, Reservation, Personnel, Blog, BlogCommentaire, Faq,
+    CircuitImage, VehiculeImage, BlogImage, Itineraire, Testimonia, ContactUsModele, SurMesure, SurMesureActivite, LieuAVisiter
 )
 
 
@@ -34,58 +31,13 @@ class UtilisateurAdmin(UserAdmin):
             'fields': ('email', 'nom', 'prenom', 'telephone', 'role', 'image')
         }),
     )
-
-
-# Inline pour les images de destination (défini avant DestinationAdmin)
-class DestinationImageInline(admin.TabularInline):
-    model = DestinationImage
-    extra = 1
-    readonly_fields = ('image_preview',)
-    fields = ('image', 'titre', 'description', 'ordre', 'image_preview')
-    ordering = ('ordre',)
-
-    def image_preview(self, obj):
-        if obj.image:
-            return format_html('<img src="{}" width="50" height="50" style="border-radius: 3px;" />', obj.image.url)
-        return "Pas d'image"
-    image_preview.short_description = "Aperçu"
-
-
-@admin.register(Destination)
-class DestinationAdmin(admin.ModelAdmin):
-    list_display = ('nom', 'region', 'pays', 'image_preview', 'nombre_circuits')
-    list_filter = ('region', 'pays')
-    search_fields = ('nom', 'region', 'description')
-    readonly_fields = ('image_preview',)
-    inlines = [DestinationImageInline]
-    
-    def image_preview(self, obj):
-        if obj.image:
-            return format_html('<img src="{}" width="50" height="50" style="border-radius: 5px;" />', obj.image.url)
-        return "Pas d'image"
-    image_preview.short_description = "Aperçu"
-    
-    def nombre_circuits(self, obj):
-        return obj.circuits.count()
-    nombre_circuits.short_description = "Circuits"
-
-
-@admin.register(Saison)
-class SaisonAdmin(admin.ModelAdmin):
-    list_display = ('nom', 'date_debut', 'date_fin', 'nombre_circuits')
-    list_filter = ('date_debut', 'date_fin')
-    search_fields = ('nom',)
-    date_hierarchy = 'date_debut'
-    
-    def nombre_circuits(self, obj):
-        return obj.circuits.count()
-    nombre_circuits.short_description = "Circuits"
     
     
 class ItineraireInline(admin.TabularInline):
     model = Itineraire
     extra = 1
     fields = ('jour', 'lieu_depart', 'lieu_arrivee', 'distance_km', 'duree_trajet', 'description', 'carte_gps')
+    
     
 @admin.register(Itineraire)
 class ItineraireAdmin(admin.ModelAdmin):
@@ -94,6 +46,7 @@ class ItineraireAdmin(admin.ModelAdmin):
     def nombre_circuits(self, obj):
         return 1 if obj.circuit else 0
     nombre_circuits.short_description = "Circuits"
+
 
 class PointInteretInline(admin.TabularInline):
     model = PointInteret
@@ -152,15 +105,15 @@ class BlogImageInline(admin.TabularInline):
 
 @admin.register(Circuit)
 class CircuitAdmin(admin.ModelAdmin):
-    list_display = ('titre', 'destination', 'duree', 'prix', 'inclus', 'non_inclus', 'type', 'transport', 'difficulte', 'saison', 'vehicule_recommande', 'image_preview', 'nombre_reservations')
-    list_filter = ('difficulte', 'destination', 'saison', 'vehicule_recommande')
+    list_display = ('titre', 'destination', 'duree', 'prix', 'inclus', 'non_inclus', 'type', 'transport', 'difficulte', 'saison', 'image_preview', 'nombre_reservations')
+    list_filter = ('difficulte', 'destination', 'saison')
     search_fields = ('titre', 'description')
     readonly_fields = ('image_preview',)
     inlines = [PointInteretInline, CircuitImageInline, ItineraireInline]
     
     fieldsets = (
         ('Informations générales', {
-            'fields': ('titre', 'description', 'destination', 'saison', 'vehicule_recommande')
+            'fields': ('titre', 'description', 'destination', 'saison')
         }),
         ('Détails du circuit', {
             'fields': ('duree', 'prix', 'type', 'transport', 'difficulte', 'inclus', 'non_inclus')
@@ -193,26 +146,6 @@ class PointInteretAdmin(admin.ModelAdmin):
             return format_html('<img src="{}" width="50" height="50" style="border-radius: 5px;" />', obj.image.url)
         return "Pas d'image"
     image_preview.short_description = "Aperçu"
-
-
-@admin.register(TypeVehicule)
-class TypeVehiculeAdmin(admin.ModelAdmin):
-    list_display = ('libelle', 'nombre_vehicules')
-    search_fields = ('libelle',)
-    
-    def nombre_vehicules(self, obj):
-        return obj.vehicules.count()
-    nombre_vehicules.short_description = "Véhicules"
-
-
-@admin.register(Capacite)
-class CapaciteAdmin(admin.ModelAdmin):
-    list_display = ('nombre_places', 'description', 'nombre_vehicules')
-    ordering = ('nombre_places',)
-    
-    def nombre_vehicules(self, obj):
-        return obj.vehicules.count()
-    nombre_vehicules.short_description = "Véhicules"
 
 
 @admin.register(Vehicule)
@@ -388,22 +321,6 @@ class VehiculeImageAdmin(admin.ModelAdmin):
     search_fields = ('titre', 'description', 'vehicule__marque', 'vehicule__modele')
     list_editable = ('ordre',)
     ordering = ('vehicule', 'ordre')
-    readonly_fields = ('image_preview',)
-
-    def image_preview(self, obj):
-        if obj.image:
-            return format_html('<img src="{}" width="100" height="100" style="border-radius: 5px;" />', obj.image.url)
-        return "Pas d'image"
-    image_preview.short_description = "Aperçu"
-
-
-@admin.register(DestinationImage)
-class DestinationImageAdmin(admin.ModelAdmin):
-    list_display = ('destination', 'titre', 'ordre', 'image_preview')
-    list_filter = ('destination',)
-    search_fields = ('titre', 'description', 'destination__nom')
-    list_editable = ('ordre',)
-    ordering = ('destination', 'ordre')
     readonly_fields = ('image_preview',)
 
     def image_preview(self, obj):

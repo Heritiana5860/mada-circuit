@@ -263,7 +263,7 @@ const PangalanesDetailPage = () => {
   const days = calculateDays(formData.dateDepart, formData.dateArrive);
   const totalPrice = dataFromState.prix * guestCount;
 
-  const regions = dataFromState.destination.nom;
+  const regions = dataFromState.destination;
   const regionsCircuit = regions.split(",");
 
   // Géocoder toutes les régions

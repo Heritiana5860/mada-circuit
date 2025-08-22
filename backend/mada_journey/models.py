@@ -7,13 +7,6 @@ import uuid
 import os
 
 
-# Fonctions pour les chemins d'upload des images
-def destination_image_path(instance, filename):
-    """Chemin d'upload pour les images de destinations"""
-    ext = filename.split('.')[-1]
-    filename = f"{uuid.uuid4()}.{ext}"
-    return os.path.join('destinations/', filename)
-
 
 def circuit_image_path(instance, filename):
     """Chemin d'upload pour les images de circuits"""
@@ -89,28 +82,6 @@ class Utilisateur(AbstractUser):
     REQUIRED_FIELDS = ['username']
 
 
-class Destination(models.Model):
-    id = models.CharField(primary_key=True, default=uuid.uuid4, editable=False, max_length=36)
-    nom = models.CharField(max_length=100)
-    description = models.TextField(null=True, blank=True)
-    region = models.CharField(max_length=100)
-    pays = models.CharField(max_length=100, default="Madagascar")
-    image = models.ImageField(upload_to=destination_image_path, blank=True, null=True)
-
-    def __str__(self):
-        return self.nom
-
-
-class Saison(models.Model):
-    id = models.CharField(primary_key=True, default=uuid.uuid4, editable=False, max_length=36)
-    nom = models.CharField(max_length=100, unique=True)
-    date_debut = models.DateField(null=True, blank=True)
-    date_fin = models.DateField(null=True, blank=True)
-    
-    def __str__(self):
-        return self.nom
-
-
 class Difficulte(models.TextChoices):
     FACILE = 'FACILE', 'Facile'
     MOYEN = 'MOYEN', 'Moyen'
@@ -135,6 +106,9 @@ class Circuit(models.Model):
     prix = models.DecimalField(max_digits=10, decimal_places=2)
     inclus = models.TextField(blank=True, help_text="Services inclus (ex: hébergement, guide, petit-déjeuner), lister en separant par ';'")
     non_inclus = models.TextField(blank=True, help_text="Services non inclus (ex: essence, péages), lister en separant par ';'")
+    destination = models.CharField(max_length=100, blank=True, help_text="Destination principale du circuit")
+    region = models.CharField(max_length=100, blank=True, help_text="Région principale du circuit")
+    saison = models.CharField(max_length=100, blank=True, help_text="Saison recommandée pour ce circuit")
     
     image = models.ImageField(upload_to=circuit_image_path, blank=True, null=True)
     
@@ -150,10 +124,6 @@ class Circuit(models.Model):
         max_length=255, 
         default=CircuitTransport.VOITURE, 
         verbose_name='Transport')
-    
-    destination = models.ForeignKey(Destination, on_delete=models.CASCADE, related_name='circuits')
-    saison = models.ForeignKey(Saison, on_delete=models.CASCADE, related_name='circuits')
-    vehicule_recommande = models.ForeignKey('Vehicule', on_delete=models.SET_NULL, null=True, blank=True, related_name='circuits', help_text="Véhicule recommandé pour ce circuit")
 
     def __str__(self):
         return self.titre
@@ -198,23 +168,6 @@ class PointInteret(models.Model):
         return self.nom
 
 
-class TypeVehicule(models.Model):
-    id = models.CharField(primary_key=True, default=uuid.uuid4, editable=False, max_length=36)
-    libelle = models.CharField(max_length=100, unique=True)
-    
-    def __str__(self):
-        return self.libelle
-
-
-class Capacite(models.Model):
-    id = models.CharField(primary_key=True, default=uuid.uuid4, editable=False, max_length=36)
-    nombre_places = models.IntegerField()
-    description = models.TextField(blank=True, null=True)
-    
-    def __str__(self):
-        return f"{self.nombre_places} places"
-
-
 class EtatVehicule(models.TextChoices):
     DISPONIBLE = 'DISPONIBLE', 'Disponible'
     RESERVE = 'RESERVE', 'Réservé'
@@ -223,26 +176,17 @@ class EtatVehicule(models.TextChoices):
 
 class Vehicule(models.Model):
     id = models.CharField(primary_key=True, default=uuid.uuid4, editable=False, max_length=36)
-    immatriculation = models.CharField(max_length=20, unique=True)
-    marque = models.CharField(max_length=100)
-    modele = models.CharField(max_length=100)
+    immatriculation = models.CharField(max_length=20, unique=True, help_text="Immatriculation du véhicule (ex: 1234-AB-56)")
+    marque = models.CharField(max_length=100, help_text="Marque du véhicule (ex: Toyota, Ford)")
+    modele = models.CharField(max_length=100, help_text="Modèle du véhicule (ex: Corolla, Focus)")
     annee = models.IntegerField()
-    prix = models.DecimalField(max_digits=10, decimal_places=2)  # Nom original dans la DB
+    prix = models.DecimalField(max_digits=10, decimal_places=2)
+    capacite = models.IntegerField(blank=True, help_text="Nombre de places assises")
+    type = models.CharField(max_length=100, blank=True, help_text="Type de véhicule (ex: 4x4, berline)")
     etat = models.CharField(max_length=20, choices=EtatVehicule.choices, default=EtatVehicule.DISPONIBLE)
-    # image = models.ImageField(upload_to=vehicule_image_path, blank=True, null=True)
     
-    type = models.ForeignKey(TypeVehicule, on_delete=models.CASCADE, related_name='vehicules')
-    capacite = models.ForeignKey(Capacite, on_delete=models.CASCADE, related_name='vehicules')
-
     def __str__(self):
         return f"{self.marque} {self.modele} ({self.immatriculation})"
-
-    def get_caracteristiques_list(self):
-        return [c.strip() for c in self.caracteristiques.split(',')] if self.caracteristiques else []
-
-    def get_conditions_location_list(self):
-        return [c.strip() for c in self.conditions_location.split(',')] if self.conditions_location else []
-
 
 class Hebergement(models.TextChoices):
     STANDARD = 'STANDARD', 'Standard'
@@ -388,21 +332,6 @@ class VehiculeImage(models.Model):
 
     def __str__(self):
         return f"Image {self.ordre} - {self.vehicule.marque} {self.vehicule.modele}"
-
-    class Meta:
-        ordering = ['ordre']
-
-
-class DestinationImage(models.Model):
-    id = models.CharField(primary_key=True, default=uuid.uuid4, editable=False, max_length=36)
-    destination = models.ForeignKey(Destination, on_delete=models.CASCADE, related_name='images')
-    image = models.ImageField(upload_to=destination_image_path)
-    titre = models.CharField(max_length=200, blank=True, null=True)
-    description = models.TextField(blank=True, null=True)
-    ordre = models.IntegerField(default=0, help_text="Ordre d'affichage")
-
-    def __str__(self):
-        return f"Image {self.ordre} - {self.destination.nom}"
 
     class Meta:
         ordering = ['ordre']

@@ -264,7 +264,7 @@ const CircuitDetail = () => {
   const days = calculateDays(formData.dateDepart, formData.dateArrive);
   const totalPrice = circuitFromState.prix * guestCount;
 
-  const regions = circuitFromState.destination.nom;
+  const regions = circuitFromState.destination;
   const regionsCircuit = regions.split(",");
 
   // Géocoder toutes les régions

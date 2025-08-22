@@ -47,12 +47,12 @@ export interface CircuitImage {
 export interface Itineraires {
   id: string;
   jour: number;
-  lieuDepart: string,
-  lieuArrivee: string,
-  distanceKm?: number,
-  dureeTrajet?: number,
+  lieuDepart: string;
+  lieuArrivee: string;
+  distanceKm?: number;
+  dureeTrajet?: number;
   description: string;
-  carteGps?: string
+  carteGps?: string;
 }
 
 export interface Circuit {
@@ -64,25 +64,12 @@ export interface Circuit {
   inclus: string;
   nonInclus: string;
   type: string;
-  difficulte: 'FACILE' | 'MOYEN' | 'DIFFICILE';
+  difficulte: "FACILE" | "MOYEN" | "DIFFICILE";
   destination: Destination;
   saison: Saison;
   pointsInteret?: PointsInteret[];
   itineraires?: Itineraires[];
   images?: CircuitImage[];
-}
-
-// Types pour les véhicules
-export interface TypeVehicule {
-  id: string;
-  libelle: string;
-  vehicules_count?: number;
-}
-
-export interface Capacite {
-  id: string;
-  nombrePlaces: number;
-  description?: string;
 }
 
 export interface VehiculeImage {
@@ -97,9 +84,9 @@ export interface Vehicule {
   modele: string;
   annee: number;
   prix: number;
-  etat: 'DISPONIBLE' | 'RESERVE' | 'MAINTENANCE';
-  type: TypeVehicule;
-  capacite: Capacite;
+  etat: "DISPONIBLE" | "RESERVE" | "MAINTENANCE";
+  type: string;
+  capacite: number;
   images?: VehiculeImage[];
 }
 
@@ -129,7 +116,7 @@ export interface Reservation {
   dateFin: string;
   nombrePersonnes: number;
   prixTotal: number;
-  statut: 'EN_ATTENTE' | 'CONFIRMEE' | 'ANNULEE' | 'TERMINEE';
+  statut: "EN_ATTENTE" | "CONFIRMEE" | "ANNULEE" | "TERMINEE";
   circuit?: Circuit;
   vehicule?: Vehicule;
   utilisateur: User;
@@ -140,7 +127,7 @@ export interface ReservationVehicule {
   date_reservation: string;
   date_depart: string;
   date_fin: string;
-  statut: 'EN_ATTENTE' | 'CONFIRMEE' | 'ANNULEE' | 'TERMINEE';
+  statut: "EN_ATTENTE" | "CONFIRMEE" | "ANNULEE" | "TERMINEE";
   nombre_personnes: number;
   prix_total: number;
   commentaire?: string;
@@ -286,27 +273,27 @@ export interface DashboardStats {
 
 // Enums
 export enum Role {
-  CLIENT = 'CLIENT',
-  ADMIN = 'ADMIN',
-  GUIDE = 'GUIDE',
-  COMMERCIAL = 'COMMERCIAL'
+  CLIENT = "CLIENT",
+  ADMIN = "ADMIN",
+  GUIDE = "GUIDE",
+  COMMERCIAL = "COMMERCIAL",
 }
 
 export enum Difficulte {
-  FACILE = 'FACILE',
-  MOYEN = 'MOYEN',
-  DIFFICILE = 'DIFFICILE'
+  FACILE = "FACILE",
+  MOYEN = "MOYEN",
+  DIFFICILE = "DIFFICILE",
 }
 
 export enum EtatVehicule {
-  DISPONIBLE = 'DISPONIBLE',
-  LOUE = 'LOUE',
-  MAINTENANCE = 'MAINTENANCE'
+  DISPONIBLE = "DISPONIBLE",
+  LOUE = "LOUE",
+  MAINTENANCE = "MAINTENANCE",
 }
 
 export enum StatutReservation {
-  EN_ATTENTE = 'EN_ATTENTE',
-  CONFIRMEE = 'CONFIRMEE',
-  ANNULEE = 'ANNULEE',
-  TERMINEE = 'TERMINEE'
+  EN_ATTENTE = "EN_ATTENTE",
+  CONFIRMEE = "CONFIRMEE",
+  ANNULEE = "ANNULEE",
+  TERMINEE = "TERMINEE",
 }

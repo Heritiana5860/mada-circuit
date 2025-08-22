@@ -36,7 +36,7 @@ const Location4x4: React.FC = () => {
     useContext(TestimoniaContext);
 
   const filteredVehicles = filter
-    ? vehicles.filter((v) => v.type?.libelle === filter)
+    ? vehicles.filter((v) => v.type === filter)
     : vehicles;
 
   if (

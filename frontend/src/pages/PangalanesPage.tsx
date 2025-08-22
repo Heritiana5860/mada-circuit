@@ -157,7 +157,7 @@ const PangalanesPage = () => {
 
   const { data, loading, error } = useQuery(GET_ALL_CIRCUITS, {
     variables: {
-      type: "pangalane",
+      type: "PANGALANE",
     },
   });
 

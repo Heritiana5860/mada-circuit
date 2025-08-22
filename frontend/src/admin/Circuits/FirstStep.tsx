@@ -191,8 +191,8 @@ const FirstStep: React.FC<FirstType> = ({
               className="h-12 px-2 border rounded-md w-full"
             >
               <option value="">Choisissez un transport...</option>
-              <option value="EN_VOITURE">En voiture</option>
-              <option value="EN_BATEAU">En bateau</option>
+              <option value="VOITURE">En voiture</option>
+              <option value="BATEAU">En bateau</option>
             </select>
           </div>
         </div>

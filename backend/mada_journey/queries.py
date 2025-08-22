@@ -7,17 +7,16 @@ import base64
 from django.core.exceptions import ValidationError
 
 from .models import (
-    Utilisateur, Destination, Saison, Circuit, PointInteret,
-    TypeVehicule, Capacite, Vehicule, Reservation, Personnel, Blog, BlogCommentaire, Faq,
-    CircuitImage, VehiculeImage, DestinationImage, BlogImage,
+    Utilisateur, Circuit, PointInteret, Vehicule, Reservation, Personnel, Blog, BlogCommentaire, Faq,
+    CircuitImage, VehiculeImage, BlogImage,
     EtatVehicule, Itineraire, Testimonia
 )
 from .model_types import (
-    UtilisateurType, DestinationType, SaisonType, CircuitType,
-    PointInteretType, TypeVehiculeType, CapaciteType, VehiculeType,
+    UtilisateurType, CircuitType,
+    PointInteretType, VehiculeType,
     ReservationType, PersonnelType, BlogType,
     BlogCommentaireType, FaqType,
-    CircuitImageType, VehiculeImageType, DestinationImageType, BlogImageType, ItineraireType, TestimoniaType
+    CircuitImageType, VehiculeImageType, BlogImageType, ItineraireType, TestimoniaType
 )
 
 logger = logging.getLogger("myapp") 
@@ -28,18 +27,6 @@ class Query(graphene.ObjectType):
     all_utilisateurs = graphene.List(UtilisateurType)
     utilisateur = graphene.Field(UtilisateurType, id=graphene.ID())
     utilisateur_by_email = graphene.Field(UtilisateurType, email=graphene.String())
-    
-    # Queries pour les destinations
-    all_destinations = graphene.List(DestinationType)
-    destination = graphene.Field(DestinationType, id=graphene.ID())
-    destinations_by_region = graphene.List(DestinationType, region=graphene.String())
-    popular_destinations = graphene.List(DestinationType, limit=graphene.Int())
-    
-    # Queries pour les saisons
-    all_saisons = graphene.List(SaisonType)
-    saison = graphene.Field(SaisonType, id=graphene.ID())
-    current_saison = graphene.Field(SaisonType)
-    saisons_by_period = graphene.List(SaisonType, start_date=graphene.Date(), end_date=graphene.Date())
     
     # Queries pour les circuits
     all_circuits = graphene.List(CircuitType)
@@ -64,21 +51,10 @@ class Query(graphene.ObjectType):
     point_interet = graphene.Field(PointInteretType, id=graphene.ID())
     points_interet_by_circuit = graphene.List(PointInteretType, circuit_id=graphene.ID())
     
-    # Queries pour les types de véhicules
-    all_types_vehicule = graphene.List(TypeVehiculeType)
-    type_vehicule = graphene.Field(TypeVehiculeType, id=graphene.ID())
-    
-    # Queries pour les capacités
-    all_capacites = graphene.List(CapaciteType)
-    capacite = graphene.Field(CapaciteType, id=graphene.ID())
-    capacites_by_places = graphene.List(CapaciteType, min_places=graphene.Int(), max_places=graphene.Int())
-    
     # Queries pour les véhicules
     all_vehicules = graphene.List(VehiculeType)
     vehicule = graphene.Field(VehiculeType, id=graphene.ID())
     vehicules_disponibles = graphene.List(VehiculeType)
-    vehicules_by_type = graphene.List(VehiculeType, type_id=graphene.ID())
-    vehicules_by_capacite = graphene.List(VehiculeType, capacite_id=graphene.ID())
     vehicules_by_price_range = graphene.List(VehiculeType, min_price=graphene.Float(), max_price=graphene.Float())
 
     # Queries pour les réservations
@@ -120,10 +96,6 @@ class Query(graphene.ObjectType):
     vehicule_image = graphene.Field(VehiculeImageType, id=graphene.ID())
     vehicule_images_by_vehicule = graphene.List(VehiculeImageType, vehicule_id=graphene.ID())
 
-    all_destination_images = graphene.List(DestinationImageType)
-    destination_image = graphene.Field(DestinationImageType, id=graphene.ID())
-    destination_images_by_destination = graphene.List(DestinationImageType, destination_id=graphene.ID())
-
     all_blog_images = graphene.List(BlogImageType)
     blog_image = graphene.Field(BlogImageType, id=graphene.ID())
     blog_images_by_blog = graphene.List(BlogImageType, blog_id=graphene.ID())
@@ -147,65 +119,18 @@ class Query(graphene.ObjectType):
             return Utilisateur.objects.get(email=email)
         except Utilisateur.DoesNotExist:
             return None
-    
-    # Resolvers pour les destinations
-    def resolve_all_destinations(self, info):
-        return Destination.objects.all()
-    
-    def resolve_destination(self, info, id):
-        try:
-            return Destination.objects.get(pk=id)
-        except Destination.DoesNotExist:
-            return None
-    
-    def resolve_destinations_by_region(self, info, region):
-        return Destination.objects.filter(region__icontains=region)
-    
-    def resolve_popular_destinations(self, info, limit=5):
-        # Destinations avec le plus de circuits
-        return Destination.objects.annotate(
-            circuits_count=graphene.Count('circuits')
-        ).order_by('-circuits_count')[:limit]
-    
-    # Resolvers pour les saisons
-    def resolve_all_saisons(self, info):
-        return Saison.objects.all()
-    
-    def resolve_saison(self, info, id):
-        try:
-            return Saison.objects.get(pk=id)
-        except Saison.DoesNotExist:
-            return None
-    
-    def resolve_current_saison(self, info):
-        today = timezone.now().date()
-        try:
-            return Saison.objects.filter(
-                date_debut__lte=today,
-                date_fin__gte=today
-            ).first()
-        except Saison.DoesNotExist:
-            return None
-    
-    def resolve_saisons_by_period(self, info, start_date=None, end_date=None):
-        queryset = Saison.objects.all()
-        if start_date:
-            queryset = queryset.filter(date_debut__gte=start_date)
-        if end_date:
-            queryset = queryset.filter(date_fin__lte=end_date)
-        return queryset
-    
+            
     # Resolvers pour les circuits
     def resolve_all_circuits(self, info):
-        return Circuit.objects.all().select_related('destination', 'saison')
+        return Circuit.objects.all()
     
     def resolve_all_circuits_by_type(self, info, type):
         logger.debug(f"filter type {type}")
-        return Circuit.objects.filter(type=type).select_related('destination', 'saison')
+        return Circuit.objects.filter(type=type)
     
     def resolve_circuit(self, info, id):
         try:
-            return Circuit.objects.select_related('destination', 'saison').get(pk=id)
+            return Circuit.objects.get(pk=id)
         except Circuit.DoesNotExist:
             return None
     
@@ -215,24 +140,7 @@ class Query(graphene.ObjectType):
             return Itineraire.objects.get(pk=id)
         except Itineraire.DoesNotExist:
             return None
-    
-    def resolve_circuits_by_destination(self, info, destination_id):
-        return Circuit.objects.filter(destination_id=destination_id).select_related('destination', 'saison')
-    
-    def resolve_circuits_by_saison(self, info, saison_id):
-        return Circuit.objects.filter(saison_id=saison_id).select_related('destination', 'saison')
-    
-    def resolve_circuits_by_difficulte(self, info, difficulte):
-        return Circuit.objects.filter(difficulte=difficulte).select_related('destination', 'saison')
-    
-    def resolve_circuits_by_price_range(self, info, min_price=None, max_price=None):
-        queryset = Circuit.objects.all().select_related('destination', 'saison')
-        if min_price is not None:
-            queryset = queryset.filter(prix__gte=min_price)
-        if max_price is not None:
-            queryset = queryset.filter(prix__lte=max_price)
-        return queryset
-    
+                    
     def resolve_available_circuits(self, info):
         # Circuits avec moins de 10 réservations confirmées
         return Circuit.objects.annotate(
@@ -240,20 +148,20 @@ class Query(graphene.ObjectType):
                 'reservations',
                 filter=Q(reservations__statut=Reservation.ReservationStatus.CONFIRMEE)
             )
-        ).filter(confirmed_reservations__lt=10).select_related('destination', 'saison')
+        ).filter(confirmed_reservations__lt=10)
     
     def resolve_featured_circuits(self, info, limit=6):
         # Circuits les plus populaires (avec le plus de réservations)
         return Circuit.objects.annotate(
             reservations_count=graphene.Count('reservations')
-        ).order_by('-reservations_count').select_related('destination', 'saison')[:limit]
+        ).order_by('-reservations_count')[:limit]
     
     def resolve_search_circuits(self, info, search_term):
         return Circuit.objects.filter(
             Q(titre__icontains=search_term) |
             Q(description__icontains=search_term) |
             Q(destination__nom__icontains=search_term)
-        ).select_related('destination', 'saison')
+        )
     
     # Resolvers pour les points d'intérêt
     def resolve_all_points_interet(self, info):
@@ -267,16 +175,6 @@ class Query(graphene.ObjectType):
     
     def resolve_points_interet_by_circuit(self, info, circuit_id):
         return PointInteret.objects.filter(circuit_id=circuit_id).select_related('circuit')
-
-    # Resolvers pour les types de véhicules
-    def resolve_all_types_vehicule(self, info):
-        return TypeVehicule.objects.all()
-
-    def resolve_type_vehicule(self, info, id):
-        try:
-            return TypeVehicule.objects.get(pk=id)
-        except TypeVehicule.DoesNotExist:
-            return None
 
     # Resolvers pour les capacités
     def resolve_all_capacites(self, info):
@@ -298,30 +196,16 @@ class Query(graphene.ObjectType):
 
     # Resolvers pour les véhicules
     def resolve_all_vehicules(self, info):
-        return Vehicule.objects.all().select_related('type', 'capacite').prefetch_related('images')
+        return Vehicule.objects.all().prefetch_related('images')
 
     def resolve_vehicule(self, info, id):
         try:
-            return Vehicule.objects.select_related('type', 'capacite').get(pk=id)
+            return Vehicule.objects.get(pk=id)
         except Vehicule.DoesNotExist:
             return None
 
     def resolve_vehicules_disponibles(self, info):
-        return Vehicule.objects.filter(etat=EtatVehicule.DISPONIBLE).select_related('type', 'capacite')
-
-    def resolve_vehicules_by_type(self, info, type_id):
-        return Vehicule.objects.filter(type_id=type_id).select_related('type', 'capacite')
-
-    def resolve_vehicules_by_capacite(self, info, capacite_id):
-        return Vehicule.objects.filter(capacite_id=capacite_id).select_related('type', 'capacite')
-
-    def resolve_vehicules_by_price_range(self, info, min_price=None, max_price=None):
-        queryset = Vehicule.objects.all().select_related('type', 'capacite')
-        if min_price is not None:
-            queryset = queryset.filter(prix__gte=min_price)
-        if max_price is not None:
-            queryset = queryset.filter(prix__lte=max_price)
-        return queryset
+        return Vehicule.objects.filter(etat=EtatVehicule.DISPONIBLE)
 
     # Resolvers pour les réservations
     def resolve_all_reservations(self, info):
@@ -441,18 +325,6 @@ class Query(graphene.ObjectType):
 
     def resolve_vehicule_images_by_vehicule(self, info, vehicule_id):
         return VehiculeImage.objects.filter(vehicule_id=vehicule_id).select_related('vehicule').order_by('ordre')
-
-    def resolve_all_destination_images(self, info):
-        return DestinationImage.objects.all().select_related('destination').order_by('destination', 'ordre')
-
-    def resolve_destination_image(self, info, id):
-        try:
-            return DestinationImage.objects.select_related('destination').get(pk=id)
-        except DestinationImage.DoesNotExist:
-            return None
-
-    def resolve_destination_images_by_destination(self, info, destination_id):
-        return DestinationImage.objects.filter(destination_id=destination_id).select_related('destination').order_by('ordre')
 
     def resolve_all_blog_images(self, info):
         return BlogImage.objects.all().select_related('blog').order_by('blog', 'ordre')

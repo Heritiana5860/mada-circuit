@@ -89,10 +89,12 @@ const Blog = () => {
         contenu: blog.contenu.trim(),
         auteur: blog.auteur?.trim() || "Auteur inconnu",
         datePublication: blog.datePublication || new Date().toISOString(),
-        image: blog.image?.trim() || DEFAULT_IMAGE,
+        images: `http://localhost:8000/media/${blog.image}`,
         tags:
-          Array.isArray(blog.tags) && blog.tags.length > 0
-            ? blog.tags.filter((tag) => tag && typeof tag === "string")
+          blog.tags && blog.tags.length > 0
+            ? blog.tags
+                .split(";")
+                .filter((tag) => tag && typeof tag === "string")
             : DEFAULT_TAGS,
       }))
       .sort(
@@ -202,6 +204,8 @@ const Blog = () => {
   // Blogs pour l'affichage
   const featuredBlog = filteredBlogs.length > 0 ? filteredBlogs[0] : null;
   const regularBlogs = filteredBlogs.slice(1);
+
+  console.log("featuredBlog: ", featuredBlog);
 
   // Composant d'erreur avec retry
   const ErrorComponent = ({ error, onRetry }) => (
@@ -394,9 +398,6 @@ const Blog = () => {
                                   src={featuredBlog.image}
                                   alt={featuredBlog.titre}
                                   className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                                  // onError={(e) => {
-                                  //   e.target.src = DEFAULT_IMAGE;
-                                  // }}
                                 />
                                 <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent"></div>
                               </div>

@@ -2,11 +2,12 @@ import { DELETE_TESTIMONIA, UPDATE_TESTIMONIA } from "@/graphql/mutations";
 import { ALL_TESTIMONIA } from "@/graphql/queries";
 import { useMutation, useQuery } from "@apollo/client";
 import { Trash } from "lucide-react";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import EmptyData from "./composants/EmptyData";
+import { TestimoniaContext } from "@/provider/DataContext";
 
 const Temoignages = () => {
-  const { loading, error, data } = useQuery(ALL_TESTIMONIA);
+  const { data, loading, error } = useContext(TestimoniaContext);
   const [
     updateTestimonia,
     { loading: testimoniaLoading, error: testimoniaError },

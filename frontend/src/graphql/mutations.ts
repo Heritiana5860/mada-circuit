@@ -501,3 +501,24 @@ export const CREATE_VEHICULE = gql`
     }
   }
 `;
+
+export const CREATE_BLOG = gql`
+  mutation CreateBlog(
+    $contenu: String!
+    $titre: String!
+    $auteur: String
+    $tags: String
+    $images: [Upload]
+  ) {
+    createBlog(
+      contenu: $contenu
+      titre: $titre
+      auteur: $auteur
+      tags: $tags
+      images: $images
+    ) {
+      success
+      errors
+    }
+  }
+`;

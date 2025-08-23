@@ -172,10 +172,13 @@ export const GET_ALL_BLOGS = gql`
       id
       titre
       contenu
-      image
       datePublication
       auteur
       tags
+      images {
+        id
+        image
+      }
     }
   }
 `;
@@ -268,6 +271,63 @@ export const GET_USER_RESERVATIONS = gql`
         marque
         modele
         prix
+      }
+    }
+  }
+`;
+
+export const GET_ALL_RESERVATION = gql`
+  query AllReservations {
+    allReservations {
+      id
+      dateReservation
+      dateDepart
+      statut
+      duree
+      nombrePersonnes
+      hebergement
+      activite
+      budget
+      nom
+      prenom
+      email
+      telephone
+      commentaire
+      prixTotal
+      utilisateur {
+        nom
+        prenom
+        telephone
+        email
+      }
+      circuit {
+        titre
+        duree
+        prix
+        description
+        inclus
+        nonInclus
+        destination
+        saison
+        transport
+        itineraires {
+          jour
+          lieuDepart
+          lieuArrivee
+          distanceKm
+          dureeTrajet
+          description
+        }
+      }
+      vehicule {
+        immatriculation
+        marque
+        modele
+        annee
+        prix
+        capacite
+        type
+        etat
       }
     }
   }
@@ -367,6 +427,30 @@ export const GET_ALL_USERS = gql`
       prenom
       telephone
       role
+    }
+  }
+`;
+
+// All sur mesure
+export const GET_ALL_SURMESURE = gql`
+  query AllSurMesure {
+    allSurMesure {
+      id
+      pointDepart
+      pointArrivee
+      dateDebut
+      dateFin
+      duree
+      nombreDePersonne
+      hebergement
+      budget
+      nom
+      prenom
+      email
+      contact
+      lieuVisiter {
+        nom
+      }
     }
   }
 `;

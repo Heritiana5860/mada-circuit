@@ -6,7 +6,6 @@ import {
 } from "@/components/ui/card";
 import { useState } from "react";
 import First from "./First";
-import Second from "./Second";
 import ThirdStep from "../Circuits/ThirdStep";
 import { useMutation } from "@apollo/client";
 import { CREATE_VEHICULE } from "@/graphql/mutations";

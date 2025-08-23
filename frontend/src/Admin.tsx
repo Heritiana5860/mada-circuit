@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import {
   Home,
   Map,
@@ -18,20 +18,36 @@ import {
   User,
   BarChart3,
   Package,
-  Shield,
 } from "lucide-react";
 import Dashboard from "./admin/Dashboard";
 import CreateCircuit from "./admin/Circuits/CreateCircuit";
-import CreateBlog from "./admin/CreateBlog";
+import CreateBlog from "./admin/Blog/CreateBlog";
 import CreateFaq from "./admin/CreateFaq";
 import CreatePersonnel from "./admin/CreatePersonnel";
 import CreateVehicule from "./admin/Vehicules/CreateVehicule";
 import Reservations from "./admin/Reservations";
-import SurMesures from "./admin/SurMesures";
-import Utilisateurs from "./admin/Utilisateurs";
+import SurMesures from "./admin/SurMesure/SurMesures";
+import Utilisateurs from "./admin/Utilisateurs/Utilisateurs";
 import Temoignages from "./admin/Temoignages";
+import {
+  AllTestimoniaContext,
+  ReservationContext,
+  SurMesureContext,
+} from "./provider/DataContext";
 
 const ImprovedAdmin = () => {
+  const { data, loading, error } = useContext(SurMesureContext);
+  const {
+    data: resaData,
+    loading: resaLoading,
+    error: resaError,
+  } = useContext(ReservationContext);
+  const {
+    data: testimoniaData,
+    loading: testimoniaLoading,
+    error: testimoniaError,
+  } = useContext(AllTestimoniaContext);
+
   const [activeSection, setActiveSection] = useState("dashboard");
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
@@ -50,6 +66,14 @@ const ImprovedAdmin = () => {
     window.addEventListener("resize", checkScreenSize);
     return () => window.removeEventListener("resize", checkScreenSize);
   }, []);
+
+  if (loading || resaLoading || testimoniaLoading) {
+    return <div>Loading...</div>;
+  }
+
+  if (error || resaError || testimoniaError) {
+    return <div>Erreur!</div>;
+  }
 
   const menuGroups = [
     {
@@ -76,9 +100,14 @@ const ImprovedAdmin = () => {
           id: "reservations",
           label: "Réservations",
           icon: Calendar,
-          badge: "12",
+          badge: resaData.length,
         },
-        { id: "sur-mesure", label: "Sur mesure", icon: Package, badge: "5" },
+        {
+          id: "sur-mesure",
+          label: "Sur mesure",
+          icon: Package,
+          badge: data.length,
+        },
       ],
     },
     {
@@ -89,7 +118,7 @@ const ImprovedAdmin = () => {
           id: "temoignages",
           label: "Témoignages",
           icon: MessageSquare,
-          badge: "3",
+          badge: testimoniaData.length,
         },
         { id: "settings", label: "Paramètres", icon: Settings, badge: null },
       ],

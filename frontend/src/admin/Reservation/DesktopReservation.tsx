@@ -1,20 +1,20 @@
 import {
-  Eye,
-  Trash,
-  MapPin,
   Calendar,
-  Users,
+  CircleDot,
   Clock,
+  Eye,
   Loader2,
+  MapPin,
+  Trash,
+  Users,
 } from "lucide-react";
 
-const DesktopSurMesure = ({
+const ReservationDesktop = ({
   filteredUsers,
+  setShowModalDetail,
   setSelectedUser,
   setShowModal,
-  showModalDetail,
-  setShowModalDetail,
-  deleteLoading,
+  handleStatusChange,
 }) => {
   const ActionButton = ({
     onClick,
@@ -79,22 +79,6 @@ const DesktopSurMesure = ({
     );
   };
 
-  if (!filteredUsers || filteredUsers.length === 0) {
-    return (
-      <div className="hidden lg:block">
-        <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-12 text-center">
-          <MapPin className="w-12 h-12 text-gray-400 mx-auto mb-4" />
-          <h3 className="text-lg font-medium text-gray-900 mb-2">
-            Aucun voyage trouvé
-          </h3>
-          <p className="text-gray-500">
-            Aucun voyage ne correspond à vos critères de recherche.
-          </p>
-        </div>
-      </div>
-    );
-  }
-
   return (
     <div className="hidden lg:block">
       <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
@@ -102,10 +86,11 @@ const DesktopSurMesure = ({
         <div className="bg-gradient-to-r from-gray-50 to-gray-100 px-6 py-4 border-b border-gray-200">
           <div className="flex items-center justify-between">
             <h2 className="text-lg font-semibold text-gray-900">
-              Liste des Voyages
+              Liste des Reservations
             </h2>
             <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-blue-100 text-blue-800">
-              {filteredUsers.length} voyage{filteredUsers.length > 1 ? "s" : ""}
+              {filteredUsers.length} reservation
+              {filteredUsers.length > 1 ? "s" : ""}
             </span>
           </div>
         </div>
@@ -117,11 +102,8 @@ const DesktopSurMesure = ({
                 <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
                   <div className="flex items-center gap-2">
                     <MapPin className="w-4 h-4" />
-                    Destination
+                    Type
                   </div>
-                </th>
-                <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
-                  Lieu à visiter
                 </th>
                 <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
                   <div className="flex items-center gap-2">
@@ -141,6 +123,12 @@ const DesktopSurMesure = ({
                     Participants
                   </div>
                 </th>
+                <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                  <div className="flex items-center gap-2">
+                    <CircleDot className="w-4 h-4" />
+                    Status
+                  </div>
+                </th>
                 <th className="px-6 py-4 text-right text-xs font-semibold text-gray-600 uppercase tracking-wider">
                   Actions
                 </th>
@@ -156,42 +144,17 @@ const DesktopSurMesure = ({
                 >
                   <td className="px-6 py-5">
                     <div className="flex items-center">
-                      <div className="flex-shrink-0 w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center">
-                        <MapPin className="w-5 h-5 text-blue-600" />
-                      </div>
                       <div className="ml-4">
                         <div className="font-semibold text-gray-900 text-sm">
-                          {user.pointDepart}
-                        </div>
-                        <div className="text-xs text-gray-500 flex items-center gap-1">
-                          <span>→</span>
-                          <span className="font-medium">
-                            {user.pointArrivee}
-                          </span>
+                          {user.circuit.id !== null ? "Circuit" : "Vehicule"}
                         </div>
                       </div>
-                    </div>
-                  </td>
-
-                  <td className="px-6 py-5">
-                    <div className="text-sm font-medium text-gray-900">
-                      {user.lieuVisiter && user.lieuVisiter.length > 0 ? (
-                        user.lieuVisiter.map((lieu, i) => (
-                          <span key={i} className="block">
-                            {lieu.nom}
-                          </span>
-                        ))
-                      ) : (
-                        <span className="text-gray-400 italic">
-                          Non renseigné
-                        </span>
-                      )}
                     </div>
                   </td>
 
                   <td className="px-6 py-5">
                     <div className="text-sm text-gray-900">
-                      <div className="font-medium">{user.dateDebut}</div>
+                      <div className="font-medium">{user.dateDepart}</div>
                       <div className="text-xs text-gray-500">
                         au {user.dateFin}
                       </div>
@@ -211,7 +174,7 @@ const DesktopSurMesure = ({
                     <div className="flex items-center gap-2">
                       <div className="flex -space-x-1">
                         {Array.from({
-                          length: Math.min(user.nombreDePersonne, 3),
+                          length: Math.min(user.nombrePersonnes, 3),
                         }).map((_, i) => (
                           <div
                             key={i}
@@ -220,15 +183,35 @@ const DesktopSurMesure = ({
                             <Users className="w-3 h-3 text-gray-600" />
                           </div>
                         ))}
-                        {user.nombreDePersonne > 3 && (
+                        {user.nombrePersonnes > 3 && (
                           <div className="w-6 h-6 bg-blue-100 text-blue-800 rounded-full border-2 border-white flex items-center justify-center text-xs font-medium">
-                            +{user.nombreDePersonne - 3}
+                            +{user.nombrePersonnes - 3}
                           </div>
                         )}
                       </div>
                       <span className="text-sm font-medium text-gray-700">
-                        {user.nombreDePersonne}
+                        {user.nombrePersonnes}
                       </span>
+                    </div>
+                  </td>
+
+                  <td className="px-6 py-5">
+                    <div className="flex flex-col gap-2">
+                      <div className="text-sm font-semibold text-gray-900">
+                        <select
+                          id={`status-${user.id}`}
+                          value={user.statut}
+                          onChange={(e) =>
+                            handleStatusChange(user.id, e.target.value)
+                          }
+                          className="h-12 px-2 border rounded-md w-full"
+                        >
+                          <option value="EN_ATTENTE">En attente</option>
+                          <option value="CONFIRMEE">Confirmée</option>
+                          <option value="ANNULEE">Annulée</option>
+                          <option value="TERMINEE">Terminée</option>
+                        </select>
+                      </div>
                     </div>
                   </td>
 
@@ -241,7 +224,6 @@ const DesktopSurMesure = ({
                         }}
                         icon={Eye}
                         variant="view"
-                        disabled={deleteLoading}
                       >
                         Voir
                       </ActionButton>
@@ -253,10 +235,8 @@ const DesktopSurMesure = ({
                         }}
                         icon={Trash}
                         variant="danger"
-                        loading={deleteLoading}
-                        disabled={deleteLoading}
                       >
-                        {deleteLoading ? "Suppression..." : "Supprimer"}
+                        Delete
                       </ActionButton>
                     </div>
                   </td>
@@ -270,4 +250,4 @@ const DesktopSurMesure = ({
   );
 };
 
-export default DesktopSurMesure;
+export default ReservationDesktop;

@@ -461,18 +461,10 @@ class UpdateReservationStatus(graphene.Mutation):
     def mutate(self, info, id, statut):
         try:
             with transaction.atomic():
-                reservation = Reservation.objects.get(pk=id)
-                old_statut = reservation.statut
+                _, real_reservation_id = from_global_id(id)
+                reservation = Reservation.objects.get(id=real_reservation_id)
                 reservation.statut = statut
                 reservation.save()
-
-                # Gestion de l'état du véhicule
-                if statut == Reservation.ReservationStatus.ANNULEE and old_statut != Reservation.ReservationStatus.ANNULEE:
-                    reservation.vehicule.etat = EtatVehicule.DISPONIBLE
-                    reservation.vehicule.save()
-                elif statut == Reservation.ReservationStatus.CONFIRMEE and old_statut != Reservation.ReservationStatus.CONFIRMEE:
-                    reservation.vehicule.etat = EtatVehicule.RESERVE
-                    reservation.vehicule.save()
 
                 return UpdateReservationStatus(reservation=reservation, success=True)
         except Reservation.DoesNotExist:
@@ -480,37 +472,56 @@ class UpdateReservationStatus(graphene.Mutation):
         except Exception as e:
             return UpdateReservationStatus(success=False, errors=[str(e)])
 
+class DelateReservation(graphene.Mutation):
+    class Arguments:
+        id = graphene.ID(required=True)
+        
+    success = graphene.Boolean()
+    errors = graphene.List(graphene.String)
+    
+    def mutate(self, info, id):
+        try:
+            _, real_id = from_global_id(id)
+            reservation = Reservation.objects.get(pk=real_id)
+            reservation.delete()
+            return DelateReservation(success=True)
+        except Reservation.DoesNotExist:
+            return DelateReservation(success=False, errors=["Reservation non trouvé"])
+        except Exception as e:
+            return DelateReservation(success=False, errors=[str(e)])
+
 # Mutations pour les blogs
 class CreateBlog(graphene.Mutation):
     class Arguments:
         titre = graphene.String(required=True)
         contenu = graphene.String(required=True)
-        auteur = graphene.String()
-        image = Upload()
-        tags = graphene.List(graphene.String)
+        auteur = graphene.String(required=False)
+        tags = graphene.String(required=False)
+        images = graphene.List(Upload, required=False)
 
     blog = graphene.Field(BlogType)
     success = graphene.Boolean()
     errors = graphene.List(graphene.String)
 
-    def mutate(self, info, titre, contenu, auteur=None, image=None, tags=None):
+    def mutate(self, info, titre, contenu, auteur=None, images=None, tags=None):
         try:
-            # Nettoyer les valeurs None/vides
-            cleaned_data = {
-                'titre': titre,
-                'contenu': contenu,
-                'tags': tags or []
-            }
-
-            # Ajouter auteur seulement s'il n'est pas None ou vide
-            if auteur and auteur.strip():
-                cleaned_data['auteur'] = auteur
-
-            # Ajouter image seulement si elle n'est pas None
-            if image is not None:
-                cleaned_data['image'] = image
-
-            blog = Blog.objects.create(**cleaned_data)
+            with transaction.atomic():
+                
+                blog = Blog.objects.create(
+                    titre=titre,
+                    contenu=contenu,
+                    auteur=auteur,
+                    tags=tags,
+                )
+                
+                if images:
+                    for idx, img in enumerate(images):
+                        BlogImage.objects.create(
+                            blog=blog,
+                            image=img,
+                            ordre=idx,
+                        )
+                
             return CreateBlog(blog=blog, success=True)
         except Exception as e:
             return CreateBlog(success=False, errors=[str(e)])
@@ -1535,6 +1546,23 @@ class CreateSurMesure(graphene.Mutation):
         
         except Exception as e:
             return CreateSurMesure(success=False, errors=[f"Erreur inattendue: {str(e)}"])
+        
+class DeleteSurMesure(graphene.Mutation):
+    class Arguments:
+        id = graphene.ID(required=True)
+    
+    success = graphene.Boolean()
+    errors = graphene.List(graphene.String)
+    
+    def mutate(self, info, id):
+        try:
+            sur_mesure = SurMesure.objects.get(id=id)
+            sur_mesure.delete()
+            return DeleteSurMesure(success=True, errors=[])
+        except SurMesure.DoesNotExist:
+            return DeleteSurMesure(success=False, errors=["Circuit sur mesure non trouvé"])
+        except Exception as e:
+            return DeleteSurMesure(success=False, errors=[str(e)])
             
 # Classe principale des mutations
 class Mutation(graphene.ObjectType):
@@ -1561,6 +1589,7 @@ class Mutation(graphene.ObjectType):
     create_reservation = CreateReservation.Field()
     update_reservation_status = UpdateReservationStatus.Field()
     create_vehicule_reservation = CreateVehiculeReservation.Field()
+    delete_reservation = DelateReservation.Field()
 
     # Mutations blogs
     create_blog = CreateBlog.Field()
@@ -1601,3 +1630,4 @@ class Mutation(graphene.ObjectType):
     
     # Create sur mesure
     create_sur_mesure = CreateSurMesure.Field()
+    delete_sur_mesure = DeleteSurMesure.Field()

@@ -9,14 +9,14 @@ from django.core.exceptions import ValidationError
 from .models import (
     Utilisateur, Circuit, PointInteret, Vehicule, Reservation, Personnel, Blog, BlogCommentaire, Faq,
     CircuitImage, VehiculeImage, BlogImage,
-    EtatVehicule, Itineraire, Testimonia
+    EtatVehicule, Itineraire, Testimonia, SurMesure
 )
 from .model_types import (
     UtilisateurType, CircuitType,
     PointInteretType, VehiculeType,
     ReservationType, PersonnelType, BlogType,
     BlogCommentaireType, FaqType,
-    CircuitImageType, VehiculeImageType, BlogImageType, ItineraireType, TestimoniaType
+    CircuitImageType, VehiculeImageType, BlogImageType, ItineraireType, TestimoniaType, SurMesureType
 )
 
 logger = logging.getLogger("myapp") 
@@ -103,6 +103,9 @@ class Query(graphene.ObjectType):
     # Query Testimonia
     all_testimonia = graphene.List(TestimoniaType)
     all_testimonia_by_status = graphene.List(TestimoniaType, status=graphene.Boolean(required=True))
+    
+    # Query pour sur mesure
+    all_sur_mesure = graphene.List(SurMesureType)
     
     # Resolvers pour les utilisateurs
     def resolve_all_utilisateurs(self, info):
@@ -209,7 +212,7 @@ class Query(graphene.ObjectType):
 
     # Resolvers pour les réservations
     def resolve_all_reservations(self, info):
-        return Reservation.objects.all().select_related('utilisateur', 'circuit', 'vehicule')
+        return Reservation.objects.all()
 
     def resolve_reservation(self, info, id):
         try:
@@ -343,3 +346,6 @@ class Query(graphene.ObjectType):
 
     def resolve_all_testimonia_by_status(self, info, status):
         return Testimonia.objects.filter(status=status).select_related('utilisateur')
+    
+    def resolve_all_sur_mesure(self, info):
+        return SurMesure.objects.all()

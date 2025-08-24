@@ -264,7 +264,7 @@ class Blog(models.Model):
     datePublication = models.DateTimeField(default=timezone.now)
     auteur = models.CharField(max_length=100, blank=True, null=True)
     image = models.ImageField(upload_to=blog_image_path, blank=True, null=True)
-    tags = models.JSONField(default=list, blank=True)
+    tags = models.CharField(max_length=255, blank=True)
 
     def __str__(self):
         return self.titre

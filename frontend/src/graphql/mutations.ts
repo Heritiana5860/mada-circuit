@@ -142,6 +142,23 @@ export const CREATE_CIRCUIT_RESERVATION = gql`
     }
   }
 `;
+export const UPDATE_RESERVATION = gql`
+  mutation UpdateReservationStatus($id: ID!, $statut: String!) {
+    updateReservationStatus(id: $id, statut: $statut) {
+      success
+      errors
+    }
+  }
+`;
+
+export const DELETE_RESERVATION = gql`
+  mutation DeleteReservation($id: ID!) {
+    deleteReservation(id: $id) {
+      success
+      errors
+    }
+  }
+`;
 
 // Mutation pour créer une réservation
 export const CREATE_RESERVATION = gql`
@@ -335,6 +352,14 @@ export const CREATE_SUR_MESURE = gql`
           nom
         }
       }
+    }
+  }
+`;
+export const DELETE_SUR_MESURE = gql`
+  mutation DeleteSurMesure($id: ID!) {
+    deleteSurMesure(id: $id) {
+      success
+      errors
     }
   }
 `;

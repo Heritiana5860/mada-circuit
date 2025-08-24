@@ -1,18 +1,22 @@
+import { ReservationContext } from "@/provider/DataContext";
 import { useContext, useMemo, useState } from "react";
-import DesktopSurMesure from "./DesktopSurMesure";
-import MobileSurMesure from "./MobileSurMesure";
-import { SurMesureContext } from "@/provider/DataContext";
+import ReservationDesktop from "./DesktopReservation";
+import ReservationMobile from "./MobileReservations";
 import { useMutation } from "@apollo/client";
-import { DELETE_SUR_MESURE } from "@/graphql/mutations";
-import ConfirmationSup from "./ConfirmationSup";
-import { GET_ALL_SURMESURE } from "@/graphql/queries";
-import Detail from "./Detail";
+import { DELETE_RESERVATION, UPDATE_RESERVATION } from "@/graphql/mutations";
+import { GET_ALL_RESERVATION } from "@/graphql/queries";
+import ResaConfirmation from "./ResaConfirmation";
+import DetailReservation from "./DetailReservation";
 
-const SurMesures = () => {
-  const { data: allData, loading, error } = useContext(SurMesureContext);
-  const [deleteSurMesure, { loading: deleteLoading, error: deleteError }] =
-    useMutation(DELETE_SUR_MESURE, {
-      refetchQueries: [{ query: GET_ALL_SURMESURE }],
+const Reservations = () => {
+  const { data: allData, loading, error } = useContext(ReservationContext);
+  const [updateReservation, { loading: resaLoading, error: resaError }] =
+    useMutation(UPDATE_RESERVATION, {
+      refetchQueries: [{ query: GET_ALL_RESERVATION }],
+    });
+  const [deleteAReservation, { loading: delLoading, error: delError }] =
+    useMutation(DELETE_RESERVATION, {
+      refetchQueries: [{ query: GET_ALL_RESERVATION }],
     });
 
   const [showModal, setShowModal] = useState(false);
@@ -26,11 +30,11 @@ const SurMesures = () => {
   const filteredUsers = useMemo(() => {
     return allData.filter((user) => {
       const matchesSearch =
-        user.pointDepart?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        user.pointArrivee?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        user.activite?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        user.statut?.toLowerCase().includes(searchTerm.toLowerCase()) ||
         user.duree?.toLowerCase().includes(searchTerm.toLowerCase()) ||
         user.budget?.includes(searchTerm) ||
-        user.dateDebut?.includes(searchTerm) ||
+        user.dateDepart?.includes(searchTerm) ||
         user.dateFin?.includes(searchTerm) ||
         user.nombreDePersonne?.includes(searchTerm) ||
         user.hebergement?.includes(searchTerm) ||
@@ -45,23 +49,44 @@ const SurMesures = () => {
     });
   }, [allData, searchTerm, roleFilter]);
 
-  if (loading) {
+  if (loading || resaLoading || delLoading) {
     return <div>Loading...</div>;
   }
 
-  if (error) {
+  if (error || resaError || delError) {
     return <div>Erreur!</div>;
   }
+
+  const handleStatusChange = async (id, newStatus: string) => {
+    try {
+      const result = await updateReservation({
+        variables: {
+          id: id,
+          statut: newStatus,
+        },
+      });
+
+      if (result.data.success) {
+        console.log("OK");
+      } else {
+        console.log(result);
+      }
+    } catch (e) {
+      console.error("Erreur lors de la mise à jour du status:", e);
+    }
+  };
 
   const handleDelete = async () => {
     if (!selectedUser) return;
 
     try {
-      await deleteSurMesure({
+      const result = await deleteAReservation({
         variables: { id: selectedUser.id },
       });
       setShowModal(false);
       setSelectedUser(null);
+
+      console.log(result);
     } catch (err) {
       console.error("Erreur lors de la suppression:", err);
       alert("Erreur lors de la suppression. Veuillez réessayer.");
@@ -72,42 +97,40 @@ const SurMesures = () => {
     <div className="space-y-6">
       <div className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
         {/* Desktop Table */}
-        <DesktopSurMesure
+        <ReservationDesktop
           filteredUsers={filteredUsers}
+          setShowModalDetail={setShowModalDetail}
           setSelectedUser={setSelectedUser}
           setShowModal={setShowModal}
-          deleteLoading={deleteLoading}
-          setShowModalDetail={setShowModalDetail}
-          showModalDetail={showModalDetail}
+          handleStatusChange={handleStatusChange}
         />
 
         {/* Mobile Cards */}
-        <MobileSurMesure
+        <ReservationMobile
           filteredUsers={filteredUsers}
           setSelectedUser={setSelectedUser}
-          setShowModal={setShowModal}
-          deleteLoading={deleteLoading}
           setShowModalDetail={setShowModalDetail}
-          showModalDetail={showModalDetail}
+          setShowModal={setShowModal}
+          handleStatusChange={handleStatusChange}
         />
 
-        {/* Modal de confirmation amélioré */}
-        <ConfirmationSup
+        {/* Modal de confirmation suppression */}
+        <ResaConfirmation
           showModal={showModal}
           setShowModal={setShowModal}
           handleDelete={handleDelete}
-          deleteLoading={deleteLoading}
+          deleteLoading={delLoading}
         />
 
         {/* Modal de detail */}
-        <Detail
+        <DetailReservation
           showModalDetail={showModalDetail}
-          setShowModalDetail={setShowModalDetail}
           selectedUser={selectedUser}
+          setShowModalDetail={setShowModalDetail}
         />
       </div>
     </div>
   );
 };
 
-export default SurMesures;
+export default Reservations;

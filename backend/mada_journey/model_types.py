@@ -168,7 +168,7 @@ class ReservationType(DjangoObjectType):
         model = Reservation
         fields = (
             'id', 'utilisateur', 'circuit', 'vehicule', 'date_reservation',
-            'date_depart', 'statut', 'duree', 'nombre_personnes',
+            'date_depart', 'date_fin', 'statut', 'duree', 'nombre_personnes',
             'hebergement', 'activite', 'budget', 'nom', 'prenom',
             'email', 'telephone', 'commentaire'
         )

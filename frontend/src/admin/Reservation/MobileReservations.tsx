@@ -1,21 +1,20 @@
 import {
-  Eye,
-  Trash,
-  MapPin,
   Calendar,
-  Users,
-  Clock,
-  Loader2,
   ChevronRight,
+  Clock,
+  Eye,
+  Loader2,
+  MapPin,
+  Trash,
+  Users,
 } from "lucide-react";
 
-const MobileSurMesure = ({
+const ReservationMobile = ({
   filteredUsers,
   setSelectedUser,
-  setShowModal,
-  deleteLoading,
   setShowModalDetail,
-  showModalDetail,
+  setShowModal,
+  handleStatusChange,
 }) => {
   const ActionButton = ({
     onClick,
@@ -94,22 +93,6 @@ const MobileSurMesure = ({
     );
   };
 
-  if (!filteredUsers || filteredUsers.length === 0) {
-    return (
-      <div className="lg:hidden">
-        <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-8 text-center mx-4 my-6">
-          <MapPin className="w-10 h-10 text-gray-400 mx-auto mb-3" />
-          <h3 className="text-base font-medium text-gray-900 mb-2">
-            Aucun voyage trouvé
-          </h3>
-          <p className="text-sm text-gray-500">
-            Aucun voyage ne correspond à vos critères.
-          </p>
-        </div>
-      </div>
-    );
-  }
-
   return (
     <div className="lg:hidden">
       {/* Header mobile */}
@@ -137,13 +120,7 @@ const MobileSurMesure = ({
                   </div>
                   <div className="flex-1 min-w-0">
                     <div className="font-semibold text-gray-900 text-sm truncate">
-                      {user.pointDepart}
-                    </div>
-                    <div className="flex items-center text-xs text-blue-600 gap-1">
-                      <span>→</span>
-                      <span className="font-medium truncate">
-                        {user.pointArrivee}
-                      </span>
+                      {user.Circuit}
                     </div>
                   </div>
                 </div>
@@ -153,18 +130,6 @@ const MobileSurMesure = ({
 
             {/* Contenu de la carte */}
             <div className="p-4">
-              {/* Lieu à visiter */}
-              {user.lieuVisiter?.nom && (
-                <div className="mb-3">
-                  <div className="text-sm font-medium text-gray-900 mb-1">
-                    Lieu à visiter
-                  </div>
-                  <div className="text-sm text-gray-600">
-                    {user.lieuVisiter.nom}
-                  </div>
-                </div>
-              )}
-
               {/* Informations principales */}
               <div className="grid grid-cols-2 gap-3 mb-4">
                 <div>
@@ -173,7 +138,7 @@ const MobileSurMesure = ({
                     <span>Période</span>
                   </div>
                   <div className="text-sm font-medium text-gray-900">
-                    {user.dateDebut}
+                    {user.dateDepart}
                   </div>
                   <div className="text-xs text-gray-500">au {user.dateFin}</div>
                 </div>
@@ -184,8 +149,8 @@ const MobileSurMesure = ({
                     <span>Participants</span>
                   </div>
                   <div className="text-sm font-medium text-gray-900">
-                    {user.nombreDePersonne} personne
-                    {user.nombreDePersonne > 1 ? "s" : ""}
+                    {user.nombrePersonnes} personne
+                    {user.nombrePersonnes > 1 ? "s" : ""}
                   </div>
                 </div>
               </div>
@@ -198,6 +163,21 @@ const MobileSurMesure = ({
                 <StatusBadge duration={user.duree} />
               </div>
 
+              {/* Status */}
+              <div className="flex items-center gap-2 mb-4 flex-wrap">
+                <select
+                  id="status"
+                  value={user.statut}
+                  onChange={(e) => handleStatusChange(user.id, e.target.value)}
+                  className="h-12 px-2 border rounded-md w-full"
+                >
+                  <option value="EN_ATTENTE">En attente</option>
+                  <option value="CONFIRMEE">Confirmée</option>
+                  <option value="ANNULEE">Annulée</option>
+                  <option value="TERMINEE">Terminée</option>
+                </select>
+              </div>
+
               {/* Actions */}
               <div className="flex items-center gap-2 pt-2 border-t border-gray-100">
                 <ActionButton
@@ -207,7 +187,7 @@ const MobileSurMesure = ({
                   }}
                   icon={Eye}
                   variant="view"
-                  disabled={deleteLoading}
+                  //   disabled={deleteLoading}
                 >
                   Détails
                 </ActionButton>
@@ -219,10 +199,11 @@ const MobileSurMesure = ({
                   }}
                   icon={Trash}
                   variant="danger"
-                  loading={deleteLoading}
-                  disabled={deleteLoading}
+                  //   loading={deleteLoading}
+                  //   disabled={deleteLoading}
                 >
-                  {deleteLoading ? "..." : "Supprimer"}
+                  {/* {deleteLoading ? "..." : "Supprimer"} */}
+                  Supprimer
                 </ActionButton>
               </div>
             </div>
@@ -233,4 +214,4 @@ const MobileSurMesure = ({
   );
 };
 
-export default MobileSurMesure;
+export default ReservationMobile;

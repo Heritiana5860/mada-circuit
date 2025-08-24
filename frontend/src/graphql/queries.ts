@@ -234,6 +234,7 @@ export const GET_USER_RESERVATIONS = gql`
       id
       dateReservation
       dateDepart
+      dateFin
       statut
       duree
       nombrePersonnes
@@ -282,6 +283,7 @@ export const GET_ALL_RESERVATION = gql`
       id
       dateReservation
       dateDepart
+      dateFin
       statut
       duree
       nombrePersonnes
@@ -301,6 +303,7 @@ export const GET_ALL_RESERVATION = gql`
         email
       }
       circuit {
+        id
         titre
         duree
         prix
@@ -320,6 +323,7 @@ export const GET_ALL_RESERVATION = gql`
         }
       }
       vehicule {
+        id
         immatriculation
         marque
         modele

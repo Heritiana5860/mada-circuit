@@ -11,7 +11,7 @@ def message(utilisateur, date_depart, date_fin, duree, nombre_personnes, budget,
     else:
         detail = (
             f"✨ Titre          : {circuit.titre}\n"
-            f"🚩 Destination    : {circuit.destination.nom}\n"
+            f"🚩 Destination    : {circuit.destination}\n"
             f"⏳ Durée          : {circuit.duree} jours\n"
             f"💰 Prix           : {circuit.prix} Ar /jour\n"
             f"👍 Inclus         : {circuit.inclus}\n"

@@ -25,7 +25,7 @@ import CreateBlog from "./admin/Blog/CreateBlog";
 import CreateFaq from "./admin/CreateFaq";
 import CreatePersonnel from "./admin/CreatePersonnel";
 import CreateVehicule from "./admin/Vehicules/CreateVehicule";
-import Reservations from "./admin/Reservations";
+import Reservations from "./admin/Reservation/Reservations";
 import SurMesures from "./admin/SurMesure/SurMesures";
 import Utilisateurs from "./admin/Utilisateurs/Utilisateurs";
 import Temoignages from "./admin/Temoignages";

@@ -4,6 +4,8 @@ import Footer from "@/components/Footer";
 import { Link, useNavigate } from "react-router-dom";
 import { useQuery } from "@apollo/client";
 import { GET_ALL_PERSONNELS } from "@/graphql/queries";
+import { useContext } from "react";
+import { AllPersonnelContext } from "@/provider/DataContext";
 
 const PageGuide = () => {
   const guideData = [
@@ -85,11 +87,8 @@ const PageGuide = () => {
     },
   ];
 
-  const {
-    loading: peronnelLoading,
-    error: personnelError,
-    data: personnelData,
-  } = useQuery(GET_ALL_PERSONNELS);
+  const { personnelData, peronnelLoading, personnelError } =
+    useContext(AllPersonnelContext);
 
   const navigate = useNavigate();
 

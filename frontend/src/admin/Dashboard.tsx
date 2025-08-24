@@ -1,30 +1,110 @@
+import {
+  AllBlogContext,
+  AllPersonnelContext,
+  AllTestimoniaContext,
+  AllUserContext,
+  CircuitContext,
+  DataContext,
+  FaqContext,
+  ReservationContext,
+  SurMesureContext,
+} from "@/provider/DataContext";
 import { BarChart3, Bell, Search } from "lucide-react";
+import { useContext } from "react";
 
 const Dashboard = () => {
+  const { data: allData, loading, error } = useContext(ReservationContext);
+  const {
+    data: dataCircuit,
+    loading: loadingCircuit,
+    error: errorCircuit,
+  } = useContext(CircuitContext);
+  const {
+    loading: userLoading,
+    error: userError,
+    data,
+  } = useContext(AllUserContext);
+  const {
+    data: testimoniaData,
+    loading: testimoniaLoading,
+    error: testimoniaError,
+  } = useContext(AllTestimoniaContext);
+  const { allDataFaq, faqLoading, faqError } = useContext(FaqContext);
+  const {
+    data: dataSur,
+    loading: loadingSur,
+    error: errorSur,
+  } = useContext(SurMesureContext);
+  const { personnelData, peronnelLoading, personnelError } =
+    useContext(AllPersonnelContext);
+  const { dataBlog, loadingBlog, errorBlog } = useContext(AllBlogContext);
+
+  if (
+    loading ||
+    loadingCircuit ||
+    userLoading ||
+    testimoniaLoading ||
+    faqLoading ||
+    loadingSur ||
+    peronnelLoading ||
+    loadingBlog
+  ) {
+    return <div>Loading...</div>;
+  }
+
+  if (
+    error ||
+    errorCircuit ||
+    userError ||
+    testimoniaError ||
+    faqError ||
+    errorSur ||
+    personnelError ||
+    errorBlog
+  ) {
+    return <div>Erreur!</div>;
+  }
+
   const stats = [
     {
       title: "Réservations",
-      value: "147",
-      change: "+12%",
+      value: allData.length,
       color: "bg-blue-500",
     },
     {
       title: "Circuits actifs",
-      value: "23",
-      change: "+5%",
+      value: dataCircuit.length,
       color: "bg-green-500",
     },
     {
       title: "Utilisateurs",
-      value: "1,248",
-      change: "+8%",
+      value: data.length,
       color: "bg-purple-500",
     },
     {
-      title: "Revenus",
-      value: "€45,230",
-      change: "+15%",
+      title: "Temoignage",
+      value: testimoniaData.length,
       color: "bg-orange-500",
+    },
+    {
+      title: "Faqs",
+      value: allDataFaq.length,
+      color: "bg-purple-500",
+    },
+    {
+      title: "Sur Mesure",
+      value: dataSur.length,
+      color: "bg-orange-500",
+    },
+    {
+      title: "Personnel",
+      value: personnelData.length,
+      color: "bg-green-500",
+    },
+    {
+      title: "Blog",
+      value: dataBlog.length,
+      color: "bg-blue-500",
     },
   ];
 
@@ -88,9 +168,6 @@ const Dashboard = () => {
                 </p>
                 <p className="text-2xl font-bold text-gray-900 mt-1">
                   {stat.value}
-                </p>
-                <p className="text-sm text-green-600 font-medium mt-1">
-                  {stat.change}
                 </p>
               </div>
               <div

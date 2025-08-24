@@ -18,11 +18,8 @@ import {
   Phone,
   Calendar,
   Shield,
-  Edit,
   Camera,
 } from "lucide-react";
-import { useQuery } from "@apollo/client";
-import { GET_UTILISATEUR_BY_EMAIL } from "@/graphql/queries";
 import { Link } from "react-router-dom";
 import {
   DataContext,

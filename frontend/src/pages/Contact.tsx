@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import NavBar from "../components/NavBar";
 import Footer from "../components/Footer";
 import { Button } from "@/components/ui/button";
@@ -12,19 +12,10 @@ import {
   MapPin,
   Clock,
   Send,
-  Divide,
-  Heading1,
 } from "lucide-react";
-import { useMutation, gql, useQuery } from "@apollo/client";
+import { useMutation } from "@apollo/client";
 import { useToast } from "@/components/ui/use-toast";
-import { useAuth } from "../contexts/AuthContext";
 import { CREATE_CONTACT_US } from "@/graphql/mutations";
-import { GET_ALL_FAQS } from "@/graphql/queries";
-import ContentLoading from "@/components/Loading";
-import ContentError from "@/components/error";
-import { Alert, AlertDescription } from "@/components/ui/alert";
-import { error } from "console";
-import { FaqContext } from "@/provider/DataContext";
 
 const Contact = () => {
   // État du formulaire

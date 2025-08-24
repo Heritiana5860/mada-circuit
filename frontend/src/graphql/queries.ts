@@ -87,6 +87,29 @@ export const GET_CIRCUIT_BY_ID = gql`
   }
 `;
 
+export const ALL_CIRCUITS = gql`
+  query AllCircuits {
+    allCircuits {
+      id
+      titre
+      description
+      duree
+      prix
+      inclus
+      nonInclus
+      destination
+      saison
+      image
+      difficulte
+      type
+      transport
+      reservationsCount
+      isAvailable
+      imagesCount
+    }
+  }
+`;
+
 // Queries pour les véhicules
 export const GET_ALL_VEHICULES = gql`
   query GetAllVehicules {

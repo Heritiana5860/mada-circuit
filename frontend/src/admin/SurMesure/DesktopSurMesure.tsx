@@ -1,3 +1,4 @@
+import { formatterUS } from "@/helper/formatage";
 import {
   Eye,
   Trash,
@@ -12,7 +13,6 @@ const DesktopSurMesure = ({
   filteredUsers,
   setSelectedUser,
   setShowModal,
-  showModalDetail,
   setShowModalDetail,
   deleteLoading,
 }) => {
@@ -191,9 +191,11 @@ const DesktopSurMesure = ({
 
                   <td className="px-6 py-5">
                     <div className="text-sm text-gray-900">
-                      <div className="font-medium">{user.dateDebut}</div>
+                      <div className="font-medium">
+                        {formatterUS.format(new Date(user.dateDebut))}
+                      </div>
                       <div className="text-xs text-gray-500">
-                        au {user.dateFin}
+                        au {formatterUS.format(new Date(user.dateFin))}
                       </div>
                     </div>
                   </td>

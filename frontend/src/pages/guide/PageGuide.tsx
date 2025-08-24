@@ -2,91 +2,10 @@ import NavBar from "@/components/NavBar";
 import PageGuideCard from "./PageGuideCard";
 import Footer from "@/components/Footer";
 import { Link, useNavigate } from "react-router-dom";
-import { useQuery } from "@apollo/client";
-import { GET_ALL_PERSONNELS } from "@/graphql/queries";
 import { useContext } from "react";
 import { AllPersonnelContext } from "@/provider/DataContext";
 
 const PageGuide = () => {
-  const guideData = [
-    {
-      id: 1,
-      aventureImage: [
-        "https://plus.unsplash.com/premium_photo-1720373139748-8060f718ec21?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8OXx8YXZlbnR1cmUlMjB0b3VyaXN0aXF1ZXxlbnwwfHwwfHx8MA%3D%3D",
-        "https://images.unsplash.com/photo-1626234151148-67eef56d0a34?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8YXZlbnR1cmUlMjB0b3VyaXN0aXF1ZXxlbnwwfHwwfHx8MA%3D%3D",
-        "https://images.unsplash.com/photo-1566283190896-d1fc1c11beb0?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NHx8YXZlbnR1cmUlMjB0b3VyaXN0aXF1ZXxlbnwwfHwwfHx8MA%3D%3D",
-      ],
-      url: "https://images.unsplash.com/photo-1568602471122-7832951cc4c5?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MjB8fHBlcnNvbnxlbnwwfHwwfHx8MA%3D%3D",
-      nom: "Jean Doe",
-      specialite: [
-        "Guide naturaliste spécialisé dans les parcs nationaux",
-        "Observation de la faune",
-        "Randonnée",
-        "Photographie de la nature",
-      ],
-      languages: "Français, Anglais",
-      lieu: "📍Basé à Antananarivo",
-      Biographie:
-        "Andry est un passionné de la nature malgache depuis plus de 15 ans. Diplômé en écotourisme, il a parcouru les forêts denses de Ranomafana, les massifs de l'Isalo, et les zones humides de Masoala pour faire découvrir aux voyageurs la biodiversité unique de Madagascar.",
-      contact: "+261 38 22 754 98",
-      email: "jean.doe@gmail.com",
-      rating: 3.9,
-      reviewCount: 136,
-      price: "À partir de 45€",
-      availability: "Disponible",
-      prix: "À partir de 45€",
-    },
-    {
-      id: 2,
-      aventureImage: [
-        "https://images.unsplash.com/photo-1676808625978-400448b79d48?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTZ8fGF2ZW50dXJlJTIwdG91cmlzdGlxdWV8ZW58MHx8MHx8fDA%3D",
-        "https://images.unsplash.com/photo-1553244687-0646c8e0b68e?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTl8fGF2ZW50dXJlJTIwdG91cmlzdGlxdWV8ZW58MHx8MHx8fDA%3D",
-        "https://images.unsplash.com/photo-1534249214258-6039e5137921?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mjd8fGF2ZW50dXJlJTIwdG91cmlzdGlxdWV8ZW58MHx8MHx8fDA%3D",
-      ],
-      url: "https://plus.unsplash.com/premium_photo-1714839367832-43d2363fff46?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NXx8dG91cmlzdGljJTIwZ3VpZGUlMjB3b21hbnxlbnwwfHwwfHx8MA%3D%3D",
-      nom: "Mialy Notiavina",
-      specialite: [
-        "Guide culturelle",
-        "Artisanat",
-        "Traditions malgaches",
-        "Rites ancestraux",
-      ],
-      languages: "Français, Anglais, Espagnol",
-      lieu: "📍Basée à Tuléar",
-      Biographie:
-        "Originaire du sud de Madagascar, Mialy a étudié l'histoire et la civilisation malgache à l'Université de Fianarantsoa. Depuis plus de 10 ans, elle accompagne des groupes et voyageurs curieux à travers les traditions, l'artisanat et les rites ancestraux de sa région.",
-      contact: "+261 32 50 704 90",
-      email: "mialy@gmail.com",
-      rating: 4.0,
-      reviewCount: 156,
-      price: "À partir de 45€",
-      availability: "Disponible",
-      prix: "À partir de 40€",
-    },
-    {
-      id: 3,
-      aventureImage: [
-        "https://images.unsplash.com/photo-1589411455082-23c608daac50?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MjJ8fGF2ZW50dXJlJTIwdG91cmlzdGlxdWV8ZW58MHx8MHx8fDA%3D",
-        "https://images.unsplash.com/photo-1487975836665-e091375fb97f?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MjN8fGF2ZW50dXJlJTIwdG91cmlzdGlxdWV8ZW58MHx8MHx8fDA%3D",
-        "https://images.unsplash.com/photo-1445093446913-34933e71f8ea?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mzh8fGF2ZW50dXJlJTIwdG91cmlzdGlxdWV8ZW58MHx8MHx8fDA%3D",
-      ],
-      url: "https://images.unsplash.com/photo-1495538411606-c9efab92bcbe?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTZ8fHRvdXJpc3RpYyUyMGd1aWRlJTIwbWFufGVufDB8fDB8fHww",
-      nom: "Hery Nasandratra",
-      specialite: ["Guide aventure", "Randonnée", "Trekking"],
-      languages: "Français, Anglais, Allemand",
-      lieu: "📍Basé à Antsirabe",
-      Biographie:
-        "Hery est un guide certifié passionné de randonnée, originaire des Hautes Terres. Ancien enseignant reconverti dans le tourisme, il combine connaissances géographiques et esprit d'aventure. Avec plus de 12 ans d'expérience, il a mené des treks de plusieurs jours dans l'Andringitra, l'Ankaratra, et les zones rurales inexplorées.",
-      contact: "+261 33 21 958 88",
-      email: "hery@gmail.com",
-      rating: 3.7,
-      reviewCount: 123,
-      price: "À partir de 45€",
-      availability: "Disponible",
-      prix: "À partir de 44€",
-    },
-  ];
-
   const { personnelData, peronnelLoading, personnelError } =
     useContext(AllPersonnelContext);
 
@@ -131,8 +50,6 @@ const PageGuide = () => {
       </div>
     );
   }
-
-  const data = personnelData?.allPersonnels;
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
@@ -268,7 +185,7 @@ const PageGuide = () => {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {data.map((guide, index) => (
+            {personnelData.map((guide) => (
               <PageGuideCard
                 key={guide.id}
                 url={`http://localhost:8000/media/${guide.photo}`}

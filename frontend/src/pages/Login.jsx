@@ -24,17 +24,38 @@ const Login = () => {
   const [errors, setErrors] = useState([]);
   const [error, setError] = useState("");
 
-  const { login, isAuthenticated } = useAuth();
+  // CORRECTION : Ajouter 'user' à la destructuration
+  const { login, isAuthenticated, user } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
 
+  const getRedirectPath = (userRole, fallbackPath = "/") => {
+    switch (userRole) {
+      case "ADMIN":
+        return "/admin";
+      case "CLIENT":
+        return "/";
+      default:
+        console.warn(`Unknown role: ${userRole}, using fallback`);
+        return fallbackPath;
+    }
+  };
+
   // Rediriger si déjà connecté
   useEffect(() => {
-    if (isAuthenticated) {
-      const from = location.state?.from?.pathname || "/";
-      navigate(from, { replace: true });
+    if (isAuthenticated && user) {
+      const redirectPath = getRedirectPath(user.role, "/");
+
+      console.log("redirectPath: ", redirectPath);
+
+      const finalPath =
+        user.role === "CLIENT" && location.state?.from?.pathname
+          ? location.state.from.pathname
+          : redirectPath;
+
+      navigate(finalPath, { replace: true });
     }
-  }, [isAuthenticated, navigate, location]);
+  }, [isAuthenticated, user, navigate, location]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -64,20 +85,6 @@ const Login = () => {
       const result = await login(formData.email.trim(), formData.password);
 
       if (result.success && result.user) {
-        const userRole = result.user.role;
-        console.log("Login successful, user role:", userRole);
-
-        // Redirection immédiate basée sur le rôle
-        if (userRole === "ADMIN") {
-          console.log("Redirecting ADMIN to /admin");
-          navigate("/admin", { replace: true });
-        } else if (userRole === "CLIENT") {
-          console.log("Redirecting CLIENT to home");
-          navigate("/", { replace: true });
-        } else {
-          console.warn(`Unknown role: ${userRole}, redirecting to home`);
-          navigate("/", { replace: true });
-        }
       } else {
         setError(result.error || "Erreur de connexion");
       }
@@ -93,6 +100,9 @@ const Login = () => {
       setLoading(false);
     }
   };
+
+  // Afficher les erreurs de connexion
+  const displayError = error || (errors.length > 0 ? errors.join(", ") : "");
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-primary/10 via-background to-secondary/10 px-4">
@@ -124,13 +134,10 @@ const Login = () => {
           </CardHeader>
 
           <CardContent className="space-y-4">
-            {errors.length > 0 && (
+            {/* CORRECTION : Utiliser displayError pour l'affichage */}
+            {displayError && (
               <Alert className="border-destructive/50 text-destructive">
-                <AlertDescription>
-                  {errors.map((error, index) => (
-                    <div key={index}>{error}</div>
-                  ))}
-                </AlertDescription>
+                <AlertDescription>{displayError}</AlertDescription>
               </Alert>
             )}
 

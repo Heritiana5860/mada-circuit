@@ -1,3 +1,4 @@
+import { formatterUS } from "@/helper/formatage";
 import {
   Eye,
   Trash,
@@ -173,9 +174,11 @@ const MobileSurMesure = ({
                     <span>Période</span>
                   </div>
                   <div className="text-sm font-medium text-gray-900">
-                    {user.dateDebut}
+                    {formatterUS.format(new Date(user.dateDebut))}
                   </div>
-                  <div className="text-xs text-gray-500">au {user.dateFin}</div>
+                  <div className="text-xs text-gray-500">
+                    au {formatterUS.format(new Date(user.dateFin))}
+                  </div>
                 </div>
 
                 <div>

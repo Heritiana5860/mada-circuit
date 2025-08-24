@@ -34,9 +34,11 @@ import {
   ReservationContext,
   SurMesureContext,
 } from "./provider/DataContext";
+import { useAuth } from "./contexts/AuthContext";
 
 const ImprovedAdmin = () => {
   const { data, loading, error } = useContext(SurMesureContext);
+  const { user, isAuthenticated, logout } = useAuth();
   const {
     data: resaData,
     loading: resaLoading,
@@ -255,7 +257,10 @@ const ImprovedAdmin = () => {
                 <p className="text-xs text-gray-500">admin@voyage.com</p>
               </div>
             </div>
-            <button className="w-full flex items-center space-x-3 px-3 py-2.5 text-red-600 hover:bg-red-50 rounded-lg transition-colors">
+            <button
+              onClick={logout}
+              className="w-full flex items-center space-x-3 px-3 py-2.5 text-red-600 hover:bg-red-50 rounded-lg transition-colors"
+            >
               <LogOut className="w-5 h-5" />
               <span className="font-medium">Déconnexion</span>
             </button>

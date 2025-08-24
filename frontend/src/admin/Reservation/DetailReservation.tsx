@@ -1,3 +1,4 @@
+import { formatPrice, formatterUS } from "@/helper/formatage";
 import {
   Armchair,
   Bookmark,
@@ -92,7 +93,9 @@ const DetailReservation = ({
             <InfoItem
               icon={ClipboardType}
               label="Type"
-              value={`${selectedUser.circuit.id > 0 ? "Circuit" : "Vehicule"}`}
+              value={`${
+                selectedUser.circuit !== null ? "Circuit" : "Vehicule"
+              }`}
             />
 
             <InfoItem
@@ -110,7 +113,7 @@ const DetailReservation = ({
             <InfoItem
               icon={DollarSign}
               label="Budget"
-              value={`${selectedUser.budget} Ar`}
+              value={`${formatPrice(selectedUser.budget)} Ar`}
             />
           </InfoSection>
 
@@ -124,7 +127,9 @@ const DetailReservation = ({
             <InfoItem
               icon={Calendar}
               label="Dates"
-              value={`${selectedUser.dateDepart} → ${selectedUser.dateFin}`}
+              value={`${formatterUS.format(
+                new Date(selectedUser.dateDepart)
+              )} → ${formatterUS.format(new Date(selectedUser.dateFin))}`}
             />
             <InfoItem
               icon={Clock}
@@ -134,7 +139,7 @@ const DetailReservation = ({
           </InfoSection>
 
           {/* Voyage Details Section */}
-          {selectedUser.circuit.id !== null ? (
+          {selectedUser.circuit !== null ? (
             <InfoSection
               icon={Users}
               title="Détails du Voyage"

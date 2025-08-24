@@ -1,3 +1,4 @@
+import { formatterUS } from "@/helper/formatage";
 import {
   AlertTriangle,
   X,
@@ -87,7 +88,8 @@ const Detail = ({ showModalDetail, setShowModalDetail, selectedUser }) => {
               value={
                 selectedUser.lieuVisiter.map((lieu, i) => (
                   <span key={i}>
-                    {lieu.nom}{" - "}
+                    {lieu.nom}
+                    {" - "}
                   </span>
                 )) || "Non spécifié"
               }
@@ -104,7 +106,9 @@ const Detail = ({ showModalDetail, setShowModalDetail, selectedUser }) => {
             <InfoItem
               icon={Calendar}
               label="Dates"
-              value={`${selectedUser.dateDebut} → ${selectedUser.dateFin}`}
+              value={`${formatterUS.format(
+                new Date(selectedUser.dateDebut)
+              )} → ${formatterUS.format(new Date(selectedUser.dateFin))}`}
             />
             <InfoItem
               icon={Clock}

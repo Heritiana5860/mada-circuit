@@ -1,3 +1,4 @@
+import { formatterUS } from "@/helper/formatage";
 import {
   Calendar,
   CircleDot,
@@ -137,7 +138,7 @@ const ReservationDesktop = ({
             <tbody className="divide-y divide-gray-100">
               {filteredUsers.map((user, index) => (
                 <tr
-                  key={user.id}
+                  key={index}
                   className={`hover:bg-blue-50 transition-all duration-200 ${
                     index % 2 === 0 ? "bg-white" : "bg-gray-50/30"
                   }`}
@@ -146,7 +147,7 @@ const ReservationDesktop = ({
                     <div className="flex items-center">
                       <div className="ml-4">
                         <div className="font-semibold text-gray-900 text-sm">
-                          {user.circuit.id !== null ? "Circuit" : "Vehicule"}
+                          {user.circuit !== null ? "Circuit" : "Vehicule"}
                         </div>
                       </div>
                     </div>
@@ -154,9 +155,11 @@ const ReservationDesktop = ({
 
                   <td className="px-6 py-5">
                     <div className="text-sm text-gray-900">
-                      <div className="font-medium">{user.dateDepart}</div>
+                      <div className="font-medium">
+                        {formatterUS.format(new Date(user.dateDepart))}
+                      </div>
                       <div className="text-xs text-gray-500">
-                        au {user.dateFin}
+                        au {formatterUS.format(new Date(user.dateFin))}
                       </div>
                     </div>
                   </td>

@@ -89,12 +89,23 @@ const Blog = () => {
         contenu: blog.contenu.trim(),
         auteur: blog.auteur?.trim() || "Auteur inconnu",
         datePublication: blog.datePublication || new Date().toISOString(),
-        images: `http://localhost:8000/media/${blog.image}`,
+        // Correction pour les images : prendre la première image ou image par défaut
+        image:
+          blog.images && blog.images.length > 0
+            ? `http://localhost:8000/media/${blog.images[0].image}`
+            : DEFAULT_IMAGE,
+        images:
+          blog.images && blog.images.length > 0
+            ? blog.images.map(
+                (img) => `http://localhost:8000/media/${img.image}`
+              )
+            : [DEFAULT_IMAGE],
         tags:
           blog.tags && blog.tags.length > 0
             ? blog.tags
                 .split(";")
                 .filter((tag) => tag && typeof tag === "string")
+                .map((tag) => tag.trim())
             : DEFAULT_TAGS,
       }))
       .sort(
@@ -205,8 +216,6 @@ const Blog = () => {
   const featuredBlog = filteredBlogs.length > 0 ? filteredBlogs[0] : null;
   const regularBlogs = filteredBlogs.slice(1);
 
-  console.log("featuredBlog: ", featuredBlog);
-
   // Composant d'erreur avec retry
   const ErrorComponent = ({ error, onRetry }) => (
     <Alert variant="destructive" className="mb-8 border-red-200 bg-red-50">
@@ -300,18 +309,18 @@ const Blog = () => {
                   </Badge>
                 </div>
                 <h1 className="text-3xl md:text-4xl font-bold text-white mb-6 leading-tight">
-                  Explorez l’île aux mille visages
+                  Explorez l'île aux mille visages
                   <span className="text-transparent bg-clip-text bg-gradient-to-r from-green-400 to-blue-500 block">
                     Madagascar
                   </span>
                 </h1>
-                <p className="text-xl md:text-sm text-white/90 mb-8 max-w-2xl leading-relaxed">
+                <p className="text-xl md:text-lg text-white/90 mb-8 max-w-2xl leading-relaxed">
                   Préparez votre aventure avec nos{" "}
                   <strong>guides de voyage complets</strong>, nos{" "}
                   <strong>conseils exclusifs</strong> et des{" "}
                   <strong>itinéraires sur mesure</strong>. Que vous voyagiez en{" "}
                   <strong>voiture de location</strong> ou en{" "}
-                  <strong>circuit organisé</strong>, partez à la rencontre d’une
+                  <strong>circuit organisé</strong>, partez à la rencontre d'une
                   île unique au monde : plages paradisiaques, forêts tropicales,
                   parcs nationaux et une culture riche et authentique.
                 </p>
@@ -398,6 +407,10 @@ const Blog = () => {
                                   src={featuredBlog.image}
                                   alt={featuredBlog.titre}
                                   className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                                  onError={(e) => {
+                                    const target = e.target as HTMLImageElement;
+                                    target.src = DEFAULT_IMAGE;
+                                  }}
                                 />
                                 <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent"></div>
                               </div>
@@ -484,6 +497,11 @@ const Blog = () => {
                                       src={blog.image}
                                       alt={blog.titre}
                                       className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                                      onError={(e) => {
+                                        const target =
+                                          e.target as HTMLImageElement;
+                                        target.src = DEFAULT_IMAGE;
+                                      }}
                                     />
                                     <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent"></div>
                                     <div className="absolute top-4 left-4">

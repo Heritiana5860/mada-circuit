@@ -15,11 +15,14 @@ import { TestimoniaCarousel } from "@/components/TestimoniaCarousel";
 
 const Location4x4: React.FC = () => {
   const { loading, error, data } = useQuery(GET_ALL_VEHICULES);
-  const { loading: typesLoading, data: typesData } = useQuery(
-    GET_ALL_TYPES_VEHICULES
-  );
   const vehicles = data?.allVehicules || [];
-  const vehicleTypes = typesData?.allTypesVehicule || [];
+  const vehicleTypes = [];
+  vehicles.forEach((v) => {
+    if (!vehicleTypes.includes(v.type)) {
+      vehicleTypes.push(v.type);
+    }
+  });
+  // const vehicleTypes = typesData?.allTypesVehicule || [];
   const [filter, setFilter] = useState<string>("");
   const [currentIndex, setCurrentIndex] = useState(0);
 
@@ -39,13 +42,7 @@ const Location4x4: React.FC = () => {
     ? vehicles.filter((v) => v.type === filter)
     : vehicles;
 
-  if (
-    loading ||
-    typesLoading ||
-    faqLoading ||
-    utilisateurLoading ||
-    testimoniaLoading
-  )
+  if (loading || faqLoading || utilisateurLoading || testimoniaLoading)
     return (
       <div className="min-h-screen flex flex-col">
         <NavBar />
@@ -109,9 +106,9 @@ const Location4x4: React.FC = () => {
                       className="w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-primary focus:border-transparent"
                     >
                       <option value="">Tous les types</option>
-                      {vehicleTypes.map((type) => (
-                        <option key={type.id} value={type.libelle}>
-                          {type.libelle}
+                      {vehicleTypes.map((type, index) => (
+                        <option key={index} value={type}>
+                          {type}
                         </option>
                       ))}
                     </select>

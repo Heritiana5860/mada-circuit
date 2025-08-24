@@ -112,11 +112,12 @@ const Circuits = () => {
   useEffect(() => {
     if (circuitsData?.allCircuitsByType) {
       let circuits = circuitsData?.allCircuitsByType;
+      
 
       // Filtre par région
       if (selectedRegion !== "all") {
         circuits = circuits.filter((circuit: string) =>
-          circuit["destination"]["region"]
+          circuit["region"]
             .toLowerCase()
             .includes(selectedRegion.toLowerCase())
         );
@@ -129,7 +130,7 @@ const Circuits = () => {
             circuit["titre"]
               .toLowerCase()
               .includes(searchQuery.toLowerCase()) ||
-            circuit["destination"]["nom"]
+            circuit["destination"]
               .toLowerCase()
               .includes(searchQuery.toLowerCase()) ||
             circuit["description"]

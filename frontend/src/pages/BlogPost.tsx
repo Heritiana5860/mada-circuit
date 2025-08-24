@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
 import { useQuery } from "@apollo/client";
 import NavBar from "../components/NavBar";
@@ -6,7 +6,6 @@ import Footer from "../components/Footer";
 import {
   Calendar,
   UserRound,
-  Tag,
   Share2,
   Facebook,
   Twitter,
@@ -111,11 +110,13 @@ const BlogPost = () => {
           </Link>
         </div>
 
+        {/* Image principale (première image) */}
         <div className="relative h-[50vh] overflow-hidden">
           <img
             src={
-              post.image ||
-              "https://images.unsplash.com/photo-1516815231560-8f41ec531527?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2000&q=80"
+              post.images && post.images.length > 0
+                ? `http://localhost:8000/media/${post.images[0].image}`
+                : "https://images.unsplash.com/photo-1516815231560-8f41ec531527?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2000&q=80"
             }
             alt={post.titre}
             className="w-full h-full object-cover"
@@ -148,23 +149,50 @@ const BlogPost = () => {
         </div>
 
         <article className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+          {/* Contenu de l'article */}
           <div
-            className="prose prose-lg max-w-none"
+            className="prose prose-lg max-w-none mb-8"
             dangerouslySetInnerHTML={{ __html: post.contenu }}
           />
+
+          {/* Galerie d'images (toutes les images) */}
+          {post.images && post.images.length > 0 && (
+            <div className="mb-8">
+              <h3 className="text-xl font-semibold mb-4">Galerie photos</h3>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                {post.images.map((image, index) => (
+                  <div
+                    key={image.id || index}
+                    className="aspect-square overflow-hidden rounded-lg shadow-md hover:shadow-lg transition-shadow cursor-pointer"
+                  >
+                    <img
+                      src={`http://localhost:8000/media/${image.image}`}
+                      alt={`${post.titre} - Image ${index + 1}`}
+                      className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
+                      onError={(e) => {
+                        const target = e.target as HTMLImageElement;
+                        target.src =
+                          "https://images.unsplash.com/photo-1506744038136-46273834b3fb?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2000&q=80";
+                      }}
+                    />
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
 
           <Separator className="my-8" />
 
           <div className="flex flex-wrap items-center justify-between">
             <div className="mb-4 md:mb-0">
               <span className="font-medium mr-2">Tags:</span>
-              {Array.isArray(post.tags) && post.tags.length > 0 ? (
-                post.tags.map((tag, idx) => (
+              {post.tags ? (
+                post.tags.split(";").map((tag, idx) => (
                   <span
                     key={idx}
                     className="inline-block text-sm bg-muted text-muted-foreground px-3 py-1 rounded-full mr-2 mb-2"
                   >
-                    #{tag}
+                    {tag}
                   </span>
                 ))
               ) : (
@@ -229,8 +257,9 @@ const BlogPost = () => {
                     <div className="h-40">
                       <img
                         src={
-                          blog.image ||
-                          "https://images.unsplash.com/photo-1506744038136-46273834b3fb?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2000&q=80"
+                          blog.images && blog.images.length > 0
+                            ? `http://localhost:8000/media/${blog.images[0].image}`
+                            : "https://images.unsplash.com/photo-1506744038136-46273834b3fb?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2000&q=80"
                         }
                         alt={blog.titre}
                         className="w-full h-full object-cover"

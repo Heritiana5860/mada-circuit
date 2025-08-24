@@ -54,13 +54,30 @@ const getEtatIcon = (etat: string) => {
   }
 };
 
+const getCapacite = (vehicle) => {
+  // Si capacite est un objet avec nombrePlaces
+  if (
+    vehicle.capacite &&
+    typeof vehicle.capacite === "object" &&
+    vehicle.capacite.nombrePlaces
+  ) {
+    return vehicle.capacite.nombrePlaces;
+  }
+  // Si capacite est directement un nombre
+  if (typeof vehicle.capacite === "number") {
+    return vehicle.capacite;
+  }
+  // Fallback
+  return 0;
+};
+
 // Fonction pour générer une description enrichie
 const generateDescription = (vehicle) => {
   const typeVehicule = vehicle.type.toLowerCase();
   const marque = vehicle.marque;
   const modele = vehicle.modele;
   const annee = vehicle.annee;
-  const places = vehicle.capacite;
+  const places = getCapacite(vehicle);
 
   let description = `Découvrez notre ${typeVehicule} ${marque} ${modele} de ${annee}, `;
 
@@ -202,9 +219,10 @@ const VehicleDetailSimple = () => {
       return false;
     }
 
-    if (formData.personne > (data?.vehicule?.capacite?.nombrePlaces || 0)) {
+    const maxPlaces = getCapacite(data?.vehicule);
+    if (formData.personne > maxPlaces) {
       setError(
-        `Le nombre de personnes ne peut pas excéder ${data?.vehicule?.capacite?.nombrePlaces} places`
+        `Le nombre de personnes ne peut pas excéder ${maxPlaces} places`
       );
       return false;
     }
@@ -240,9 +258,6 @@ const VehicleDetailSimple = () => {
         commentaire: formData.commentaire,
         budget: total.toString(),
       };
-
-      console.log("Données de réservation:", reservationData);
-      console.log("Données user:", user);
 
       await createReservation(reservationData);
       await refetchReservations();
@@ -354,7 +369,7 @@ const VehicleDetailSimple = () => {
             {/* Informations du véhicule */}
             <div>
               <div className="relative mb-10">
-                <div className="h-96 relative overflow-hidden rounded-2xl group">
+                <div className="w-full h-96 relative overflow-hidden rounded-2xl group">
                   <img
                     src={allVehiculeImages[selectedImageIndex]}
                     alt={`${vehicle.marque} ${vehicle.modele} - Image ${
@@ -450,7 +465,7 @@ const VehicleDetailSimple = () => {
                         Capacité
                       </span>
                       <span className="font-medium">
-                        {vehicle.capacite} places
+                        {getCapacite(vehicle)} places
                       </span>
                     </div>
                   </div>
@@ -549,7 +564,7 @@ const VehicleDetailSimple = () => {
                           value={formData.personne}
                           onChange={handleInputChange}
                           min="1"
-                          max={vehicle.capacite.nombrePlaces}
+                          max={getCapacite(vehicle)}
                           placeholder="Combien de personnes ?"
                           className="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                           required

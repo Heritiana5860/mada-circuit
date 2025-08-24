@@ -16,6 +16,7 @@ export const GET_ALL_CIRCUITS = gql`
       difficulte
       transport
       destination
+      region
       saison
       images {
         id
@@ -56,6 +57,7 @@ export const GET_CIRCUIT_BY_ID = gql`
       difficulte
       transport
       destination
+      region
       saison
       images {
         id
@@ -98,6 +100,7 @@ export const ALL_CIRCUITS = gql`
       inclus
       nonInclus
       destination
+      region
       saison
       image
       difficulte
@@ -217,6 +220,10 @@ export const GET_BLOG_BY_ID = gql`
       datePublication
       auteur
       tags
+      images {
+        id
+        image
+      }
     }
   }
 `;

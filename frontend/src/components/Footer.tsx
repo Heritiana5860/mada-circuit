@@ -37,7 +37,7 @@ const Footer = () => {
             </ul>
           </div>
           
-          <div>
+          {/* <div>
             <h3 className="text-xl font-semibold mb-4">Liens Utiles</h3>
             <ul className="space-y-2">
               <li><Link to="/about" className="text-muted-foreground hover:text-primary transition-colors">À Propos</Link></li>
@@ -45,7 +45,7 @@ const Footer = () => {
               <li><Link to="/terms" className="text-muted-foreground hover:text-primary transition-colors">Conditions d'utilisation</Link></li>
               <li><Link to="/privacy" className="text-muted-foreground hover:text-primary transition-colors">Politique de confidentialité</Link></li>
             </ul>
-          </div>
+          </div> */}
           
           <div>
             <h3 className="text-xl font-semibold mb-4">Contact</h3>

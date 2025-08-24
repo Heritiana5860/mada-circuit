@@ -80,7 +80,7 @@ const ImprovedAdmin = () => {
       title: "Vue d'ensemble",
       items: [
         { id: "dashboard", label: "Dashboard", icon: Home, badge: null },
-        { id: "analytics", label: "Analytiques", icon: BarChart3, badge: null },
+        // { id: "analytics", label: "Analytiques", icon: BarChart3, badge: null },
       ],
     },
     {

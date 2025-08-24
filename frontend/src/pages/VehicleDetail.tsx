@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useQuery } from "@apollo/client";
 import { GET_VEHICULE_BY_ID } from "@/graphql/queries";
@@ -17,11 +17,9 @@ import {
   Shield,
   Settings,
   Check,
-  Calendar,
   Heart,
   Share2,
 } from "lucide-react";
-import { Vehicule } from "@/types";
 import { format } from "date-fns";
 import { fr } from "date-fns/locale";
 import { Calendar as CalendarComponent } from "@/components/ui/calendar";

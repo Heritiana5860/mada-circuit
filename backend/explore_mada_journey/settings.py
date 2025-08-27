@@ -12,13 +12,16 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 
 import os
 from pathlib import Path
+from dotenv import load_dotenv
+
+load_dotenv()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 LOGGING = {
     "version": 1,
-    "disable_existing_loggers": False,  # conserve les loggers Django par défaut
+    "disable_existing_loggers": False,
     "formatters": {
         "standard": {
             "format": "[%(asctime)s] %(levelname)s %(name)s: %(message)s"
@@ -167,13 +170,13 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'explore_mada_journey.wsgi.application'
 
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = 'mail.madagascar-voyagesolidaire.com'
-EMAIL_PORT = 587
-EMAIL_USE_TLS = True
-EMAIL_USE_SSL = False
-EMAIL_HOST_USER = 'reservation@madagascar-voyagesolidaire.com'
-EMAIL_HOST_PASSWORD = 'b2DmphuhXu855t3rd8x4'
+EMAIL_BACKEND = os.getenv("EMAIL_BACKEND")
+EMAIL_HOST = os.getenv("EMAIL_HOST")
+EMAIL_PORT = os.getenv("EMAIL_PORT")
+EMAIL_USE_TLS = os.getenv("EMAIL_USE_TLS") == 'True'
+EMAIL_USE_SSL = os.getenv("EMAIL_USE_SSL") == 'False'
+EMAIL_HOST_USER = os.getenv("EMAIL_HOST_USER")
+EMAIL_HOST_PASSWORD = os.getenv("EMAIL_HOST_PASSWORD")
 
 
 # Database

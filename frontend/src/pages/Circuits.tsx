@@ -61,7 +61,7 @@ const Circuits = () => {
     loading: circuitsLoading,
     error: circuitsError,
   } = useQuery(GET_ALL_CIRCUITS, {
-    variables: { type: "CIRCUIT" },
+    variables: { typeCircuit: "CIRCUIT" },
   });
 
   // Recuperer les FAQ

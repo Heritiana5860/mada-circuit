@@ -44,7 +44,7 @@ const NavBar = () => {
     { to: "/voyages-sur-mesure", label: "Sur Mesure" },
     { to: "/location-4x4", label: "Location 4x4" },
     { to: "/pangalanes", label: "Canal des Pangalanes" },
-    { to: "/blog", label: "Blog" },
+    { to: "/programme-solidaire", label: "Solidaire" },
     { to: "/contact", label: "Contact" },
   ];
 

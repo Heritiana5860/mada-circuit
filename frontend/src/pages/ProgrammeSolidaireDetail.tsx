@@ -247,8 +247,6 @@ const ProgrammeSolidaireDetail = () => {
         commentaire: formData.commentaire || "",
       };
 
-      console.log("Données de réservation:", reservationData);
-
       await pangalaneReservation({
         variables: reservationData,
       });
@@ -262,8 +260,6 @@ const ProgrammeSolidaireDetail = () => {
     if (mutationLoading) return <p>Loading...</p>;
     if (mutationError) return <p>Error: {mutationError.message}</p>;
 
-    // Logique de réservation
-    console.log("Réservation pour:", dataFromState?.titre);
   };
 
   if (!dataFromState) {

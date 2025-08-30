@@ -248,7 +248,7 @@ const Reservation = () => {
             <div className="text-right">
               <p className="text-sm text-gray-500">Bienvenue</p>
               <p className="font-medium text-gray-900">
-                {user?.prenom} {user?.nom}
+                {user?.nom} {user?.prenom} 
               </p>
             </div>
           </div>
@@ -462,10 +462,10 @@ const Reservation = () => {
                       </div>
 
                       {/* Actions (si nécessaire) */}
-                      <button className="w-full bg-white border border-gray-300 rounded-lg px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors flex items-center justify-center space-x-2">
+                      {/* <button className="w-full bg-white border border-gray-300 rounded-lg px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors flex items-center justify-center space-x-2">
                         <Eye className="w-4 h-4" />
                         <span>Voir détails</span>
-                      </button>
+                      </button> */}
                     </div>
                   </div>
                 </div>

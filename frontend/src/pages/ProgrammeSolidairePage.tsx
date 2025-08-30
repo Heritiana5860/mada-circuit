@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 import NavBar from "../components/NavBar";
 import Footer from "../components/Footer";
 import { Button } from "@/components/ui/button";
@@ -29,7 +29,7 @@ const ProgrammeSolidairePage = () => {
 
   const { data, loading, error } = useQuery(GET_ALL_CIRCUITS, {
     variables: {
-      type: "solidaire",
+      typeCircuit: "solidaire",
     },
   });
 
@@ -253,7 +253,7 @@ const ProgrammeSolidairePage = () => {
               </div>
               <div className="relative">
                 <img
-                  src="https://images.unsplash.com/photo-1593113630400-ea4288922497?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2000&q=80"
+                  src="solid.JPG"
                   alt="Villageois du Canal des Pangalanes"
                   className="rounded-lg shadow-lg w-full h-auto"
                 />
@@ -380,7 +380,7 @@ const ProgrammeSolidairePage = () => {
                   <CardContent className="p-6">
                     <div className="flex items-center mb-2 text-sm text-muted-foreground">
                       <MapPin className="h-4 w-4 mr-1" />
-                      <span>{pack.destination.nom}</span>
+                      <span>{pack.destination}</span>
                     </div>
                     <h3 className="text-xl font-bold mb-2">{pack.titre}</h3>
                     <p className="text-muted-foreground mb-4">
@@ -441,7 +441,7 @@ const ProgrammeSolidairePage = () => {
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
               <div className="relative">
                 <img
-                  src="https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2000&q=80"
+                  src="solidaire.JPG"
                   alt="École dans un village du Canal des Pangalanes"
                   className="rounded-lg shadow-lg w-full h-auto"
                 />

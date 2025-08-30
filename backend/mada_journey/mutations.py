@@ -133,22 +133,32 @@ class DeleteUtilisateur(graphene.Mutation):
         except Exception as e:
             return DeleteUtilisateur(success=False, errors=[str(e)])
 
-class ItineraireInput(graphene.InputObjectType):
-    jour = graphene.Int(required=True, description="Jour de l'itinéraire (ex: 1, 2, ...)")
-    lieu_depart = graphene.String(required=True, description="Lieu de départ")
-    lieu_arrivee = graphene.String(required=False, description="Lieu d'arrivée")
-    distance_km = graphene.Float(required=False, description="Distance en kilomètres")
-    duree_trajet = graphene.Float(required=False, description="Durée du trajet en heures")
-    description = graphene.String(required=False, description="Description de l'itinéraire")
-
 # Mutations pour les circuits
+class ItineraireInput(graphene.InputObjectType):
+    jour = graphene.Int(required=True, description="Numéro du jour")
+    type_itineraire = graphene.String(required=True, description="Type d'étape: 'trajet' ou 'sejour'")
+    
+    # Champs pour les trajets
+    lieu_depart = graphene.String(description="Lieu de départ (obligatoire pour trajets)")
+    lieu_arrivee = graphene.String(description="Lieu d'arrivée (obligatoire pour trajets)")
+    distance_km = graphene.Float(description="Distance en kilomètres")
+    duree_trajet = graphene.Float(description="Durée du trajet en heures")
+    
+    # Champs pour les séjours
+    lieu = graphene.String(description="Lieu de séjour (obligatoire pour séjours)")
+    nuitees = graphene.Int(description="Nombre de nuitées (défaut: 1)")
+    
+    # Champs communs
+    description = graphene.String(description="Description de l'étape")
+
+
 class CreateCircuit(graphene.Mutation):
     class Arguments:
         titre = graphene.String(required=True)
         description = graphene.String(required=True)
         duree = graphene.Int(required=True)
         prix = graphene.Int(required=True)
-        type = graphene.String(required=True)
+        type_circuit = graphene.String(required=True)
         transport = graphene.String(required=True)
         inclus = graphene.String()
         non_inclus = graphene.String()
@@ -163,6 +173,41 @@ class CreateCircuit(graphene.Mutation):
     success = graphene.Boolean()
     errors = graphene.List(graphene.String)
 
+    @staticmethod
+    def validate_itineraire_data(itineraire_data):
+        """Validation des données d'itinéraire selon le type"""
+        errors = []
+        
+        # Vérification du type
+        if itineraire_data.get("type_itineraire") not in ["trajet", "sejour"]:
+            errors.append(
+                f"Type invalide pour le jour {itineraire_data.get('jour')}: doit être 'trajet' ou 'sejour'"
+            )
+            return errors
+        
+        if itineraire_data["type_itineraire"] == "trajet":
+            # Validation pour les trajets
+            if not itineraire_data.get("lieu_depart"):
+                errors.append(f"Jour {itineraire_data.get('jour')}: Le lieu de départ est obligatoire pour un trajet")
+            if not itineraire_data.get("lieu_arrivee"):
+                errors.append(f"Jour {itineraire_data.get('jour')}: Le lieu d'arrivée est obligatoire pour un trajet")
+            
+            if itineraire_data.get("distance_km") is not None and itineraire_data["distance_km"] < 0:
+                errors.append(f"Jour {itineraire_data.get('jour')}: La distance ne peut pas être négative")
+            if itineraire_data.get("duree_trajet") is not None and itineraire_data["duree_trajet"] <= 0:
+                errors.append(f"Jour {itineraire_data.get('jour')}: La durée du trajet doit être positive")
+        
+        elif itineraire_data["type_itineraire"] == "sejour":
+            # Validation pour les séjours
+            if not itineraire_data.get("lieu"):
+                errors.append(f"Jour {itineraire_data.get('jour')}: Le lieu est obligatoire pour un séjour")
+            
+            nuitees = itineraire_data.get("nuitees", 1)
+            if nuitees < 1:
+                errors.append(f"Jour {itineraire_data.get('jour')}: Le nombre de nuitées doit être d'au moins 1")
+        
+        return errors
+
     def mutate(
         self,
         info,
@@ -170,7 +215,7 @@ class CreateCircuit(graphene.Mutation):
         description,
         duree,
         prix,
-        type,
+        type_circuit,
         transport,
         inclus,
         non_inclus,
@@ -182,15 +227,23 @@ class CreateCircuit(graphene.Mutation):
         images=None
     ):
         try:
-            with transaction.atomic():
+            # Validation des itinéraires avant création
+            all_errors = []
+            for itineraire_data in itineraires:
+                errors = CreateCircuit.validate_itineraire_data(itineraire_data)
+                all_errors.extend(errors)
+            
+            if all_errors:
+                return CreateCircuit(success=False, errors=all_errors)
 
+            with transaction.atomic():
                 # Créer le circuit
                 circuit = Circuit.objects.create(
                     titre=titre,
                     description=description,
                     duree=duree,
                     prix=Decimal(str(prix)),
-                    type=type,
+                    type_circuit=type_circuit,
                     transport=transport,
                     inclus=inclus,
                     non_inclus=non_inclus,
@@ -200,18 +253,41 @@ class CreateCircuit(graphene.Mutation):
                     saison=saison,
                 )
 
-                # Créer les itinéraires et les associer au circuit
+                # Créer les itinéraires
                 for itineraire_data in itineraires:
-                    Itineraire.objects.create(
-                        circuit=circuit,
-                        jour=itineraire_data["jour"],
-                        lieu_depart=itineraire_data["lieu_depart"],
-                        lieu_arrivee=itineraire_data.get("lieu_arrivee"),
-                        distance_km=itineraire_data.get("distance_km"),
-                        duree_trajet=itineraire_data.get("duree_trajet"),
-                        description=itineraire_data.get("description"),
-                    )
+                    itineraire_kwargs = {
+                        'circuit': circuit,
+                        'jour': itineraire_data["jour"],
+                        'type_itineraire': itineraire_data["type_itineraire"],
+                        'description': itineraire_data.get("description"),
+                    }
                     
+                    if itineraire_data["type_itineraire"] == "trajet":
+                        itineraire_kwargs.update({
+                            'lieu_depart': itineraire_data["lieu_depart"],
+                            'lieu_arrivee': itineraire_data.get("lieu_arrivee"),
+                            'distance_km': itineraire_data.get("distance_km"),
+                            'duree_trajet': itineraire_data.get("duree_trajet"),
+                        })
+                    
+                    elif itineraire_data["type_itineraire"] == "sejour":
+                        itineraire_kwargs.update({
+                            'lieu': itineraire_data["lieu"],
+                            'nuitees': itineraire_data.get("nuitees", 1),
+                        })
+                    
+                    itineraire = Itineraire.objects.create(**itineraire_kwargs)
+                    
+                    try:
+                        itineraire.full_clean()
+                    except ValidationError as ve:
+                        error_messages = []
+                        for field, errors in ve.message_dict.items():
+                            for error in errors:
+                                error_messages.append(f"Jour {itineraire_data['jour']} - {field}: {error}")
+                        raise Exception("; ".join(error_messages))
+                
+                # Gérer les images
                 if images:
                     for idx, img in enumerate(images):
                         CircuitImage.objects.create(
@@ -220,9 +296,11 @@ class CreateCircuit(graphene.Mutation):
                             ordre=idx,
                         )
 
-                return CreateCircuit(circuit=circuit, success=True)
+                return CreateCircuit(circuit=circuit, success=True, errors=[])
+                
         except Exception as e:
             return CreateCircuit(success=False, errors=[str(e)])
+
 
 class DeleteCircuit(graphene.Mutation):
     class Arguments:
@@ -342,7 +420,7 @@ class CreateReservation(graphene.Mutation):
                 if vehicule_id and circuit_id:
                     # Les deux sont fournis - réservation véhicule avec circuit
                     try:
-                        circuit_type, real_circuit_id = from_global_id(circuit_id)
+                        _, real_circuit_id = from_global_id(circuit_id)
                         circuit = Circuit.objects.get(id=real_circuit_id)
                         vehicule = Vehicule.objects.get(id=vehicule_id)
                         reservation_type = Reservation.ReservationType.VEHICULE
@@ -374,7 +452,7 @@ class CreateReservation(graphene.Mutation):
                 elif circuit_id:
                     # Seulement circuit - réservation circuit seul
                     try:
-                        circuit_type, real_circuit_id = from_global_id(circuit_id)
+                        _, real_circuit_id = from_global_id(circuit_id)
                         circuit = Circuit.objects.get(id=real_circuit_id)
                         reservation_type = Reservation.ReservationType.CIRCUIT
                     except Circuit.DoesNotExist:

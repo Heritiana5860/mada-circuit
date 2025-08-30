@@ -84,11 +84,38 @@ class PointInteretType(DjangoObjectType):
         fields = ('id', 'nom', 'description', 'type', 'temps_visite', 'prix_entree', 'image', 'circuit')
         interfaces = (relay.Node,)
 
-class ItineraireType(DjangoObjectType):
-    class Meta:
-        model = Itineraire
-        fields = ('id', 'jour', 'lieu_depart', 'lieu_arrivee', 'distance_km', 'duree_trajet', 'description', 'carte_gps', 'circuit')
-        interfaces = (relay.Node,)
+class ItineraireType(graphene.ObjectType):
+    id = graphene.String()
+    jour = graphene.Int()
+    type_itineraire = graphene.String()
+    
+    # Champs pour trajets
+    lieu_depart = graphene.String()
+    lieu_arrivee = graphene.String()
+    distance_km = graphene.Float()
+    duree_trajet = graphene.Float()
+    
+    # Champs pour séjours
+    lieu = graphene.String()
+    nuitees = graphene.Int()
+    
+    # Champs communs
+    description = graphene.String()
+    carte_gps = graphene.String()
+    
+    # Propriétés calculées
+    display_name = graphene.String()
+    is_trajet = graphene.Boolean()
+    is_sejour = graphene.Boolean()
+    
+    def resolve_display_name(self, info):
+        return self.display_name
+    
+    def resolve_is_trajet(self, info):
+        return self.is_trajet
+    
+    def resolve_is_sejour(self, info):
+        return self.is_sejour
 
 class CircuitType(DjangoObjectType):
     difficulte = graphene.Field(DifficulteEnum)
@@ -102,7 +129,7 @@ class CircuitType(DjangoObjectType):
     class Meta:
         model = Circuit
         fields = (
-            'id', 'titre', 'description', 'duree', 'transport', 'prix', 'inclus', 'non_inclus', 'type', 'image',
+            'id', 'titre', 'description', 'duree', 'transport', 'prix', 'inclus', 'non_inclus', 'type_circuit', 'image',
             'difficulte', 'destination', 'saison', 'region'  
         )
         interfaces = (relay.Node,)

@@ -10,9 +10,10 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.2/ref/settings/
 """
 
+from dotenv import load_dotenv
 import os
 from pathlib import Path
-from dotenv import load_dotenv
+
 
 load_dotenv()
 
@@ -151,7 +152,12 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-ROOT_URLCONF = 'explore_mada_journey.urls'
+# En production, définir les en-têtes de sécurité appropriés
+# Avec cette configuration, votre application redirigera toutes les requêtes HTTP vers HTTPS et activera les en-têtes HSTS pour appliquer des connexions sécurisées.
+# SECURE_HSTS_SECONDS = 3600   # Définir la durée HSTS 
+# SECURE_SSL_REDIRECT = True   # Rediriger toutes les requêtes HTTP vers HTTPS
+
+ROOT_URLCONF = os.getenv("ROOT_URLCONF")
 
 TEMPLATES = [
     {
@@ -168,7 +174,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'explore_mada_journey.wsgi.application'
+WSGI_APPLICATION = os.getenv("WSGI_APPLICATION")
 
 EMAIL_BACKEND = os.getenv("EMAIL_BACKEND")
 EMAIL_HOST = os.getenv("EMAIL_HOST")
@@ -290,3 +296,5 @@ CSRF_COOKIE_HTTPONLY = False  # Doit être False pour que JS puisse accéder au 
 CSRF_USE_SESSIONS = False  # Utiliser des cookies au lieu des sessions
 CSRF_COOKIE_SAMESITE = None  # 'None' permet le partage entre sites
 SESSION_COOKIE_SAMESITE = None  # 'None' permet le partage entre sites
+# SESSION_COOKIE_SECURE = True # En production, mettre à True si HTTPS
+# SESSION_COOKIE_HTTPONLY = True # Empêche l'accès JS au cookie de session

@@ -32,11 +32,12 @@ const CreateCircuit = () => {
   const [difficulte, setDifficulte] = useState("");
   const [description, setDescription] = useState("");
 
-  // Step 2
+  // Step 2 - État initial mis à jour avec le nouveau format
   const [days, setDays] = useState<ItineraryDay[]>([
     {
       id: "1",
       jour: 1,
+      type: "trajet",
       depart: "",
       arrivee: "",
       distance: 0,
@@ -54,6 +55,19 @@ const CreateCircuit = () => {
     { id: 3, label: "Confirmation" },
   ];
 
+  // Fonction de validation mise à jour pour gérer les deux types
+  const validateStep2 = () => {
+    return days.every((day) => {
+      if (day.type === "trajet") {
+        // Pour un trajet, on vérifie le départ et l'arrivée
+        return day.depart && day.arrivee;
+      } else {
+        // Pour un séjour, on vérifie le lieu
+        return day.lieu;
+      }
+    });
+  };
+
   const nextStep = () => {
     if (currentStep < steps.length) {
       // Validation de base avant de passer à l'étape suivante
@@ -64,12 +78,15 @@ const CreateCircuit = () => {
         setErrorMessage("Veuillez remplir tous les champs obligatoires.");
         return;
       }
-      if (currentStep === 2 && days.some((day) => !day.depart || !day.jour)) {
+
+      // Validation mise à jour pour l'étape 2
+      if (currentStep === 2 && !validateStep2()) {
         setErrorMessage(
-          "Veuillez remplir tous les champs obligatoires pour chaque itinéraire."
+          "Veuillez remplir tous les champs obligatoires pour chaque étape de l'itinéraire."
         );
         return;
       }
+
       setErrorMessage(null);
       setCurrentStep((prev) => prev + 1);
     }
@@ -90,6 +107,7 @@ const CreateCircuit = () => {
     return <div>Erreur lors de la création circuit!</div>;
   }
 
+  // Fonction pour vider tous les champs - mise à jour
   const emptyFields = () => {
     setTitre("");
     setDuree(1);
@@ -107,6 +125,7 @@ const CreateCircuit = () => {
       {
         id: "1",
         jour: 1,
+        type: "trajet", // Nouveau champ
         depart: "",
         arrivee: "",
         distance: 0,
@@ -114,14 +133,14 @@ const CreateCircuit = () => {
         description: "",
       },
     ]);
-    setSelectedImages(null);
+    setSelectedImages([]);
     setErrorMessage(null);
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    // Validation des données
+    // Validation des données de base
     if (
       !titre ||
       !description ||
@@ -134,29 +153,54 @@ const CreateCircuit = () => {
       return;
     }
 
-    // Préparer les données pour la mutation
+    // Validation finale des étapes
+    if (!validateStep2()) {
+      setErrorMessage(
+        "Veuillez remplir tous les champs obligatoires pour chaque étape."
+      );
+      return;
+    }
+
+    // Préparer les données pour la mutation - logique mise à jour
+    const itineraires = days.map((day) => {
+      const baseItinerary = {
+        jour: day.jour,
+        typeItineraire: day.type,
+        description: day.description || null,
+      };
+
+      if (day.type === "trajet") {
+        return {
+          ...baseItinerary,
+          lieuDepart: day.depart,
+          lieuArrivee: day.arrivee,
+          distanceKm: parseFloat(day.distance?.toString() || "0") || null,
+          dureeTrajet: parseFloat(day.duree?.toString() || "0") || null,
+        };
+      } else {
+        return {
+          ...baseItinerary,
+          lieu: day.lieu,
+          nuitees: day.nuitees || 1,
+        };
+      }
+    });
+
     const data = {
-      titre,
-      description,
-      duree,
+      titre: titre,
+      description: description,
+      duree: duree,
       prix: parseFloat(prix.toString()),
-      type: types,
-      transport,
-      difficulte,
+      typeCircuit: types,
+      transport: transport,
+      difficulte: difficulte,
       destination: destination,
       region: region,
       saison: saison,
-      inclus,
-      nonInclus,
-      itineraires: days.map((day) => ({
-        jour: day.jour,
-        lieuDepart: day.depart,
-        lieuArrivee: day.arrivee || null,
-        distanceKm: parseFloat(day.distance.toString()) || null,
-        dureeTrajet: parseFloat(day.duree.toString()) || null,
-        description: day.description || null,
-      })),
-      images: selectedImages.map(img => img.file),
+      inclus: inclus,
+      nonInclus: nonInclus,
+      itineraires: itineraires,
+      images: selectedImages.map((img) => img.file),
     };
 
     try {
@@ -245,6 +289,19 @@ const CreateCircuit = () => {
                 />
               )}
             </div>
+
+            {/* Affichage des erreurs */}
+            {errorMessage && (
+              <div
+                className={`p-3 rounded-lg text-sm ${
+                  errorMessage.includes("succès")
+                    ? "bg-green-100 text-green-700 border border-green-200"
+                    : "bg-red-100 text-red-700 border border-red-200"
+                }`}
+              >
+                {errorMessage}
+              </div>
+            )}
           </CardContent>
 
           {/* Boutons */}

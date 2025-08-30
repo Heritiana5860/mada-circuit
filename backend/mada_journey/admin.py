@@ -41,7 +41,7 @@ class ItineraireInline(admin.TabularInline):
     
 @admin.register(Itineraire)
 class ItineraireAdmin(admin.ModelAdmin):
-    list_display = ('jour', 'lieu_depart', 'lieu_arrivee', 'distance_km', 'duree_trajet', 'description', 'carte_gps', 'circuit', 'nombre_circuits')
+    list_display = ('jour', 'lieu_depart', 'lieu_arrivee', 'distance_km', 'duree_trajet', 'description', 'type_itineraire', 'circuit', 'nombre_circuits')
 
     def nombre_circuits(self, obj):
         return 1 if obj.circuit else 0
@@ -105,7 +105,7 @@ class BlogImageInline(admin.TabularInline):
 
 @admin.register(Circuit)
 class CircuitAdmin(admin.ModelAdmin):
-    list_display = ('titre', 'destination', 'duree', 'prix', 'inclus', 'non_inclus', 'type', 'transport', 'difficulte', 'saison', 'image_preview', 'nombre_reservations')
+    list_display = ('titre', 'destination', 'duree', 'prix', 'inclus', 'non_inclus', 'type_circuit', 'transport', 'difficulte', 'saison', 'image_preview', 'nombre_reservations')
     list_filter = ('difficulte', 'destination', 'saison')
     search_fields = ('titre', 'description')
     readonly_fields = ('image_preview',)
@@ -116,7 +116,7 @@ class CircuitAdmin(admin.ModelAdmin):
             'fields': ('titre', 'description', 'destination', 'saison')
         }),
         ('Détails du circuit', {
-            'fields': ('duree', 'prix', 'type', 'transport', 'difficulte', 'inclus', 'non_inclus')
+            'fields': ('duree', 'prix', 'type_circuit', 'transport', 'difficulte', 'inclus', 'non_inclus')
         }),
         ('Image', {
             'fields': ('image', 'image_preview')

@@ -440,7 +440,7 @@ export const CREATE_CIRCUIT = gql`
     $description: String!
     $duree: Int!
     $prix: Int!
-    $type: String!
+    $typeCircuit: String!
     $transport: String!
     $difficulte: String!
     $inclus: String
@@ -456,7 +456,7 @@ export const CREATE_CIRCUIT = gql`
       description: $description
       duree: $duree
       prix: $prix
-      type: $type
+      typeCircuit: $typeCircuit
       transport: $transport
       difficulte: $difficulte
       inclus: $inclus
@@ -480,7 +480,7 @@ export const CREATE_CIRCUIT = gql`
         destination
         saison
         difficulte
-        type
+        typeCircuit
         transport
         reservationsCount
         isAvailable

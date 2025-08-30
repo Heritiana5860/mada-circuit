@@ -4,12 +4,7 @@ import Footer from "../components/Footer";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import {
-  BookOpen,
   School,
-  Heart,
-  Landmark,
-  Users,
-  TreePine,
   Mail,
   Globe,
 } from "lucide-react";
@@ -66,7 +61,7 @@ const ObjectifsAssociationPage = () => {
         {/* Hero Section */}
         <section className="relative h-[50vh] overflow-hidden">
           <img
-            src="https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2000&q=80"
+            src="solidaire2.JPG"
             alt="Enfants malgaches à l'école"
             className="w-full h-full object-cover"
           />
@@ -137,7 +132,7 @@ const ObjectifsAssociationPage = () => {
               </div>
               <div className="relative">
                 <img
-                  src="https://images.unsplash.com/photo-1511576661531-b34d7da5d0bb?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2000&q=80"
+                  src="mission.JPG"
                   alt="Enfants apprenant"
                   className="rounded-lg shadow-lg w-full h-auto"
                 />

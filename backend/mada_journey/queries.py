@@ -32,7 +32,7 @@ class Query(graphene.ObjectType):
     all_circuits = graphene.List(CircuitType)
     all_circuits_by_type = graphene.List(
         CircuitType, 
-        type=graphene.String(required=True)
+        type_circuit=graphene.String(required=True)
     )
     circuit = graphene.Field(CircuitType, id=graphene.ID())
     circuits_by_destination = graphene.List(CircuitType, destination_id=graphene.ID())
@@ -127,9 +127,9 @@ class Query(graphene.ObjectType):
     def resolve_all_circuits(self, info):
         return Circuit.objects.all()
     
-    def resolve_all_circuits_by_type(self, info, type):
-        logger.debug(f"filter type {type}")
-        return Circuit.objects.filter(type=type)
+    def resolve_all_circuits_by_type(self, info, type_circuit):
+        logger.debug(f"filter type {type_circuit}")
+        return Circuit.objects.filter(type_circuit=type_circuit)
     
     def resolve_circuit(self, info, id):
         try:

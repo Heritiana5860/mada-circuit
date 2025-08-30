@@ -9,7 +9,7 @@ import { useState } from "react";
 const PopularCircuits = () => {
   // Requête GraphQL pour récupérer tous les circuits (on prendra les 3 premiers)
   const { data, loading, error } = useQuery(GET_ALL_CIRCUITS, {
-    variables: { type: "CIRCUIT" },
+    variables: { typeCircuit: "CIRCUIT" },
   });
 
   const [viewMode, setViewMode] = useState<"grid" | "list">("grid");

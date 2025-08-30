@@ -157,7 +157,7 @@ const PangalanesPage = () => {
 
   const { data, loading, error } = useQuery(GET_ALL_CIRCUITS, {
     variables: {
-      type: "PANGALANE",
+      typeCircuit: "pangalane",
     },
   });
 
@@ -176,23 +176,19 @@ const PangalanesPage = () => {
       <NavBar />
 
       <main className="flex-grow">
-        <section className="relative h-[70vh] overflow-hidden">
+        <section className="h-[50vh] overflow-hidden bg-gradient-to-r from-black/70 to-black/30 pt-4">
           <img
-            src="https://images.unsplash.com/photo-1516815231560-8f41ec531527?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2000&q=80"
+            src="slogan.png"
             alt="Canal des Pangalanes"
-            className="w-full h-full object-cover"
+            className="w-full h-full object-contain bg-left"
           />
-          <div className="absolute inset-0 bg-gradient-to-r from-black/70 to-black/30 flex items-center">
+        </section>
+
+        {/* Section Bouton */}
+        <section className="py-8 bg-gradient-to-r from-black/70 to-black/30">
+          <div className="inset-0 flex items-center">
             <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
               <div className="max-w-3xl">
-                <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-6">
-                  Le Canal des Pangalanes
-                </h1>
-                <p className="text-xl text-white/90 mb-8">
-                  Une merveille d'ingénierie de près de 700 kilomètres qui relie
-                  Farafangana à Tamatave à travers un chapelet de lagunes, de
-                  lacs et d'estuaires.
-                </p>
                 <Button
                   onClick={() => {
                     document.getElementById("offres")?.scrollIntoView({
@@ -268,7 +264,7 @@ const PangalanesPage = () => {
               </div>
               <div className="relative">
                 <img
-                  src="https://cdn.generationvoyage.fr/2016/03/canal-pangalanes-madagascar-1.jpg"
+                  src="navigale.JPG"
                   alt="Canal des Pangalanes"
                   className="rounded-lg shadow-lg w-full h-auto"
                 />
@@ -420,7 +416,7 @@ const PangalanesPage = () => {
               </div>
               <div className="relative">
                 <img
-                  src="https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2000&q=80"
+                  src="canal.JPG"
                   alt="Tourisme solidaire à Madagascar"
                   className="rounded-lg shadow-lg w-full h-auto"
                 />

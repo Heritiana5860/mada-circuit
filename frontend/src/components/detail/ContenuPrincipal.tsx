@@ -1,4 +1,4 @@
-import { Car, Clock, MapPin, Ship, Waves } from "lucide-react";
+import { Car, Clock, MapPin, Moon, Ship, View, Waves } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
 import { Badge } from "../ui/badge";
 
@@ -12,6 +12,10 @@ interface Itineraire {
   description: string;
   distanceKm: string;
   dureeTrajet: string;
+  lieu: string;
+  nuitees: number;
+  isTrajet: boolean;
+  isSejour: boolean;
 }
 
 interface DataProps {
@@ -99,40 +103,72 @@ const ContenuPrincipal: React.FC<ContenuPrincipalProps> = ({
           </CardHeader>
           <CardContent>
             <div className="space-y-4">
-              {dataFromState.itineraires.map((item, index) => (
-                <div key={index} className="flex">
-                  <div className="flex-shrink-0 w-8 h-8 bg-primary text-white rounded-full flex items-center justify-center text-sm font-semibold mr-4">
-                    {index + 1}
-                  </div>
-                  <div>
-                    {item.lieuArrivee ? (
-                      <h4 className="font-semibold text-gray-900 font-sans pb-3">
-                        {item.lieuDepart} → {item.lieuArrivee}
-                      </h4>
-                    ) : (
-                      <h4 className="font-semibold text-gray-900 font-sans pb-3">
-                        {item.lieuDepart}
-                      </h4>
-                    )}
+              {(() => {
+                let currentDay = 1;
+                return dataFromState.itineraires?.map((item, index) => {
+                  // Déterminer l’affichage des jours
+                  let jourTexte = "";
+                  if (item.isSejour && item.nuitees > 1) {
+                    jourTexte = `Jours ${currentDay}-${
+                      currentDay + item.nuitees - 1
+                    }`;
+                  } else {
+                    jourTexte = `Jour ${currentDay}`;
+                  }
 
-                    <div className="mb-4">
-                      {item.distanceKm && (
-                        <span className="inline-flex items-center text-sm">
-                          <Waves className="text-gray-600 h-4 w-4 mr-1" />
-                          {item.distanceKm} Km
-                        </span>
-                      )}
-                      {item.dureeTrajet && (
-                        <span className="inline-flex items-center text-sm ml-3">
-                          <Clock className="text-gray-600 h-4 w-4 mr-1" />
-                          {item.dureeTrajet} H
-                        </span>
-                      )}
+                  // Incrémenter le compteur
+                  currentDay +=
+                    item.isSejour && item.nuitees > 0 ? item.nuitees : 1;
+
+                  return (
+                    <div key={index} className="flex">
+                      {/* Affichage du jour */}
+                      <div className="flex-shrink-0 h-8 bg-primary text-white rounded px-2 flex items-center justify-center text-sm font-semibold mr-4">
+                        {jourTexte}
+                      </div>
+
+                      {/* Contenu */}
+                      <div>
+                        {item.isTrajet ? (
+                          <h4 className="font-semibold text-blue-900 flex items-center pb-3">
+                            <Car className="h-4 w-4 mr-2 text-blue-600" />
+                            {item.lieuDepart} → {item.lieuArrivee}
+                          </h4>
+                        ) : (
+                          <h4 className="font-semibold text-green-900 flex items-center pb-3">
+                            <View className="h-4 w-4 mr-2 text-green-600" />
+                            {item.lieu}
+                          </h4>
+                        )}
+
+                        {/* Infos supplémentaires */}
+                        <div className="mb-4 flex flex-wrap gap-4 text-sm text-gray-700">
+                          {item.distanceKm && (
+                            <span className="flex items-center">
+                              <Waves className="h-4 w-4 mr-1" />{" "}
+                              {item.distanceKm} Km
+                            </span>
+                          )}
+                          {item.dureeTrajet && (
+                            <span className="flex items-center">
+                              <Clock className="h-4 w-4 mr-1" />{" "}
+                              {item.dureeTrajet} H
+                            </span>
+                          )}
+                          {item.nuitees && item.isSejour && (
+                            <span className="flex items-center">
+                              <Moon className="h-4 w-4 mr-1" /> {item.nuitees}{" "}
+                              {item.nuitees > 1 ? "nuits" : "nuit"}
+                            </span>
+                          )}
+                        </div>
+
+                        <p className="text-gray-600">{item.description}</p>
+                      </div>
                     </div>
-                    <p className="text-gray-600">{item.description}</p>
-                  </div>
-                </div>
-              ))}
+                  );
+                });
+              })()}
             </div>
           </CardContent>
         </Card>

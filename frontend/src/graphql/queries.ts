@@ -2,8 +2,8 @@ import { gql } from "@apollo/client";
 
 // Queries pour les circuits
 export const GET_ALL_CIRCUITS = gql`
-  query AllCircuitsByType($type: String!) {
-    allCircuitsByType(type: $type) {
+  query AllCircuitsByType($typeCircuit: String!) {
+    allCircuitsByType(typeCircuit: $typeCircuit) {
       id
       titre
       description
@@ -12,7 +12,7 @@ export const GET_ALL_CIRCUITS = gql`
       inclus
       nonInclus
       image
-      type
+      typeCircuit
       difficulte
       transport
       destination
@@ -22,68 +22,18 @@ export const GET_ALL_CIRCUITS = gql`
         id
         image
       }
-      pointsInteret {
-        id
-        nom
-        description
-        type
-        tempsVisite
-        prixEntree
-      }
       itineraires {
-        id
         jour
+        typeItineraire
         lieuDepart
         lieuArrivee
         distanceKm
         dureeTrajet
+        lieu
+        nuitees
         description
-      }
-    }
-  }
-`;
-
-export const GET_CIRCUIT_BY_ID = gql`
-  query Circuit($id: ID) {
-    circuit(id: $id) {
-      id
-      titre
-      description
-      duree
-      prix
-      inclus
-      nonInclus
-      image
-      difficulte
-      transport
-      destination
-      region
-      saison
-      images {
-        id
-        image
-      }
-      saison {
-        id
-        nom
-      }
-      pointsInteret {
-        id
-        nom
-        description
-        type
-        tempsVisite
-        prixEntree
-      }
-      itineraires {
-        id
-        jour
-        lieuDepart
-        lieuArrivee
-        distanceKm
-        dureeTrajet
-        description
-        carteGps
+        isTrajet
+        isSejour
       }
     }
   }
@@ -104,7 +54,7 @@ export const ALL_CIRCUITS = gql`
       saison
       image
       difficulte
-      type
+      typeCircuit
       transport
       reservationsCount
       isAvailable

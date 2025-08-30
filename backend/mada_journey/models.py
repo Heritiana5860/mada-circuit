@@ -113,7 +113,7 @@ class Circuit(models.Model):
     image = models.ImageField(upload_to=circuit_image_path, blank=True, null=True)
     
     difficulte = models.CharField(max_length=10, choices=Difficulte.choices, default=Difficulte.FACILE)
-    type = models.CharField(
+    type_circuit = models.CharField(
         choices=CircuitType, 
         max_length=20, 
         default=CircuitType.CIRCUIT, 
@@ -130,23 +130,81 @@ class Circuit(models.Model):
     
     
 class Itineraire(models.Model):
+    # Choix pour le type d'étape
+    TYPE_CHOICES = [
+        ('trajet', 'Trajet'),
+        ('sejour', 'Séjour'),
+    ]
+    
     id = models.CharField(primary_key=True, default=uuid.uuid4, editable=False, max_length=36)
     jour = models.PositiveIntegerField(default=1, help_text="Jour 1, Jour 2...")
-    lieu_depart = models.CharField(max_length=100)
-    lieu_arrivee = models.CharField(max_length=100, null=True, blank=True)
+    type_itineraire = models.CharField(max_length=10, choices=TYPE_CHOICES, default='trajet', help_text="Type d'étape")
+    
+    # Champs pour les trajets
+    lieu_depart = models.CharField(max_length=100, null=True, blank=True, help_text="Lieu de départ (pour trajets)")
+    lieu_arrivee = models.CharField(max_length=100, null=True, blank=True, help_text="Lieu d'arrivée (pour trajets)")
     distance_km = models.FloatField(null=True, blank=True, help_text="Distance estimée (km)")
     duree_trajet = models.FloatField(null=True, blank=True, help_text="Durée estimée (heures)")
+    
+    # Champs pour les séjours
+    lieu = models.CharField(max_length=100, null=True, blank=True, help_text="Lieu de séjour")
+    nuitees = models.PositiveIntegerField(null=True, blank=True, default=1, help_text="Nombre de nuitées")
+    
+    # Champs communs
     description = models.TextField(verbose_name="Description détaillée", null=True, blank=True)
     carte_gps = models.URLField(null=True, blank=True, help_text="Lien vers l'itinéraire GPS")
     
-    circuit = models.ForeignKey(Circuit, on_delete=models.CASCADE, related_name='itineraires')
+    circuit = models.ForeignKey('Circuit', on_delete=models.CASCADE, related_name='itineraires')
     
     class Meta:
         verbose_name = "Itinéraire"
         verbose_name_plural = "Itinéraires"
-
+        ordering = ['jour']  # Tri par ordre de jour
+    
+    def clean(self):
+        """Validation personnalisée selon le type d'étape"""
+        from django.core.exceptions import ValidationError
+        
+        if self.type_itineraire == 'trajet':
+            if not self.lieu_depart:
+                raise ValidationError({'lieu_depart': 'Le lieu de départ est obligatoire pour un trajet.'})
+            if not self.lieu_arrivee:
+                raise ValidationError({'lieu_arrivee': 'Le lieu d\'arrivée est obligatoire pour un trajet.'})
+        
+        elif self.type_itineraire == 'sejour':
+            if not self.lieu:
+                raise ValidationError({'lieu': 'Le lieu est obligatoire pour un séjour.'})
+            if self.nuitees is None or self.nuitees < 1:
+                raise ValidationError({'nuitees': 'Le nombre de nuitées doit être d\'au moins 1 pour un séjour.'})
+    
+    def save(self, *args, **kwargs):
+        """Override save pour valider avant sauvegarde"""
+        self.clean()
+        super().save(*args, **kwargs)
+    
     def __str__(self):
-        return f"Itinéraire pour {self.lieu_depart}"
+        if self.type_itineraire == 'trajet':
+            return f"Jour {self.jour}: {self.lieu_depart} → {self.lieu_arrivee}"
+        else:
+            return f"Jour {self.jour}: Séjour à {self.lieu} ({self.nuitees} nuitée{'s' if self.nuitees > 1 else ''})"
+    
+    @property
+    def display_name(self):
+        """Nom d'affichage formaté selon le type"""
+        if self.type_itineraire == 'trajet':
+            return f"Trajet: {self.lieu_depart} → {self.lieu_arrivee}"
+        else:
+            return f"Séjour: {self.lieu}"
+    
+    @property
+    def is_trajet(self):
+        """Vérifie si c'est un trajet"""
+        return self.type_itineraire == 'trajet'
+    
+    @property
+    def is_sejour(self):
+        """Vérifie si c'est un séjour"""
+        return self.type_itineraire == 'sejour'
 
 
 class PointInteret(models.Model):

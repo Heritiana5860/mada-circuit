@@ -4,8 +4,6 @@ import {
   Menu,
   X,
   MapPin,
-  Sun,
-  Moon,
   User,
   LogOut,
   MailCheck,
@@ -68,16 +66,16 @@ const NavBar = () => {
             <MapPin
               className={cn(
                 "text-primary transition-transform duration-300 group-hover:scale-110",
-                scrolled ? "h-7 w-7" : "h-8 w-8"
+                scrolled ? "h-4 w-4" : "h-5 w-5"
               )}
             />
             <span
               className={cn(
                 "font-bold text-foreground transition-all duration-300",
-                scrolled ? "text-lg" : "text-xl"
+                scrolled ? "text-md" : "text-lg"
               )}
             >
-              Madagascar Voyage
+              Madagascar Voyage Solidaire
             </span>
           </Link>
 

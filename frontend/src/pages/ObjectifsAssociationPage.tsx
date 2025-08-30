@@ -196,7 +196,7 @@ const ObjectifsAssociationPage = () => {
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
               <div className="relative order-2 lg:order-1">
                 <img
-                  src="https://images.unsplash.com/photo-1503428593586-e225b39bddfe?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2000&q=80"
+                  src="site.png"
                   alt="Projet futur"
                   className="rounded-lg shadow-lg w-full h-auto"
                 />
@@ -236,7 +236,7 @@ const ObjectifsAssociationPage = () => {
         <section className="relative py-20 overflow-hidden">
           <div className="absolute inset-0 z-0">
             <img
-              src="https://images.unsplash.com/photo-1524069290683-0457abfe42c3?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2000&q=80"
+              src="salut.JPG"
               alt="Background"
               className="w-full h-full object-cover"
             />

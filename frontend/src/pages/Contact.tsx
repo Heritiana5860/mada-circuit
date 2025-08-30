@@ -102,7 +102,7 @@ const Contact = () => {
         {/* Contactez-nous */}
         <section className="relative h-[40vh] overflow-hidden">
           <img
-            src="https://images.unsplash.com/photo-1516815231560-8f41ec531527?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2000&q=80"
+            src="i.JPG"
             alt="Contactez-nous"
             className="w-full h-full object-cover"
           />

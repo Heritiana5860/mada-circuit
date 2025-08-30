@@ -42,7 +42,7 @@ export const destinations = [
   {
     name: "Betafo",
     region: "Hautes Terres Centrales",
-    image: "/api/placeholder/150/100",
+    image: "https://images.unsplash.com/photo-1691739065576-ecb558188a38?q=80&w=1074&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
     code: "BET",
     type: "nature",
     description: "Geysers naturels et sources chaudes",
@@ -53,7 +53,7 @@ export const destinations = [
   {
     name: "Diego Suarez (Antsiranana)",
     region: "Nord",
-    image: "/api/placeholder/150/100",
+    image: "https://images.unsplash.com/photo-1700083848763-215b05123e4a?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
     code: "DIE",
     type: "city",
     description: "Port historique, baie magnifique, architecture coloniale",
@@ -62,7 +62,7 @@ export const destinations = [
   {
     name: "Nosy Be",
     region: "Nord",
-    image: "/api/placeholder/150/100",
+    image: "https://images.unsplash.com/photo-1656748587136-b403c4fa82c1?q=80&w=1074&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
     code: "NOS",
     type: "island",
     description: "Île aux parfums, plages paradisiaques, ylang-ylang",
@@ -71,7 +71,7 @@ export const destinations = [
   {
     name: "Parc National Montagne d'Ambre",
     region: "Nord",
-    image: "/api/placeholder/150/100",
+    image: "https://images.unsplash.com/photo-1664414679642-d93f70f13327?q=80&w=1331&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
     code: "AMB",
     type: "park",
     description: "Forêt tropicale humide, cascades, lémuriens couronnés",
@@ -84,7 +84,7 @@ export const destinations = [
   {
     name: "Réserve Spéciale d'Ankarana",
     region: "Nord",
-    image: "/api/placeholder/150/100",
+    image: "https://images.unsplash.com/photo-1550992402-9b1fc58fd76d?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
     code: "ANK",
     type: "park",
     description: "Tsingy spectaculaires, grottes, chauve-souris",
@@ -93,7 +93,7 @@ export const destinations = [
   {
     name: "Nosy Komba",
     region: "Nord",
-    image: "/api/placeholder/150/100",
+    image: "https://images.unsplash.com/photo-1708876954769-d89e740378e2?q=80&w=1957&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
     code: "NKO",
     type: "island",
     description: "Île aux lémuriens, artisanat local, plages préservées",
@@ -102,7 +102,7 @@ export const destinations = [
   {
     name: "Nosy Tanikely",
     region: "Nord",
-    image: "/api/placeholder/150/100",
+    image: "https://images.unsplash.com/photo-1573551089778-46a7abc39d9f?q=80&w=1074&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
     code: "NTA",
     type: "island",
     description: "Réserve marine, snorkeling, tortues de mer",
@@ -111,7 +111,7 @@ export const destinations = [
   {
     name: "Joffreville",
     region: "Nord",
-    image: "/api/placeholder/150/100",
+    image: "https://images.unsplash.com/photo-1490984792589-bc12fe270585?q=80&w=1169&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
     code: "JOF",
     type: "city",
     description:
@@ -121,7 +121,7 @@ export const destinations = [
   {
     name: "Cap d'Ambre",
     region: "Nord",
-    image: "/api/placeholder/150/100",
+    image: "https://images.unsplash.com/photo-1645302764437-1cd40621d8cf?q=80&w=1332&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
     code: "CAP",
     type: "nature",
     description: "Point le plus au nord de Madagascar, phare historique",
@@ -130,7 +130,7 @@ export const destinations = [
   {
     name: "Baie des Sakalava",
     region: "Nord",
-    image: "/api/placeholder/150/100",
+    image: "https://images.unsplash.com/photo-1665397532934-b563bcbed97a?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
     code: "SAK",
     type: "beach",
     description: "Plages désertes, eaux turquoise, windsurf",
@@ -141,7 +141,7 @@ export const destinations = [
   {
     name: "Parc National Andasibe-Mantadia",
     region: "Est",
-    image: "/api/placeholder/150/100",
+    image: "lemur.jpg",
     code: "AND",
     type: "park",
     description: "Forêt primaire, Indri indri (plus grand lémurien), orchidées",
@@ -150,7 +150,7 @@ export const destinations = [
   {
     name: "Sainte Marie (Nosy Boraha)",
     region: "Est",
-    image: "/api/placeholder/150/100",
+    image: "https://images.unsplash.com/photo-1587580154308-f0be057deb77?q=80&w=1332&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
     code: "SMS",
     type: "island",
     description: "Île aux baleines, plages tropicales, histoire des pirates",
@@ -163,7 +163,7 @@ export const destinations = [
   {
     name: "Tamatave (Toamasina)",
     region: "Est",
-    image: "/api/placeholder/150/100",
+    image: "https://images.unsplash.com/photo-1555686367-56d5186965d5?q=80&w=1174&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
     code: "TMM",
     type: "city",
     description: "Premier port de Madagascar, marché aux épices, plages",
@@ -172,7 +172,7 @@ export const destinations = [
   {
     name: "Canal des Pangalanes",
     region: "Est",
-    image: "/api/placeholder/150/100",
+    image: "navigale.JPG",
     code: "PAN",
     type: "nature",
     description: "Canal naturel de 665 km, villages de pêcheurs, navigation",
@@ -185,7 +185,7 @@ export const destinations = [
   {
     name: "Foulpointe",
     region: "Est",
-    image: "/api/placeholder/150/100",
+    image: "https://images.unsplash.com/photo-1578458329607-534298aebc4d?q=80&w=700&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
     code: "FOU",
     type: "beach",
     description: "Station balnéaire, plages de sable blanc, cocotiers",
@@ -194,7 +194,7 @@ export const destinations = [
   {
     name: "Maroantsetra",
     region: "Est",
-    image: "/api/placeholder/150/100",
+    image: "https://images.unsplash.com/photo-1654503046422-c182e411d03e?q=80&w=1074&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
     code: "WMN",
     type: "city",
     description: "Porte d'entrée de la péninsule Masoala",
@@ -203,7 +203,7 @@ export const destinations = [
   {
     name: "Parc National Masoala",
     region: "Est",
-    image: "/api/placeholder/150/100",
+    image: "https://images.unsplash.com/photo-1587691812967-d0dc0b0684c6?q=80&w=1176&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
     code: "MAS",
     type: "park",
     description: "Plus grand parc de Madagascar, forêt primaire, parc marin",
@@ -212,7 +212,7 @@ export const destinations = [
   {
     name: "Île aux Nattes",
     region: "Est",
-    image: "/api/placeholder/150/100",
+    image: "https://images.unsplash.com/photo-1503863369250-3ab1905ea94a?q=80&w=1074&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
     code: "NAT",
     type: "island",
     description: "Petit paradis tropical, plages immaculées, tranquillité",
@@ -227,7 +227,7 @@ export const destinations = [
   {
     name: "Morondava",
     region: "Ouest",
-    image: "/api/placeholder/150/100",
+    image: "https://images.unsplash.com/photo-1659944975073-453265ccf3a6?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
     code: "MOQ",
     type: "city",
     description: "Ville côtière, porte d'entrée de l'Avenue des Baobabs",
@@ -236,7 +236,7 @@ export const destinations = [
   {
     name: "Avenue des Baobabs",
     region: "Ouest",
-    image: "/api/placeholder/150/100",
+    image: "https://images.unsplash.com/photo-1684274928311-e5dddff9cfce?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
     code: "BAO",
     type: "nature",
     description: "Site emblématique, baobabs centenaires, couchers de soleil",
@@ -245,7 +245,7 @@ export const destinations = [
   {
     name: "Réserve des Tsingy de Bemaraha",
     region: "Ouest",
-    image: "/api/placeholder/150/100",
+    image: "https://images.unsplash.com/photo-1623730527071-27f13a2a3a65?q=80&w=1173&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
     code: "BEM",
     type: "park",
     description: "Patrimoine UNESCO, cathédrales de pierre, lémuriens",
@@ -254,7 +254,7 @@ export const destinations = [
   {
     name: "Bekopaka",
     region: "Ouest",
-    image: "/api/placeholder/150/100",
+    image: "https://images.unsplash.com/photo-1709674392764-5482159131e1?q=80&w=1074&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
     code: "BEK",
     type: "city",
     description: "Village d'accès aux Tsingy de Bemaraha",
@@ -263,7 +263,7 @@ export const destinations = [
   {
     name: "Mahajanga (Majunga)",
     region: "Ouest",
-    image: "/api/placeholder/150/100",
+    image: "https://images.unsplash.com/photo-1714978382993-0b74eb01d2d9?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
     code: "MJN",
     type: "city",
     description: "Port historique, plages, architecture swahilie",
@@ -276,7 +276,7 @@ export const destinations = [
   {
     name: "Parc National Ankarafantsika",
     region: "Ouest",
-    image: "/api/placeholder/150/100",
+    image: "https://images.unsplash.com/photo-1668486011476-5ce099c4b427?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
     code: "AFK",
     type: "park",
     description: "Forêt sèche, lacs, oiseaux endémiques, lémuriens",
@@ -285,7 +285,7 @@ export const destinations = [
   {
     name: "Baobab Amoureux",
     region: "Ouest",
-    image: "/api/placeholder/150/100",
+    image: "amoureux.JPG",
     code: "BAM",
     type: "nature",
     description: "Deux baobabs entrelacés, légende romantique",
@@ -294,7 +294,7 @@ export const destinations = [
   {
     name: "Cirque Rouge",
     region: "Ouest",
-    image: "/api/placeholder/150/100",
+    image: "https://images.unsplash.com/photo-1519462568576-0c687427fb2e?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
     code: "CIR",
     type: "nature",
     description: "Formation géologique rouge, paysage lunaire",
@@ -305,7 +305,7 @@ export const destinations = [
   {
     name: "Parc National d'Isalo",
     region: "Sud-Ouest",
-    image: "/api/placeholder/150/100",
+    image: "i.JPG",
     code: "ISA",
     type: "park",
     description:
@@ -319,7 +319,7 @@ export const destinations = [
   {
     name: "Tuléar (Toliara)",
     region: "Sud-Ouest",
-    image: "/api/placeholder/150/100",
+    image: "toliara.JPG",
     code: "TLE",
     type: "city",
     description: "Ville côtière, culture Vezo, porte du Grand Sud",
@@ -328,7 +328,7 @@ export const destinations = [
   {
     name: "Ifaty",
     region: "Sud-Ouest",
-    image: "/api/placeholder/150/100",
+    image: "https://images.unsplash.com/photo-1755716963484-129960b33ca7?q=80&w=1332&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
     code: "IFA",
     type: "beach",
     description: "Station balnéaire, forêt de baobabs, récif corallien",
@@ -337,7 +337,7 @@ export const destinations = [
   {
     name: "Anakao",
     region: "Sud-Ouest",
-    image: "/api/placeholder/150/100",
+    image: "lakana.JPG",
     code: "ANA",
     type: "beach",
     description:
@@ -347,7 +347,7 @@ export const destinations = [
   {
     name: "Parc National Zombitse-Vohibasia",
     region: "Sud-Ouest",
-    image: "/api/placeholder/150/100",
+    image: "https://images.unsplash.com/photo-1668480559872-316945170a6b?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
     code: "ZOM",
     type: "park",
     description: "Forêt de transition, oiseaux endémiques, baobabs",
@@ -356,7 +356,7 @@ export const destinations = [
   {
     name: "Réserve Privée de Berenty",
     region: "Sud-Ouest",
-    image: "/api/placeholder/150/100",
+    image: "https://plus.unsplash.com/premium_photo-1749559496420-a65014aa2c86?q=80&w=884&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
     code: "BER",
     type: "reserve",
     description:
@@ -366,7 +366,7 @@ export const destinations = [
   {
     name: "Fort Dauphin (Tolagnaro)",
     region: "Sud-Ouest",
-    image: "/api/placeholder/150/100",
+    image: "https://images.unsplash.com/photo-1748273226242-cd51841e9160?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8VG9sYWduYXJvJTIwTWFkYWdhc2NhcnxlbnwwfHwwfHx8MA%3D%3D",
     code: "FTU",
     type: "city",
     description: "Ville historique, plages superbes, fort français",
@@ -377,7 +377,7 @@ export const destinations = [
   {
     name: "Parc National Ranomafana",
     region: "Sud-Est",
-    image: "/api/placeholder/150/100",
+    image: "lemur.jpg",
     code: "RAN",
     type: "park",
     description: "Forêt tropicale humide, lémuriens dorés, sources chaudes",
@@ -386,7 +386,7 @@ export const destinations = [
   {
     name: "Fianarantsoa",
     region: "Sud-Est",
-    image: "/api/placeholder/150/100",
+    image: "https://images.unsplash.com/photo-1696148899432-13ff6c14b8e2?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8M3x8dHJhaW4lMjBGQ0V8ZW58MHx8MHx8fDA%3D",
     code: "FIA",
     type: "city",
     description: "Capitale intellectuelle, architecture betsileo, train FCE",
@@ -395,7 +395,7 @@ export const destinations = [
   {
     name: "Ambalavao",
     region: "Sud-Est",
-    image: "/api/placeholder/150/100",
+    image: "https://images.unsplash.com/photo-1694712282542-1c9929653496?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8M3x8QW1iYWxhdmFvfGVufDB8fDB8fHww",
     code: "AMV",
     type: "city",
     description: "Papier antemoro, marché aux zébus, culture Betsileo",
@@ -404,7 +404,7 @@ export const destinations = [
   {
     name: "Parc National d'Andringitra",
     region: "Sud-Est",
-    image: "/api/placeholder/150/100",
+    image: "https://images.unsplash.com/photo-1573403092240-26095e118918?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8SGF1dGUlMjBtb250YWduZSUyME1hZGFnYXNjYXJ8ZW58MHx8MHx8fDA%3D",
     code: "ADR",
     type: "park",
     description: "Haute montagne, Pic Boby (2658m), randonnées, climat tempéré",
@@ -413,7 +413,7 @@ export const destinations = [
   {
     name: "Réserve Communautaire d'Anja",
     region: "Sud-Est",
-    image: "/api/placeholder/150/100",
+    image: "https://images.unsplash.com/photo-1749104674665-cfea164f926b?q=80&w=1334&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
     code: "ANJ",
     type: "reserve",
     description:
@@ -423,7 +423,7 @@ export const destinations = [
   {
     name: "Manakara",
     region: "Sud-Est",
-    image: "/api/placeholder/150/100",
+    image: "https://images.unsplash.com/photo-1741627591392-4f83960c7467?q=80&w=687&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
     code: "WVK",
     type: "city",
     description: "Terminus du train FCE, canal des Pangalanes, plages",
@@ -434,7 +434,7 @@ export const destinations = [
   {
     name: "Nosy Mitsio",
     region: "Nord-Ouest",
-    image: "/api/placeholder/150/100",
+    image: "https://images.unsplash.com/photo-1560724397-906ac32ad662?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTJ8fHBsb25nJUMzJUE5ZSUyMGV4Y2VwdGlvbm5lbGxlJTIwTWFkYWdhc2NhcnxlbnwwfHwwfHx8MA%3D%3D",
     code: "MIT",
     type: "island",
     description: "Archipel préservé, plongée exceptionnelle, tortues",
@@ -443,7 +443,7 @@ export const destinations = [
   {
     name: "Nosy Iranja",
     region: "Nord-Ouest",
-    image: "/api/placeholder/150/100",
+    image: "https://images.unsplash.com/photo-1656829873010-3916abc057e6?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8Tm9zeSUyMElyYW5qYSUyME1hZGFnYXNjYXJ8ZW58MHx8MHx8fDA%3D",
     code: "IRN",
     type: "island",
     description: "Île aux tortues, banc de sable, eaux cristallines",
@@ -454,7 +454,7 @@ export const destinations = [
   {
     name: "Sambava",
     region: "Nord-Est",
-    image: "/api/placeholder/150/100",
+    image: "https://media.istockphoto.com/id/179358729/fr/photo/gousses-de-vanille-processus-de-maturation-s%C3%A9chage-rapide.webp?a=1&b=1&s=612x612&w=0&k=20&c=RrIylzr6lF1PoBx4rXP00UlHTOfuBW69z19NYmBppmI=",
     code: "SVB",
     type: "city",
     description: "Capitale de la vanille, SAVA, plantations",
@@ -463,7 +463,7 @@ export const destinations = [
   {
     name: "Vohémar",
     region: "Nord-Est",
-    image: "/api/placeholder/150/100",
+    image: "https://images.unsplash.com/photo-1720465803765-92ff437df9bc?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTZ8fFZvaCVDMyVBOW1hciUyME1hZGFnYXNjYXJ8ZW58MHx8MHx8fDA%3D",
     code: "VOH",
     type: "city",
     description: "Ville côtière, histoire arabe, plages sauvages",
@@ -472,7 +472,7 @@ export const destinations = [
   {
     name: "Cap Masoala",
     region: "Nord-Est",
-    image: "/api/placeholder/150/100",
+    image: "https://plus.unsplash.com/premium_photo-1664121799894-eb6c2af13bc8?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8Q2FwJTIwTWFzb2FsYSUyME1hZGFnYXNjYXJ8ZW58MHx8MHx8fDA%3D",
     code: "CAM",
     type: "nature",
     description: "Pointe de la péninsule Masoala, nature vierge",
@@ -483,7 +483,7 @@ export const destinations = [
   {
     name: "Réserve de l'Ankarana",
     region: "Nord",
-    image: "/api/placeholder/150/100",
+    image: "https://images.unsplash.com/photo-1745143795162-338d77318a48?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8cml2aSVDMyVBOHJlcyUyMHNvdXRlcnJhaW5lcyUyME1hZGFnYXNjYXJ8ZW58MHx8MHx8fDA%3D",
     code: "ANR",
     type: "park",
     description: "Tsingy nord, grottes, rivières souterraines",
@@ -492,7 +492,7 @@ export const destinations = [
   {
     name: "Parc National de Kirindy Mitea",
     region: "Ouest",
-    image: "/api/placeholder/150/100",
+    image: "https://images.unsplash.com/photo-1684274928311-e5dddff9cfce?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8YmFvYmFicyUyMGclQzMlQTlhbnRzJTIwTWFkYWdhc2NhcnxlbnwwfHwwfHx8MA%3D%3D",
     code: "KIR",
     type: "park",
     description: "Forêt sèche, baobabs géants, fossa",
@@ -501,7 +501,7 @@ export const destinations = [
   {
     name: "Parc National de Marojejy",
     region: "Nord-Est",
-    image: "/api/placeholder/150/100",
+    image: "https://images.unsplash.com/photo-1562550745-f54f73011c70?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8bCVDMyVBOW11cmllbnMlMjByYXJlcyUyME1hZGFnYXNjYXJ8ZW58MHx8MHx8fDA%3D",
     code: "MAR",
     type: "park",
     description: "Montagne sacrée, forêt de nuages, lémuriens rares",
@@ -510,7 +510,7 @@ export const destinations = [
   {
     name: "Réserve Naturelle Intégrale du Lokobe",
     region: "Nord",
-    image: "/api/placeholder/150/100",
+    image: "https://images.unsplash.com/photo-1591824579767-0d4f02b45a36?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8bCVDMyVBOW11cmllbnMlMjBub2lycyUyME1hZGFnYXNjYXJ8ZW58MHx8MHx8fDA%3D",
     code: "LOK",
     type: "reserve",
     description: "Dernière forêt primaire de Nosy Be, lémuriens noirs",
@@ -519,7 +519,7 @@ export const destinations = [
   {
     name: "Parc Marin de Nosy Tanikely",
     region: "Nord",
-    image: "/api/placeholder/150/100",
+    image: "https://images.unsplash.com/photo-1722925541600-668518309952?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8N3x8c25vcmtlbGluZyUyME1hZGFnYXNjYXJ8ZW58MHx8MHx8fDA%3D",
     code: "TNK",
     type: "marine",
     description: "Réserve marine, récifs coralliens, snorkeling",

@@ -1,22 +1,14 @@
 import React, { useContext, useEffect, useState } from "react";
 import NavBar from "../components/NavBar";
 import Footer from "../components/Footer";
-import TestimonialCard from "../components/testimonia/TestimonialCard";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { Separator } from "@/components/ui/separator";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
   MapPin,
-  Calendar,
   Users,
   Clock,
   Compass,
-  Check,
   Send,
-  Quote,
-  ChevronRight,
-  ChevronLeft,
   Navigation,
   Route,
   Trash2,
@@ -25,15 +17,7 @@ import {
   Plane,
   X,
 } from "lucide-react";
-import { useMutation, useQuery } from "@apollo/client";
-import { GET_TESTIMONIA_BY_STATUS } from "@/graphql/queries";
-import {
-  Carousel,
-  CarouselContent,
-  CarouselItem,
-  CarouselNext,
-  CarouselPrevious,
-} from "@/components/ui/carousel";
+import { useMutation } from "@apollo/client";
 import NombrePersonneDetail from "@/components/detail/NombrePersonneDetail";
 import {
   DataContext,
@@ -607,6 +591,7 @@ const VoyagesSurMesure = () => {
                                         backgroundImage: `url(${destination.image})`,
                                         backgroundSize: "cover",
                                         backgroundPosition: "center",
+                                        opacity: 0.85,
                                       }}
                                     >
                                       <div className="absolute top-2 right-2">
@@ -623,10 +608,10 @@ const VoyagesSurMesure = () => {
                                           {destination.name}
                                         </h4>
                                         <p className="text-white/80 text-sm">
-                                          {destination.region}
+                                          {destination.region} ({destination.type})
                                         </p>
-                                        <div className="text-xs text-white/60 mt-1">
-                                          {destination.code}
+                                        <div className="text-xs text-white/70 mt-1">
+                                          {destination.description}
                                         </div>
                                       </div>
                                     </div>

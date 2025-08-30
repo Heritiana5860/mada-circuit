@@ -4,20 +4,50 @@ import path from "path";
 import { componentTagger } from "lovable-tagger";
 
 // https://vitejs.dev/config/
+// export default defineConfig(({ mode }) => ({
+//   server: {
+//     host: "::",
+//     port: 5173,
+//   },
+//   plugins: [
+//     react(),
+//     mode === 'development' &&
+//     componentTagger(),
+//   ].filter(Boolean),
+//   resolve: {
+//     alias: {
+//       "@": path.resolve(__dirname, "./src"),
+//     },
+//   },
+//   assetsInclude: ['**/*.JPG'],
+// }));
+
 export default defineConfig(({ mode }) => ({
   server: {
     host: "::",
     port: 5173,
   },
-  plugins: [
-    react(),
-    mode === 'development' &&
-    componentTagger(),
-  ].filter(Boolean),
+  plugins: [react(), mode === "development" && componentTagger()].filter(
+    Boolean
+  ),
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "./src"),
     },
   },
-  assetsInclude: ['**/*.JPG'],
+  assetsInclude: ["**/*.JPG"],
+  build: {
+    rollupOptions: {
+      external: (id) => {
+        // Ne pas externaliser les fichiers CSS
+        if (id.endsWith(".css")) {
+          return false;
+        }
+        return false; 
+      },
+    },
+  },
+  optimizeDeps: {
+    include: ["leaflet"],
+  },
 }));

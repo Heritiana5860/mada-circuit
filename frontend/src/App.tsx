@@ -30,7 +30,6 @@ import Testimonia from "./pages/Testimonia";
 import { UtilisateurProvider } from "./provider/UtilisateurProvider";
 import { ReservationProvider } from "./provider/ReservationProvider";
 import { FaqProvider } from "./provider/FaqProvider";
-import "leaflet/dist/leaflet.css";
 import { TestimoniaProvider } from "./provider/TestimoniaProvider";
 import Admin from "./Admin";
 import { SurMesureProvider } from "./provider/SurMesureProvider";

@@ -40,11 +40,11 @@ const Circuits = () => {
 
   // Images de fond pour le carousel (remplacez par vos vraies images)
   const backgroundImages = [
-    "/doubo.jpg",
-    "/rano.jpg",
-    "/trano.png",
-    "/gidro.png",
-    "/jus.jpg",
+    "/doubo.webp",
+    "/rano.webp",
+    "/piscine.webp",
+    "/gidro.webp",
+    "/jus.webp",
   ];
 
   // Filtres avancés

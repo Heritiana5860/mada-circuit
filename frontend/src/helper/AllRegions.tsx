@@ -141,7 +141,7 @@ export const destinations = [
   {
     name: "Parc National Andasibe-Mantadia",
     region: "Est",
-    image: "lemur.jpg",
+    image: "lemur.webp",
     code: "AND",
     type: "park",
     description: "Forêt primaire, Indri indri (plus grand lémurien), orchidées",
@@ -172,7 +172,7 @@ export const destinations = [
   {
     name: "Canal des Pangalanes",
     region: "Est",
-    image: "navigale.JPG",
+    image: "navigale.webp",
     code: "PAN",
     type: "nature",
     description: "Canal naturel de 665 km, villages de pêcheurs, navigation",
@@ -285,7 +285,7 @@ export const destinations = [
   {
     name: "Baobab Amoureux",
     region: "Ouest",
-    image: "amoureux.JPG",
+    image: "amoureux.webp",
     code: "BAM",
     type: "nature",
     description: "Deux baobabs entrelacés, légende romantique",
@@ -305,7 +305,7 @@ export const destinations = [
   {
     name: "Parc National d'Isalo",
     region: "Sud-Ouest",
-    image: "i.JPG",
+    image: "i.webp",
     code: "ISA",
     type: "park",
     description:
@@ -319,7 +319,7 @@ export const destinations = [
   {
     name: "Tuléar (Toliara)",
     region: "Sud-Ouest",
-    image: "toliara.JPG",
+    image: "toliara.webp",
     code: "TLE",
     type: "city",
     description: "Ville côtière, culture Vezo, porte du Grand Sud",
@@ -337,7 +337,7 @@ export const destinations = [
   {
     name: "Anakao",
     region: "Sud-Ouest",
-    image: "lakana.JPG",
+    image: "lakana.webp",
     code: "ANA",
     type: "beach",
     description:
@@ -377,7 +377,7 @@ export const destinations = [
   {
     name: "Parc National Ranomafana",
     region: "Sud-Est",
-    image: "lemur.jpg",
+    image: "lemur.webp",
     code: "RAN",
     type: "park",
     description: "Forêt tropicale humide, lémuriens dorés, sources chaudes",

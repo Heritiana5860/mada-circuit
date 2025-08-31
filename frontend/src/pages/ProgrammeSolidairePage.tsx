@@ -253,7 +253,7 @@ const ProgrammeSolidairePage = () => {
               </div>
               <div className="relative">
                 <img
-                  src="solid.JPG"
+                  src="solid.webp"
                   alt="Villageois du Canal des Pangalanes"
                   className="rounded-lg shadow-lg w-full h-auto"
                 />
@@ -441,7 +441,7 @@ const ProgrammeSolidairePage = () => {
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
               <div className="relative">
                 <img
-                  src="solidaire.JPG"
+                  src="solidaire.webp"
                   alt="École dans un village du Canal des Pangalanes"
                   className="rounded-lg shadow-lg w-full h-auto"
                 />

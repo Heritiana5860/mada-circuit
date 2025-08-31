@@ -57,7 +57,7 @@ const PageGuide = () => {
       <NavBar />
 
       {/* Hero Section modernisé */}
-      <section className="relative bg-green-100 text-white overflow-hidden bg-[url(/guide.png)] bg-cover bg-center">
+      <section className="relative bg-green-100 text-white overflow-hidden bg-[url(/guide.webp)] bg-cover bg-center">
         <div className="absolute inset-0 bg-black/40" />
         <div className="absolute inset-0 bg-gradient-to-r from-emerald-900/50 to-transparent" />
 

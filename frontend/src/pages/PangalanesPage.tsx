@@ -178,9 +178,10 @@ const PangalanesPage = () => {
       <main className="flex-grow">
         <section className="h-[50vh] overflow-hidden bg-gradient-to-r from-black/70 to-black/30 pt-4">
           <img
-            src="slogan.png"
+            src="slogan.webp"
             alt="Canal des Pangalanes"
             className="w-full h-full object-contain bg-left"
+            loading="lazy"
           />
         </section>
 
@@ -264,9 +265,10 @@ const PangalanesPage = () => {
               </div>
               <div className="relative">
                 <img
-                  src="navigale.JPG"
+                  src="https://drive.google.com/thumbnail?id=1l2HeO6CJb72pcUdlmtRkDPWgk5ljpdBu&sz=w1000"
                   alt="Canal des Pangalanes"
                   className="rounded-lg shadow-lg w-full h-auto"
+                  loading="lazy"
                 />
                 <div className="absolute -top-4 -right-4 bg-white p-3 rounded-lg shadow-lg">
                   <MapPin className="h-8 w-8 text-primary" />
@@ -416,9 +418,10 @@ const PangalanesPage = () => {
               </div>
               <div className="relative">
                 <img
-                  src="canal.JPG"
+                  src="canal.webp"
                   alt="Tourisme solidaire à Madagascar"
                   className="rounded-lg shadow-lg w-full h-auto"
+                  loading="lazy"
                 />
                 <div className="absolute -bottom-4 -left-4 bg-white p-3 rounded-lg shadow-lg">
                   <Heart className="h-8 w-8 text-primary" />
@@ -434,6 +437,7 @@ const PangalanesPage = () => {
               src="https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2000&q=80"
               alt="Background"
               className="w-full h-full object-cover"
+              loading="lazy"
             />
             <div className="absolute inset-0 bg-black/60"></div>
           </div>

@@ -61,7 +61,7 @@ const ObjectifsAssociationPage = () => {
         {/* Hero Section */}
         <section className="relative h-[50vh] overflow-hidden">
           <img
-            src="solidaire2.JPG"
+            src="solidaire2.webp"
             alt="Enfants malgaches à l'école"
             className="w-full h-full object-cover"
           />
@@ -132,7 +132,7 @@ const ObjectifsAssociationPage = () => {
               </div>
               <div className="relative">
                 <img
-                  src="mission.JPG"
+                  src="mission.webp"
                   alt="Enfants apprenant"
                   className="rounded-lg shadow-lg w-full h-auto"
                 />
@@ -196,7 +196,7 @@ const ObjectifsAssociationPage = () => {
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
               <div className="relative order-2 lg:order-1">
                 <img
-                  src="site.png"
+                  src="site.webp"
                   alt="Projet futur"
                   className="rounded-lg shadow-lg w-full h-auto"
                 />
@@ -236,7 +236,7 @@ const ObjectifsAssociationPage = () => {
         <section className="relative py-20 overflow-hidden">
           <div className="absolute inset-0 z-0">
             <img
-              src="salut.JPG"
+              src="salut.webp"
               alt="Background"
               className="w-full h-full object-cover"
             />

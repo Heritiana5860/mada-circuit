@@ -302,7 +302,7 @@ const VoyagesSurMesure = () => {
       <main className="flex-grow">
         <section className="relative h-[50vh] overflow-hidden">
           <img
-            src="/surmesure.jpg"
+            src="/surmesure.webp"
             alt="Canal des Pangalanes"
             className="w-full h-full object-cover"
           />

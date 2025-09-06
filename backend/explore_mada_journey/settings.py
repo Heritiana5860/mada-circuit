@@ -89,17 +89,17 @@ SECRET_KEY = 'django-insecure-=-^c))dt)dbi(g%h2kmtgkp)o!q3cr12=m0cs2#3(j2jg(qodf
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['localhost', '127.0.0.1', '*']
+ALLOWED_HOSTS = ['localhost', '127.0.0.1', 'https://administration.madagascar-voyagesolidaire.com']
 
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:8080",
-    "http://localhost:8000"
+    'https://administration.madagascar-voyagesolidaire.com',
     
 ]
 
 CSRF_TRUSTED_ORIGINS = [
     "http://localhost:8080",
-    "http://localhost:8000"
+    'https://administration.madagascar-voyagesolidaire.com',
 ]
 
 CORS_ALLOW_ALL_ORIGINS = True
@@ -190,8 +190,15 @@ EMAIL_HOST_PASSWORD = os.getenv("EMAIL_HOST_PASSWORD")
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': os.getenv("DB_NAME"),
+        'USER': os.getenv("USER"),
+        'PASSWORD': os.getenv("DB_PASSWORD"),
+        'HOST': os.getenv("HOST"),
+        'PORT': os.getenv("PORT"),
+        'OPTIONS': {
+            'charset': 'utf8mb4',
+        }
     }
 }
 

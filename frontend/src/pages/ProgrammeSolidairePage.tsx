@@ -23,6 +23,8 @@ import { GET_ALL_CIRCUITS } from "@/graphql/queries";
 import ContentLoading from "@/components/Loading";
 import ContentError from "@/components/error";
 import { formatPrice } from "@/helper/formatage";
+import { Helmet } from "react-helmet-async";
+import SEO from "@/SEO";
 
 const ProgrammeSolidairePage = () => {
   const navigate = useNavigate();
@@ -167,6 +169,13 @@ const ProgrammeSolidairePage = () => {
 
   return (
     <div className="min-h-screen flex flex-col">
+      <SEO
+        title="Circuit solidaire à Madagascar | Voyages responsables"
+        description="Participez à un circuit solidaire à Madagascar : voyage authentique, rencontres locales et contribution au développement durable des communautés."
+        canonical="https://madagascar-voyagesolidaire.com/programme-solidaire"
+        image="https://madagascar-voyagesolidaire.com/images/solidaire-og.webp"
+      />
+
       <NavBar />
 
       <main className="flex-grow">

@@ -1,9 +1,7 @@
 import {
   Card,
   CardContent,
-  CardDescription,
   CardHeader,
-  CardTitle,
 } from "@/components/ui/card";
 import {
   BriefcaseBusiness,
@@ -12,18 +10,14 @@ import {
   FlaskConical,
   Globe,
   Mail,
-  MapPin,
   MapPinHouse,
   Phone,
   User,
   X,
 } from "lucide-react";
-import { Label } from "../components/ui/label";
 import { useState } from "react";
-import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import Field from "./composants/Field";
-import { Separator } from "@radix-ui/react-separator";
 import { useMutation } from "@apollo/client";
 import { CREATE_PERSONNEL } from "@/graphql/mutations";
 

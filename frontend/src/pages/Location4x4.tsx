@@ -12,6 +12,8 @@ import {
 } from "@/provider/DataContext";
 import { FaqCard } from "@/components/FaqCard";
 import { TestimoniaCarousel } from "@/components/TestimoniaCarousel";
+import { Helmet } from "react-helmet-async";
+import SEO from "@/SEO";
 
 const Location4x4: React.FC = () => {
   const { loading, error, data } = useQuery(GET_ALL_VEHICULES);
@@ -80,6 +82,13 @@ const Location4x4: React.FC = () => {
 
   return (
     <div className="min-h-screen flex flex-col">
+      <SEO
+        title="Location 4x4 à Madagascar | Avec Chauffeur Expérimenté"
+        description="Louez un 4x4 avec chauffeur à Madagascar pour vos circuits et excursions. Confort, sécurité et flexibilité pour explorer l’île en toute sérénité."
+        canonical="https://madagascar-voyagesolidaire.com/location-4x4"
+        image="https://madagascar-voyagesolidaire.com/images/vehicule-og.webp"
+      />
+
       <NavBar />
       <main className="flex-grow">
         <div className="container mx-auto px-4 py-8">

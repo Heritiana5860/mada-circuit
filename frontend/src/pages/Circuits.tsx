@@ -27,6 +27,8 @@ import {
 } from "@/provider/DataContext";
 import { FaqCard } from "@/components/FaqCard";
 import { TestimoniaCarousel } from "@/components/TestimoniaCarousel";
+import { Helmet } from "react-helmet-async";
+import SEO from "@/SEO";
 
 const Circuits = () => {
   const [selectedRegion, setSelectedRegion] = useState<string>("all");
@@ -112,14 +114,11 @@ const Circuits = () => {
   useEffect(() => {
     if (circuitsData?.allCircuitsByType) {
       let circuits = circuitsData?.allCircuitsByType;
-      
 
       // Filtre par région
       if (selectedRegion !== "all") {
         circuits = circuits.filter((circuit: string) =>
-          circuit["region"]
-            .toLowerCase()
-            .includes(selectedRegion.toLowerCase())
+          circuit["region"].toLowerCase().includes(selectedRegion.toLowerCase())
         );
       }
 
@@ -221,6 +220,13 @@ const Circuits = () => {
 
   return (
     <div className="min-h-screen flex flex-col bg-gray-50">
+      <SEO
+        title="Circuits à Madagascar | Voyages et Aventures Authentiques"
+        description="Explorez nos circuits à Madagascar : aventures uniques, découvertes culturelles et paysages exceptionnels pour un voyage inoubliable au cœur de l’île rouge."
+        canonical="https://madagascar-voyagesolidaire.com/circuits"
+        image="https://madagascar-voyagesolidaire.com/images/circuit-og.webp"
+      />
+
       <NavBar />
 
       <main className="flex-grow">

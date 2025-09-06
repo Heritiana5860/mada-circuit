@@ -28,6 +28,8 @@ import { destinations } from "@/helper/AllRegions";
 import { CREATE_SUR_MESURE } from "@/graphql/mutations";
 import { FaqCard } from "@/components/FaqCard";
 import { TestimoniaCarousel } from "@/components/TestimoniaCarousel";
+import { Helmet } from "react-helmet-async";
+import SEO from "@/SEO";
 
 const VoyagesSurMesure = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -297,6 +299,13 @@ const VoyagesSurMesure = () => {
 
   return (
     <div className="min-h-screen flex flex-col">
+      <SEO
+        title="Voyage sur mesure à Madagascar | Circuits personnalisés"
+        description="Créez votre voyage sur mesure à Madagascar : circuits personnalisés, expériences uniques et découverte authentique du pays selon vos envies."
+        canonical="https://madagascar-voyagesolidaire.com/voyages-sur-mesure"
+        image="https://madagascar-voyagesolidaire.com/images/surmesure-og.webp"
+      />
+
       <NavBar />
 
       <main className="flex-grow">
@@ -608,7 +617,8 @@ const VoyagesSurMesure = () => {
                                           {destination.name}
                                         </h4>
                                         <p className="text-white/80 text-sm">
-                                          {destination.region} ({destination.type})
+                                          {destination.region} (
+                                          {destination.type})
                                         </p>
                                         <div className="text-xs text-white/70 mt-1">
                                           {destination.description}

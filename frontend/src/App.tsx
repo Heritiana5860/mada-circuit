@@ -13,8 +13,6 @@ import VoyagesSurMesure from "./pages/VoyagesSurMesure";
 import Location4x4 from "./pages/Location4x4";
 import VehicleDetailSimple from "./pages/VehicleDetailSimple";
 import PangalanesPage from "./pages/PangalanesPage";
-import Blog from "./pages/Blog";
-import BlogPost from "./pages/BlogPost";
 import Contact from "./pages/Contact";
 import ProgrammeSolidairePage from "./pages/ProgrammeSolidairePage";
 import ObjectifsAssociationPage from "./pages/ObjectifsAssociationPage";
@@ -39,6 +37,7 @@ import CircuitProvider from "./provider/CircuitProvider";
 import { AllUserProvider } from "./provider/AllUserProvider";
 import { AllPersonnelProvider } from "./provider/AllPersonnelProvider";
 import { AllBlogProvider } from "./provider/AllBlogProvider";
+import { HelmetProvider } from "react-helmet-async";
 
 const queryClient = new QueryClient();
 
@@ -57,132 +56,129 @@ const App = () => (
                         <AllUserProvider>
                           <AllPersonnelProvider>
                             <AllBlogProvider>
-                              <Toaster />
-                              <Sonner />
-                              <BrowserRouter>
-                                <Routes>
-                                  <Route path="/" element={<Index />} />
+                              <HelmetProvider>
+                                <Toaster />
+                                <Sonner />
+                                <BrowserRouter>
+                                  <Routes>
+                                    <Route path="/" element={<Index />} />
 
-                                  {/* Route admin protégée - SEULEMENT pour les ADMIN */}
-                                  <Route
-                                    path="/admin"
-                                    element={
-                                      <ProtectedRoute
-                                        requireAuth={true}
-                                        requireRole="ADMIN"
-                                      >
-                                        <Admin />
-                                      </ProtectedRoute>
-                                    }
-                                  />
+                                    {/* Route admin protégée - SEULEMENT pour les ADMIN */}
+                                    <Route
+                                      path="/admin"
+                                      element={
+                                        <ProtectedRoute
+                                          requireAuth={true}
+                                          requireRole="ADMIN"
+                                        >
+                                          <Admin />
+                                        </ProtectedRoute>
+                                      }
+                                    />
 
-                                  {/* Routes d'authentification */}
-                                  <Route
-                                    path="/login"
-                                    element={
-                                      <ProtectedRoute requireAuth={false}>
-                                        <Login />
-                                      </ProtectedRoute>
-                                    }
-                                  />
-                                  <Route
-                                    path="/register"
-                                    element={
-                                      <ProtectedRoute requireAuth={false}>
-                                        <Register />
-                                      </ProtectedRoute>
-                                    }
-                                  />
+                                    {/* Routes d'authentification */}
+                                    <Route
+                                      path="/login"
+                                      element={
+                                        <ProtectedRoute requireAuth={false}>
+                                          <Login />
+                                        </ProtectedRoute>
+                                      }
+                                    />
+                                    <Route
+                                      path="/register"
+                                      element={
+                                        <ProtectedRoute requireAuth={false}>
+                                          <Register />
+                                        </ProtectedRoute>
+                                      }
+                                    />
 
-                                  {/* Routes publiques */}
-                                  <Route
-                                    path="/circuits"
-                                    element={<Circuits />}
-                                  />
-                                  <Route
-                                    path="/circuits/:id"
-                                    element={<CircuitDetail />}
-                                  />
-                                  <Route
-                                    path="/voyages-sur-mesure"
-                                    element={<VoyagesSurMesure />}
-                                  />
-                                  <Route
-                                    path="/sur-mesure"
-                                    element={
-                                      <Navigate
-                                        to="/voyages-sur-mesure"
-                                        replace
-                                      />
-                                    }
-                                  />
-                                  <Route
-                                    path="/location-4x4"
-                                    element={<Location4x4 />}
-                                  />
-                                  <Route
-                                    path="/location-4x4/:id"
-                                    element={<VehicleDetailSimple />}
-                                  />
-                                  <Route
-                                    path="/pangalanes"
-                                    element={<PangalanesPage />}
-                                  />
-                                  <Route
-                                    path="/pangalanes/:id"
-                                    element={<PangalanesDetailPage />}
-                                  />
-                                  <Route
-                                    path="/programme-solidaire"
-                                    element={<ProgrammeSolidairePage />}
-                                  />
-                                  <Route
-                                    path="/programme-solidaire/:id"
-                                    element={<ProgrammeSolidaireDetail />}
-                                  />
-                                  <Route
-                                    path="/objectif-association"
-                                    element={<ObjectifsAssociationPage />}
-                                  />
-                                  <Route path="/blog" element={<Blog />} />
-                                  <Route
-                                    path="/blog/:id"
-                                    element={<BlogPost />}
-                                  />
-                                  <Route
-                                    path="/contact"
-                                    element={<Contact />}
-                                  />
-                                  <Route
-                                    path="/reservations"
-                                    element={<Reservation />}
-                                  />
-                                  <Route
-                                    path="/guides"
-                                    element={<PageGuide />}
-                                  />
-                                  <Route
-                                    path="/guidesprofile/:id"
-                                    element={<PageGuideProfile />}
-                                  />
-                                  <Route
-                                    path="/testimonia"
-                                    element={<Testimonia />}
-                                  />
+                                    {/* Routes publiques */}
+                                    <Route
+                                      path="/circuits"
+                                      element={<Circuits />}
+                                    />
+                                    <Route
+                                      path="/circuits/:id"
+                                      element={<CircuitDetail />}
+                                    />
+                                    <Route
+                                      path="/voyages-sur-mesure"
+                                      element={<VoyagesSurMesure />}
+                                    />
+                                    <Route
+                                      path="/sur-mesure"
+                                      element={
+                                        <Navigate
+                                          to="/voyages-sur-mesure"
+                                          replace
+                                        />
+                                      }
+                                    />
+                                    <Route
+                                      path="/location-4x4"
+                                      element={<Location4x4 />}
+                                    />
+                                    <Route
+                                      path="/location-4x4/:id"
+                                      element={<VehicleDetailSimple />}
+                                    />
+                                    <Route
+                                      path="/pangalanes"
+                                      element={<PangalanesPage />}
+                                    />
+                                    <Route
+                                      path="/pangalanes/:id"
+                                      element={<PangalanesDetailPage />}
+                                    />
+                                    <Route
+                                      path="/programme-solidaire"
+                                      element={<ProgrammeSolidairePage />}
+                                    />
+                                    <Route
+                                      path="/programme-solidaire/:id"
+                                      element={<ProgrammeSolidaireDetail />}
+                                    />
+                                    <Route
+                                      path="/objectif-association"
+                                      element={<ObjectifsAssociationPage />}
+                                    />
+                                    <Route
+                                      path="/contact"
+                                      element={<Contact />}
+                                    />
+                                    <Route
+                                      path="/reservations"
+                                      element={<Reservation />}
+                                    />
+                                    <Route
+                                      path="/guides"
+                                      element={<PageGuide />}
+                                    />
+                                    <Route
+                                      path="/guidesprofile/:id"
+                                      element={<PageGuideProfile />}
+                                    />
+                                    <Route
+                                      path="/testimonia"
+                                      element={<Testimonia />}
+                                    />
 
-                                  {/* Routes protégées */}
-                                  <Route
-                                    path="/profile"
-                                    element={
-                                      <ProtectedRoute>
-                                        <Profile />
-                                      </ProtectedRoute>
-                                    }
-                                  />
+                                    {/* Routes protégées */}
+                                    <Route
+                                      path="/profile"
+                                      element={
+                                        <ProtectedRoute>
+                                          <Profile />
+                                        </ProtectedRoute>
+                                      }
+                                    />
 
-                                  <Route path="*" element={<NotFound />} />
-                                </Routes>
-                              </BrowserRouter>
+                                    <Route path="*" element={<NotFound />} />
+                                  </Routes>
+                                </BrowserRouter>
+                              </HelmetProvider>
                             </AllBlogProvider>
                           </AllPersonnelProvider>
                         </AllUserProvider>

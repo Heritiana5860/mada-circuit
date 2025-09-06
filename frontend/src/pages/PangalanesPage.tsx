@@ -25,6 +25,7 @@ import ContentError from "@/components/error";
 import { SectionCitation } from "./pangalanes/SectionCitation";
 import { formatPrice } from "@/helper/formatage";
 import CardContentDetail from "@/components/detail/CardContentDetail";
+import { Helmet } from "react-helmet-async";
 
 const PangalanesPage = () => {
   const navigate = useNavigate();
@@ -173,6 +174,14 @@ const PangalanesPage = () => {
 
   return (
     <div className="min-h-screen flex flex-col">
+      <Helmet>
+        <title>Canal des Pangalanes Madagascar | Excursions & Découverte</title>
+        <meta
+          name="description"
+          content="Vivez une expérience unique sur le Canal des Pangalanes : croisières, excursions en pirogue et immersion dans la nature sauvage et les villages authentiques."
+        />
+      </Helmet>
+
       <NavBar />
 
       <main className="flex-grow">

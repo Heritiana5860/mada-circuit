@@ -153,7 +153,7 @@ const ImprovedAdmin = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="h-screen bg-gray-50 flex overflow-hidden">
       {/* Mobile Overlay */}
       {isMobile && sidebarOpen && (
         <div
@@ -162,49 +162,50 @@ const ImprovedAdmin = () => {
         />
       )}
 
-      <div className="flex">
-        {/* Sidebar */}
-        <div
-          className={`
-          ${isMobile ? "fixed inset-y-0 left-0 z-50 transform" : "relative"} 
-          ${isMobile && !sidebarOpen ? "-translate-x-full" : "translate-x-0"}
-          w-64 bg-white shadow-lg border-r border-gray-200 transition-transform duration-300 ease-in-out
-        `}
-        >
-          {/* Header */}
-          <div className="p-6 border-b border-gray-200">
-            <div className="flex items-center justify-between">
-              <div>
-                <h3 className="text-xl font-bold text-emerald-600">
-                  Voyage Solidaire
-                </h3>
-                <p className="text-sm text-gray-500">Admin Dashboard</p>
-              </div>
-              {isMobile && (
-                <button
-                  onClick={() => setSidebarOpen(false)}
-                  className="p-2 rounded-lg hover:bg-gray-100"
-                >
-                  <X className="w-5 h-5" />
-                </button>
-              )}
+      {/* Sidebar */}
+      <div
+        className={`
+      ${isMobile ? "fixed inset-y-0 left-0 z-50 transform" : "relative"} 
+      ${isMobile && !sidebarOpen ? "-translate-x-full" : "translate-x-0"}
+      w-64 bg-white shadow-lg border-r border-gray-200 transition-transform duration-300 ease-in-out
+      flex flex-col h-full
+    `}
+      >
+        {/* Header */}
+        <div className="flex-shrink-0 p-6 border-b border-gray-200">
+          <div className="flex items-center justify-between">
+            <div>
+              <h3 className="text-xl font-bold text-emerald-600">
+                Voyage Solidaire
+              </h3>
+              <p className="text-sm text-gray-500">Admin Dashboard</p>
             </div>
+            {isMobile && (
+              <button
+                onClick={() => setSidebarOpen(false)}
+                className="p-2 rounded-lg hover:bg-gray-100"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            )}
           </div>
+        </div>
 
-          {/* Search */}
-          <div className="p-4 border-b border-gray-100">
-            <div className="relative">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
-              <input
-                type="text"
-                placeholder="Rechercher..."
-                className="w-full pl-10 pr-4 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
-              />
-            </div>
+        {/* Search */}
+        <div className="flex-shrink-0 p-4 border-b border-gray-100">
+          <div className="relative">
+            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
+            <input
+              type="text"
+              placeholder="Rechercher..."
+              className="w-full pl-10 pr-4 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500"
+            />
           </div>
+        </div>
 
-          {/* Navigation */}
-          <nav className="flex-1 p-4 space-y-6 overflow-y-auto">
+        {/* Navigation - Scrollable */}
+        <div className="flex-1 overflow-y-auto">
+          <nav className="p-4 space-y-6">
             {menuGroups.map((group, groupIndex) => (
               <div key={groupIndex}>
                 <h4 className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-3">
@@ -245,62 +246,64 @@ const ImprovedAdmin = () => {
               </div>
             ))}
           </nav>
+        </div>
 
-          {/* User Profile & Logout */}
-          <div className="border-t border-gray-200 p-4 space-y-2">
-            <div className="flex items-center space-x-3 px-3 py-2 rounded-lg hover:bg-gray-50">
+        {/* User Profile & Logout - Fixed at bottom */}
+        <div className="flex-shrink-0 border-t border-gray-200 p-4 space-y-2">
+          <div className="flex items-center space-x-3 px-3 py-2 rounded-lg hover:bg-gray-50">
+            <div className="w-8 h-8 bg-emerald-100 rounded-full flex items-center justify-center">
+              <User className="w-4 h-4 text-emerald-600" />
+            </div>
+            <div className="flex-1">
+              <p className="text-sm font-medium text-gray-900">Admin User</p>
+              <p className="text-xs text-gray-500">admin@voyage.com</p>
+            </div>
+          </div>
+          <button
+            onClick={logout}
+            className="w-full flex items-center space-x-3 px-3 py-2.5 text-red-600 hover:bg-red-50 rounded-lg transition-colors"
+          >
+            <LogOut className="w-5 h-5" />
+            <span className="font-medium">Déconnexion</span>
+          </button>
+        </div>
+      </div>
+
+      {/* Main Content */}
+      <div className="flex-1 flex flex-col h-full overflow-hidden">
+        {/* Top Header - Fixed */}
+        <header className="flex-shrink-0 bg-white shadow-sm border-b border-gray-200 px-4 py-4 md:px-8">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center space-x-4">
+              {isMobile && (
+                <button
+                  onClick={() => setSidebarOpen(true)}
+                  className="p-2 rounded-lg hover:bg-gray-100"
+                >
+                  <Menu className="w-5 h-5" />
+                </button>
+              )}
+              <h2 className="text-lg font-semibold text-gray-900 hidden md:block">
+                Tableau de bord
+              </h2>
+            </div>
+
+            <div className="flex items-center space-x-4">
+              <button className="relative p-2 rounded-lg hover:bg-gray-100">
+                <Bell className="w-5 h-5 text-gray-600" />
+                <span className="absolute -top-1 -right-1 w-3 h-3 bg-red-500 rounded-full"></span>
+              </button>
               <div className="w-8 h-8 bg-emerald-100 rounded-full flex items-center justify-center">
                 <User className="w-4 h-4 text-emerald-600" />
               </div>
-              <div className="flex-1">
-                <p className="text-sm font-medium text-gray-900">Admin User</p>
-                <p className="text-xs text-gray-500">admin@voyage.com</p>
-              </div>
             </div>
-            <button
-              onClick={logout}
-              className="w-full flex items-center space-x-3 px-3 py-2.5 text-red-600 hover:bg-red-50 rounded-lg transition-colors"
-            >
-              <LogOut className="w-5 h-5" />
-              <span className="font-medium">Déconnexion</span>
-            </button>
           </div>
-        </div>
+        </header>
 
-        {/* Main Content */}
-        <div className="flex-1 flex flex-col min-h-screen">
-          {/* Top Header */}
-          <header className="bg-white shadow-sm border-b border-gray-200 px-4 py-4 md:px-8">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center space-x-4">
-                {isMobile && (
-                  <button
-                    onClick={() => setSidebarOpen(true)}
-                    className="p-2 rounded-lg hover:bg-gray-100"
-                  >
-                    <Menu className="w-5 h-5" />
-                  </button>
-                )}
-                <h2 className="text-lg font-semibold text-gray-900 hidden md:block">
-                  Tableau de bord
-                </h2>
-              </div>
-
-              <div className="flex items-center space-x-4">
-                <button className="relative p-2 rounded-lg hover:bg-gray-100">
-                  <Bell className="w-5 h-5 text-gray-600" />
-                  <span className="absolute -top-1 -right-1 w-3 h-3 bg-red-500 rounded-full"></span>
-                </button>
-                <div className="w-8 h-8 bg-emerald-100 rounded-full flex items-center justify-center">
-                  <User className="w-4 h-4 text-emerald-600" />
-                </div>
-              </div>
-            </div>
-          </header>
-
-          {/* Main Content Area */}
-          <main className="flex-1 p-4 md:p-8">{renderContent()}</main>
-        </div>
+        {/* Main Content Area - Scrollable */}
+        <main className="flex-1 overflow-y-auto p-4 md:p-8">
+          {renderContent()}
+        </main>
       </div>
     </div>
   );

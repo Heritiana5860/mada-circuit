@@ -6,16 +6,11 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Separator } from "@/components/ui/separator";
-import {
-  Phone,
-  Mail,
-  MapPin,
-  Clock,
-  Send,
-} from "lucide-react";
+import { Phone, Mail, MapPin, Clock, Send } from "lucide-react";
 import { useMutation } from "@apollo/client";
 import { useToast } from "@/components/ui/use-toast";
 import { CREATE_CONTACT_US } from "@/graphql/mutations";
+import { Helmet } from "react-helmet-async";
 
 const Contact = () => {
   // État du formulaire
@@ -96,6 +91,17 @@ const Contact = () => {
 
   return (
     <div className="min-h-screen flex flex-col">
+      <Helmet>
+        <title>
+          Contact Madagascar Voyage Solidaire | Demandez Votre Devis
+        </title>
+        <meta
+          name="description"
+          content="Contactez-nous pour organiser votre voyage à Madagascar. Demandez un devis personnalisé pour un circuit sur mesure, une excursion ou une location de 4x4."
+        />
+        <link rel="canonical" href="https://madagascar-voyagesolidaire.com/contact" />
+      </Helmet>
+
       <NavBar />
 
       <main className="flex-grow">

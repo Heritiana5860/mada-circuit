@@ -115,7 +115,7 @@ const Hero = () => {
               top: "15%",
               right: "60%",
               transform: "rotate(-3deg)",
-              backgroundImage: "url(solidaire.webp)",
+              backgroundImage: "url(solidaire.JPG)",
               backgroundSize: "cover",
               backgroundPosition: "center",
               animation: "float6 7.5s ease-in-out infinite",

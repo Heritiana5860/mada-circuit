@@ -185,7 +185,7 @@ const PangalanesPage = () => {
       <NavBar />
 
       <main className="flex-grow">
-        <section className="h-[50vh] overflow-hidden bg-gradient-to-r from-black/70 to-black/30 pt-4">
+        <section className="h-[36vh] overflow-hidden pt-4">
           <img
             src="slogan.webp"
             alt="Canal des Pangalanes"
@@ -195,7 +195,7 @@ const PangalanesPage = () => {
         </section>
 
         {/* Section Bouton */}
-        <section className="py-8 bg-gradient-to-r from-black/70 to-black/30">
+        <section className="py-8">
           <div className="inset-0 flex items-center">
             <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
               <div className="max-w-3xl">
@@ -274,7 +274,7 @@ const PangalanesPage = () => {
               </div>
               <div className="relative">
                 <img
-                  src="https://drive.google.com/thumbnail?id=1l2HeO6CJb72pcUdlmtRkDPWgk5ljpdBu&sz=w1000"
+                  src="navigale.webp"
                   alt="Canal des Pangalanes"
                   className="rounded-lg shadow-lg w-full h-auto"
                   loading="lazy"

@@ -14,6 +14,7 @@ import { FaqCard } from "@/components/FaqCard";
 import { TestimoniaCarousel } from "@/components/TestimoniaCarousel";
 import { Helmet } from "react-helmet-async";
 import SEO from "@/SEO";
+import { urlMedia } from "@/helper/UrlImage";
 
 const Location4x4: React.FC = () => {
   const { loading, error, data } = useQuery(GET_ALL_VEHICULES);
@@ -77,7 +78,7 @@ const Location4x4: React.FC = () => {
   }
 
   const utilisateurImage = utilisateur?.image
-    ? `http://localhost:8000/media/${utilisateur.image}`
+    ? `${urlMedia}${utilisateur.image}`
     : null;
 
   return (

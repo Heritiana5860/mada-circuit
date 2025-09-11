@@ -30,6 +30,8 @@ import { FaqCard } from "@/components/FaqCard";
 import { TestimoniaCarousel } from "@/components/TestimoniaCarousel";
 import { Helmet } from "react-helmet-async";
 import SEO from "@/SEO";
+import { urlMedia } from "@/helper/UrlImage";
+import PageHeader from "@/components/PageHeader";
 
 const VoyagesSurMesure = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -208,7 +210,7 @@ const VoyagesSurMesure = () => {
   }
 
   const utilisateurImage = utilisateur?.image
-    ? `http://localhost:8000/media/${utilisateur.image}`
+    ? `${urlMedia}${utilisateur.image}`
     : null;
 
   const handleDestinationSelect = (destination) => {
@@ -309,24 +311,14 @@ const VoyagesSurMesure = () => {
       <NavBar />
 
       <main className="flex-grow">
-        <section className="relative h-[50vh] overflow-hidden">
-          <img
-            src="/surmesure.webp"
-            alt="Canal des Pangalanes"
-            className="w-full h-full object-cover"
-          />
-          <div className="absolute inset-0 bg-gradient-to-r from-black/50 to-black/20 flex items-center">
-            <div className="text-center max-w-3xl mx-auto">
-              <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-6">
-                Créez votre Voyage Sur Mesure
-              </h1>
-              <p className="text-xl text-white/90 mb-8">
-                Un voyage unique, conçu selon vos préférences, pour découvrir
-                Madagascar à votre rythme et selon vos envies.
-              </p>
-            </div>
-          </div>
-        </section>
+        {/* Header */}
+        <PageHeader
+          titre="Créez votre Voyage Sur Mesure"
+          description="Un voyage unique, conçu selon vos préférences, pour découvrir
+              Madagascar à votre rythme et selon vos envies."
+          background="surmesure.webp"
+          bg_position="bg-center"
+        />
 
         <section className="py-12">
           <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">

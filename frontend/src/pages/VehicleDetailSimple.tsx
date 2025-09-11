@@ -22,6 +22,7 @@ import {
 import { useVehicleReservation } from "@/hooks/useVehicleReservation";
 import { formatPrice } from "@/helper/formatage";
 import { StatistiqueReservationContext } from "@/provider/DataContext";
+import { urlMedia } from "@/helper/UrlImage";
 
 // Fonction pour décoder l'ID Relay
 const decodeRelayId = (relayId: string): string => {
@@ -338,7 +339,7 @@ const VehicleDetailSimple = () => {
           if (imagePath.startsWith("http")) {
             return imagePath;
           } else {
-            return `http://localhost:8000/media/${imagePath}`;
+            return `${urlMedia}${imagePath}`;
           }
         });
     }

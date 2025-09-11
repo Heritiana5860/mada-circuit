@@ -4,6 +4,7 @@ import Footer from "@/components/Footer";
 import { Link, useNavigate } from "react-router-dom";
 import { useContext } from "react";
 import { AllPersonnelContext } from "@/provider/DataContext";
+import { urlMedia } from "@/helper/UrlImage";
 
 const PageGuide = () => {
   const { personnelData, peronnelLoading, personnelError } =
@@ -188,7 +189,7 @@ const PageGuide = () => {
             {personnelData.map((guide) => (
               <PageGuideCard
                 key={guide.id}
-                url={`http://localhost:8000/media/${guide.photo}`}
+                url={`${urlMedia}${guide.photo}`}
                 nom={`${guide.nom} ${guide.prenom}`}
                 lieu={guide.adresse}
                 languages={guide.langues}

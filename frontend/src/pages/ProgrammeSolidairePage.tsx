@@ -25,6 +25,7 @@ import ContentError from "@/components/error";
 import { formatPrice } from "@/helper/formatage";
 import { Helmet } from "react-helmet-async";
 import SEO from "@/SEO";
+import { urlMedia } from "@/helper/UrlImage";
 
 const ProgrammeSolidairePage = () => {
   const navigate = useNavigate();
@@ -179,43 +180,34 @@ const ProgrammeSolidairePage = () => {
       <NavBar />
 
       <main className="flex-grow">
-        <section className="relative h-[70vh] overflow-hidden">
-          <img
-            src="https://images.unsplash.com/photo-1541976844346-f18aeac57b06?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2000&q=80"
-            alt="Programme Solidaire"
-            className="w-full h-full object-cover"
-          />
-          <div className="absolute inset-0 bg-gradient-to-r from-black/70 to-black/30 flex items-center">
-            <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-              <div className="max-w-3xl">
-                <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-6">
-                  Devenez Voyageur Solidaire
-                </h1>
-                <p className="text-xl text-white/90 mb-8">
-                  Un mélange de vacances confortables et d'actions solidaires
-                  auprès des populations locales sur les rives du fameux Canal
-                  des Pangalanes.
-                </p>
-                <Button
-                  onClick={() => {
-                    document.getElementById("projet")?.scrollIntoView({
-                      behavior: "smooth",
-                    });
-                  }}
-                  size="lg"
-                  className="mr-4"
-                >
-                  Découvrir nos projets
-                </Button>
-                <Link to="/contact">
-                  <Button size="lg" variant="secondary">
-                    Faire un don
-                  </Button>
-                </Link>
-              </div>
-            </div>
+        <div className="p-10 bg-[url('https://images.unsplash.com/photo-1541976844346-f18aeac57b06?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2000&q=80')] bg-cover">
+          <div className="text-center mb-16">
+            <h1 className="text-5xl md:text-7xl lg:text-8xl font-black mb-8 leading-tight">
+              <span className=" text-white">Devenez Voyageur Solidaire</span>
+            </h1>
+            <p className="text-xl md:text-2xl text-white/90 max-w-4xl mx-auto leading-relaxed mb-12">
+              Un mélange de vacances confortables et d'actions solidaires auprès
+              des populations locales sur les rives du fameux Canal des
+              Pangalanes.
+            </p>
+            <Button
+              onClick={() => {
+                document.getElementById("projet")?.scrollIntoView({
+                  behavior: "smooth",
+                });
+              }}
+              size="lg"
+              className="mr-4"
+            >
+              Découvrir nos projets
+            </Button>
+            <Link to="/contact">
+              <Button size="lg" variant="secondary">
+                Faire un don
+              </Button>
+            </Link>
           </div>
-        </section>
+        </div>
 
         <section className="py-16 bg-primary/5">
           <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -376,7 +368,7 @@ const ProgrammeSolidairePage = () => {
                 <Card key={index} className="overflow-hidden">
                   <div className="relative h-48">
                     <img
-                      src={`http://localhost:8000/media/${pack.images[0].image}`}
+                      src={`${urlMedia}${pack.images[0].image}`}
                       alt={pack.titre}
                       className="w-full h-full object-cover"
                     />
@@ -450,7 +442,7 @@ const ProgrammeSolidairePage = () => {
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
               <div className="relative">
                 <img
-                  src="solidaire.webp"
+                  src="solidaire.JPG"
                   alt="École dans un village du Canal des Pangalanes"
                   className="rounded-lg shadow-lg w-full h-auto"
                 />

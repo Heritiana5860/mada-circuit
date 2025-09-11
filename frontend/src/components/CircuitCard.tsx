@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import { cn } from "@/lib/utils";
 import { Circuit, CircuitImage } from "@/types";
 import { formatPrice } from "@/helper/formatage";
+import { urlMedia } from "@/helper/UrlImage";
 
 interface CircuitCardProps {
   id: string;
@@ -39,7 +40,7 @@ const CircuitCard = ({
   // Afficher la première image de la galerie ou un placeholder
   const imageUrl =
     images && images.length > 0
-      ? `http://localhost:8000/media/${images[0].image}`
+      ? `${urlMedia}${images[0].image}`
       : "/placeholder.svg";
 
   return (

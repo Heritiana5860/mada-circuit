@@ -38,6 +38,8 @@ import { AllUserProvider } from "./provider/AllUserProvider";
 import { AllPersonnelProvider } from "./provider/AllPersonnelProvider";
 import { AllBlogProvider } from "./provider/AllBlogProvider";
 import { HelmetProvider } from "react-helmet-async";
+import Blog from "./pages/Blog/Blog";
+import BlogDetail from "./pages/Blog/BlogDetail";
 
 const queryClient = new QueryClient();
 
@@ -131,6 +133,11 @@ const App = () => (
                                     <Route
                                       path="/pangalanes/:id"
                                       element={<PangalanesDetailPage />}
+                                    />
+                                    <Route path="/blog" element={<Blog />} />
+                                    <Route
+                                      path="/blog/:id"
+                                      element={<BlogDetail />}
                                     />
                                     <Route
                                       path="/programme-solidaire"

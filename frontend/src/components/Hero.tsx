@@ -292,7 +292,7 @@ const Hero = () => {
       </div>
 
       {/* Styles CSS intégrés pour les animations */}
-      <style jsx>{`
+      <style>{`
         @keyframes float1 {
           0%,
           100% {

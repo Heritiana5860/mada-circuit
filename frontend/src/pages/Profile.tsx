@@ -25,6 +25,7 @@ import {
   DataContext,
   StatistiqueReservationContext,
 } from "@/provider/DataContext";
+import { urlMedia } from "@/helper/UrlImage";
 
 const Profile = () => {
   const { user } = useAuth();
@@ -180,7 +181,7 @@ const Profile = () => {
                       <div className="w-32 h-32 rounded-full bg-gradient-to-br from-blue-400 to-purple-500 flex items-center justify-center shadow-lg">
                         {userData.image ? (
                           <img
-                            src={`http://localhost:8000/media/${userData.image}`}
+                            src={`${urlMedia}${userData.image}`}
                             alt={`${userData.nom} ${userData.prenom}`}
                             className="w-full h-full rounded-full object-cover"
                           />

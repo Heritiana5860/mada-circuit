@@ -11,6 +11,7 @@ import {
 import { useLocation } from "react-router-dom";
 import NavBar from "@/components/NavBar";
 import Footer from "@/components/Footer";
+import { urlMedia } from "@/helper/UrlImage";
 
 const PageGuideProfile = () => {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
@@ -47,7 +48,7 @@ const PageGuideProfile = () => {
                 <div className="text-center mb-6">
                   <div className="relative inline-block">
                     <img
-                      src={`http://localhost:8000/media/${guideData.photo}`}
+                      src={`${urlMedia}${guideData.photo}`}
                       alt={guideData.nom}
                       className="w-32 h-32 object-cover rounded-full mx-auto shadow-lg border-4 border-white dark:border-gray-700"
                     />

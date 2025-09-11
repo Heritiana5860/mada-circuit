@@ -29,6 +29,7 @@ import { FaqCard } from "@/components/FaqCard";
 import { TestimoniaCarousel } from "@/components/TestimoniaCarousel";
 import { Helmet } from "react-helmet-async";
 import SEO from "@/SEO";
+import { urlMedia } from "@/helper/UrlImage";
 
 const Circuits = () => {
   const [selectedRegion, setSelectedRegion] = useState<string>("all");
@@ -215,7 +216,7 @@ const Circuits = () => {
   }
 
   const utilisateurImage = utilisateur?.image
-    ? `http://localhost:8000/media/${utilisateur.image}`
+    ? `${urlMedia}${utilisateur.image}`
     : null;
 
   return (

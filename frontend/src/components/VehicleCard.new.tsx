@@ -5,6 +5,7 @@ import { Car, Users } from "lucide-react";
 import { CSSProperties } from "react";
 import { Vehicule } from "@/types";
 import { formatPrice } from "@/helper/formatage";
+import { urlMedia } from "@/helper/UrlImage";
 
 interface VehicleCardProps {
   vehicle: Vehicule;
@@ -20,7 +21,7 @@ const VehicleCard: React.FC<VehicleCardProps> = ({
   // Afficher la première image de la galerie ou un placeholder
   const imageUrl =
     vehicle.images && vehicle.images.length > 0
-      ? `http://localhost:8000/media/${vehicle.images[0].image}`
+      ? `${urlMedia}${vehicle.images[0].image}`
       : "/placeholder.svg";
 
   return (

@@ -99,34 +99,33 @@ const Contact = () => {
           name="description"
           content="Contactez-nous pour organiser votre voyage à Madagascar. Demandez un devis personnalisé pour un circuit sur mesure, une excursion ou une location de 4x4."
         />
-        <link rel="canonical" href="https://madagascar-voyagesolidaire.com/contact" />
+        <link
+          rel="canonical"
+          href="https://madagascar-voyagesolidaire.com/contact"
+        />
       </Helmet>
 
       <NavBar />
 
       <main className="flex-grow">
         {/* Contactez-nous */}
-        <section className="relative h-[40vh] overflow-hidden">
-          <img
-            src="i.webp"
-            alt="Contactez-nous"
-            className="w-full h-full object-cover"
-          />
-          <div className="absolute inset-0 bg-gradient-to-r from-black/70 to-black/30 flex items-center">
-            <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-              <div className="max-w-3xl">
-                <h1 className="text-4xl md:text-5xl font-bold text-white mb-4">
-                  Contactez-nous
-                </h1>
-                <p className="text-xl text-white/90">
-                  Notre équipe est à votre disposition pour répondre à toutes
-                  vos questions et vous aider à planifier votre voyage à
-                  Madagascar.
-                </p>
-              </div>
+        <div className="relative p-10 bg-[url('i.webp')] bg-cover bg-center">
+          {/* Overlay */}
+          <div className="absolute inset-0 bg-black/50"></div>
+
+          {/* Contenu */}
+          <div className="relative max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="text-center mb-16">
+              <h1 className="text-5xl md:text-7xl lg:text-8xl font-black mb-8 leading-tight">
+                <span className="text-white">Contactez-nous</span>
+              </h1>
+              <p className="text-xl md:text-2xl text-white/90 max-w-4xl mx-auto leading-relaxed mb-12">
+                Notre équipe est à votre disposition pour répondre à toutes vos
+                questions et vous aider à planifier votre voyage à Madagascar.
+              </p>
             </div>
           </div>
-        </section>
+        </div>
 
         {/* Envoyez-nous un message */}
         <section className="py-16">
@@ -283,9 +282,11 @@ const Contact = () => {
                           Téléphone
                         </h3>
                         <p className="text-muted-foreground">
-                          0033601903524 | +33 7 83 39 91 41
+                          +33 7 44 89 44 08
                           <br />
-                          +261 34 52 981 05 | +261 32 72 731 67
+                          +261 34 52 981 05
+                          <br />
+                          +261 32 72 731 67
                         </p>
                       </div>
                     </div>

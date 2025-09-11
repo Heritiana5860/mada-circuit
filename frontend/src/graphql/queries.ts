@@ -151,9 +151,9 @@ export const GET_ALL_BLOGS = gql`
       datePublication
       auteur
       tags
-      images {
+      medias {
         id
-        image
+        file
       }
     }
   }
@@ -165,14 +165,12 @@ export const GET_BLOG_BY_ID = gql`
       id
       titre
       contenu
-      image
-      imageUrl
       datePublication
       auteur
       tags
-      images {
+      medias {
         id
-        image
+        file
       }
     }
   }

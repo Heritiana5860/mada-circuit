@@ -11,6 +11,7 @@ import {
   CarouselNext,
 } from "../ui/carousel";
 import { DataContext } from "@/provider/DataContext";
+import { urlMedia } from "@/helper/UrlImage";
 
 const Testimonials = () => {
   const { data, loading, error } = useQuery(GET_TESTIMONIA_BY_STATUS, {
@@ -61,7 +62,7 @@ const Testimonials = () => {
 
   const allData = data?.allTestimoniaByStatus || [];
   const utilisateurImage = utilisateur?.image
-    ? `http://localhost:8000/media/${utilisateur.image}`
+    ? `${urlMedia}${utilisateur.image}`
     : null;
 
   // Grouper les témoignages par lots de 3 pour chaque diapositive

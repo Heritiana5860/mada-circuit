@@ -3,6 +3,7 @@ import { Card, CardContent } from "../ui/card";
 import { Link } from "react-router-dom";
 import { Button } from "../ui/button";
 import { formatPrice } from "@/helper/formatage";
+import { urlMedia } from "@/helper/UrlImage";
 
 interface ImageType {
   image: string;
@@ -33,7 +34,7 @@ const CardContentDetail: React.FC<CardContentDetailProps> = ({
         <div className="relative h-48">
           {pack.images && pack.images.length > 0 && (
             <img
-              src={`http://localhost:8000/media/${pack.images[0].image}`}
+              src={`${urlMedia}${pack.images[0].image}`}
               alt={pack.titre}
               className="w-full h-full object-cover"
             />

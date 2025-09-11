@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
 import { Button } from "../components/ui/button";
@@ -63,8 +63,8 @@ const Register = () => {
 
     if (file) {
       // Vérifier la taille du fichier (max 5MB)
-      if (file.size > 5 * 1024 * 1024) {
-        setErrors(["L'image ne doit pas dépasser 5MB"]);
+      if (file.size > 15 * 1024 * 1024) {
+        setErrors(["L'image ne doit pas dépasser 15MB"]);
         return;
       }
 
@@ -253,7 +253,7 @@ const Register = () => {
                   </label>
 
                   <p className="text-xs text-muted-foreground text-center px-2">
-                    JPG, PNG, GIF (max. 5MB)
+                    JPG, PNG, GIF (max. 15MB)
                   </p>
                 </div>
               </div>

@@ -33,19 +33,10 @@ const Footer = () => {
               <li><Link to="/voyages-sur-mesure" className="text-muted-foreground hover:text-primary transition-colors">Sur Mesure</Link></li>
               <li><Link to="/location-4x4" className="text-muted-foreground hover:text-primary transition-colors">Location 4x4</Link></li>
               <li><Link to="/pangalanes" className="text-muted-foreground hover:text-primary transition-colors">Canal des Pangalanes</Link></li>
+              <li><Link to="/programme-solidaire" className="text-muted-foreground hover:text-primary transition-colors">Solidaire</Link></li>
               <li><Link to="/blog" className="text-muted-foreground hover:text-primary transition-colors">Blog</Link></li>
             </ul>
           </div>
-          
-          {/* <div>
-            <h3 className="text-xl font-semibold mb-4">Liens Utiles</h3>
-            <ul className="space-y-2">
-              <li><Link to="/about" className="text-muted-foreground hover:text-primary transition-colors">À Propos</Link></li>
-              <li><Link to="/faq" className="text-muted-foreground hover:text-primary transition-colors">FAQ</Link></li>
-              <li><Link to="/terms" className="text-muted-foreground hover:text-primary transition-colors">Conditions d'utilisation</Link></li>
-              <li><Link to="/privacy" className="text-muted-foreground hover:text-primary transition-colors">Politique de confidentialité</Link></li>
-            </ul>
-          </div> */}
           
           <div>
             <h3 className="text-xl font-semibold mb-4">Contact</h3>
@@ -56,7 +47,7 @@ const Footer = () => {
               </li>
               <li className="flex items-center">
                 <Phone className="h-5 w-5 mr-2 text-primary" />
-                <span className="text-muted-foreground">0033601903524 | +33 7 83 39 91 41 </span>
+                <span className="text-muted-foreground">+33 7 44 89 44 08 </span>
               </li>
               <li className="flex items-center">
                 <Phone className="h-5 w-5 mr-2 text-primary" />

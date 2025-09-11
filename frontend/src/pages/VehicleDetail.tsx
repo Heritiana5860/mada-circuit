@@ -30,6 +30,7 @@ import {
 } from "@/components/ui/popover";
 import { cn } from "@/lib/utils";
 import { CalendarIcon } from "lucide-react";
+import { urlMedia } from "@/helper/UrlImage";
 
 const VehicleDetail = () => {
   const { id } = useParams();
@@ -127,7 +128,7 @@ const VehicleDetail = () => {
             return imagePath; // URL complète
           } else {
             // URL relative
-            return `http://localhost:8000/media/${imagePath}`;
+            return `${urlMedia}${imagePath}`;
           }
         });
     }

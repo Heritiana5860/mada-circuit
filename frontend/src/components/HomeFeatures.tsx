@@ -1,5 +1,5 @@
 import { Map, Calendar, Compass, Truck, ArrowRight } from "lucide-react";
-import { useContext, useState } from "react";
+import { useState } from "react";
 import { Link } from "react-router-dom";
 
 const FeatureCard = ({
@@ -98,20 +98,6 @@ const HomeFeatures = () => {
       icon: <Truck className="h-7 w-7" />,
       lien: "/location-4x4",
     },
-    // {
-    //   title: "Guides Locaux",
-    //   description:
-    //     "Nos guides expérimentés vous feront découvrir la culture et l'histoire locales.",
-    //   icon: <Users className="h-7 w-7" />,
-    //   lien: "/guides",
-    // },
-    // {
-    //   title: "Service 5 Étoiles",
-    //   description:
-    //     "Nous nous engageons à offrir un service d'excellence pour un voyage sans souci.",
-    //   icon: <Star className="h-7 w-7" />,
-    //   lien: "/service-5-etoiles",
-    // },
   ];
 
   return (
@@ -152,7 +138,7 @@ const HomeFeatures = () => {
         </div>
 
         {/* Features Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 lg:gap-10">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-8 lg:gap-10">
           {features.map((feature, index) => (
             <div
               key={index}
@@ -183,24 +169,6 @@ const HomeFeatures = () => {
           </Link>
         </div>
       </div>
-
-      {/* <style jsx>{`
-        @keyframes fade-in-up {
-          from {
-            opacity: 0;
-            transform: translateY(30px);
-          }
-          to {
-            opacity: 1;
-            transform: translateY(0);
-          }
-        }
-
-        .animate-fade-in-up {
-          animation: fade-in-up 0.8s ease-out forwards;
-          opacity: 0;
-        }
-      `}</style> */}
     </section>
   );
 };

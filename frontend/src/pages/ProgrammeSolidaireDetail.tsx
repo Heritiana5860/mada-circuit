@@ -33,6 +33,7 @@ import {
   geocodeAllRegions,
   getConnectionCoordinates,
 } from "@/helper/FonctionMap";
+import { urlMedia } from "@/helper/UrlImage";
 
 const defaultIcon = L.icon({
   iconUrl,
@@ -101,7 +102,7 @@ const ProgrammeSolidaireDetail = () => {
           if (imagePath.startsWith("http")) {
             return imagePath;
           } else {
-            return `http://localhost:8000/media/${imagePath}`;
+            return `${urlMedia}${imagePath}`;
           }
         });
     }

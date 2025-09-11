@@ -1,10 +1,12 @@
+import { urlMedia } from "./UrlImage";
+
 interface ImageObject {
   image: string;
 }
 
 export const getCircuitImages = (
   images: ImageObject[] | undefined,
-  baseURL: string = "http://localhost:8000/media/"
+  baseURL: string = `${urlMedia}`
 ): string[] => {
   if (images && Array.isArray(images) && images.length > 0) {
     return images

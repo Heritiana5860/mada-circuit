@@ -130,6 +130,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
       });
 
       if (data.loginUser.success) {
+        
         const { token: newToken, utilisateur } = data.loginUser;
         setToken(newToken);
         setUser(utilisateur);
@@ -156,8 +157,6 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
       const { data } = await registerMutation({
         variables: userData,
       });
-
-      console.log("Mutation response:", userData);
 
       if (data.registerUser.success) {
         const { token: newToken, utilisateur } = data.registerUser;

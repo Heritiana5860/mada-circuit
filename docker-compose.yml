@@ -1,4 +1,18 @@
 services:
+  mysql:
+    image: mysql:8.0
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpassword123
+      MYSQL_DATABASE: madaga47_mada_db
+      MYSQL_USER: madaga47_mada_db
+      MYSQL_PASSWORD: rBbFadV7FWA6zZpfdemn
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+    networks:
+      - app-network
   frontend:
     build:
       context: ./frontend
@@ -28,51 +42,21 @@ services:
     environment:
       DEBUG: 1
       DJANGO_ALLOWED_HOSTS: 0.0.0.0
-      DB_NAME: mada_circuit
-      DB_USER: mada_circuit
-      DB_PASSWORD: mada_circuit
-      DB_HOST: postgresql
-      DB_PORT: 5432
+      DB_NAME: madaga47_mada_db
+      DB_USER: madaga47_mada_db
+      DB_PASSWORD: rBbFadV7FWA6zZpfdemn
+      DB_HOST: mysql
+      DB_PORT: 3306
     restart: always
     networks:
       - app-network
-
-  # postgresql:
-  #   image: postgres:15
-  #   volumes:
-  #     - postgres_data:/var/lib/postgresql/data
-  #   environment:
-  #     POSTGRES_DB: mada_circuit
-  #     POSTGRES_USER: mada_circuit
-  #     POSTGRES_PASSWORD: mada_circuit
-  #   healthcheck:
-  #     test: ["CMD-SHELL", "pg_isready -U mada_circuitT -d mada_circuit"]
-  #     interval: 10s
-  #     timeout: 5s
-  #     retries: 5
-  #   restart: always
-  #   networks:
-  #     - app-network
-
-  # pgadmin:
-  #   image: dpage/pgadmin4
-  #   container_name: mada_circuit_pgadmin
-  #   restart: always
-  #   ports:
-  #     - "8080:80"
-  #   environment:
-  #     PGADMIN_DEFAULT_EMAIL: admin@mada-circuit.org
-  #     PGADMIN_DEFAULT_PASSWORD: admin@mada-circuit
-  #   volumes:
-  #     - pgadmin-data:/var/lib/pgadmin
-  #   networks:
-  #     - app-network
-
-
+    depends_on:
+    - mysql
 
 volumes:
   backend:
   frontend_node_modules:
+  mysql_data:
 
 networks:
   app-network:

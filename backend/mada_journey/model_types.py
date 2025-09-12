@@ -62,7 +62,7 @@ class VehiculeImageType(DjangoObjectType):
 class BlogImageType(DjangoObjectType):
     class Meta:
         model = BlogImage
-        fields = ('id', 'blog', 'image', 'titre', 'description', 'ordre')
+        fields = ('id', 'blog', 'file', 'titre', 'description', 'ordre')
         interfaces = (relay.Node,)
 
 # Types GraphQL pour les modèles
@@ -222,15 +222,15 @@ class BlogType(DjangoObjectType):
     commentaires = graphene.List(lambda: BlogCommentaireType)
     commentaires_count = graphene.Int()
     tags_list = graphene.List(graphene.String)
-    images = graphene.List(BlogImageType)
-    images_count = graphene.Int()
-    image_url = graphene.String()
+    medias = graphene.List(BlogImageType)
+    medias_count = graphene.Int()
+    file_url = graphene.String() 
 
     class Meta:
         model = Blog
         fields = (
             'id', 'titre', 'contenu', 'datePublication',
-            'auteur', 'image', 'tags'
+            'auteur', 'tags'
         )
         interfaces = (relay.Node,)
 
@@ -243,23 +243,18 @@ class BlogType(DjangoObjectType):
     def resolve_tags_list(self, info):
         return self.tags if isinstance(self.tags, list) else []
 
-    def resolve_images(self, info):
-        return self.images.all().order_by('ordre')
+    def resolve_medias(self, info):
+        return self.medias.all().order_by('ordre')
 
-    def resolve_images_count(self, info):
-        return self.images.count()
+    def resolve_medias_count(self, info):
+        return self.medias.count()
     
-    def resolve_image_url(self, info):
-        if self.image:
+    def resolve_file_url(self, info):
+        if self.file:
             request = info.context
-            return request.build_absolute_uri(self.image.url)
+            return request.build_absolute_uri(self.file.url)
         return None
-    
-    def resolve_image(self, info):
-        if self.image:
-            request = info.context
-            return request.build_absolute_uri(self.image.url)
-        return None
+
 
 class BlogCommentaireType(DjangoObjectType):
     class Meta:

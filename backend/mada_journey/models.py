@@ -2,6 +2,7 @@ from django.db import models
 from django.contrib.auth.models import AbstractUser
 from django.utils.translation import gettext_lazy as _
 from django.core.validators import MinValueValidator, MaxValueValidator, EmailValidator
+from django.core.validators import FileExtensionValidator
 from django.utils import timezone
 import uuid
 import os
@@ -321,7 +322,6 @@ class Blog(models.Model):
     contenu = models.TextField()
     datePublication = models.DateTimeField(default=timezone.now)
     auteur = models.CharField(max_length=100, blank=True, null=True)
-    image = models.ImageField(upload_to=blog_image_path, blank=True, null=True)
     tags = models.CharField(max_length=255, blank=True)
 
     def __str__(self):
@@ -395,19 +395,26 @@ class VehiculeImage(models.Model):
         ordering = ['ordre']
 
 
+def blog_media_path(instance, filename):
+    # Chemin personnalisé pour stocker les fichiers
+    return f"blogs/{instance.blog.id}/{filename}"
+
 class BlogImage(models.Model):
     id = models.CharField(primary_key=True, default=uuid.uuid4, editable=False, max_length=36)
-    blog = models.ForeignKey(Blog, on_delete=models.CASCADE, related_name='images')
-    image = models.ImageField(upload_to=blog_image_path)
+    blog = models.ForeignKey("Blog", on_delete=models.CASCADE, related_name="medias")
+    file = models.FileField(
+        upload_to=blog_media_path,
+        validators=[FileExtensionValidator(allowed_extensions=['jpg', 'jpeg', 'png', 'gif', 'mp4', 'mov', 'avi'])]
+    )
     titre = models.CharField(max_length=200, blank=True, null=True)
     description = models.TextField(blank=True, null=True)
     ordre = models.IntegerField(default=0, help_text="Ordre d'affichage")
 
     def __str__(self):
-        return f"Image {self.ordre} - {self.blog.titre}"
+        return f"Media {self.ordre} - {self.blog.titre}"
 
     class Meta:
-        ordering = ['ordre']   
+        ordering = ["ordre"]
              
              
 # Testimonia Modele

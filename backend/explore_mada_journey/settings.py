@@ -13,6 +13,7 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 from dotenv import load_dotenv
 import os
 from pathlib import Path
+from datetime import timedelta
 
 
 load_dotenv()
@@ -193,16 +194,35 @@ EMAIL_HOST_PASSWORD = os.getenv("EMAIL_HOST_PASSWORD")
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': os.getenv("DB_NAME"),
-        'USER': os.getenv("USER"),
-        'PASSWORD': os.getenv("DB_PASSWORD"),
-        'HOST': os.getenv("HOST"),
-        'PORT': os.getenv("PORT"),
+        'NAME': "madaga47_mada_db",
+        'USER': "madaga47_mada_db",
+        'PASSWORD': "rBbFadV7FWA6zZpfdemn",
+        'HOST': "mysql",
+        'PORT': "3306",
         'OPTIONS': {
             'charset': 'utf8mb4',
+            # Supprimez toutes les options liées aux plugins
+            'init_command': "SET sql_mode='STRICT_TRANS_TABLES'",
         }
     }
 }
+
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.mysql',
+#         'NAME': 'madaga47_circuit_db',
+#         'USER': 'madaga47_circuit_db',    
+#         'PASSWORD': 'rBbFadV7FWA6zZpfdemn',
+#         # 'HOST': 'localhost', # En production
+#         'HOST': 'db',
+#         'PORT': '3306',
+#         'OPTIONS': {
+#             'charset': 'utf8mb4',
+#             # Supprimez toutes les options li  es aux plugins
+#             'init_command': "SET sql_mode='STRICT_TRANS_TABLES'",
+#         }
+#     }
+# }
 
 AUTH_USER_MODEL = 'mada_journey.Utilisateur'
 
@@ -280,6 +300,20 @@ CACHES = {
     }
 }
 
+#  Configuration pour le JWT dans GraphQL
+GRAPHQL_JWT = {
+    'JWT_VERIFY_EXPIRATION': True,
+    "JWT_LONG_RUNNING_REFRESH_TOKEN": True,
+    'JWT_EXPIRATION_DELTA': timedelta(days=7),
+    # 'JWT_AUTH_HEADER_PREFIX': 'Bearer',
+    "JWT_REFRESH_EXPIRATION_DELTA": timedelta(days=7),
+    'JWT_ALGORITHM': 'HS256',
+}
+
+AUTHENTICATION_BACKENDS = [
+    'graphql_jwt.backends.JSONWebTokenBackend',
+    'django.contrib.auth.backends.ModelBackend',
+]
 
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': [

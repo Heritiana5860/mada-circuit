@@ -93,12 +93,14 @@ class BlogImageInline(admin.TabularInline):
     model = BlogImage
     extra = 1
     readonly_fields = ('image_preview',)
-    fields = ('image', 'titre', 'description', 'ordre', 'image_preview')
+    fields = ('file', 'titre', 'description', 'ordre', 'image_preview')
     ordering = ('ordre',)
 
     def image_preview(self, obj):
-        if obj.image:
-            return format_html('<img src="{}" width="50" height="50" style="border-radius: 3px;" />', obj.image.url)
+        if obj.file:
+            ext = obj.file.name.split('.')[-1].lower()
+            if ext in ['jpg', 'jpeg', 'png', 'gif']:
+                return format_html('<img src="{}" width="50" height="50" style="border-radius: 3px;" />', obj.file.url)
         return "Pas d'image"
     image_preview.short_description = "Aperçu"
 
@@ -238,13 +240,12 @@ class BlogCommentaireInline(admin.TabularInline):
 
 @admin.register(Blog)
 class BlogAdmin(admin.ModelAdmin):
-    list_display = ('titre', 'auteur', 'datePublication', 'image_preview', 'nombre_commentaires')
+    list_display = ('titre', 'auteur', 'datePublication', 'nombre_medias')
     list_filter = ('datePublication', 'auteur')
     search_fields = ('titre', 'contenu', 'auteur')
     date_hierarchy = 'datePublication'
-    readonly_fields = ('image_preview', 'datePublication')
-    inlines = [BlogCommentaireInline, BlogImageInline]
-    
+    inlines = [BlogImageInline]
+
     fieldsets = (
         ('Contenu', {
             'fields': ('titre', 'contenu', 'auteur')
@@ -252,20 +253,11 @@ class BlogAdmin(admin.ModelAdmin):
         ('Métadonnées', {
             'fields': ('tags', 'datePublication')
         }),
-        ('Image', {
-            'fields': ('image', 'image_preview')
-        }),
     )
-    
-    def image_preview(self, obj):
-        if obj.image:
-            return format_html('<img src="{}" width="50" height="50" style="border-radius: 5px;" />', obj.image.url)
-        return "Pas d'image"
-    image_preview.short_description = "Aperçu"
-    
-    def nombre_commentaires(self, obj):
-        return obj.commentaires.count()
-    nombre_commentaires.short_description = "Commentaires"
+
+    def nombre_medias(self, obj):
+        return obj.medias.count()
+    nombre_medias.short_description = "Nombre de médias"
 
 
 @admin.register(BlogCommentaire)
@@ -340,9 +332,22 @@ class BlogImageAdmin(admin.ModelAdmin):
     readonly_fields = ('image_preview',)
 
     def image_preview(self, obj):
-        if obj.image:
-            return format_html('<img src="{}" width="100" height="100" style="border-radius: 5px;" />', obj.image.url)
-        return "Pas d'image"
+        if obj.file:
+            ext = obj.file.name.split('.')[-1].lower()
+            if ext in ['jpg', 'jpeg', 'png', 'gif']:
+                return format_html(
+                    '<img src="{}" width="100" height="100" style="border-radius: 5px;" />',
+                    obj.file.url
+                )
+            elif ext in ['mp4', 'mov', 'avi']:
+                return format_html(
+                    '<video width="150" height="100" controls>'
+                    '<source src="{}" type="video/{}">'
+                    'Votre navigateur ne supporte pas la vidéo.'
+                    '</video>',
+                    obj.file.url, ext
+                )
+        return "Aucun fichier"
     image_preview.short_description = "Aperçu"
 
 

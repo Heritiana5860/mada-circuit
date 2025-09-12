@@ -37,8 +37,8 @@ const ThirdStep = ({ selectedImages, setSelectedImages }) => {
   const handleDrop = (e: React.DragEvent<HTMLDivElement>) => {
     e.preventDefault();
     setIsDragging(false);
-    const files = Array.from(e.dataTransfer.files).filter((file) =>
-      file.type.startsWith("image/")
+    const files = Array.from(e.dataTransfer.files).filter(
+      (file) => file.type.startsWith("image/") || file.type.startsWith("video/")
     );
     if (files.length > 0) {
       handleFileSelect(files);
@@ -82,7 +82,7 @@ const ThirdStep = ({ selectedImages, setSelectedImages }) => {
             ref={fileInputRef}
             type="file"
             multiple
-            accept="image/*"
+            accept="image/*, video/*"
             onChange={handleFileChange}
             className="hidden"
           />
@@ -139,11 +139,19 @@ const ThirdStep = ({ selectedImages, setSelectedImages }) => {
             {selectedImages.map((image) => (
               <div key={image.id} className="relative group">
                 <div className="aspect-square rounded-lg overflow-hidden bg-gray-100 border-2 border-gray-200">
-                  <img
-                    src={image.url}
-                    alt={image.name}
-                    className="w-full h-full object-cover"
-                  />
+                  {image.file.type.startsWith("video/") ? (
+                    <video
+                      src={image.url}
+                      controls
+                      className="w-full h-full object-cover"
+                    />
+                  ) : (
+                    <img
+                      src={image.url}
+                      alt={image.name}
+                      className="w-full h-full object-cover"
+                    />
+                  )}
 
                   {/* Bouton de suppression */}
                   <button

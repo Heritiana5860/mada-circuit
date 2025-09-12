@@ -35,7 +35,6 @@ const Blog = () => {
   }
 
   const allBlogs = data?.allBlogs;
-  console.log("All blogs: ", allBlogs);
 
   // Fonction pour déterminer si c'est une image ou vidéo
   const isVideo = (url) => {

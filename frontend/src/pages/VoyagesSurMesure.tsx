@@ -312,13 +312,25 @@ const VoyagesSurMesure = () => {
 
       <main className="flex-grow">
         {/* Header */}
-        <PageHeader
-          titre="Créez votre Voyage Sur Mesure"
-          description="Un voyage unique, conçu selon vos préférences, pour découvrir
-              Madagascar à votre rythme et selon vos envies."
-          background="surmesure.webp"
-          bg_position="bg-center"
-        />
+        <div className="relative p-10 bg-[url('surmesure.webp')] bg-cover bg-center">
+          {/* Overlay */}
+          <div className="absolute inset-0 bg-black/50"></div>
+
+          {/* Contenu */}
+          <div className="relative max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="text-center mb-16">
+              <h1 className="text-5xl md:text-7xl lg:text-8xl font-black mb-8 leading-tight">
+                <span className="text-white">
+                  Créez votre Voyage Sur Mesure
+                </span>
+              </h1>
+              <p className="text-xl md:text-2xl text-white/90 max-w-4xl mx-auto leading-relaxed mb-12">
+                Un voyage unique, conçu selon vos préférences, pour découvrir
+                Madagascar à votre rythme et selon vos envies.
+              </p>
+            </div>
+          </div>
+        </div>
 
         <section className="py-12">
           <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">

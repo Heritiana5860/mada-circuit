@@ -78,7 +78,7 @@ const CreateBlog = () => {
       contenu: contenu,
       auteur: auteur,
       tags: tags,
-      images: selectedImages.map((img) => img.file),
+      files: selectedImages.map((img) => img.file),
     };
 
     try {
@@ -89,14 +89,14 @@ const CreateBlog = () => {
       if (result.data.createBlog.success) {
         emptyFields();
         setCurrentStep(1);
-        setErrorMessage("Circuit créé avec succès !");
+        setErrorMessage("Blog créé avec succès !");
       } else {
         setErrorMessage(result.data.createBlog.errors.join(", "));
       }
     } catch (err) {
       console.error("Erreur:", err);
       setErrorMessage(
-        "Une erreur est survenue lors de la création du circuit."
+        "Une erreur est survenue lors de la création de blog."
       );
     }
   };

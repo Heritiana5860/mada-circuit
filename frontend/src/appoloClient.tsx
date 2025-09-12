@@ -1,8 +1,4 @@
-import {
-  ApolloClient,
-  InMemoryCache,
-  from,
-} from "@apollo/client";
+import { ApolloClient, InMemoryCache, from } from "@apollo/client";
 import { onError } from "@apollo/client/link/error";
 import { setContext } from "@apollo/client/link/context";
 import createUploadLink from "apollo-upload-client/createUploadLink.mjs";
@@ -10,19 +6,17 @@ import createUploadLink from "apollo-upload-client/createUploadLink.mjs";
 // Gestion des erreurs
 const errorLink = onError(({ graphQLErrors, networkError }) => {
   if (graphQLErrors) {
-    graphQLErrors.forEach(({ message, locations, path }) =>
-      console.error(
-        `[GraphQL error]: Message: ${message}, Location: ${locations}, Path: ${path}`
-      )
-    );
+    graphQLErrors.forEach(({ message }) => {
+      console.error(`[GraphQL error]: Message: ${message}`);
+      if (message.includes("login_required")) {
+        localStorage.removeItem("authToken");
+        localStorage.removeItem("authUser");
+        window.location.href = "/login";
+      }
+    });
   }
   if (networkError) {
     console.error(`[Network error]: ${networkError}`);
-    // Si erreur 401, rediriger vers login
-    if ("statusCode" in networkError && networkError.statusCode === 401) {
-      localStorage.removeItem("authToken");
-      window.location.href = "/login";
-    }
   }
 });
 
@@ -40,7 +34,7 @@ const authLink = setContext((_, { headers }) => {
   return {
     headers: {
       ...headers,
-      authorization: token ? `Bearer ${token}` : "",
+      authorization: token ? `JWT ${token}` : "",
       // Ne pas définir Content-Type pour les uploads multipart
       // Apollo Upload Client s'en charge automatiquement
     },

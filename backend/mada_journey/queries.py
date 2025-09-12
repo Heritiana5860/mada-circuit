@@ -6,6 +6,8 @@ import logging
 import base64
 from django.core.exceptions import ValidationError
 
+from graphql_jwt.decorators import login_required
+
 from .models import (
     Utilisateur, Circuit, PointInteret, Vehicule, Reservation, Personnel, Blog, BlogCommentaire, Faq,
     CircuitImage, VehiculeImage, BlogImage,
@@ -63,7 +65,6 @@ class Query(graphene.ObjectType):
     reservations_by_user = graphene.List(ReservationType, user_id=graphene.ID())
     reservations_by_circuit = graphene.List(ReservationType, circuit_id=graphene.ID())
     reservations_by_statut = graphene.List(ReservationType, statut=graphene.String())
-    reservations_by_date_range = graphene.List(ReservationType, start_date=graphene.DateTime(), end_date=graphene.DateTime())
     pending_reservations = graphene.List(ReservationType)
     confirmed_reservations = graphene.List(ReservationType)
     
@@ -108,15 +109,16 @@ class Query(graphene.ObjectType):
     all_sur_mesure = graphene.List(SurMesureType)
     
     # Resolvers pour les utilisateurs
+    @login_required
     def resolve_all_utilisateurs(self, info):
         return Utilisateur.objects.all()
-    
+    @login_required
     def resolve_utilisateur(self, info, id):
         try:
             return Utilisateur.objects.get(pk=id)
         except Utilisateur.DoesNotExist:
             return None
-    
+    @login_required
     def resolve_utilisateur_by_email(self, info, email):
         try:
             return Utilisateur.objects.get(email=email)
@@ -211,15 +213,16 @@ class Query(graphene.ObjectType):
         return Vehicule.objects.filter(etat=EtatVehicule.DISPONIBLE)
 
     # Resolvers pour les réservations
+    @login_required
     def resolve_all_reservations(self, info):
         return Reservation.objects.all()
-
+    @login_required
     def resolve_reservation(self, info, id):
         try:
             return Reservation.objects.select_related('utilisateur', 'circuit', 'vehicule').get(pk=id)
         except Reservation.DoesNotExist:
             return None
-        
+    @login_required
     def resolve_reservations_by_user(self, info, user_id):
         decoded_bytes = base64.b64decode(user_id)
         decoded_str = decoded_bytes.decode('utf-8')
@@ -228,24 +231,16 @@ class Query(graphene.ObjectType):
         logger.debug(f"decoded_str: {decoded_str}")
         logger.debug(f"clean_user_id: {clean_user_id}")
         return Reservation.objects.filter(utilisateur_id=clean_user_id).select_related('utilisateur', 'circuit', 'vehicule')
-
+    @login_required
     def resolve_reservations_by_circuit(self, info, circuit_id):
         return Reservation.objects.filter(circuit_id=circuit_id).select_related('utilisateur', 'circuit', 'vehicule')
-
+    @login_required
     def resolve_reservations_by_statut(self, info, statut):
         return Reservation.objects.filter(statut=statut).select_related('utilisateur', 'circuit', 'vehicule')
-
-    def resolve_reservations_by_date_range(self, info, start_date=None, end_date=None):
-        queryset = Reservation.objects.all().select_related('utilisateur', 'circuit', 'vehicule')
-        if start_date:
-            queryset = queryset.filter(date_depart__gte=start_date)
-        if end_date:
-            queryset = queryset.filter(date_depart__lte=end_date)
-        return queryset
-
+    @login_required
     def resolve_pending_reservations(self, info):
         return Reservation.objects.filter(statut=Reservation.ReservationStatus.EN_ATTENTE).select_related('utilisateur', 'circuit', 'vehicule')
-
+    @login_required
     def resolve_confirmed_reservations(self, info):
         return Reservation.objects.filter(statut=Reservation.ReservationStatus.CONFIRMEE).select_related('utilisateur', 'circuit', 'vehicule')
 

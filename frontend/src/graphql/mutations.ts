@@ -533,14 +533,14 @@ export const CREATE_BLOG = gql`
     $titre: String!
     $auteur: String
     $tags: String
-    $images: [Upload]
+    $files: [Upload]
   ) {
     createBlog(
       contenu: $contenu
       titre: $titre
       auteur: $auteur
       tags: $tags
-      images: $images
+      files: $files
     ) {
       success
       errors

@@ -575,16 +575,15 @@ class CreateBlog(graphene.Mutation):
         contenu = graphene.String(required=True)
         auteur = graphene.String(required=False)
         tags = graphene.String(required=False)
-        images = graphene.List(Upload, required=False)
+        files = graphene.List(Upload, required=False)
 
     blog = graphene.Field(BlogType)
     success = graphene.Boolean()
     errors = graphene.List(graphene.String)
 
-    def mutate(self, info, titre, contenu, auteur=None, images=None, tags=None):
+    def mutate(self, info, titre, contenu, auteur=None, files=None, tags=None):
         try:
             with transaction.atomic():
-                
                 blog = Blog.objects.create(
                     titre=titre,
                     contenu=contenu,
@@ -592,17 +591,18 @@ class CreateBlog(graphene.Mutation):
                     tags=tags,
                 )
                 
-                if images:
-                    for idx, img in enumerate(images):
+                if files:
+                    for idx, f in enumerate(files):
                         BlogImage.objects.create(
                             blog=blog,
-                            image=img,
+                            file=f, 
                             ordre=idx,
                         )
                 
             return CreateBlog(blog=blog, success=True)
         except Exception as e:
             return CreateBlog(success=False, errors=[str(e)])
+
 
 class UpdateBlog(graphene.Mutation):
     class Arguments:

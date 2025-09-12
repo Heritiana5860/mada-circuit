@@ -71,30 +71,30 @@ const HomeFeatures = () => {
 
   const features = [
     {
-      title: "Circuits Touristiques",
+      title: "Tourist Tours",
       description:
-        "Découvrez nos circuits soigneusement conçus pour explorer les merveilles de Madagascar.",
+        "Discover our carefully crafted tours to explore the wonders of Madagascar.",
       icon: <Map className="h-7 w-7" />,
       lien: "/circuits",
     },
     {
-      title: "Voyages Sur Mesure",
+      title: "Tailor-Made Trips",
       description:
-        "Créez votre propre itinéraire avec l'aide de nos experts pour une expérience unique.",
+        "Create your own itinerary with the help of our experts for a unique experience.",
       icon: <Calendar className="h-7 w-7" />,
       lien: "/voyages-sur-mesure",
     },
     {
-      title: "Canal des Pangalanes",
+      title: "Pangalanes Canal",
       description:
-        "Explorez ce canal unique de 700 km reliant Farafangana à Toamasina.",
+        "Explore this unique 700 km canal connecting Farafangana to Toamasina.",
       icon: <Compass className="h-7 w-7" />,
       lien: "/pangalanes",
     },
     {
-      title: "Location de 4x4",
+      title: "4x4 Rentals",
       description:
-        "Louez un véhicule tout-terrain pour explorer librement les paysages variés de l'île.",
+        "Rent an off-road vehicle to freely explore the island's diverse landscapes.",
       icon: <Truck className="h-7 w-7" />,
       lien: "/location-4x4",
     },
@@ -115,22 +115,20 @@ const HomeFeatures = () => {
         <div className="text-center max-w-4xl mx-auto mb-20">
           <div className="inline-flex items-center px-4 py-2 bg-gradient-to-r from-blue-100 to-purple-100 rounded-full mb-6">
             <span className="text-sm font-semibold bg-gradient-to-r from-primary via-accent to-secondary bg-clip-text text-transparent">
-              ✨ Nos Services Premium
+              ✨ Our Premium Services
             </span>
           </div>
 
           <h2 className="text-4xl md:text-6xl font-bold mb-6 leading-tight">
-            <span>Découvrez nos offres</span>
+            <span>Discover Our Exclusive </span>
             <br />
-            <span>exclusives</span>
+            <span>Offers</span>
           </h2>
 
           <p className="text-xl text-gray-600 leading-relaxed max-w-3xl mx-auto">
-            Nous proposons une gamme complète de services pour rendre votre
-            séjour à Madagascar
-            <span className="font-semibold text-blue-600"> inoubliable</span>,
-            de la découverte des circuits touristiques à la location de
-            véhicules 4x4.
+            We offer a full range of services to make your stay in Madagascar
+            <span className="font-semibold text-blue-600"> unforgettable</span>,
+            from exploring tourist tours to renting 4x4 vehicles.
           </p>
 
           {/* Decorative line */}
@@ -162,7 +160,7 @@ const HomeFeatures = () => {
         <div className="text-center mt-16">
           <Link to={"/voyages-sur-mesure"}>
             <button className="group relative inline-flex items-center px-8 py-4 bg-primary text-white font-semibold rounded-2xl shadow-xl hover:scale-105 transition-all duration-300 px-8 py-4 text-base">
-              <span>Planifier mon voyage</span>
+              <span>Plan My Trip</span>
               <ArrowRight className="ml-2 h-5 w-5 transition-transform duration-300 group-hover:translate-x-1" />
               <div className="absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
             </button>

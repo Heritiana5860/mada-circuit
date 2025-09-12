@@ -19,23 +19,24 @@ const Vehicles4x4: React.FC = () => {
         <div>
           <div className="inline-flex items-center px-4 py-2 bg-gradient-to-r from-blue-100 to-purple-100 rounded-full mb-6">
             <span className="text-sm font-semibold bg-gradient-to-r from-primary via-accent to-secondary bg-clip-text text-transparent">
-              Véhicules 4x4
+              4x4 Vehicles
             </span>
           </div>
 
           <h2 className="text-4xl md:text-6xl font-bold mb-6 leading-tight">
-            Nos véhicules disponibles
+            Our Available Vehicles
           </h2>
           <p className="text-xl text-gray-600 leading-relaxed max-w-3xl mx-auto">
-            Découvrez notre flotte de véhicules 4x4 parfaitement adaptés pour
-            explorer les routes de Madagascar en toute sécurité et confort.
+            Discover our fleet of 4x4 vehicles, perfectly suited to explore
+            Madagascar's roads safely and comfortably.
           </p>
         </div>
+
         <Link
           to="/location-4x4"
           className="mt-4 md:mt-0 flex items-center text-primary hover:text-primary/80 transition-colors font-medium"
         >
-          <span>Voir tous les véhicules</span>
+          <span>See All Vehicles</span>
           <ArrowRight className="ml-2 h-4 w-4" />
         </Link>
       </div>
@@ -43,19 +44,18 @@ const Vehicles4x4: React.FC = () => {
       {loading ? (
         <div className="flex justify-center items-center py-12">
           <Loader2 className="h-8 w-8 animate-spin" />
-          <span className="ml-2">Chargement des véhicules...</span>
+          <span className="ml-2">Loading vehicles…</span>
         </div>
       ) : error ? (
         <Alert variant="destructive" className="mb-6">
           <AlertDescription>
-            Erreur lors du chargement des véhicules. Veuillez réessayer plus
-            tard.
+            Error loading vehicles. Please try again later.
           </AlertDescription>
         </Alert>
       ) : vehicles.length === 0 ? (
         <div className="text-center py-12">
           <p className="text-muted-foreground">
-            Aucun véhicule disponible pour le moment.
+            No vehicles available at the moment.
           </p>
         </div>
       ) : (

@@ -15,14 +15,14 @@ const Index = () => {
 
     // Set page title
     document.title =
-      "Madagascar Voyage - Circuits, Canal des Pangalanes & Location 4x4";
+      "Madagascar Travel - Tours, Pangalanes Canal & 4x4 Rentals";
   }, []);
 
   return (
     <div className="min-h-screen flex flex-col">
       <SEO
-        title="Madagascar Voyage | Circuits, Pangalanes & Location 4x4"
-        description="Circuits sur mesure à Madagascar, excursions sur le Canal des Pangalanes et location de 4x4 avec chauffeur pour une aventure inoubliable."
+        title="Madagascar Travel | Tours, Pangalanes & 4x4 Rentals"
+        description="Tailor-made tours in Madagascar, excursions on the Pangalanes Canal, and 4x4 rentals with a driver for an unforgettable adventure."
         canonical="https://madagascar-voyagesolidaire.com/"
         image="https://madagascar-voyagesolidaire.com/images/index-og.webp"
       />

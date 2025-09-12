@@ -181,7 +181,7 @@ const Hero = () => {
             <div className="relative px-4 py-2 flex items-center gap-2 text-sm font-medium text-white">
               <Star className="w-4 h-4 text-accent fill-current drop-shadow-sm" />
               <span className="drop-shadow-sm">
-                Expérience authentique Madagascar
+                Authentic Madagascar Experience
               </span>
               <div className="w-2 h-2 bg-primary rounded-full animate-pulse shadow-[0_0_10px_theme(colors.primary)]"></div>
             </div>
@@ -202,10 +202,10 @@ const Hero = () => {
           Madagascar
           <br />
           <span className="text-transparent bg-gradient-to-r from-primary via-accent to-secondary bg-clip-text">
-            Voyage
+            Solidarity
           </span>
           <br />
-          Solidaire
+          Travel
         </h1>
 
         {/* Sous-titre élégant */}
@@ -218,10 +218,9 @@ const Hero = () => {
             animationDelay: "0.4s",
           }}
         >
-          Des circuits sur mesure, la découverte du canal des Pangalanes et la
-          location de véhicules 4x4 pour une{" "}
+          Tailor-made tours, the discovery of the Pangalanes Canal, and 4x4 vehicle rentals for an{" "}
           <span className="font-semibold text-accent">
-            aventure inoubliable
+            unforgettable adventure
           </span>
           .
         </p>
@@ -248,7 +247,7 @@ const Hero = () => {
             <div className="absolute -inset-1 bg-primary/30 rounded-md blur-lg opacity-0 group-hover:opacity-60 transition-all duration-300"></div>
 
             <div className="relative flex items-center justify-center gap-2 z-10 font-semibold text-white">
-              <span>Découvrir nos circuits</span>
+              <span>Discover our tours</span>
               <ArrowRight className="w-5 h-5 transition-transform duration-300 group-hover:translate-x-1" />
             </div>
           </a>
@@ -268,7 +267,7 @@ const Hero = () => {
 
             <div className="relative flex items-center justify-center gap-2 z-10">
               <MapPin className="w-4 h-4 transition-transform duration-300 group-hover:rotate-6" />
-              <span>Nous contacter</span>
+              <span>Contact Us</span>
             </div>
           </a>
         </div>

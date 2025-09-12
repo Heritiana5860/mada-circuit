@@ -9,26 +9,29 @@ const PangalanesSection = () => {
           <div className="order-2 lg:order-1 animate-fade-in-up">
             <div className="inline-flex items-center px-4 py-2 bg-gradient-to-r from-blue-100 to-purple-100 rounded-full mb-6">
               <span className="text-sm font-semibold bg-gradient-to-r from-primary via-accent to-secondary bg-clip-text text-transparent">
-                Canal des Pangalanes
+                Pangalanes Canal
               </span>
             </div>
 
             <h2 className="text-4xl md:text-6xl font-bold mb-6 leading-tight">
-              Découvrez cette merveille naturelle
+              Discover This Natural Wonder
             </h2>
             <p className="text-xl text-gray-600 leading-relaxed max-w-3xl mx-auto">
-              Le Canal des Pangalanes, long de près de 700 kilomètres, est l'une
-              des plus grandes réalisations d'ingénierie de Madagascar. Il relie
-              Farafangana à Toamasina en longeant la côte est, offrant une voie
-              navigable à travers les lagunes, les lacs et les estuaires.
+              The Pangalanes Canal, nearly 700 kilometers long, is one of
+              Madagascar's greatest engineering achievements. It connects
+              Farafangana to Toamasina along the east coast, providing a
+              navigable route through lagoons, lakes, and estuaries.
             </p>
             <p className="text-xl text-gray-600 leading-relaxed max-w-3xl mx-auto">
-              Naviguez à travers des paysages luxuriants, observez la faune et
-              la flore uniques, et découvrez les villages traditionnels qui
-              bordent ce canal historique.
+              Cruise through lush landscapes, observe unique wildlife and
+              plants, and discover the traditional villages that line this
+              historic canal.
             </p>
-            <Link to="/pangalanes" className="btn-primary inline-flex mt-4 text-lg">
-              <span>Explorer le canal</span>
+            <Link
+              to="/pangalanes"
+              className="btn-primary inline-flex mt-4 text-lg"
+            >
+              <span>Explore the Canal</span>
               <ArrowRight className="ml-2 h-4 w-4" />
             </Link>
           </div>
@@ -46,10 +49,9 @@ const PangalanesSection = () => {
               className="absolute -bottom-6 -left-6 bg-card p-6 rounded-xl shadow-xl max-w-xs hidden lg:block animate-fade-in"
               style={{ animationDelay: "0.3s" }}
             >
-              <p className="text-xl font-semibold mb-2">700 km de navigation</p>
+              <p className="text-xl font-semibold mb-2">700 km of Navigation</p>
               <p className="text-muted-foreground text-lg">
-                Une expérience unique à travers les lagunes et villages
-                traditionnels.
+                A unique experience through lagoons and traditional villages.
               </p>
             </div>
           </div>

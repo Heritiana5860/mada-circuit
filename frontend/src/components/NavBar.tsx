@@ -37,12 +37,12 @@ const NavBar = () => {
   const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
 
   const navItems = [
-    { to: "/", label: "Accueil" },
-    { to: "/circuits", label: "Circuits" },
-    { to: "/voyages-sur-mesure", label: "Sur Mesure" },
-    { to: "/location-4x4", label: "Location 4x4" },
-    { to: "/pangalanes", label: "Canal des Pangalanes" },
-    { to: "/programme-solidaire", label: "Solidaire" },
+    { to: "/", label: "Home" },
+    { to: "/circuits", label: "Tours" },
+    { to: "/voyages-sur-mesure", label: "Tailor-Made" },
+    { to: "/location-4x4", label: "4x4 Rentals" },
+    { to: "/pangalanes", label: "Pangalanes Canal" },
+    { to: "/programme-solidaire", label: "Solidarity" },
     { to: "/blog", label: "Blog" },
     { to: "/contact", label: "Contact" },
   ];
@@ -76,7 +76,7 @@ const NavBar = () => {
                 scrolled ? "text-md" : "text-lg"
               )}
             >
-              Madagascar Voyage Solidaire
+              Madagascar Solidarity Travel
             </span>
           </Link>
 
@@ -115,38 +115,38 @@ const NavBar = () => {
                     <DropdownMenuItem asChild>
                       <Link to="/profile" className="flex items-center">
                         <User className="mr-2 h-4 w-4" />
-                        <span>Profil</span>
+                        <span>Profile</span>
                       </Link>
                     </DropdownMenuItem>
                     <DropdownMenuItem>
                       <Link to="/reservations" className="flex items-center">
                         <BookOpenText className="mr-2 h-4 w-4" />
-                        <span>Mes réservations</span>
+                        <span>My Bookings</span>
                       </Link>
                     </DropdownMenuItem>
                     <DropdownMenuItem>
                       <Link to="/testimonia" className="flex items-center">
                         <MailCheck className="mr-2 h-4 w-4" />
-                        <span>Temoignage</span>
+                        <span>Testimonial</span>
                       </Link>
                     </DropdownMenuItem>
                     <DropdownMenuSeparator />
                     <DropdownMenuItem onClick={logout}>
                       <LogOut className="mr-2 h-4 w-4" />
-                      <span>Déconnexion</span>
+                      <span>Logout</span>
                     </DropdownMenuItem>
                   </DropdownMenuContent>
                 </DropdownMenu>
               ) : (
                 <>
                   <Button variant="outline" asChild>
-                    <Link to="/login">Connexion</Link>
+                    <Link to="/login">Login</Link>
                   </Button>
                   <Button
                     className="bg-primary text-white hover:bg-primary/90"
                     asChild
                   >
-                    <Link to="/register">Inscription</Link>
+                    <Link to="/register">Sign Up</Link>
                   </Button>
                 </>
               )}
@@ -191,31 +191,31 @@ const NavBar = () => {
             {isAuthenticated ? (
               <>
                 <div className="px-3 py-2 text-sm text-muted-foreground">
-                  Connecté en tant que {user?.prenom}
+                  Logged in as {user?.prenom}
                 </div>
                 <Link
                   to="/profile"
                   className="block px-3 py-2 rounded-md hover:bg-muted"
                 >
-                  Profil
+                  Profile
                 </Link>
                 <Link
                   to="/reservations"
                   className="block px-3 py-2 rounded-md hover:bg-muted"
                 >
-                  Mes réservations
+                  My Bookings
                 </Link>
                 <Link
                   to="/temoignage"
                   className="block px-3 py-2 rounded-md hover:bg-muted"
                 >
-                  Temoignage
+                  Testimonial
                 </Link>
                 <button
                   onClick={logout}
                   className="block w-full text-left px-3 py-2 rounded-md hover:bg-muted"
                 >
-                  Déconnexion
+                  Logout
                 </button>
               </>
             ) : (
@@ -224,13 +224,13 @@ const NavBar = () => {
                   to="/login"
                   className="block px-3 py-2 rounded-md hover:bg-muted"
                 >
-                  Connexion
+                  Login
                 </Link>
                 <Link
                   to="/register"
                   className="block px-3 py-2 rounded-md hover:bg-muted"
                 >
-                  Inscription
+                  Sign Up
                 </Link>
               </>
             )}

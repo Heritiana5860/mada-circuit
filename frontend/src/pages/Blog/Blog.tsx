@@ -7,6 +7,7 @@ import { GET_ALL_BLOGS } from "@/graphql/queries";
 import { Link } from "react-router-dom";
 import { urlMedia } from "@/helper/UrlImage";
 import PageHeader from "@/components/PageHeader";
+import { Helmet } from "react-helmet-async";
 
 // Composant principal amélioré
 const Blog = () => {
@@ -43,6 +44,20 @@ const Blog = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-blue-50">
+      <Helmet>
+        <title>
+          Blog & Actualités
+        </title>
+        <meta
+          name="description"
+          content="Découvrez nos derniers articles, guides pratiques et actualités."
+        />
+        <link
+          rel="canonical"
+          href="https://madagascar-voyagesolidaire.com/contact"
+        />
+      </Helmet>
+
       <NavBar />
 
       {/* Header Section */}
@@ -51,7 +66,7 @@ const Blog = () => {
         description="Découvrez nos derniers articles, guides pratiques et actualités.
             Explorez un monde d'idées et d'inspirations à travers nos contenus
             soigneusement sélectionnés."
-        background='piscine.webp'
+        background="piscine.webp"
         bg_position="bg-end"
       />
 

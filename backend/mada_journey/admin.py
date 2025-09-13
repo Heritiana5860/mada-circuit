@@ -152,15 +152,15 @@ class PointInteretAdmin(admin.ModelAdmin):
 
 @admin.register(Vehicule)
 class VehiculeAdmin(admin.ModelAdmin):
-    list_display = ('immatriculation', 'marque', 'modele', 'annee', 'type', 'capacite', 'prix', 'etat')
+    list_display = ('marque', 'modele', 'annee', 'type', 'capacite', 'prix', 'etat')
     list_filter = ('etat', 'type', 'capacite', 'marque')
-    search_fields = ('immatriculation', 'marque', 'modele')
+    search_fields = ('marque', 'modele')
     readonly_fields = ('image_preview',)
     inlines = [VehiculeImageInline]
     
     fieldsets = (
         ('Informations du véhicule', {
-            'fields': ('immatriculation', 'marque', 'modele', 'annee')
+            'fields': ('marque', 'modele', 'annee')
         }),
         ('Classification', {
             'fields': ('type', 'capacite')

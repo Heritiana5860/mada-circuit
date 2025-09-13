@@ -15,8 +15,6 @@ const CreateVehicule = () => {
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   const [createAVehicule, { loading, error }] = useMutation(CREATE_VEHICULE);
-
-  const [immatriculation, setImmatriculation] = useState("");
   const [marque, setMarque] = useState("");
   const [modele, setModele] = useState("");
   const [types, setTypes] = useState("");
@@ -37,14 +35,7 @@ const CreateVehicule = () => {
       // Validation de base avant de passer à l'étape suivante
       if (
         currentStep === 1 &&
-        (!immatriculation ||
-          !marque ||
-          !modele ||
-          !types ||
-          !annee ||
-          !capacite ||
-          !etat ||
-          !prix)
+        (!marque || !modele || !types || !annee || !capacite || !etat || !prix)
       ) {
         setErrorMessage("Veuillez remplir tous les champs obligatoires.");
         return;
@@ -70,7 +61,6 @@ const CreateVehicule = () => {
   }
 
   const emptyFields = () => {
-    setImmatriculation("");
     setAnnee(2000);
     setPrix(0);
     setMarque("");
@@ -88,7 +78,6 @@ const CreateVehicule = () => {
 
     // Validation des données
     if (
-      !immatriculation ||
       !marque ||
       !modele ||
       !types ||
@@ -102,7 +91,6 @@ const CreateVehicule = () => {
     }
 
     const data = {
-      immatriculation: immatriculation,
       marque: marque,
       modele: modele,
       type: types,
@@ -162,7 +150,6 @@ const CreateVehicule = () => {
             <div className="p-6 border rounded-lg shadow-md min-h-[200px]">
               {currentStep === 1 && (
                 <First
-                  immatriculation={immatriculation}
                   marque={marque}
                   modele={modele}
                   annee={annee}
@@ -173,7 +160,6 @@ const CreateVehicule = () => {
                   setAnnee={setAnnee}
                   setCapacite={setCapacite}
                   setEtat={setEtat}
-                  setImmatriculation={setImmatriculation}
                   setMarque={setMarque}
                   setModele={setModele}
                   setPrix={setPrix}

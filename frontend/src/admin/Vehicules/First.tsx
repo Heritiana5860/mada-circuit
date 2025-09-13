@@ -9,7 +9,6 @@ import Field from "../composants/Field";
 import { Dispatch, SetStateAction } from "react";
 
 interface FirstType {
-  immatriculation: string;
   marque: string;
   modele: string;
   types: string;
@@ -17,7 +16,6 @@ interface FirstType {
   capacite: number;
   etat: string;
   prix: number;
-  setImmatriculation: Dispatch<SetStateAction<string>>;
   setMarque: Dispatch<SetStateAction<string>>;
   setModele: Dispatch<SetStateAction<string>>;
   setTypes: Dispatch<SetStateAction<string>>;
@@ -28,7 +26,6 @@ interface FirstType {
 }
 
 const First: React.FC<FirstType> = ({
-  immatriculation,
   marque,
   modele,
   types,
@@ -36,7 +33,6 @@ const First: React.FC<FirstType> = ({
   capacite,
   etat,
   prix,
-  setImmatriculation,
   setMarque,
   setModele,
   setTypes,
@@ -49,17 +45,6 @@ const First: React.FC<FirstType> = ({
     <div className="space-y-5">
       {/* Immatriculation & Marque & Modele */}
       <div className="grid grid-cols-3 gap-4 mt-4">
-        <Field
-          label="Immatriculation"
-          id="immatriculation"
-          name="immatriculation"
-          placeholder="2255FE"
-          type="text"
-          value={immatriculation}
-          setValue={setImmatriculation}
-          icon={<ShieldHalf className="h-4 w-4" />}
-        />
-
         <Field
           label="Marque"
           id="marque"

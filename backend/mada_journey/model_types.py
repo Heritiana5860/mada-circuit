@@ -168,7 +168,7 @@ class VehiculeType(DjangoObjectType):
     class Meta:
         model = Vehicule
         fields = (
-            'id', 'immatriculation', 'marque', 'modele', 'annee',
+            'id', 'marque', 'modele', 'annee',
             'type', 'capacite', 'prix', 'etat', 'images'
         )
         interfaces = (relay.Node,)

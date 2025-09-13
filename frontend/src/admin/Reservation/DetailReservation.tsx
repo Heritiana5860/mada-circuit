@@ -181,11 +181,11 @@ const DetailReservation = ({
               bgColor="bg-orange-50"
               iconColor="text-orange-600"
             >
-              <InfoItem
+              {/* <InfoItem
                 icon={Tags}
                 label="Immatriculation"
                 value={selectedUser.vehicule.immatriculation}
-              />
+              /> */}
               <InfoItem
                 icon={Bookmark}
                 label="Marque"

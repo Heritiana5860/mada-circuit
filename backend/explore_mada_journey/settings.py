@@ -134,6 +134,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     "graphene_file_upload",
     'graphene_django',
+    'graphql_jwt',
     'rest_framework',
     'corsheaders',
     'django_filters',
@@ -285,12 +286,12 @@ if DEBUG:
 
 
 # Configuration des tailles d'upload
-FILE_UPLOAD_MAX_MEMORY_SIZE = 10 * 1024 * 1024  # 10MB
-DATA_UPLOAD_MAX_MEMORY_SIZE = 10 * 1024 * 1024   # 10MB
+FILE_UPLOAD_MAX_MEMORY_SIZE = 15 * 1024 * 1024  # 15MB
+DATA_UPLOAD_MAX_MEMORY_SIZE = 15 * 1024 * 1024   # 15MB
 
 # Configuration de sécurité pour les fichiers
 ALLOWED_IMAGE_EXTENSIONS = ['.jpg', '.jpeg', '.png', '.gif', '.webp']
-MAX_IMAGE_SIZE = 5 * 1024 * 1024  # 5MB
+MAX_IMAGE_SIZE = 15 * 1024 * 1024  # 15MB
 
 # Configuration du cache pour optimiser l'admin
 CACHES = {
@@ -305,7 +306,7 @@ GRAPHQL_JWT = {
     'JWT_VERIFY_EXPIRATION': True,
     "JWT_LONG_RUNNING_REFRESH_TOKEN": True,
     'JWT_EXPIRATION_DELTA': timedelta(days=7),
-    # 'JWT_AUTH_HEADER_PREFIX': 'Bearer',
+    # 'JWT_AUTH_HEADER_PREFIX': 'JWT',
     "JWT_REFRESH_EXPIRATION_DELTA": timedelta(days=7),
     'JWT_ALGORITHM': 'HS256',
 }

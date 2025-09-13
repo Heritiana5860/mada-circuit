@@ -235,7 +235,6 @@ class EtatVehicule(models.TextChoices):
 
 class Vehicule(models.Model):
     id = models.CharField(primary_key=True, default=uuid.uuid4, editable=False, max_length=36)
-    immatriculation = models.CharField(max_length=20, unique=True, help_text="Immatriculation du véhicule (ex: 1234-AB-56)")
     marque = models.CharField(max_length=100, help_text="Marque du véhicule (ex: Toyota, Ford)")
     modele = models.CharField(max_length=100, help_text="Modèle du véhicule (ex: Corolla, Focus)")
     annee = models.IntegerField()
@@ -245,7 +244,7 @@ class Vehicule(models.Model):
     etat = models.CharField(max_length=20, choices=EtatVehicule.choices, default=EtatVehicule.DISPONIBLE)
     
     def __str__(self):
-        return f"{self.marque} {self.modele} ({self.immatriculation})"
+        return f"{self.marque} {self.modele}"
 
 class Hebergement(models.TextChoices):
     STANDARD = 'STANDARD', 'Standard'

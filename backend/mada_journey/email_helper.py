@@ -1,7 +1,6 @@
 def message(utilisateur, date_depart, date_fin, duree, nombre_personnes, budget, commentaire, vehicule, circuit):
     if vehicule is not None:
         detail = (
-            f"🏷️ Immatriculation    : {vehicule.immatriculation}\n"
             f"🧲 Marque             : {vehicule.marque}\n"
             f"🛡️ Modèle             : {vehicule.modele}\n"
             f"📆 Année              : {vehicule.annee}\n"

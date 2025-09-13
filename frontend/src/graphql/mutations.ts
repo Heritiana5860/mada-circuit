@@ -502,7 +502,6 @@ export const CREATE_VEHICULE = gql`
   mutation CreateVehicule(
     $annee: Int!
     $capacite: Int!
-    $immatriculation: String!
     $marque: String!
     $modele: String!
     $prix: Float!
@@ -513,7 +512,6 @@ export const CREATE_VEHICULE = gql`
     createVehicule(
       annee: $annee
       capacite: $capacite
-      immatriculation: $immatriculation
       marque: $marque
       modele: $modele
       prix: $prix

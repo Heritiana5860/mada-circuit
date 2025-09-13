@@ -68,7 +68,6 @@ export const GET_ALL_VEHICULES = gql`
   query GetAllVehicules {
     allVehicules {
       id
-      immatriculation
       marque
       modele
       annee
@@ -88,7 +87,6 @@ export const GET_VEHICULE_BY_ID = gql`
   query GetVehiculeById($id: ID!) {
     vehicule(id: $id) {
       id
-      immatriculation
       marque
       modele
       annee
@@ -110,7 +108,6 @@ export const GET_VEHICULE_BY_NODE_ID = gql`
     node(id: $id) {
       ... on VehiculeType {
         id
-        immatriculation
         marque
         modele
         annee
@@ -246,7 +243,6 @@ export const GET_USER_RESERVATIONS = gql`
       }
       vehicule {
         id
-        immatriculation
         marque
         modele
         prix
@@ -302,7 +298,6 @@ export const GET_ALL_RESERVATION = gql`
       }
       vehicule {
         id
-        immatriculation
         marque
         modele
         annee

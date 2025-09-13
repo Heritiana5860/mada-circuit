@@ -79,7 +79,6 @@ export interface VehiculeImage {
 
 export interface Vehicule {
   id: string;
-  immatriculation: string;
   marque: string;
   modele: string;
   annee: number;

@@ -324,7 +324,6 @@ class DeleteCircuit(graphene.Mutation):
 # Mutations pour les véhicules
 class CreateVehicule(graphene.Mutation):
     class Arguments:
-        immatriculation = graphene.String(required=True)
         marque = graphene.String(required=True)
         modele = graphene.String(required=True)
         annee = graphene.Int(required=True)
@@ -338,14 +337,11 @@ class CreateVehicule(graphene.Mutation):
     success = graphene.Boolean()
     errors = graphene.List(graphene.String)
 
-    def mutate(self, info, immatriculation, marque, modele, annee, type, capacite, prix, etat="DISPONIBLE", images=None):
+    def mutate(self, info, marque, modele, annee, type, capacite, prix, etat="DISPONIBLE", images=None):
         try:
             with transaction.atomic():
-                if Vehicule.objects.filter(immatriculation=immatriculation).exists():
-                    return CreateVehicule(success=False, errors=["Un véhicule avec cette immatriculation existe déjà"])
 
                 vehicule = Vehicule.objects.create(
-                    immatriculation=immatriculation,
                     marque=marque,
                     modele=modele,
                     annee=annee,

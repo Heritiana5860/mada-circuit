@@ -31,6 +31,7 @@ const uploadLink = createUploadLink({
 // Lien d'authentification pour ajouter le token aux headers
 const authLink = setContext((_, { headers }) => {
   const token = localStorage.getItem("authToken");
+
   return {
     headers: {
       ...headers,

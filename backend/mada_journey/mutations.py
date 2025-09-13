@@ -3,6 +3,8 @@ from graphene_file_upload.scalars import Upload
 from django.contrib.auth import authenticate
 from django.utils import timezone
 from django.core.exceptions import ValidationError
+from graphql_jwt import Verify, Refresh, ObtainJSONWebToken
+import graphql_jwt
 from django.core.mail import send_mail
 from django.db import transaction
 from decimal import Decimal
@@ -328,6 +330,7 @@ class CreateVehicule(graphene.Mutation):
         modele = graphene.String(required=True)
         annee = graphene.Int(required=True)
         type = graphene.String(required=True)
+        langue = graphene.String(required=True)
         capacite = graphene.Int(required=True)
         prix = graphene.Float(required=True)
         etat = graphene.String()
@@ -337,7 +340,7 @@ class CreateVehicule(graphene.Mutation):
     success = graphene.Boolean()
     errors = graphene.List(graphene.String)
 
-    def mutate(self, info, marque, modele, annee, type, capacite, prix, etat="DISPONIBLE", images=None):
+    def mutate(self, info, marque, modele, annee, type, langue, capacite, prix, etat="DISPONIBLE", images=None):
         try:
             with transaction.atomic():
 
@@ -346,6 +349,7 @@ class CreateVehicule(graphene.Mutation):
                     modele=modele,
                     annee=annee,
                     type=type,
+                    langue=langue,
                     capacite=capacite,
                     prix=Decimal(str(prix)),
                     etat=etat,
@@ -779,7 +783,7 @@ class RegisterUser(graphene.Mutation):
     utilisateur = graphene.Field(UtilisateurType)
     success = graphene.Boolean()
     errors = graphene.List(graphene.String)
-    token = graphene.String()
+    # token = graphene.String()
 
     def mutate(self, info, email, password, nom, prenom, image, telephone=None):
         try:
@@ -821,57 +825,24 @@ class RegisterUser(graphene.Mutation):
                 utilisateur.save()
 
                 # Générer un token simple (optionnel)
-                import uuid
-                token = f"token_{utilisateur.id}_{uuid.uuid4().hex[:8]}"
+                # import uuid
+                # token = f"token_{utilisateur.id}_{uuid.uuid4().hex[:8]}"
 
                 return RegisterUser(
                     utilisateur=utilisateur,
                     success=True,
-                    token=token
                 )
 
         except Exception as e:
             return RegisterUser(success=False, errors=[str(e)])
 
-class LoginUser(graphene.Mutation):
-    class Arguments:
-        email = graphene.String(required=True)
-        password = graphene.String(required=True)
+        
+class ObtainJSONWebTokenWithUser(graphql_jwt.ObtainJSONWebToken):
+    user = graphene.Field(UtilisateurType)
 
-    utilisateur = graphene.Field(UtilisateurType)
-    success = graphene.Boolean()
-    errors = graphene.List(graphene.String)
-    token = graphene.String()
-
-    def mutate(self, info, email, password):
-        try:
-            # Authentifier l'utilisateur
-            utilisateur = authenticate(username=email, password=password)
-
-            if utilisateur is None:
-                return LoginUser(
-                    success=False,
-                    errors=["Email ou mot de passe incorrect"]
-                )
-
-            if not utilisateur.is_active:
-                return LoginUser(
-                    success=False,
-                    errors=["Compte utilisateur désactivé"]
-                )
-
-            # Générer un token simple (optionnel)
-            import uuid
-            token = f"token_{utilisateur.id}_{uuid.uuid4().hex[:8]}"
-
-            return LoginUser(
-                utilisateur=utilisateur,
-                success=True,
-                token=token
-            )
-
-        except Exception as e:
-            return LoginUser(success=False, errors=[str(e)])
+    @classmethod
+    def resolve(cls, root, info, **kwargs):
+        return cls(user=info.context.user)
 
 class LogoutUser(graphene.Mutation):
     success = graphene.Boolean()
@@ -1642,10 +1613,12 @@ class DeleteSurMesure(graphene.Mutation):
 class Mutation(graphene.ObjectType):
     # Mutations d'authentification
     register_user = RegisterUser.Field()
-    login_user = LoginUser.Field()
     logout_user = LogoutUser.Field()
     change_password = ChangePassword.Field()
     reset_password_request = ResetPasswordRequest.Field()
+    login_user = ObtainJSONWebTokenWithUser.Field()
+    verify_token = Verify.Field()
+    refresh_token = Refresh.Field()
 
     # Mutations utilisateurs
     create_utilisateur = CreateUtilisateur.Field()

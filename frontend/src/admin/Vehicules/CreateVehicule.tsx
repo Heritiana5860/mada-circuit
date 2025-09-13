@@ -18,6 +18,7 @@ const CreateVehicule = () => {
   const [marque, setMarque] = useState("");
   const [modele, setModele] = useState("");
   const [types, setTypes] = useState("");
+  const [langue, setLangue] = useState("");
   const [annee, setAnnee] = useState(2000);
   const [capacite, setCapacite] = useState(4);
   const [etat, setEtat] = useState("");
@@ -66,6 +67,7 @@ const CreateVehicule = () => {
     setMarque("");
     setModele("");
     setTypes("");
+    setLangue("");
     setEtat("");
     setCapacite(4);
     setPrix(0);
@@ -81,6 +83,7 @@ const CreateVehicule = () => {
       !marque ||
       !modele ||
       !types ||
+      !langue ||
       !annee ||
       !capacite ||
       !etat ||
@@ -94,6 +97,7 @@ const CreateVehicule = () => {
       marque: marque,
       modele: modele,
       type: types,
+      langue: langue,
       annee: annee,
       capacite: capacite,
       etat: etat,
@@ -157,6 +161,7 @@ const CreateVehicule = () => {
                   etat={etat}
                   prix={prix}
                   types={types}
+                  langue={langue}
                   setAnnee={setAnnee}
                   setCapacite={setCapacite}
                   setEtat={setEtat}
@@ -164,6 +169,7 @@ const CreateVehicule = () => {
                   setModele={setModele}
                   setPrix={setPrix}
                   setTypes={setTypes}
+                  setLangue={setLangue}
                 />
               )}
               {currentStep === 2 && (

@@ -506,6 +506,7 @@ export const CREATE_VEHICULE = gql`
     $modele: String!
     $prix: Float!
     $type: String!
+    $langue: String!
     $etat: String
     $images: [Upload]
   ) {
@@ -516,6 +517,7 @@ export const CREATE_VEHICULE = gql`
       modele: $modele
       prix: $prix
       type: $type
+      langue: $langue
       etat: $etat
       images: $images
     ) {

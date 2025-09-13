@@ -2,6 +2,7 @@ import {
   Captions,
   ClipboardType,
   Component,
+  Languages,
   ShieldHalf,
   Tag,
 } from "lucide-react";
@@ -12,6 +13,7 @@ interface FirstType {
   marque: string;
   modele: string;
   types: string;
+  langue: string;
   annee: number;
   capacite: number;
   etat: string;
@@ -19,6 +21,7 @@ interface FirstType {
   setMarque: Dispatch<SetStateAction<string>>;
   setModele: Dispatch<SetStateAction<string>>;
   setTypes: Dispatch<SetStateAction<string>>;
+  setLangue: Dispatch<SetStateAction<string>>;
   setAnnee: Dispatch<SetStateAction<number>>;
   setCapacite: Dispatch<SetStateAction<number>>;
   setEtat: Dispatch<SetStateAction<string>>;
@@ -29,6 +32,7 @@ const First: React.FC<FirstType> = ({
   marque,
   modele,
   types,
+  langue,
   annee,
   capacite,
   etat,
@@ -36,6 +40,7 @@ const First: React.FC<FirstType> = ({
   setMarque,
   setModele,
   setTypes,
+  setLangue,
   setAnnee,
   setCapacite,
   setEtat,
@@ -65,6 +70,17 @@ const First: React.FC<FirstType> = ({
           value={modele}
           setValue={setModele}
           icon={<Component className="h-4 w-4" />}
+        />
+
+        <Field
+          label="Langue"
+          id="langue"
+          name="langue"
+          placeholder="Langue parlé par le chauffeur"
+          type="text"
+          value={langue}
+          setValue={setLangue}
+          icon={<Languages className="h-4 w-4" />}
         />
       </div>
 

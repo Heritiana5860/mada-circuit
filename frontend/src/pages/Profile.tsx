@@ -12,14 +12,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
-import {
-  User,
-  Mail,
-  Phone,
-  Calendar,
-  Shield,
-  Camera,
-} from "lucide-react";
+import { User, Mail, Phone, Calendar, Shield, Camera } from "lucide-react";
 import { Link } from "react-router-dom";
 import {
   DataContext,
@@ -124,9 +117,9 @@ const Profile = () => {
 
   // Calcul des statistiques
   const stats = {
-    total: reservation.length,
+    total: reservation?.length,
     confirmees: reservation.filter((r) => r.statut === "CONFIRMEE").length,
-    enAttente: reservation.filter((r) => r.statut === "EN_ATTENTE").length,
+    enAttente: reservation?.filter((r) => r.statut === "EN_ATTENTE").length,
     annulees: reservation.filter((r) => r.statut === "ANNULEE").length,
     terminees: reservation.filter((r) => r.statut === "TERMINEE").length,
   };
@@ -318,31 +311,35 @@ const Profile = () => {
                     <span className="text-medium font-bold text-blue-600">
                       Total réservations
                     </span>
-                    <span className="font-bold text-blue-600 text-medium">{stats.total}</span>
+                    <span className="font-bold text-blue-600 text-medium">
+                      {stats.total}
+                    </span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-sm text-green-600">
-                      Confirmées
+                    <span className="text-sm text-green-600">Confirmées</span>
+                    <span className="font-medium text-green-600 text-sm">
+                      {stats.confirmees}
                     </span>
-                    <span className="font-medium text-green-600 text-sm">{stats.confirmees}</span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-sm text-yellow-600">
-                      En attente
+                    <span className="text-sm text-yellow-600">En attente</span>
+                    <span className="font-medium text-yellow-600 text-sm">
+                      {stats.enAttente}
                     </span>
-                    <span className="font-medium text-yellow-600 text-sm">{stats.enAttente}</span>
                   </div>
                   <div className="flex justify-between">
                     <span className="text-sm text-muted-foreground">
                       Terminées
                     </span>
-                    <span className="font-medium text-muted-foreground text-sm">{stats.terminees}</span>
+                    <span className="font-medium text-muted-foreground text-sm">
+                      {stats.terminees}
+                    </span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-sm text-red-600">
-                      Annulées
+                    <span className="text-sm text-red-600">Annulées</span>
+                    <span className="font-medium text-red-600 text-sm">
+                      {stats.annulees}
                     </span>
-                    <span className="font-medium text-red-600 text-sm">{stats.annulees}</span>
                   </div>
                 </CardContent>
               </Card>

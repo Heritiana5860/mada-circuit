@@ -1,6 +1,6 @@
 import React, { useContext, useState } from "react";
 import { useQuery } from "@apollo/client";
-import { GET_ALL_VEHICULES, GET_ALL_TYPES_VEHICULES } from "@/graphql/queries";
+import { GET_ALL_VEHICULES } from "@/graphql/queries";
 import VehicleCard from "@/components/VehicleCard.new";
 import NavBar from "@/components/NavBar";
 import Footer from "@/components/Footer";
@@ -12,9 +12,9 @@ import {
 } from "@/provider/DataContext";
 import { FaqCard } from "@/components/FaqCard";
 import { TestimoniaCarousel } from "@/components/TestimoniaCarousel";
-import { Helmet } from "react-helmet-async";
 import SEO from "@/SEO";
 import { urlMedia } from "@/helper/UrlImage";
+import EmptyData from "@/components/EmptyData";
 
 const Location4x4: React.FC = () => {
   const { loading, error, data } = useQuery(GET_ALL_VEHICULES);
@@ -131,9 +131,10 @@ const Location4x4: React.FC = () => {
             <div className="lg:col-span-3">
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {filteredVehicles.length === 0 ? (
-                  <div className="col-span-full text-center text-gray-500">
-                    Aucun véhicule disponible.
-                  </div>
+                  <EmptyData
+                    titre="Nos vehicules seront bientôt disponible."
+                    description="Merci pour votre patience."
+                  />
                 ) : (
                   filteredVehicles.map((vehicle) => (
                     <VehicleCard key={vehicle.id} vehicle={vehicle} />

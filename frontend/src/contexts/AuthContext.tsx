@@ -14,7 +14,7 @@ interface User {
   nom: string;
   prenom: string;
   role: string;
-  profileImage: string | null;
+  image: string | null;
 }
 
 interface AuthContextType {
@@ -45,15 +45,18 @@ interface RegisterData {
 const LOGIN_MUTATION = gql`
   mutation LoginUser($email: String!, $password: String!) {
     loginUser(email: $email, password: $password) {
-      success
-      errors
+      payload
+      refreshExpiresIn
       token
-      utilisateur {
+      refreshToken
+      user {
         id
         email
         nom
         prenom
+        telephone
         role
+        image
       }
     }
   }
@@ -78,7 +81,6 @@ const REGISTER_MUTATION = gql`
     ) {
       success
       errors
-      token
       utilisateur {
         id
         email
@@ -100,6 +102,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
 }) => {
   const [user, setUser] = useState<User | null>(null);
   const [token, setToken] = useState<string | null>(null);
+  const [refreshToken, setRefreshToken] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
 
   const [loginMutation] = useMutation(LOGIN_MUTATION);
@@ -108,40 +111,46 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
   // Vérifier le token au chargement
   useEffect(() => {
     const savedToken = localStorage.getItem("authToken");
+    const savedRefreshToken = localStorage.getItem("authRefreshToken");
     const savedUser = localStorage.getItem("authUser");
 
     if (savedToken && savedUser) {
       try {
         setToken(savedToken);
+        if (savedRefreshToken) setRefreshToken(savedRefreshToken);
         setUser(JSON.parse(savedUser));
       } catch (error) {
         console.error("Erreur lors du parsing des données utilisateur:", error);
-        localStorage.removeItem("authToken");
-        localStorage.removeItem("authUser");
+        localStorage.clear();
       }
     }
     setLoading(false);
   }, []);
 
-  const login = async (email: string, password: string) => {
+  const login = async (
+    email: string,
+    password: string
+  ): Promise<{ success: boolean; error?: string }> => {
     try {
       const { data } = await loginMutation({
         variables: { email, password },
       });
 
-      if (data.loginUser.success) {
-        
-        const { token: newToken, utilisateur } = data.loginUser;
+      if (data?.loginUser) {
+
+        const { token: newToken, refreshToken, user } = data.loginUser;
+
         setToken(newToken);
-        setUser(utilisateur);
+        setRefreshToken(refreshToken);
+        setUser(user);
+
         localStorage.setItem("authToken", newToken);
-        localStorage.setItem("authUser", JSON.stringify(utilisateur));
-        return { success: true, user: utilisateur };
+        localStorage.setItem("authRefreshToken", refreshToken);
+        localStorage.setItem("authUser", JSON.stringify(user));
+
+        return { success: true };
       } else {
-        return {
-          success: false,
-          error: data.loginUser.errors?.[0] || "Erreur de connexion",
-        };
+        return { success: false, error: "Identifiants invalides" };
       }
     } catch (error) {
       console.error("Erreur de connexion:", error);
@@ -159,10 +168,10 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({
       });
 
       if (data.registerUser.success) {
-        const { token: newToken, utilisateur } = data.registerUser;
-        setToken(newToken);
-        setUser(utilisateur);
-        localStorage.setItem("authToken", newToken);
+        const { utilisateur } = data.registerUser;
+        // setToken(newToken);
+        // setUser(utilisateur);
+        // localStorage.setItem("authToken", newToken);
         localStorage.setItem("authUser", JSON.stringify(utilisateur));
         return { success: true };
       } else {

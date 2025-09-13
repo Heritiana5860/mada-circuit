@@ -26,6 +26,7 @@ import { formatPrice } from "@/helper/formatage";
 import { Helmet } from "react-helmet-async";
 import SEO from "@/SEO";
 import { urlMedia } from "@/helper/UrlImage";
+import EmptyData from "@/components/EmptyData";
 
 const ProgrammeSolidairePage = () => {
   const navigate = useNavigate();
@@ -363,52 +364,59 @@ const ProgrammeSolidairePage = () => {
               </p>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              {dataSolidaire.map((pack, index) => (
-                <Card key={index} className="overflow-hidden">
-                  <div className="relative h-48">
-                    <img
-                      src={`${urlMedia}${pack.images[0].image}`}
-                      alt={pack.titre}
-                      className="w-full h-full object-cover"
-                    />
-                    <div className="absolute top-3 left-3">
-                      <span className="bg-primary text-primary-foreground text-xs font-medium px-2 py-1 rounded-full">
-                        {pack.duree} jours
-                      </span>
+            {dataSolidaire.length > 0 ? (
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                {dataSolidaire.map((pack, index) => (
+                  <Card key={index} className="overflow-hidden">
+                    <div className="relative h-48">
+                      <img
+                        src={`${urlMedia}${pack.images[0].image}`}
+                        alt={pack.titre}
+                        className="w-full h-full object-cover"
+                      />
+                      <div className="absolute top-3 left-3">
+                        <span className="bg-primary text-primary-foreground text-xs font-medium px-2 py-1 rounded-full">
+                          {pack.duree} jours
+                        </span>
+                      </div>
                     </div>
-                  </div>
-                  <CardContent className="p-6">
-                    <div className="flex items-center mb-2 text-sm text-muted-foreground">
-                      <MapPin className="h-4 w-4 mr-1" />
-                      <span>{pack.destination}</span>
-                    </div>
-                    <h3 className="text-xl font-bold mb-2">{pack.titre}</h3>
-                    <p className="text-muted-foreground mb-4">
-                      {pack.description}
-                    </p>
-                    <div className="flex justify-between items-center">
-                      <span className="text-xl font-bold text-primary">
-                        {formatPrice(pack.prix)} Ar
-                      </span>
-                      <Link
-                        to={`/programme-solidaire/${pack.id}`}
-                        state={{ pangalanes: pack }}
-                      >
-                        <Button
-                          variant="outline"
-                          size="sm"
-                          className="flex items-center"
+                    <CardContent className="p-6">
+                      <div className="flex items-center mb-2 text-sm text-muted-foreground">
+                        <MapPin className="h-4 w-4 mr-1" />
+                        <span>{pack.destination}</span>
+                      </div>
+                      <h3 className="text-xl font-bold mb-2">{pack.titre}</h3>
+                      <p className="text-muted-foreground mb-4">
+                        {pack.description}
+                      </p>
+                      <div className="flex justify-between items-center">
+                        <span className="text-xl font-bold text-primary">
+                          {formatPrice(pack.prix)} Ar
+                        </span>
+                        <Link
+                          to={`/programme-solidaire/${pack.id}`}
+                          state={{ pangalanes: pack }}
                         >
-                          <span>Détails</span>
-                          <ArrowRight className="ml-2 h-4 w-4" />
-                        </Button>
-                      </Link>
-                    </div>
-                  </CardContent>
-                </Card>
-              ))}
-            </div>
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            className="flex items-center"
+                          >
+                            <span>Détails</span>
+                            <ArrowRight className="ml-2 h-4 w-4" />
+                          </Button>
+                        </Link>
+                      </div>
+                    </CardContent>
+                  </Card>
+                ))}
+              </div>
+            ) : (
+              <EmptyData
+                titre="Circuits solidaire seront bientôt disponible."
+                description="Merci pour votre patience."
+              />
+            )}
           </div>
         </section>
 

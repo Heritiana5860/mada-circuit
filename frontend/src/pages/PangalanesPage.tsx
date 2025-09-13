@@ -26,6 +26,7 @@ import { SectionCitation } from "./pangalanes/SectionCitation";
 import { formatPrice } from "@/helper/formatage";
 import CardContentDetail from "@/components/detail/CardContentDetail";
 import { Helmet } from "react-helmet-async";
+import EmptyData from "@/components/EmptyData";
 
 const PangalanesPage = () => {
   const navigate = useNavigate();
@@ -328,11 +329,22 @@ const PangalanesPage = () => {
               </p>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              {dataPangalanes.map((pack, index) => (
-                <CardContentDetail pack={pack} lien="pangalanes" key={index} />
-              ))}
-            </div>
+            {dataPangalanes.length > 0 ? (
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                {dataPangalanes.map((pack, index) => (
+                  <CardContentDetail
+                    pack={pack}
+                    lien="pangalanes"
+                    key={index}
+                  />
+                ))}
+              </div>
+            ) : (
+              <EmptyData
+                titre="Circuits pangalanes seront bientôt disponible."
+                description="Merci pour votre patience."
+              />
+            )}
           </div>
         </section>
 

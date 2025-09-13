@@ -30,6 +30,7 @@ import { TestimoniaCarousel } from "@/components/TestimoniaCarousel";
 import { Helmet } from "react-helmet-async";
 import SEO from "@/SEO";
 import { urlMedia } from "@/helper/UrlImage";
+import EmptyData from "@/components/EmptyData";
 
 const Circuits = () => {
   const [selectedRegion, setSelectedRegion] = useState<string>("all");
@@ -442,21 +443,10 @@ const Circuits = () => {
                 ))}
               </div>
             ) : (
-              <Card className="border-0 shadow-sm">
-                <CardContent className="text-center py-16">
-                  <div className="mb-4">
-                    <Compass className="h-16 w-16 mx-auto text-gray-300" />
-                  </div>
-                  <h3 className="text-xl font-sans font-semibold mb-2">
-                    Aucun circuit trouvé
-                  </h3>
-                  <p className="text-muted-foreground mb-6">
-                    Essayez de modifier vos filtres ou votre recherche pour
-                    découvrir nos circuits.
-                  </p>
-                  <Button onClick={clearFilters}>Voir tous les circuits</Button>
-                </CardContent>
-              </Card>
+              <EmptyData
+                titre="Circuits seront bientôt disponible."
+                description="Merci pour votre patience."
+              />
             )}
           </div>
         </section>

@@ -135,6 +135,7 @@ INSTALLED_APPS = [
     "graphene_file_upload",
     'graphene_django',
     'graphql_jwt',
+    "graphql_jwt.refresh_token",
     'rest_framework',
     'corsheaders',
     'django_filters',
@@ -143,6 +144,9 @@ INSTALLED_APPS = [
 
 GRAPHENE = {
     'SCHEMA': 'schema_root.schema',
+    'MIDDLEWARE': [
+        'graphql_jwt.middleware.JSONWebTokenMiddleware',
+    ],
 }
 
 MIDDLEWARE = [
@@ -306,7 +310,7 @@ GRAPHQL_JWT = {
     'JWT_VERIFY_EXPIRATION': True,
     "JWT_LONG_RUNNING_REFRESH_TOKEN": True,
     'JWT_EXPIRATION_DELTA': timedelta(days=7),
-    # 'JWT_AUTH_HEADER_PREFIX': 'JWT',
+    'JWT_AUTH_HEADER_PREFIX': 'JWT', 
     "JWT_REFRESH_EXPIRATION_DELTA": timedelta(days=7),
     'JWT_ALGORITHM': 'HS256',
 }

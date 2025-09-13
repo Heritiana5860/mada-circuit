@@ -75,6 +75,7 @@ export const GET_ALL_VEHICULES = gql`
       etat
       capacite
       type
+      langue
       images {
         id
         image
@@ -94,6 +95,7 @@ export const GET_VEHICULE_BY_ID = gql`
       etat
       capacite
       type
+      langue
       images {
         id
         image
@@ -124,16 +126,6 @@ export const GET_VEHICULE_BY_NODE_ID = gql`
           description
         }
       }
-    }
-  }
-`;
-
-// Requête pour récupérer tous les types de véhicules
-export const GET_ALL_TYPES_VEHICULES = gql`
-  query GetAllTypesVehicules {
-    allTypesVehicule {
-      id
-      libelle
     }
   }
 `;

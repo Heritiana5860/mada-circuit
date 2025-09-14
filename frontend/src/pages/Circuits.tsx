@@ -225,8 +225,8 @@ const Circuits = () => {
   return (
     <div className="min-h-screen flex flex-col bg-gray-50">
       <SEO
-        title="Circuits à Madagascar | Voyages et Aventures Authentiques"
-        description="Explorez nos circuits à Madagascar : aventures uniques, découvertes culturelles et paysages exceptionnels pour un voyage inoubliable au cœur de l’île rouge."
+        title="Tours in Madagascar | Authentic Journeys and Adventures"
+        description="Explore our tours in Madagascar: unique adventures, cultural discoveries, and breathtaking landscapes for an unforgettable journey to the heart of the Red Island."
         canonical="https://madagascar-voyagesolidaire.com/circuits"
         image="https://madagascar-voyagesolidaire.com/images/circuit-og.webp"
       />
@@ -239,10 +239,8 @@ const Circuits = () => {
           backgroundImages={backgroundImages}
           // circuitsData={circuitsData}
           currentImageIndex={currentImageIndex}
-          titre='Circuits Touristiques à <br /> <span class="text-yellow-300">Madagascar</span>'
-          description="Explorez nos circuits soigneusement conçus pour vous faire
-              découvrir les merveilles naturelles, la faune unique et la culture
-              fascinante de Madagascar."
+          titre='Explore <br /> <span class="text-yellow-300">Madagascar</span> Through Our Guided Tours'
+          description="Embark on unforgettable journeys through Madagascar’s breathtaking landscapes, rare wildlife, and vibrant cultural heritage."
           goToNext={goToNext}
           goToPrevious={goToPrevious}
           goToSlide={goToSlide}
@@ -258,7 +256,7 @@ const Circuits = () => {
                 <div className="relative">
                   <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
                   <Input
-                    placeholder="Rechercher un circuit, une destination..."
+                    placeholder="Find your ideal tour or destination..."
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
                     className="pl-10 pr-4"
@@ -278,11 +276,11 @@ const Circuits = () => {
                 {/* Onglets de région */}
                 <div className="flex bg-gray-100 rounded-lg p-1">
                   {[
-                    { value: "all", label: "Tous" },
-                    { value: "nord", label: "Nord" },
-                    { value: "sud", label: "Sud" },
-                    { value: "est", label: "Est" },
-                    { value: "ouest", label: "Ouest" },
+                    { value: "all", label: "All" },
+                    { value: "nord", label: "North" },
+                    { value: "sud", label: "South" },
+                    { value: "est", label: "East" },
+                    { value: "ouest", label: "West" },
                   ].map((region) => (
                     <button
                       key={region.value}
@@ -305,7 +303,7 @@ const Circuits = () => {
                   className="flex items-center gap-2"
                 >
                   <SlidersHorizontal className="h-4 w-4" />
-                  Filtres
+                  Filters
                   {activeFiltersCount > 0 && (
                     <Badge
                       variant="default"
@@ -324,7 +322,7 @@ const Circuits = () => {
                 <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
                   <div>
                     <label className="block text-sm font-medium mb-2">
-                      Durée
+                      Duration
                     </label>
                     <select
                       value={filters.duration}
@@ -333,10 +331,10 @@ const Circuits = () => {
                       }
                       className="w-full border border-gray-300 rounded-md px-3 py-2 text-sm"
                     >
-                      <option value="all">Toutes durées</option>
-                      <option value="short">1-5 jours</option>
-                      <option value="medium">6-10 jours</option>
-                      <option value="long">11+ jours</option>
+                      <option value="all">All duration</option>
+                      <option value="short">1-5 days</option>
+                      <option value="medium">6-10 days</option>
+                      <option value="long">11+ days</option>
                     </select>
                   </div>
 
@@ -351,16 +349,16 @@ const Circuits = () => {
                       }
                       className="w-full border border-gray-300 rounded-md px-3 py-2 text-sm"
                     >
-                      <option value="all">Tous budgets</option>
-                      <option value="budget">- 500k Ar</option>
-                      <option value="mid">500k - 1.5M Ar</option>
-                      <option value="luxury">+ 1.5M Ar</option>
+                      <option value="all">All budgets</option>
+                      <option value="budget">Under €95</option>
+                      <option value="mid">€95 – €285</option>
+                      <option value="luxury">Over €285</option>
                     </select>
                   </div>
 
                   <div>
                     <label className="block text-sm font-medium mb-2">
-                      Saison
+                      Season
                     </label>
                     <select
                       value={filters.season}
@@ -369,9 +367,9 @@ const Circuits = () => {
                       }
                       className="w-full border border-gray-300 rounded-md px-3 py-2 text-sm"
                     >
-                      <option value="all">Toute l'année</option>
-                      <option value="dry">Saison sèche</option>
-                      <option value="wet">Saison des pluies</option>
+                      <option value="all">All year round</option>
+                      <option value="dry">Dry season</option>
+                      <option value="wet">Rainy season</option>
                     </select>
                   </div>
 
@@ -382,7 +380,7 @@ const Circuits = () => {
                       className="w-full"
                     >
                       <X className="h-4 w-4 mr-2" />
-                      Effacer filtres
+                      Clear filters
                     </Button>
                   </div>
                 </div>
@@ -406,7 +404,7 @@ const Circuits = () => {
                       variant="secondary"
                       className="flex items-center gap-1"
                     >
-                      Recherche: "{searchQuery}"
+                      Search: "{searchQuery}"
                       <button onClick={() => setSearchQuery("")}>
                         <X className="h-3 w-3" />
                       </button>
@@ -417,7 +415,7 @@ const Circuits = () => {
                       variant="secondary"
                       className="flex items-center gap-1"
                     >
-                      Région: {selectedRegion}
+                      Region: {selectedRegion}
                       <button onClick={() => setSelectedRegion("all")}>
                         <X className="h-3 w-3" />
                       </button>
@@ -445,10 +443,7 @@ const Circuits = () => {
                 ))}
               </div>
             ) : (
-              <EmptyData
-                titre="Circuits seront bientôt disponible."
-                description="Merci pour votre patience."
-              />
+              <EmptyData titre="Upcoming Tours Coming Soon" />
             )}
           </div>
         </section>
@@ -456,18 +451,17 @@ const Circuits = () => {
         {/* Section promotionnelle */}
         <section className="py-16 bg-gradient-to-r from-green-50 to-blue-50">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-            <h2 className="text-3xl font-bold mb-6">
-              Besoin d'aide pour choisir ?
-            </h2>
+            <h2 className="text-3xl font-bold mb-6">Need help choosing?</h2>
             <p className="text-lg text-muted-foreground mb-8 max-w-2xl mx-auto">
-              Nos experts voyage sont là pour vous conseiller et créer le
-              circuit parfait selon vos envies.
+              Our travel experts are here to guide you and craft the perfect
+              itinerary based on your preferences.
             </p>
+
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Link to={"/guides"}>
                 <Button size="lg" className="flex items-center">
                   <Users className="h-5 w-5 mr-2" />
-                  Parler à un expert
+                  Talk to an expert
                 </Button>
               </Link>
               <Link to={"/voyages-sur-mesure"}>
@@ -477,7 +471,7 @@ const Circuits = () => {
                   className="flex items-center"
                 >
                   <Star className="h-5 w-5 mr-2" />
-                  Circuit sur mesure
+                  Tailor-made tour
                 </Button>
               </Link>
             </div>

@@ -84,8 +84,8 @@ const Location4x4: React.FC = () => {
   return (
     <div className="min-h-screen flex flex-col">
       <SEO
-        title="Location 4x4 à Madagascar | Avec Chauffeur Expérimenté"
-        description="Louez un 4x4 avec chauffeur à Madagascar pour vos circuits et excursions. Confort, sécurité et flexibilité pour explorer l’île en toute sérénité."
+        title="4x4 Rental in Madagascar | With Experienced Driver"
+        description="Rent a 4x4 with a driver in Madagascar for your tours and excursions. Comfort, safety, and flexibility to explore the island with peace of mind."
         canonical="https://madagascar-voyagesolidaire.com/location-4x4"
         image="https://madagascar-voyagesolidaire.com/images/vehicule-og.webp"
       />
@@ -132,8 +132,7 @@ const Location4x4: React.FC = () => {
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {filteredVehicles.length === 0 ? (
                   <EmptyData
-                    titre="Nos vehicules seront bientôt disponible."
-                    description="Merci pour votre patience."
+                    titre="Upcoming Vehicles Comming Soon."
                   />
                 ) : (
                   filteredVehicles.map((vehicle) => (

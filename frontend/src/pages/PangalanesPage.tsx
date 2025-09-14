@@ -27,6 +27,9 @@ import { formatPrice } from "@/helper/formatage";
 import CardContentDetail from "@/components/detail/CardContentDetail";
 import { Helmet } from "react-helmet-async";
 import EmptyData from "@/components/EmptyData";
+import { activities } from "@/helper/pangalanes/Activities";
+import { whyChooseUs } from "@/helper/pangalanes/WhyChooseUs";
+import { travelOptions } from "@/helper/pangalanes/TravelOptions";
 
 const PangalanesPage = () => {
   const navigate = useNavigate();
@@ -39,123 +42,6 @@ const PangalanesPage = () => {
     window.scrollTo(0, 0);
     document.title = "Canal des Pangalanes | Madagascar Voyage";
   }, []);
-
-  const activities = [
-    {
-      title: "Croisière sur le Canal",
-      description:
-        "Naviguez sur les eaux calmes du canal à bord de nos bateaux confortables et découvrez des paysages à couper le souffle.",
-      icon: <Sailboat className="h-6 w-6 text-primary" />,
-    },
-    {
-      title: "Observation de la Faune",
-      description:
-        "Admirez les diverses espèces de lémuriens, oiseaux et autres animaux qui habitent les forêts bordant le canal.",
-      icon: <Trees className="h-6 w-6 text-primary" />,
-    },
-    {
-      title: "Pêche Traditionnelle",
-      description:
-        "Apprenez les techniques de pêche locales et tentez votre chance pour attraper des poissons d'eau douce.",
-      icon: <Fish className="h-6 w-6 text-primary" />,
-    },
-    {
-      title: "Safari Photo",
-      description:
-        "Capturez des moments inoubliables et des paysages uniques lors de votre voyage sur le Canal des Pangalanes.",
-      icon: <Camera className="h-6 w-6 text-primary" />,
-    },
-    {
-      title: "Visites de Villages",
-      description:
-        "Rencontrez les communautés locales et découvrez leur mode de vie traditionnel et leur artisanat.",
-      icon: <Users className="h-6 w-6 text-primary" />,
-    },
-    {
-      title: "Randonnées Guidées",
-      description:
-        "Explorez les sentiers qui bordent le canal avec nos guides expérimentés qui vous feront découvrir la flore locale.",
-      icon: <Compass className="h-6 w-6 text-primary" />,
-    },
-  ];
-
-  const whyChooseUs = [
-    {
-      title: "Richesse Ethnique",
-      description:
-        "Découvrez la diversité des ethnies malgaches qui vivent le long du canal et leur culture unique.",
-      icon: <Users className="h-6 w-6 text-primary" />,
-    },
-    {
-      title: "Faune Exceptionnelle",
-      description:
-        "Observez une faune riche comprenant plus de 100 espèces d'oiseaux et de nombreux animaux endémiques.",
-      icon: <Fish className="h-6 w-6 text-primary" />,
-    },
-    {
-      title: "Flore Luxuriante",
-      description:
-        "Explorez la végétation tropicale abondante qui borde le canal et ses lacs.",
-      icon: <Trees className="h-6 w-6 text-primary" />,
-    },
-    {
-      title: "Paysages Uniques",
-      description:
-        "Admirez des panoramas à couper le souffle entre forêts vierges, lacs et dunes côtières.",
-      icon: <Camera className="h-6 w-6 text-primary" />,
-    },
-    {
-      title: "Tourisme Solidaire",
-      description:
-        "Participez à des initiatives locales qui soutiennent les communautés du canal et leur développement.",
-      icon: <Heart className="h-6 w-6 text-primary" />,
-    },
-    {
-      title: "Guides Expérimentés",
-      description:
-        "Voyagez avec nos guides francophones et anglophones, passionnés par leur culture et leur patrimoine.",
-      icon: <Compass className="h-6 w-6 text-primary" />,
-    },
-  ];
-
-  const travelOptions = [
-    {
-      title: "Croisières Authentiques",
-      description:
-        "Naviguez sur le canal et savourez la gastronomie locale à bord de nos bateaux traditionnels.",
-      icon: <Sailboat className="h-6 w-6 text-primary" />,
-    },
-    {
-      title: "Voyages Sur-Mesure",
-      description:
-        "Créez votre itinéraire personnalisé selon vos envies et votre rythme avec nos spécialistes.",
-      icon: <Star className="h-6 w-6 text-primary" />,
-    },
-    {
-      title: "Raid-Aventure",
-      description:
-        "Vivez une expérience inoubliable en explorant le canal sur toute sa longueur de 650 km.",
-      icon: <Shield className="h-6 w-6 text-primary" />,
-    },
-    {
-      title: "Circuits Classiques",
-      description:
-        "Optez pour nos itinéraires éprouvés qui vous feront découvrir les trésors du canal.",
-      icon: <MapPin className="h-6 w-6 text-primary" />,
-    },
-    {
-      title: "Séjours Balnéaires",
-      description:
-        "Profitez des plages et des lodges confortables le long du canal et de l'océan Indien.",
-      icon: <Globe className="h-6 w-6 text-primary" />,
-    },
-    {
-      title: "Location de Véhicules",
-      description:
-        "Louez des 4x4 ou des voitures légères pour explorer les environs du canal en toute liberté.",
-      icon: <ArrowRight className="h-6 w-6 text-primary" />,
-    },
-  ];
 
   const { data, loading, error } = useQuery(GET_ALL_CIRCUITS, {
     variables: {
@@ -176,10 +62,10 @@ const PangalanesPage = () => {
   return (
     <div className="min-h-screen flex flex-col">
       <Helmet>
-        <title>Canal des Pangalanes Madagascar | Excursions & Découverte</title>
+        <title>Pangalanes Canal Madagascar | Tours & Discovery</title>
         <meta
           name="description"
-          content="Vivez une expérience unique sur le Canal des Pangalanes : croisières, excursions en pirogue et immersion dans la nature sauvage et les villages authentiques."
+          content="Experience the unique charm of the Pangalanes Canal: cruises, dugout canoe excursions, and immersion in wild nature and authentic villages."
         />
       </Helmet>
 
@@ -189,38 +75,42 @@ const PangalanesPage = () => {
         <div className="relative p-10 bg-[url('canal.webp')] bg-cover bg-center">
           {/* Overlay */}
           <div className="absolute inset-0 bg-black/50"></div>
-          <div className=" relative text-center mb-16">
-            <h1 className="text-5xl md:text-7xl lg:text-8xl font-black mb-8 leading-tight">
-              <span className=" text-white">
-                Decouvrez le Canal de Pangalanes
-              </span>
-            </h1>
-            <p className="text-xl md:text-2xl text-white/90 max-w-4xl mx-auto leading-relaxed mb-12">
-              Embarquez pour une aventure inoubliable: croisières, excursions en
-              pirogue et immersion au cœur d’une nature sauvage et des villages
-              authentiques.
-            </p>
-            <Button
-              onClick={() => {
-                document.getElementById("offres")?.scrollIntoView({
-                  behavior: "smooth",
-                });
-              }}
-              className="mr-5"
-            >
-              Découvrir nos offres
-            </Button>
-            <Button
-              size="lg"
-              variant="secondary"
-              onClick={() => {
-                document.getElementById("pangalanesVoyages")?.scrollIntoView({
-                  behavior: "smooth",
-                });
-              }}
-            >
-              Pourquoi choisir pangalanes voyages?
-            </Button>
+
+          <div className="max-w-6xl mx-auto">
+            <div className=" relative text-center mb-16">
+              <h1 className="text-5xl md:text-7xl lg:text-8xl font-black mb-8 leading-tight">
+                <span className="text-white">
+                  Discover the Pangalanes Canal
+                </span>
+              </h1>
+              <p className="text-xl md:text-2xl text-white/90 max-w-4xl mx-auto leading-relaxed mb-12">
+                Embark on an unforgettable adventure: cruises, pirogue
+                excursions, and immersion into the heart of wild nature and
+                authentic local villages.
+              </p>
+
+              <Button
+                onClick={() => {
+                  document.getElementById("offres")?.scrollIntoView({
+                    behavior: "smooth",
+                  });
+                }}
+                className="mr-5"
+              >
+                Discover our offers
+              </Button>
+              <Button
+                size="lg"
+                variant="secondary"
+                onClick={() => {
+                  document.getElementById("pangalanesVoyages")?.scrollIntoView({
+                    behavior: "smooth",
+                  });
+                }}
+              >
+                Why choose Pangalanes Voyages?
+              </Button>
+            </div>
           </div>
         </div>
 
@@ -228,27 +118,25 @@ const PangalanesPage = () => {
           <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
               <div>
-                <h2 className="text-3xl font-bold mb-6">
-                  Une voie navigable historique
-                </h2>
+                <h2 className="text-3xl font-bold mb-6">A Historic Waterway</h2>
                 <p className="text-muted-foreground mb-4">
-                  Le Canal des Pangalanes, l'une des plus longues voies
-                  navigables artificielles au monde, a été construit à l'époque
-                  coloniale française pour faciliter le transport des
-                  marchandises le long de la côte est de Madagascar.
+                  The Canal des Pangalanes, one of the longest man-made
+                  waterways in the world, was built during the French colonial
+                  era to facilitate the transport of goods along Madagascar’s
+                  eastern coast.
                 </p>
                 <p className="text-muted-foreground mb-6">
-                  Aujourd'hui, ce canal long de près de 700 kilomètres est
-                  devenu un site touristique majeur, offrant aux visiteurs une
-                  immersion complète dans la nature et la culture malgaches. Il
-                  relie plusieurs lacs, lagunes et rivières entre Farafangana au
-                  sud et Toamasina (Tamatave) au nord.
+                  Today, this nearly 700-kilometer-long canal has become a major
+                  tourist attraction, offering visitors a deep immersion into
+                  Malagasy nature and culture. It connects several lakes,
+                  lagoons, and rivers between Farafangana in the south and
+                  Toamasina (Tamatave) in the north.
                 </p>
                 <div className="flex items-center space-x-4">
                   <div className="flex flex-col items-center p-4 bg-white rounded-lg shadow-sm">
                     <span className="text-3xl font-bold text-primary">700</span>
                     <span className="text-sm text-muted-foreground">
-                      kilomètres
+                      kilometers
                     </span>
                   </div>
                   <div className="flex flex-col items-center p-4 bg-white rounded-lg shadow-sm">
@@ -256,7 +144,7 @@ const PangalanesPage = () => {
                       1896
                     </span>
                     <span className="text-sm text-muted-foreground">
-                      année de création
+                      year of creation
                     </span>
                   </div>
                   <div className="flex flex-col items-center p-4 bg-white rounded-lg shadow-sm">
@@ -264,11 +152,12 @@ const PangalanesPage = () => {
                       100+
                     </span>
                     <span className="text-sm text-muted-foreground">
-                      espèces d'oiseaux
+                      bird species
                     </span>
                   </div>
                 </div>
               </div>
+
               <div className="relative">
                 <img
                   src="navigale.webp"
@@ -288,12 +177,12 @@ const PangalanesPage = () => {
           <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center max-w-3xl mx-auto mb-12">
               <h2 className="text-3xl font-bold mb-4">
-                Activités sur le Canal
+                Activities on the Canal
               </h2>
               <p className="text-muted-foreground">
-                Le Canal des Pangalanes offre une multitude d'activités pour
-                tous les types de voyageurs, des amoureux de la nature aux
-                aventuriers en quête de découvertes authentiques.
+                From serene boat rides to cultural encounters, the Pangalanes
+                Canal invites every traveler—whether a nature enthusiast or an
+                explorer—to experience Madagascar’s hidden gems.
               </p>
             </div>
 
@@ -317,11 +206,11 @@ const PangalanesPage = () => {
           <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center max-w-3xl mx-auto mb-12">
               <h2 className="text-3xl font-bold mb-4" id="offres">
-                Nos Offres de Voyage
+                Our Travel Packages
               </h2>
               <p className="text-muted-foreground">
-                Découvrez nos formules spécialement conçues pour vous faire
-                vivre une expérience inoubliable sur le Canal des Pangalanes.
+                Explore our curated travel packages crafted to offer you a truly
+                unforgettable journey along the Pangalanes Canal.
               </p>
             </div>
 
@@ -336,10 +225,7 @@ const PangalanesPage = () => {
                 ))}
               </div>
             ) : (
-              <EmptyData
-                titre="Circuits pangalanes seront bientôt disponible."
-                description="Merci pour votre patience."
-              />
+              <EmptyData titre="Upcoming pangalanes tours Coming Soon" />
             )}
           </div>
         </section>
@@ -349,11 +235,12 @@ const PangalanesPage = () => {
           <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center max-w-3xl mx-auto mb-12">
               <h2 className="text-3xl font-bold mb-4">
-                Pourquoi Choisir Pangalanes Voyages
+                Why Choose Pangalanes Voyages
               </h2>
               <p className="text-muted-foreground">
-                Des richesses malgaches authentiques et des formules adaptées à
-                tous les budgets pour une expérience inoubliable.
+                Discover the true essence of Madagascar with travel options
+                designed for every budget—crafted to deliver a truly
+                unforgettable journey.
               </p>
             </div>
 
@@ -378,12 +265,10 @@ const PangalanesPage = () => {
         <section className="py-16">
           <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center max-w-3xl mx-auto mb-12">
-              <h2 className="text-3xl font-bold mb-4">
-                Nos Formules de Voyage
-              </h2>
+              <h2 className="text-3xl font-bold mb-4">Our Travel Packages</h2>
               <p className="text-muted-foreground">
-                Vivez un voyage réellement sur mesure en individuel, conçu par
-                des spécialistes de Madagascar.
+                Embark on a fully personalized journey, designed just for you by
+                experts who know Madagascar inside and out.
               </p>
             </div>
 
@@ -409,30 +294,31 @@ const PangalanesPage = () => {
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
               <div>
                 <h2 className="text-3xl font-bold mb-6">
-                  Tourisme Durable et Solidaire
+                  Sustainable and Community-Based Tourism
                 </h2>
                 <p className="text-muted-foreground mb-4">
-                  "Vous êtes en pleine nature, au bord d'un lac où l'eau est à
-                  22°C et votre seul souci est de comparer la position des
-                  étoiles dans le ciel. Vous êtes dans l'hémisphère sud. Dans
-                  ces villages au long du canal, le tourisme peut permettre aux
-                  villageois qui vous accueillent, vous donnent leur pêche et
-                  leurs fruits, d'avoir de l'électricité dans les baraques pour
-                  s'ouvrir au monde et raconter des histoires aux enfants."
+                  "You’re surrounded by nature, beside a lake with water at
+                  22°C, and your only concern is comparing the position of the
+                  stars in the sky. You’re in the southern hemisphere. In the
+                  villages along the canal, tourism can help the locals who
+                  welcome you, share their catch and fruits, gain access to
+                  electricity in their homes—opening up to the world and telling
+                  stories to their children."
                 </p>
                 <p className="text-muted-foreground mb-6">
-                  "Développer un tourisme durable adapté aux désirs, croisière
-                  de 3 à 6 jours, tourisme solidaire et potentiels locaux,
-                  encourager et favoriser le transfert de technologie de
-                  solutions d'énergies renouvelables, mettre en place un
-                  partenariat international dynamique et respectueux. Parrainez
-                  des enfants en donnant une chance de continuer leur étude au
-                  secondaire et même jusqu'à l'université."
+                  "Develop sustainable tourism tailored to travelers’ desires—3
+                  to 6-day cruises, community-based tourism, and local
+                  potential. Encourage and support the transfer of renewable
+                  energy technologies, and establish dynamic, respectful
+                  international partnerships. Sponsor children by giving them
+                  the opportunity to continue their education through secondary
+                  school and even university."
                 </p>
                 <Button onClick={handleClick} size="lg">
-                  Découvrir notre programme solidaire
+                  Discover Our Solidarity Program
                 </Button>
               </div>
+
               <div className="relative">
                 <img
                   src="canal.webp"
@@ -461,12 +347,12 @@ const PangalanesPage = () => {
 
           <div className="relative z-10 max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 text-white text-center">
             <h2 className="text-3xl md:text-4xl font-bold mb-6">
-              Prêt à explorer le Canal des Pangalanes ?
+              Ready to Explore the Pangalanes Canal?
             </h2>
             <p className="text-lg text-white/80 mb-8 max-w-3xl mx-auto">
-              Contactez-nous dès aujourd'hui pour réserver votre aventure sur le
-              Canal des Pangalanes et vivre une expérience inoubliable au cœur
-              de Madagascar.
+              Reach out now to reserve your journey along the Pangalanes Canal
+              and dive into an unforgettable escape through Madagascar’s vibrant
+              landscapes.
             </p>
             <div>
               <Link to="/contact">
@@ -475,7 +361,7 @@ const PangalanesPage = () => {
                   variant="outline"
                   className="bg-transparent border-white text-white hover:bg-white hover:text-black"
                 >
-                  Nous contacter
+                  Contact us
                 </Button>
               </Link>
             </div>

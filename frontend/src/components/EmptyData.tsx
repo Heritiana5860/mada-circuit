@@ -3,10 +3,9 @@ import { Card, CardContent } from "./ui/card";
 
 interface DataType {
   titre: string;
-  description: string;
 }
 
-const EmptyData: React.FC<DataType> = ({ titre, description }) => {
+const EmptyData: React.FC<DataType> = ({ titre }) => {
   return (
     <div className="text-center">
       <Card className="border-0 shadow-sm">
@@ -15,7 +14,9 @@ const EmptyData: React.FC<DataType> = ({ titre, description }) => {
             <Compass className="h-16 w-16 mx-auto text-gray-300" />
           </div>
           <h3 className="text-xl font-sans font-semibold mb-2">{titre}</h3>
-          <p className="text-muted-foreground mb-6">{description}</p>
+          <p className="text-muted-foreground mb-6">
+            We appreciate your patience as we prepare something special.
+          </p>
         </CardContent>
       </Card>
     </div>

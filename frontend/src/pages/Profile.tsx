@@ -19,6 +19,7 @@ import {
   StatistiqueReservationContext,
 } from "@/provider/DataContext";
 import { urlMedia } from "@/helper/UrlImage";
+import { formatDate } from "@/helper/formatage";
 
 const Profile = () => {
   const { user } = useAuth();
@@ -32,7 +33,7 @@ const Profile = () => {
 
   useEffect(() => {
     window.scrollTo(0, 0);
-    document.title = "Mon Profil | Madagascar Voyage";
+    document.title = "My Profile | Madagascar Voyage";
   }, []);
 
   // Si l'utilisateur n'est pas authentifié, le hook se charge de la redirection
@@ -48,7 +49,7 @@ const Profile = () => {
         <main className="flex-grow pt-32 pb-12">
           <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="flex justify-center items-center h-64">
-              <p>Chargement du profil...</p>
+              <p>Loading...</p>
             </div>
           </div>
         </main>
@@ -65,9 +66,7 @@ const Profile = () => {
         <main className="flex-grow pt-32 pb-12">
           <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="flex justify-center items-center h-64">
-              <p className="text-red-500">
-                Erreur lors du chargement du profil: {error.message}
-              </p>
+              <p className="text-red-500">Error: {error.message}</p>
             </div>
           </div>
         </main>
@@ -75,14 +74,6 @@ const Profile = () => {
       </div>
     );
   }
-
-  const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleDateString("fr-FR", {
-      year: "numeric",
-      month: "long",
-      day: "numeric",
-    });
-  };
 
   const getRoleBadgeVariant = (role: string) => {
     switch (role) {
@@ -132,7 +123,7 @@ const Profile = () => {
         <main className="flex-grow pt-32 pb-12">
           <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="flex justify-center items-center h-64">
-              <p>Aucune donnée utilisateur trouvée.</p>
+              <p>Upcoming users coming soon.</p>
             </div>
           </div>
         </main>
@@ -148,9 +139,9 @@ const Profile = () => {
       <main className="flex-grow pt-6 pb-12">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="mb-8">
-            <h1 className="text-3xl font-bold">Mon Profil</h1>
+            <h1 className="text-3xl font-bold">My Profile</h1>
             <p className="text-muted-foreground mt-2">
-              Gérez vos informations personnelles et vos préférences
+              Manage your personal information and preferences
             </p>
           </div>
 
@@ -161,10 +152,10 @@ const Profile = () => {
                 <CardHeader>
                   <CardTitle className="flex items-center">
                     <User className="mr-2 h-5 w-5" />
-                    Informations personnelles
+                    Personal Information
                   </CardTitle>
                   <CardDescription>
-                    Vos informations de base et de contact
+                    Your personal and contact information
                   </CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-6">
@@ -217,7 +208,7 @@ const Profile = () => {
                         <Phone className="mr-3 h-4 w-4 text-muted-foreground" />
                         <div>
                           <label className="text-sm font-medium text-muted-foreground">
-                            Téléphone
+                            Phone
                           </label>
                           <p className="text-base">{userData.telephone}</p>
                         </div>
@@ -228,7 +219,7 @@ const Profile = () => {
                       <Calendar className="mr-3 h-4 w-4 text-muted-foreground" />
                       <div>
                         <label className="text-sm font-medium text-muted-foreground">
-                          Membre depuis
+                          Joined on
                         </label>
                         <p className="text-base">
                           {formatDate(userData.dateInscription)}
@@ -240,7 +231,7 @@ const Profile = () => {
                       <Shield className="mr-3 h-4 w-4 text-muted-foreground" />
                       <div>
                         <label className="text-sm font-medium text-muted-foreground">
-                          Rôle
+                          Role
                         </label>
                         <div className="mt-1">
                           <Badge variant={getRoleBadgeVariant(userData.role)}>
@@ -290,12 +281,12 @@ const Profile = () => {
               </Card>
               <Card>
                 <CardHeader>
-                  <CardTitle>Actions rapides</CardTitle>
+                  <CardTitle>Shortcuts</CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-3">
                   <Link to="/reservations">
                     <Button variant="outline" className="w-full justify-start">
-                      Mes réservations
+                      My bookings
                     </Button>
                   </Link>
                 </CardContent>
@@ -303,40 +294,40 @@ const Profile = () => {
 
               <Card>
                 <CardHeader>
-                  <CardTitle>Statistiques</CardTitle>
+                  <CardTitle>Statistics</CardTitle>
                 </CardHeader>
                 <Separator />
                 <CardContent className="space-y-3">
                   <div className="flex justify-between pt-4 mb-5">
                     <span className="text-medium font-bold text-blue-600">
-                      Total réservations
+                      Total bookings
                     </span>
                     <span className="font-bold text-blue-600 text-medium">
                       {stats.total}
                     </span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-sm text-green-600">Confirmées</span>
+                    <span className="text-sm text-green-600">Confirmed</span>
                     <span className="font-medium text-green-600 text-sm">
                       {stats.confirmees}
                     </span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-sm text-yellow-600">En attente</span>
+                    <span className="text-sm text-yellow-600">Pending</span>
                     <span className="font-medium text-yellow-600 text-sm">
                       {stats.enAttente}
                     </span>
                   </div>
                   <div className="flex justify-between">
                     <span className="text-sm text-muted-foreground">
-                      Terminées
+                      Completed
                     </span>
                     <span className="font-medium text-muted-foreground text-sm">
                       {stats.terminees}
                     </span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-sm text-red-600">Annulées</span>
+                    <span className="text-sm text-red-600">Cancelled</span>
                     <span className="font-medium text-red-600 text-sm">
                       {stats.annulees}
                     </span>

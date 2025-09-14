@@ -11,6 +11,7 @@ import { Helmet } from "react-helmet-async";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import EmptyData from "@/components/EmptyData";
+import { formatDate } from "@/helper/formatage";
 
 // Composant principal amélioré
 const Blog = () => {
@@ -48,10 +49,10 @@ const Blog = () => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-blue-50">
       <Helmet>
-        <title>Blog & Actualités</title>
+        <title>Blog & News</title>
         <meta
           name="description"
-          content="Découvrez nos derniers articles, guides pratiques et actualités."
+          content="Discover our latest articles, practical guides, and news updates."
         />
         <link
           rel="canonical"
@@ -63,10 +64,8 @@ const Blog = () => {
 
       {/* Header Section */}
       <PageHeader
-        titre="Blog & Actualités"
-        description="Découvrez nos derniers articles, guides pratiques et actualités.
-            Explorez un monde d'idées et d'inspirations à travers nos contenus
-            soigneusement sélectionnés."
+        titre="Blog & News"
+        description="Stay informed with our newest posts, expert tips, and curated stories designed to inspire."
         background="piscine.webp"
         bg_position="bg-end"
       />
@@ -162,7 +161,7 @@ const Blog = () => {
                       <div className="flex items-center gap-4">
                         <span className="flex items-center gap-1">
                           <User className="w-4 h-4" />
-                          Par {post.auteur}
+                          By {post.auteur}
                         </span>
                       </div>
                     </div>
@@ -172,7 +171,7 @@ const Blog = () => {
                       <div className="flex items-center gap-4">
                         <span className="flex items-center gap-1">
                           <Calendar className="w-4 h-4" />
-                          {post.datePublication}
+                          {formatDate(post.datePublication)}
                         </span>
                       </div>
                     </div>
@@ -187,7 +186,7 @@ const Blog = () => {
                     <div className="mt-auto">
                       <Link to={`/blog/${post.id}`}>
                         <button className="flex items-center text-green-600 font-semibold group-hover:text-green-800 transition-colors duration-300">
-                          <span className="mr-2">Lire la suite</span>
+                          <span className="mr-2">Read more</span>
                           <ArrowRight className="w-4 h-4 transform group-hover:translate-x-1 transition-transform duration-300" />
                         </button>
                       </Link>
@@ -198,10 +197,7 @@ const Blog = () => {
             ))}
           </div>
         ) : (
-          <EmptyData
-            titre="Blogs seront bientôt disponible."
-            description="Merci pour votre patience."
-          />
+          <EmptyData titre="Upcoming Blogs Coming Soon" />
         )}
       </main>
 

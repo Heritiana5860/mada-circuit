@@ -4,7 +4,7 @@ const ContactInfoDetail = () => {
   return (
     <>
       <div className="pt-4 border-t">
-        <h4 className="font-semibold mb-3">Besoin d'aide ?</h4>
+        <h4 className="font-semibold mb-3">Need help?</h4>
         <div className="space-y-2 text-sm">
           <div className="flex items-center text-gray-600">
             <Phone className="h-4 w-4 mr-2" />

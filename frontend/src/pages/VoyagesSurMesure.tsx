@@ -111,12 +111,12 @@ const VoyagesSurMesure = () => {
   const totalSteps = 4;
 
   const activities = [
-    { name: "Randonnée", icon: <Compass className="h-5 w-5" /> },
-    { name: "Plage", icon: <Compass className="h-5 w-5" /> },
+    { name: "Hiking", icon: <Compass className="h-5 w-5" /> },
+    { name: "Beach", icon: <Compass className="h-5 w-5" /> },
     { name: "Safari", icon: <Compass className="h-5 w-5" /> },
-    { name: "Plongée", icon: <Compass className="h-5 w-5" /> },
+    { name: "Scuba Diving", icon: <Compass className="h-5 w-5" /> },
     { name: "Culture", icon: <Compass className="h-5 w-5" /> },
-    { name: "Gastronomie", icon: <Compass className="h-5 w-5" /> },
+    { name: "Gastronomy", icon: <Compass className="h-5 w-5" /> },
   ];
 
   if (testimoniaLoading || utilisateurLoading || faqLoading) {
@@ -302,8 +302,8 @@ const VoyagesSurMesure = () => {
   return (
     <div className="min-h-screen flex flex-col">
       <SEO
-        title="Voyage sur mesure à Madagascar | Circuits personnalisés"
-        description="Créez votre voyage sur mesure à Madagascar : circuits personnalisés, expériences uniques et découverte authentique du pays selon vos envies."
+        title="Tailor-Made Travel to Madagascar | Custom Tours"
+        description="Create your tailor-made trip to Madagascar: custom tours, unique experiences, and authentic discovery of the country based on your preferences."
         canonical="https://madagascar-voyagesolidaire.com/voyages-sur-mesure"
         image="https://madagascar-voyagesolidaire.com/images/surmesure-og.webp"
       />
@@ -321,12 +321,12 @@ const VoyagesSurMesure = () => {
             <div className="text-center mb-16">
               <h1 className="text-5xl md:text-7xl lg:text-8xl font-black mb-8 leading-tight">
                 <span className="text-white">
-                  Créez votre Voyage Sur Mesure
+                  Create your Custom Tour Journey
                 </span>
               </h1>
               <p className="text-xl md:text-2xl text-white/90 max-w-4xl mx-auto leading-relaxed mb-12">
-                Un voyage unique, conçu selon vos préférences, pour découvrir
-                Madagascar à votre rythme et selon vos envies.
+                A unique trip, designed according to your preferences, to
+                explore Madagascar at your own pace and on your own terms.
               </p>
             </div>
           </div>
@@ -338,10 +338,10 @@ const VoyagesSurMesure = () => {
               <div className="p-6 border-b">
                 <div className="flex items-center justify-between mb-2">
                   <h2 className="text-2xl font-bold">
-                    Votre itinéraire personnalisé
+                    Your Personalized Itinerary
                   </h2>
                   <span className="text-sm text-muted-foreground">
-                    Étape {step} sur {totalSteps}
+                    Step {step} sur {totalSteps}
                   </span>
                 </div>
 
@@ -358,11 +358,11 @@ const VoyagesSurMesure = () => {
                   <div className="space-y-6">
                     <div className="text-center">
                       <h3 className="text-2xl font-bold text-gray-900 mb-2">
-                        Planifiez votre itinéraire
+                        Plan Your Itinerary
                       </h3>
                       <p className="text-gray-600">
-                        Définissez votre point de départ, d'arrivée et les lieux
-                        que vous souhaitez visiter
+                        Set your starting point, destination, and the places you
+                        wish to visit.
                       </p>
                     </div>
 
@@ -377,7 +377,7 @@ const VoyagesSurMesure = () => {
                                 <Plane className="h-4 w-4 text-white rotate-45" />
                               </div>
                               <span className="font-semibold text-green-800">
-                                Point de départ
+                                Starting Point
                               </span>
                             </div>
                             {pointDepart && (
@@ -402,7 +402,7 @@ const VoyagesSurMesure = () => {
                                   {pointDepart}
                                 </div>
                                 <div className="text-sm text-gray-500">
-                                  Ville de départ
+                                  Departure City
                                 </div>
                               </div>
                             </div>
@@ -414,7 +414,7 @@ const VoyagesSurMesure = () => {
                             >
                               <Plus className="h-5 w-5 mr-2 text-green-600" />
                               <span className="text-green-700">
-                                Sélectionner le point de départ
+                                Select the starting point
                               </span>
                             </Button>
                           )}
@@ -436,7 +436,7 @@ const VoyagesSurMesure = () => {
                               <Route className="h-4 w-4 text-white" />
                             </div>
                             <span className="font-semibold text-blue-800">
-                              Lieux à visiter
+                              Places to Visit
                             </span>
                             <span className="text-sm text-blue-600">
                               ({lieuxAVisiter.length})
@@ -484,7 +484,7 @@ const VoyagesSurMesure = () => {
                             >
                               <Plus className="h-5 w-5 mr-2 text-blue-600" />
                               <span className="text-blue-700">
-                                Ajouter un lieu à visiter
+                                Add a Place to Visit
                               </span>
                             </Button>
                           </div>
@@ -507,7 +507,7 @@ const VoyagesSurMesure = () => {
                                 <Plane className="h-4 w-4 text-white -rotate-45" />
                               </div>
                               <span className="font-semibold text-red-800">
-                                Point d'arrivée
+                                Destination Point
                               </span>
                             </div>
                             {pointArrivee && (
@@ -532,7 +532,7 @@ const VoyagesSurMesure = () => {
                                   {pointArrivee}
                                 </div>
                                 <div className="text-sm text-gray-500">
-                                  Ville d'arrivée
+                                  Arrival City
                                 </div>
                               </div>
                             </div>
@@ -544,7 +544,7 @@ const VoyagesSurMesure = () => {
                             >
                               <Plus className="h-5 w-5 mr-2 text-red-600" />
                               <span className="text-red-700">
-                                Sélectionner le point d'arrivée
+                                Select the destination point
                               </span>
                             </Button>
                           )}
@@ -559,12 +559,12 @@ const VoyagesSurMesure = () => {
                           <div className="p-6 border-b">
                             <div className="flex items-center justify-between">
                               <h3 className="text-xl font-bold">
-                                Choisissez{" "}
+                                Choose{" "}
                                 {activeSelection === "depart"
-                                  ? "votre point de départ"
+                                  ? "your starting point"
                                   : activeSelection === "arrivee"
-                                  ? "votre point d'arrivée"
-                                  : "un lieu à visiter"}
+                                  ? "your destination point"
+                                  : "a place to visit"}
                               </h3>
                               <Button
                                 variant="ghost"
@@ -645,14 +645,16 @@ const VoyagesSurMesure = () => {
                         <CardContent className="p-6">
                           <h4 className="text-lg font-bold text-gray-800 mb-4 flex items-center">
                             <Route className="h-5 w-5 mr-2 text-blue-600" />
-                            Résumé de votre itinéraire
+                            Your Itinerary Summary
                           </h4>
 
                           <div className="space-y-2 text-sm">
                             {pointDepart && (
                               <div className="flex items-center space-x-2">
                                 <div className="w-2 h-2 bg-green-500 rounded-full"></div>
-                                <span className="text-gray-600">Départ:</span>
+                                <span className="text-gray-600">
+                                  Departure:
+                                </span>
                                 <span className="font-medium text-gray-800">
                                   {pointDepart}
                                 </span>
@@ -663,9 +665,7 @@ const VoyagesSurMesure = () => {
                               <div className="flex items-start space-x-2">
                                 <div className="w-2 h-2 bg-blue-500 rounded-full mt-1"></div>
                                 <div>
-                                  <span className="text-gray-600">
-                                    Visites:
-                                  </span>
+                                  <span className="text-gray-600">Visits:</span>
                                   <div className="ml-2">
                                     {lieuxAVisiter.map((lieu, index) => (
                                       <div
@@ -683,7 +683,7 @@ const VoyagesSurMesure = () => {
                             {pointArrivee && (
                               <div className="flex items-center space-x-2">
                                 <div className="w-2 h-2 bg-red-500 rounded-full"></div>
-                                <span className="text-gray-600">Arrivée:</span>
+                                <span className="text-gray-600">Arrival:</span>
                                 <span className="font-medium text-gray-800">
                                   {pointArrivee}
                                 </span>
@@ -698,19 +698,16 @@ const VoyagesSurMesure = () => {
 
                 {step === 2 && (
                   <div>
-                    <h3 className="text-xl font-bold mb-4">
-                      Détails du voyage
-                    </h3>
+                    <h3 className="text-xl font-bold mb-4">Trip Details</h3>
                     <p className="text-muted-foreground mb-6">
-                      Indiquez les dates et le nombre de voyageurs pour votre
-                      séjour.
+                      Enter the dates and number of travelers for your stay.
                     </p>
 
                     <div className="space-y-4 mb-6">
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div>
                           <label className="block text-sm font-medium mb-1">
-                            Date de début
+                            Started date
                           </label>
                           <div className="relative">
                             <input
@@ -726,7 +723,7 @@ const VoyagesSurMesure = () => {
                         </div>
                         <div>
                           <label className="block text-sm font-medium mb-1">
-                            Date de fin
+                            End date
                           </label>
                           <div className="relative">
                             <input
@@ -747,7 +744,7 @@ const VoyagesSurMesure = () => {
 
                       <div>
                         <label className="block text-sm font-medium mb-1">
-                          Durée préférée (jours)
+                          Preferred Duration (days)
                         </label>
                         <div className="relative">
                           <input
@@ -776,16 +773,18 @@ const VoyagesSurMesure = () => {
                 {step === 3 && (
                   <div>
                     <h3 className="text-xl font-bold mb-4">
-                      Préférences et activités
+                      Preferences and Activities
                     </h3>
                     <p className="text-muted-foreground mb-6">
-                      Choisissez le type d'hébergement et les activités qui vous
-                      intéressent.
+                      Choose the type of accommodation and activities that
+                      interest you.
                     </p>
 
                     <div className="space-y-6 mb-6">
                       <div>
-                        <h4 className="font-medium mb-3">Type d'hébergement</h4>
+                        <h4 className="font-medium mb-3">
+                          Type of Accommodation
+                        </h4>
                         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                           {["STANDARD", "CONFORT", "LUXE"].map((type) => (
                             <label
@@ -816,9 +815,7 @@ const VoyagesSurMesure = () => {
                       </div>
 
                       <div>
-                        <h4 className="font-medium mb-3">
-                          Activités souhaitées
-                        </h4>
+                        <h4 className="font-medium mb-3">Desired Activities</h4>
                         <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
                           {activities.map((activity) => (
                             <label
@@ -850,14 +847,14 @@ const VoyagesSurMesure = () => {
 
                       <div>
                         <h4 className="font-medium mb-3">
-                          Budget estimé par personne
+                          Estimated Budget per Person
                         </h4>
                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                           {[
-                            "Moins de 5 000 000 Ar",
-                            "De 5 000 000 à 10 000 000 Ar",
-                            "De 10 000 000 à 15 000 000 Ar",
-                            "Plus de 15 000 000 Ar",
+                            "Less than €1 100",
+                            "From €1,100 to €2 200",
+                            "From €2,200 to €3 300",
+                            "More than €3 300",
                           ].map((budget) => (
                             <label
                               key={budget}
@@ -896,17 +893,19 @@ const VoyagesSurMesure = () => {
 
                 {step === 4 && (
                   <div>
-                    <h3 className="text-xl font-bold mb-4">Vos coordonnées</h3>
+                    <h3 className="text-xl font-bold mb-4">
+                      Your Contact Information
+                    </h3>
                     <p className="text-muted-foreground mb-6">
-                      Laissez-nous vos coordonnées pour recevoir votre devis
-                      personnalisé.
+                      Leave us your contact details to receive your personalized
+                      quote.
                     </p>
 
                     <div className="space-y-4 mb-6">
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div>
                           <label className="block text-sm font-medium mb-1">
-                            Nom
+                            Last Name
                           </label>
                           <input
                             type="text"
@@ -914,12 +913,12 @@ const VoyagesSurMesure = () => {
                             value={formData.nom}
                             onChange={handleInputChange}
                             className="w-full p-2 border rounded-lg"
-                            placeholder="Votre nom"
+                            placeholder="Your last name"
                           />
                         </div>
                         <div>
                           <label className="block text-sm font-medium mb-1">
-                            Prénom
+                            First Name
                           </label>
                           <input
                             type="text"
@@ -927,7 +926,7 @@ const VoyagesSurMesure = () => {
                             value={formData.prenom}
                             onChange={handleInputChange}
                             className="w-full p-2 border rounded-lg"
-                            placeholder="Votre prénom"
+                            placeholder="Your first name"
                           />
                         </div>
                       </div>
@@ -942,13 +941,13 @@ const VoyagesSurMesure = () => {
                           value={formData.email}
                           onChange={handleInputChange}
                           className="w-full p-2 border rounded-lg"
-                          placeholder="votre.email@exemple.com"
+                          placeholder="your.email@example.com"
                         />
                       </div>
 
                       <div>
                         <label className="block text-sm font-medium mb-1">
-                          Téléphone
+                          Phone
                         </label>
                         <input
                           type="tel"
@@ -962,7 +961,7 @@ const VoyagesSurMesure = () => {
 
                       <div>
                         <label className="block text-sm font-medium mb-1">
-                          Informations complémentaires
+                          Additional Information
                         </label>
                         <textarea
                           rows={4}
@@ -970,7 +969,7 @@ const VoyagesSurMesure = () => {
                           value={formData.commentaire}
                           onChange={handleInputChange}
                           className="w-full p-2 border rounded-lg"
-                          placeholder="Précisez toute demande particulière ou information supplémentaire pour votre voyage..."
+                          placeholder="Please specify any special requests or additional information for your trip..."
                         ></textarea>
                       </div>
                     </div>
@@ -980,14 +979,14 @@ const VoyagesSurMesure = () => {
                 <div className="flex justify-between mt-8">
                   {step > 1 ? (
                     <Button variant="outline" onClick={() => setStep(step - 1)}>
-                      Précédent
+                      Previous
                     </Button>
                   ) : (
                     <div></div>
                   )}
 
                   {step < totalSteps ? (
-                    <Button onClick={() => setStep(step + 1)}>Continuer</Button>
+                    <Button onClick={() => setStep(step + 1)}>Next</Button>
                   ) : (
                     <Button
                       onClick={handleCreateSurMesure}
@@ -995,7 +994,7 @@ const VoyagesSurMesure = () => {
                       className="flex items-center"
                     >
                       <Send className="mr-2 h-4 w-4" />
-                      <span>Envoyer ma demande</span>
+                      <span>Submit my request</span>
                     </Button>
                   )}
                 </div>
@@ -1008,11 +1007,11 @@ const VoyagesSurMesure = () => {
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center max-w-3xl mx-auto mb-12">
               <h2 className="text-3xl font-bold mb-4">
-                Pourquoi choisir un voyage sur mesure ?
+                Why Choose a Tailor-Made Trip?
               </h2>
               <p className="text-muted-foreground">
-                Un voyage personnalisé vous offre une expérience unique, adaptée
-                à vos envies et à votre rythme.
+                A personalized journey offers you a unique experience, tailored
+                to your desires and your own pace.
               </p>
             </div>
 
@@ -1022,11 +1021,10 @@ const VoyagesSurMesure = () => {
                   <div className="bg-primary/10 p-3 rounded-full w-12 h-12 flex items-center justify-center mb-4">
                     <Compass className="h-6 w-6 text-primary" />
                   </div>
-                  <h3 className="text-xl font-bold mb-2">Liberté totale</h3>
+                  <h3 className="text-xl font-bold mb-2">Total Freedom</h3>
                   <p className="text-muted-foreground">
-                    Choisissez librement vos destinations, la durée de votre
-                    séjour dans chaque lieu et les activités qui vous
-                    intéressent le plus.
+                    Freely choose your destinations, the length of your stay in
+                    each place, and the activities that interest you most.
                   </p>
                 </CardContent>
               </Card>
@@ -1036,11 +1034,10 @@ const VoyagesSurMesure = () => {
                   <div className="bg-primary/10 p-3 rounded-full w-12 h-12 flex items-center justify-center mb-4">
                     <Users className="h-6 w-6 text-primary" />
                   </div>
-                  <h3 className="text-xl font-bold mb-2">Assistance locale</h3>
+                  <h3 className="text-xl font-bold mb-2">Local Assistance</h3>
                   <p className="text-muted-foreground">
-                    Nos guides locaux vous accompagnent tout au long de votre
-                    voyage pour vous faire découvrir les trésors cachés de
-                    Madagascar.
+                    Our local guides accompany you throughout your journey to
+                    help you discover Madagascar’s hidden treasures.
                   </p>
                 </CardContent>
               </Card>
@@ -1051,11 +1048,11 @@ const VoyagesSurMesure = () => {
                     <MapPin className="h-6 w-6 text-primary" />
                   </div>
                   <h3 className="text-xl font-bold mb-2">
-                    Expérience authentique
+                    Authentic Experience
                   </h3>
                   <p className="text-muted-foreground">
-                    Vivez des expériences uniques, loin des sentiers battus, et
-                    découvrez la culture malgache de façon authentique.
+                    Live unique experiences off the beaten path and discover
+                    Malagasy culture in an authentic way.
                   </p>
                 </CardContent>
               </Card>

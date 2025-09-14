@@ -27,6 +27,9 @@ import { Helmet } from "react-helmet-async";
 import SEO from "@/SEO";
 import { urlMedia } from "@/helper/UrlImage";
 import EmptyData from "@/components/EmptyData";
+import { villages } from "@/helper/solidaire/Villages";
+import { supportProjects } from "@/helper/solidaire/SupportProjects";
+import { exchangeActivities } from "@/helper/solidaire/ExchangeActivities";
 
 const ProgrammeSolidairePage = () => {
   const navigate = useNavigate();
@@ -46,119 +49,6 @@ const ProgrammeSolidairePage = () => {
     document.title = "Programme Solidaire | Madagascar Voyage";
   }, []);
 
-  const villages = [
-    "Salehy",
-    "Ambodiarina",
-    "Ambodisovika",
-    "Ampangalana",
-    "Andranotsara",
-    "Sohihy",
-    "Ampanambo",
-    "Analila",
-    "Manonilaza",
-    "Masomeloka",
-    "Ambalavotaka",
-    "Analampotsy",
-    "Andonaka",
-    "Nosy Varika",
-    "Ampohamanitra",
-    "Ambodiarana",
-    "Analanolona",
-    "Ambahy",
-    "Ambohitsara",
-    "Ampandomana",
-  ];
-
-  const supportProjects = [
-    {
-      title: "Construction de Puits",
-      description:
-        "Financer la construction de puits pour garantir l'accès à l'eau potable aux villages riverains du canal.",
-      icon: <Droplets className="h-6 w-6 text-primary" />,
-    },
-    {
-      title: "Panneaux Solaires",
-      description:
-        "Installer des panneaux solaires pour apporter l'électricité aux villages isolés du canal des Pangalanes.",
-      icon: <LightbulbIcon className="h-6 w-6 text-primary" />,
-    },
-    {
-      title: "Parrainage d'Enfants",
-      description:
-        "Soutenir les enfants pour leur permettre de poursuivre leur scolarité jusqu'au secondaire et même jusqu'à l'université.",
-      icon: <Heart className="h-6 w-6 text-primary" />,
-    },
-    {
-      title: "Fournitures Scolaires",
-      description:
-        "Offrir des fournitures scolaires pour permettre aux enfants d'étudier dans de meilleures conditions.",
-      icon: <BookOpen className="h-6 w-6 text-primary" />,
-    },
-    {
-      title: "Rénovation d'Écoles",
-      description:
-        "Participer à la rénovation des infrastructures scolaires pour améliorer les conditions d'apprentissage.",
-      icon: <Building className="h-6 w-6 text-primary" />,
-    },
-    {
-      title: "Rénovation d'Hôpitaux",
-      description:
-        "Contribuer à l'amélioration des infrastructures médicales pour offrir de meilleurs soins aux riverains.",
-      icon: <ShieldCheck className="h-6 w-6 text-primary" />,
-    },
-    {
-      title: "Construction d'Églises",
-      description:
-        "Aider à la construction ou rénovation d'églises, lieux importants de la vie spirituelle et sociale des villages.",
-      icon: <Church className="h-6 w-6 text-primary" />,
-    },
-    {
-      title: "Distribution de Semences",
-      description:
-        "Fournir des semences de maïs, haricot et légumes pour assurer la sécurité alimentaire des villages.",
-      //   icon: <Seed className="h-6 w-6 text-primary" />,
-    },
-  ];
-
-  const exchangeActivities = [
-    {
-      title: "Initiation à la Vannerie",
-      description:
-        "Apprenez l'art traditionnel de la vannerie avec les artisans locaux qui partagent leur savoir-faire ancestral.",
-      icon: <Star className="h-6 w-6 text-primary" />,
-    },
-    {
-      title: "Techniques de Pêche",
-      description:
-        "Découvrez les techniques de pêche traditionnelles utilisées par les riverains du canal des Pangalanes.",
-      icon: <ArrowRight className="h-6 w-6 text-primary" />,
-    },
-    {
-      title: "Culture du Riz",
-      description:
-        "Participez aux différentes étapes de la culture du riz, aliment de base de la cuisine malgache.",
-      icon: <Globe className="h-6 w-6 text-primary" />,
-    },
-    {
-      title: "Pilage du Riz",
-      description:
-        "Initiez-vous au pilage traditionnel du riz, une activité quotidienne dans les villages malgaches.",
-      icon: <ShieldCheck className="h-6 w-6 text-primary" />,
-    },
-    {
-      title: "Découverte des Coutumes",
-      description:
-        "Immergez-vous dans les traditions et coutumes locales à travers des échanges privilégiés avec les habitants.",
-      icon: <Users className="h-6 w-6 text-primary" />,
-    },
-    {
-      title: "Chants et Chorale",
-      description:
-        "Assistez aux louanges et chants chorals dans les églises des villages pour une expérience culturelle authentique.",
-      icon: <Heart className="h-6 w-6 text-primary" />,
-    },
-  ];
-
   if (loading) {
     return <ContentLoading />;
   }
@@ -172,8 +62,8 @@ const ProgrammeSolidairePage = () => {
   return (
     <div className="min-h-screen flex flex-col">
       <SEO
-        title="Circuit solidaire à Madagascar | Voyages responsables"
-        description="Participez à un circuit solidaire à Madagascar : voyage authentique, rencontres locales et contribution au développement durable des communautés."
+        title="Responsible Travel in Madagascar | Ethical & Solidarity Tours"
+        description="Join a solidarity tour in Madagascar: authentic travel, local encounters, and support for sustainable community development."
         canonical="https://madagascar-voyagesolidaire.com/programme-solidaire"
         image="https://madagascar-voyagesolidaire.com/images/solidaire-og.webp"
       />
@@ -181,35 +71,39 @@ const ProgrammeSolidairePage = () => {
       <NavBar />
 
       <main className="flex-grow">
-        
         <div className="relative p-10 bg-[url('solidaire.JPG')] bg-cover bg-center">
           {/* Overlay */}
           <div className="absolute inset-0 bg-black/50"></div>
-          <div className=" relative text-center mb-16">
-            <h1 className="text-5xl md:text-7xl lg:text-8xl font-black mb-8 leading-tight">
-              <span className=" text-white">Devenez Voyageur Solidaire</span>
-            </h1>
-            <p className="text-xl md:text-2xl text-white/90 max-w-4xl mx-auto leading-relaxed mb-12">
-              Un mélange de vacances confortables et d'actions solidaires auprès
-              des populations locales sur les rives du fameux Canal des
-              Pangalanes.
-            </p>
-            <Button
-              onClick={() => {
-                document.getElementById("projet")?.scrollIntoView({
-                  behavior: "smooth",
-                });
-              }}
-              size="lg"
-              className="mr-4"
-            >
-              Découvrir nos projets
-            </Button>
-            <Link to="/contact">
-              <Button size="lg" variant="secondary">
-                Faire un don
+          <div className="max-w-6xl mx-auto">
+            <div className="relative text-center">
+              <h1 className="text-5xl md:text-7xl lg:text-8xl font-black mb-8 leading-tight">
+                <span className="text-white">
+                  Become a Socially Responsible Traveler
+                </span>
+              </h1>
+              <p className="text-xl md:text-2xl text-white/90 max-w-4xl mx-auto leading-relaxed mb-12">
+                Enjoy a perfect blend of comfortable vacations and meaningful
+                actions supporting local communities along the famous Pangalanes
+                Canal.
+              </p>
+
+              <Button
+                onClick={() => {
+                  document.getElementById("projet")?.scrollIntoView({
+                    behavior: "smooth",
+                  });
+                }}
+                size="lg"
+                className="mr-4"
+              >
+                Discover our projects
               </Button>
-            </Link>
+              <Link to="/contact">
+                <Button size="lg" variant="secondary">
+                  Make a donation
+                </Button>
+              </Link>
+            </div>
           </div>
         </div>
 
@@ -218,32 +112,31 @@ const ProgrammeSolidairePage = () => {
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
               <div>
                 <h2 className="text-3xl font-bold mb-6">
-                  Notre Vision du Tourisme Solidaire
+                  Our Vision of Responsible Tourism
                 </h2>
                 <p className="text-muted-foreground mb-4">
-                  La route des Pangalanes ouvre une nouvelle conception du
-                  voyage qui se place au-dessus de toutes les autres notions de
-                  tourisme. Les voyageurs participent activement à une mission
-                  bien définie, avec une équipe locale rémunérée.
+                  The Pangalanes route introduces a new approach to travel that
+                  goes beyond traditional tourism. Travelers actively
+                  participate in a well-defined mission, working alongside a
+                  compensated local team.
                 </p>
                 <p className="text-muted-foreground mb-6">
-                  Les retombées économiques sont équitablement réparties entre
-                  le prestataire et le village hôte pour pérenniser les projets
-                  dans les villages situés au bord du canal des pangalanes.
-                  Notre objectif est de créer un échange authentique où chacun
-                  enrichit l'autre.
+                  Economic benefits are fairly shared between the service
+                  provider and the host village to sustain projects in
+                  communities along the Pangalanes Canal. Our goal is to create
+                  a genuine exchange where everyone enriches each other.
                 </p>
                 <div className="flex items-center space-x-4">
                   <div className="flex flex-col items-center p-4 bg-white rounded-lg shadow-sm">
                     <span className="text-3xl font-bold text-primary">21</span>
                     <span className="text-sm text-muted-foreground">
-                      villages soutenus
+                      supported villages
                     </span>
                   </div>
                   <div className="flex flex-col items-center p-4 bg-white rounded-lg shadow-sm">
                     <span className="text-3xl font-bold text-primary">10+</span>
                     <span className="text-sm text-muted-foreground">
-                      années d'action
+                      years of action
                     </span>
                   </div>
                   <div className="flex flex-col items-center p-4 bg-white rounded-lg shadow-sm">
@@ -251,11 +144,12 @@ const ProgrammeSolidairePage = () => {
                       100%
                     </span>
                     <span className="text-sm text-muted-foreground">
-                      retombées locales
+                      local benefits
                     </span>
                   </div>
                 </div>
               </div>
+
               <div className="relative">
                 <img
                   src="slogan.webp"
@@ -273,12 +167,12 @@ const ProgrammeSolidairePage = () => {
         <section className="py-16">
           <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center max-w-3xl mx-auto mb-12">
-              <h2 className="text-3xl font-bold mb-4">Les Villages Soutenus</h2>
+              <h2 className="text-3xl font-bold mb-4">Supported Villages</h2>
               <p className="text-muted-foreground">
-                Notre programme solidaire soutient 21 grands villages entre
-                Mahanoro et Mananjary, situés le long du Canal des Pangalanes,
-                isolés et ayant besoin d'aide pour améliorer leurs conditions de
-                vie.
+                Our social impact program supports 21 major villages between
+                Mahanoro and Mananjary, located along the Pangalanes Canal,
+                which are isolated and in need of assistance to improve their
+                living conditions.
               </p>
             </div>
 
@@ -299,13 +193,11 @@ const ProgrammeSolidairePage = () => {
         <section className="py-16 bg-primary/5" id="projet">
           <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center max-w-3xl mx-auto mb-12">
-              <h2 className="text-3xl font-bold mb-4">
-                Nos Projets de Soutien
-              </h2>
+              <h2 className="text-3xl font-bold mb-4">Our Support Projects</h2>
               <p className="text-muted-foreground">
-                Le manque d'échange et d'éducation constituent la principale
-                misère des riverains. Voici les projets que nous menons avec
-                votre aide pour améliorer leurs conditions de vie.
+                The lack of interaction and education is the main hardship faced
+                by local communities. Here are the projects we carry out with
+                your support to improve their living conditions.
               </p>
             </div>
 
@@ -329,12 +221,12 @@ const ProgrammeSolidairePage = () => {
           <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center max-w-3xl mx-auto mb-12">
               <h2 className="text-3xl font-bold mb-4">
-                Un Échange Culturel Enrichissant
+                A Rich Cultural Exchange
               </h2>
               <p className="text-muted-foreground">
-                En contrepartie de votre soutien, les villageois vous partagent
-                leur savoir-faire, leur culture et leurs traditions. Un
-                véritable échange où chacun s'enrichit au contact de l'autre.
+                In return for your support, villagers share their skills,
+                culture, and traditions with you. A genuine exchange where
+                everyone enriches each other through meaningful interactions.
               </p>
             </div>
 
@@ -358,12 +250,12 @@ const ProgrammeSolidairePage = () => {
           <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center max-w-3xl mx-auto mb-12">
               <h2 className="text-3xl font-bold mb-4">
-                Nos Offres de Voyage Solidaire
+                Our Socially Responsible Travel Packages
               </h2>
               <p className="text-muted-foreground">
-                Découvrez nos formules de voyages solidaires qui allient
-                confort, découverte et contribution au développement local des
-                villages du Canal des Pangalanes.
+                Explore our socially responsible travel packages that combine
+                comfort, discovery, and contributions to the local development
+                of villages along the Pangalanes Canal.
               </p>
             </div>
 
@@ -379,7 +271,7 @@ const ProgrammeSolidairePage = () => {
                       />
                       <div className="absolute top-3 left-3">
                         <span className="bg-primary text-primary-foreground text-xs font-medium px-2 py-1 rounded-full">
-                          {pack.duree} jours
+                          {pack.duree} days
                         </span>
                       </div>
                     </div>
@@ -394,7 +286,7 @@ const ProgrammeSolidairePage = () => {
                       </p>
                       <div className="flex justify-between items-center">
                         <span className="text-xl font-bold text-primary">
-                          {formatPrice(pack.prix)} Ar
+                          {formatPrice(pack.prix)}
                         </span>
                         <Link
                           to={`/programme-solidaire/${pack.id}`}
@@ -405,7 +297,7 @@ const ProgrammeSolidairePage = () => {
                             size="sm"
                             className="flex items-center"
                           >
-                            <span>Détails</span>
+                            <span>Details</span>
                             <ArrowRight className="ml-2 h-4 w-4" />
                           </Button>
                         </Link>
@@ -415,10 +307,7 @@ const ProgrammeSolidairePage = () => {
                 ))}
               </div>
             ) : (
-              <EmptyData
-                titre="Circuits solidaire seront bientôt disponible."
-                description="Merci pour votre patience."
-              />
+              <EmptyData titre="Upcoming Socially Responsible Tour Coming Soon" />
             )}
           </div>
         </section>
@@ -427,21 +316,19 @@ const ProgrammeSolidairePage = () => {
           <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="bg-white p-8 rounded-lg shadow-md">
               <blockquote className="border-l-4 border-primary pl-6 italic text-lg text-muted-foreground">
-                "Nous avons besoin de la solidarité de voyageurs avec qui nous
-                échangeons nos valeurs et, en contrepartie, nous devons
-                intégrer, utiliser des méthodes de communication et de gestion
-                correspondant aux attentes de nos visiteurs. Conscients et
-                réalistes, nous garderons notre authenticité."
+                "We rely on the solidarity of travelers with whom we share our
+                values, and in return, we must adopt communication and
+                management methods that meet our visitors' expectations. Mindful
+                and realistic, we remain true to our authenticity."
               </blockquote>
               <div className="mt-6">
                 <p className="font-medium">
-                  Pour relever le défi du développement responsable et autonome,
-                  il faut des touristes solidaires et durables. Depuis 10 ans
-                  nos activités avec les touristes étrangers ont permis à notre
-                  petit groupe d'une vingtaine de personnes, les riverains de
-                  survivre et d'investir dans les équipements et matériels
-                  nécessaires à notre désir de construire durablement, à l'abri
-                  des cyclones.
+                  Meeting the challenge of responsible and self-sufficient
+                  development requires supportive and sustainable tourists. Over
+                  the past 10 years, our activities with international travelers
+                  have enabled our small community of around twenty locals to
+                  survive and invest in the equipment and resources needed to
+                  build sustainably, safe from cyclones.
                 </p>
               </div>
             </div>
@@ -463,31 +350,30 @@ const ProgrammeSolidairePage = () => {
               </div>
               <div>
                 <h2 className="text-3xl font-bold mb-6">
-                  L'Association et son Action
+                  The Association and Its Work
                 </h2>
                 <p className="text-muted-foreground mb-4">
-                  L'association "Parrainage des enfants sur le canal des
-                  pangalanes" dirigée par Mme RAZAFIHERISON Maminiaina,
-                  travaille en collaboration avec des prestataires touristiques
-                  et des guides pour offrir une expérience authentique tout en
-                  soutenant le développement local.
+                  The association "Sponsorship of Children along the Pangalanes
+                  Canal," led by Mrs. RAZAFIHERISON Maminiaina, collaborates
+                  with tourism providers and guides to offer an authentic
+                  experience while supporting local development.
                 </p>
                 <p className="text-muted-foreground mb-6">
-                  Grâce au soutien des touristes solidaires, nous avons pu
-                  favoriser la scolarisation des enfants dans les meilleures
-                  écoles de la région, fournir de l'eau potable et des semences
-                  aux villages. Nous continuerons à œuvrer pour un avenir
-                  meilleur pour les communautés du Canal des Pangalanes.
+                  Thanks to the support of socially responsible travelers, we
+                  have been able to promote children's education in the best
+                  schools of the region, provide clean drinking water, and
+                  supply seeds to the villages. We will continue working towards
+                  a better future for the communities along the Pangalanes
+                  Canal.
                 </p>
                 <Button onClick={handleClick} size="lg" className="mb-4">
-                  Découvrir les objectifs de l'association
+                  Discover the Association's Goals
                 </Button>
                 <p className="text-sm text-muted-foreground">
-                  Canal Évasion, qui regroupe les guides, les bateliers et les
-                  chefs de village, vous garantit des perspectives de
-                  développement durable, car ils bénéficient du soutien des
-                  autorités administratives locales et souhaitent une interface
-                  internationale pour accompagner ces projets.
+                  Canal Évasion, which brings together guides, boatmen, and
+                  village leaders, ensures sustainable development
+                  opportunities, as they receive support from local authorities
+                  and seek an international platform to advance these projects.
                 </p>
               </div>
             </div>
@@ -497,12 +383,12 @@ const ProgrammeSolidairePage = () => {
         <section className="relative py-20 overflow-hidden bg-black/60">
           <div className="relative z-10 max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 text-white text-center">
             <h2 className="text-3xl md:text-4xl font-bold mb-6">
-              Prêt à devenir un voyageur solidaire ?
+              Ready to Become a Socially Responsible Traveler?
             </h2>
             <p className="text-lg text-white/80 mb-8 max-w-3xl mx-auto">
-              Contactez-nous dès aujourd'hui pour réserver votre voyage
-              solidaire sur le Canal des Pangalanes et contribuer au
-              développement durable des communautés locales.
+              Contact us today to book your socially responsible journey along
+              the Pangalanes Canal and contribute to the sustainable development
+              of local communities.
             </p>
           </div>
         </section>

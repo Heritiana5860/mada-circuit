@@ -5,6 +5,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { useContext } from "react";
 import { AllPersonnelContext } from "@/provider/DataContext";
 import { urlMedia } from "@/helper/UrlImage";
+import EmptyData from "@/components/EmptyData";
 
 const PageGuide = () => {
   const { personnelData, peronnelLoading, personnelError } =
@@ -31,9 +32,7 @@ const PageGuide = () => {
       <div className="min-h-screen bg-gray-50 dark:bg-gray-900 flex items-center justify-center">
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
-          <p className="text-gray-600 dark:text-gray-300">
-            Chargement de nos experts...
-          </p>
+          <p className="text-gray-600 dark:text-gray-300">Loading...</p>
         </div>
       </div>
     );
@@ -44,9 +43,7 @@ const PageGuide = () => {
       <div className="min-h-screen bg-gray-50 dark:bg-gray-900 flex items-center justify-center">
         <div className="text-center">
           <div className="text-red-500 mb-4">⚠️</div>
-          <p className="text-gray-600 dark:text-gray-300">
-            Erreur lors du chargement des données
-          </p>
+          <p className="text-gray-600 dark:text-gray-300">Error!</p>
         </div>
       </div>
     );
@@ -66,23 +63,23 @@ const PageGuide = () => {
           <div className="mb-8">
             <span className="inline-flex items-center bg-white/15 backdrop-blur-sm text-white px-6 py-3 rounded-full text-sm font-medium mb-6 border border-white/20">
               <span className="mr-2">🏝️</span>
-              Votre Équipe d'Experts Madagascar
+              Madagascar Travel Experts
             </span>
           </div>
 
           <h1 className="text-5xl md:text-7xl lg:text-8xl font-bold mb-8 leading-tight">
-            Rencontrez nos
+            Meet Our
             <span className="bg-gradient-to-r from-amber-400 via-orange-500 to-red-500 bg-clip-text text-transparent">
               {" "}
-              Spécialistes
+              Specialists
             </span>
           </h1>
 
           <p className="text-xl md:text-2xl text-emerald-100 mb-12 max-w-4xl mx-auto leading-relaxed">
-            Une équipe de professionnels passionnés, chacun expert dans son
-            domaine, prêts à vous accompagner dans la création de votre voyage
-            sur mesure à Madagascar. De la planification à l'exploration, nous
-            sommes là pour vous.
+            Our passionate team of travel professionals, each specialized in
+            their domain, is here to guide you in crafting your personalized
+            adventure in Madagascar. From the first idea to the final
+            discovery—we’re with you every step of the way.
           </p>
 
           <div className="flex flex-col sm:flex-row gap-6 justify-center items-center">
@@ -96,14 +93,14 @@ const PageGuide = () => {
             >
               <span className="flex items-center">
                 <span className="mr-2">👥</span>
-                Découvrir l'équipe
+                Meet the team
               </span>
             </button>
             <Link to="/contact">
               <button className="border-2 border-white text-white hover:bg-white hover:text-emerald-900 font-bold py-4 px-10 rounded-2xl transition-all duration-300 shadow-lg">
                 <span className="flex items-center">
                   <span className="mr-2">💬</span>
-                  Demander conseil
+                  Ask for advice
                 </span>
               </button>
             </Link>
@@ -116,11 +113,12 @@ const PageGuide = () => {
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-16">
             <h2 className="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white mb-6">
-              Comment Nous Vous Aidons
+              Our Commitment to Your Journey
             </h2>
             <p className="text-xl text-gray-600 dark:text-gray-300 max-w-4xl mx-auto leading-relaxed">
-              Chaque membre de notre équipe apporte une expertise unique pour
-              faire de votre voyage une expérience extraordinaire
+              Every member of our team contributes their unique expertise to
+              craft a travel experience that’s unforgettable and tailored just
+              for you.
             </p>
           </div>
 
@@ -130,11 +128,11 @@ const PageGuide = () => {
                 <span className="text-3xl">🗺️</span>
               </div>
               <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">
-                Planification sur Mesure
+                Custom Travel Planning
               </h3>
               <p className="text-gray-600 dark:text-gray-300 leading-relaxed">
-                Nos conseillers voyage créent des itinéraires personnalisés
-                selon vos envies, votre budget et vos centres d'intérêt.
+                Our travel experts design unique itineraries tailored to your
+                desires, budget, and passions.
               </p>
             </div>
 
@@ -143,11 +141,12 @@ const PageGuide = () => {
                 <span className="text-3xl">🌿</span>
               </div>
               <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">
-                Expertise Locale
+                Local Expertise
               </h3>
               <p className="text-gray-600 dark:text-gray-300 leading-relaxed">
-                Nos guides locaux vous font découvrir les secrets de Madagascar
-                : faune, flore, culture et traditions authentiques.
+                Discover Madagascar through the eyes of our local guides, who
+                unveil its natural wonders, vibrant culture, and time-honored
+                traditions.
               </p>
             </div>
 
@@ -156,11 +155,11 @@ const PageGuide = () => {
                 <span className="text-3xl">🤝</span>
               </div>
               <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">
-                Accompagnement 24/7
+                Support Around the Clock
               </h3>
               <p className="text-gray-600 dark:text-gray-300 leading-relaxed">
-                Notre équipe reste disponible avant, pendant et après votre
-                voyage pour garantir une expérience parfaite.
+                From planning to return, our team is here for you—day and
+                night—to make your journey seamless and unforgettable.
               </p>
             </div>
           </div>
@@ -172,37 +171,42 @@ const PageGuide = () => {
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-16">
             <span className="inline-block bg-emerald-100 dark:bg-emerald-900 text-emerald-800 dark:text-emerald-200 px-6 py-2 rounded-full text-sm font-semibold mb-6">
-              Notre Équipe d'Experts
+              Our Team of Experts
             </span>
             <h2 className="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white mb-6">
-              Faites Connaissance avec Nos Spécialistes
+              Meet Our Specialists
             </h2>
             <p className="text-xl text-gray-600 dark:text-gray-300 max-w-4xl mx-auto leading-relaxed">
-              Chaque expert possède des compétences uniques et une passion
-              authentique pour partager les merveilles de Madagascar. Cliquez
-              sur un profil pour découvrir comment ils peuvent vous aider à
-              planifier votre voyage idéal.
+              Each expert brings unique skills and a genuine passion for sharing
+              the wonders of Madagascar. Click on a profile to discover how they
+              can help you plan your ideal journey.
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {personnelData.map((guide) => (
-              <PageGuideCard
-                key={guide.id}
-                url={`${urlMedia}${guide.photo}`}
-                nom={`${guide.nom} ${guide.prenom}`}
-                lieu={guide.adresse}
-                languages={guide.langues}
-                Biographie={guide.biographie}
-                lien={guide}
-                handleCardClick={handleCardClick}
-                contact={guide.contact}
-                email={guide.email}
-                onContact={handleContact}
-                onEmail={handleEmail}
-              />
-            ))}
-          </div>
+          {personnelData.length > 0 ? (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+              {personnelData.map((guide) => (
+                <PageGuideCard
+                  key={guide.id}
+                  url={`${urlMedia}${guide.photo}`}
+                  nom={`${guide.nom} ${guide.prenom}`}
+                  lieu={guide.adresse}
+                  languages={guide.langues}
+                  Biographie={guide.biographie}
+                  lien={guide}
+                  handleCardClick={handleCardClick}
+                  contact={guide.contact}
+                  email={guide.email}
+                  onContact={handleContact}
+                  onEmail={handleEmail}
+                />
+              ))}
+            </div>
+          ) : (
+            <EmptyData
+              titre="Upcoming experts Coming Soon"
+            />
+          )}
         </div>
       </section>
 
@@ -211,7 +215,7 @@ const PageGuide = () => {
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-16">
             <h2 className="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white mb-6">
-              Pourquoi Choisir Notre Équipe ?
+              What Makes Our Team Unique?
             </h2>
           </div>
 
@@ -221,10 +225,11 @@ const PageGuide = () => {
                 <span className="text-2xl">🎓</span>
               </div>
               <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-2">
-                Expertise Certifiée
+                Certified Expertise
               </h3>
               <p className="text-gray-600 dark:text-gray-300">
-                Guides professionnels certifiés et conseillers expérimentés
+                Our certified guides and seasoned travel consultants bring
+                trusted expertise to every journey.
               </p>
             </div>
 
@@ -233,10 +238,11 @@ const PageGuide = () => {
                 <span className="text-2xl">🗣️</span>
               </div>
               <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-2">
-                Multilingues
+                Multilingual
               </h3>
               <p className="text-gray-600 dark:text-gray-300">
-                Communication fluide en français, anglais, et langues locales
+                We offer seamless communication in French, English, and native
+                Malagasy languages.
               </p>
             </div>
 
@@ -245,10 +251,10 @@ const PageGuide = () => {
                 <span className="text-2xl">⭐</span>
               </div>
               <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-2">
-                Excellence Reconnue
+                Recognized Excellence
               </h3>
               <p className="text-gray-600 dark:text-gray-300">
-                Notes exceptionnelles et témoignages clients élogieux
+                Exceptional reviews and enthusiastic feedback from our clients
               </p>
             </div>
 
@@ -257,10 +263,11 @@ const PageGuide = () => {
                 <span className="text-2xl">💚</span>
               </div>
               <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-2">
-                Engagement Local
+                Local Commitment
               </h3>
               <p className="text-gray-600 dark:text-gray-300">
-                Soutien aux communautés et tourisme responsable
+                Empowering local communities through sustainable and responsible
+                tourism
               </p>
             </div>
           </div>
@@ -271,12 +278,12 @@ const PageGuide = () => {
       <section className="bg-secondary/5 text-black py-20">
         <div className="max-w-5xl mx-auto text-center px-4">
           <h3 className="text-3xl md:text-4xl font-bold mb-6">
-            Prêt à Planifier Votre Aventure Malgache ?
+            Ready to Design Your Dream Trip to Madagascar?
           </h3>
           <p className="text-xl mb-8 text-gray-500 leading-relaxed">
-            Nos experts sont là pour vous accompagner dans chaque étape de votre
-            projet. Que vous ayez une idée précise ou besoin d'inspiration,
-            contactez-nous pour un conseil personnalisé gratuit.
+            From first ideas to final details, our travel specialists are here
+            to guide you. Whether you're full of plans or just starting out,
+            contact us for free expert advice tailored to you.
           </p>
 
           <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-8">
@@ -284,7 +291,7 @@ const PageGuide = () => {
               <button className="bg-white text-emerald-600 hover:bg-emerald-50 font-bold py-4 px-8 rounded-2xl transition-all duration-300 transform hover:scale-105 shadow-lg">
                 <span className="flex items-center">
                   <span className="mr-2">📞</span>
-                  Demander un conseil gratuit
+                  Get a free consultation
                 </span>
               </button>
             </Link>
@@ -292,7 +299,7 @@ const PageGuide = () => {
               <button className="border-2 border-white text-gray-500 hover:bg-white hover:text-emerald-600 font-bold py-4 px-8 rounded-2xl transition-all duration-300">
                 <span className="flex items-center">
                   <span className="mr-2">✈️</span>
-                  Créer mon voyage sur mesure
+                  Design My Personalized Journey
                 </span>
               </button>
             </Link>
@@ -300,21 +307,23 @@ const PageGuide = () => {
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mt-12 text-center">
             <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-6 border border-white/20">
-              <h4 className="font-bold text-lg mb-2">Réponse Rapide</h4>
+              <h4 className="font-bold text-lg mb-2">
+                Fast & Friendly Support
+              </h4>
               <p className="text-gray-500">
-                Réponse sous 24h à toutes vos demandes
+                We respond to all your requests within 24 hours
               </p>
             </div>
             <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-6 border border-white/20">
-              <h4 className="font-bold text-lg mb-2">Conseil Gratuit</h4>
+              <h4 className="font-bold text-lg mb-2">Free Advice</h4>
               <p className="text-gray-500">
-                Première consultation sans engagement
+                First consultation with no obligation
               </p>
             </div>
             <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-6 border border-white/20">
-              <h4 className="font-bold text-lg mb-2">Sur Mesure</h4>
+              <h4 className="font-bold text-lg mb-2">Tailor-Made</h4>
               <p className="text-gray-500">
-                Voyage adapté à vos envies et budget
+                Travel tailored to your desires and budget
               </p>
             </div>
           </div>

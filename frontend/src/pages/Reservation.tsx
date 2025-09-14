@@ -2,7 +2,6 @@ import {
   Car,
   Calendar,
   Users,
-  MapPin,
   CreditCard,
   CheckCircle,
   Clock,
@@ -10,15 +9,11 @@ import {
   XCircle,
   Route,
   Info,
-  Eye,
 } from "lucide-react";
-import { useAuth } from "@/contexts/AuthContext";
 import NavBar from "@/components/NavBar";
 import Footer from "@/components/Footer";
-import { useQuery } from "@apollo/client";
 import { Circuit, User, Vehicule } from "@/types";
-import { GET_USER_RESERVATIONS } from "@/graphql/queries";
-import { formatPrice } from "@/helper/formatage";
+import { formatDate, formatPrice } from "@/helper/formatage";
 import { useContext } from "react";
 import { StatistiqueReservationContext } from "@/provider/DataContext";
 
@@ -173,49 +168,31 @@ const Reservation = () => {
     if (reservation.circuit && reservation.vehicule) {
       return {
         type: "COMPLETE",
-        label: "Circuit + Véhicule",
+        label: "Tour + Vehicle",
         icon: Route,
         color: "text-purple-600",
       };
     } else if (reservation.circuit) {
       return {
         type: "CIRCUIT",
-        label: "Circuit seul",
+        label: "Tour",
         icon: Route,
         color: "text-blue-600",
       };
     } else if (reservation.vehicule) {
       return {
         type: "VEHICULE",
-        label: "Véhicule seul",
+        label: "Vehicle",
         icon: Car,
         color: "text-orange-600",
       };
     }
     return {
       type: "UNKNOWN",
-      label: "Type inconnu",
+      label: "Unknown",
       icon: Info,
       color: "text-gray-600",
     };
-  };
-
-  const formatDate = (dateString) => {
-    if (!dateString) return "Non définie";
-    return new Date(dateString).toLocaleDateString("fr-FR", {
-      day: "numeric",
-      month: "long",
-      year: "numeric",
-    });
-  };
-
-  const formatDateShort = (dateString) => {
-    if (!dateString) return "--";
-    return new Date(dateString).toLocaleDateString("fr-FR", {
-      day: "2-digit",
-      month: "2-digit",
-      year: "numeric",
-    });
   };
 
   // Calcul des statistiques
@@ -237,18 +214,18 @@ const Reservation = () => {
           <div className="flex items-center justify-between">
             <div>
               <h1 className="text-2xl font-semibold text-gray-900">
-                Mes Réservations
+                My Bookings
               </h1>
               <p className="mt-1 text-sm text-gray-500">
-                {stats.total} réservation{stats.total > 1 ? "s" : ""} •
-                {stats.confirmees} confirmée{stats.confirmees > 1 ? "s" : ""} •
-                {stats.enAttente} en attente
+                {stats.total} reservation{stats.total > 1 ? "s" : ""} •
+                {stats.confirmees} confirmed{stats.confirmees > 1 ? "s" : ""} •
+                {stats.enAttente} pending
               </p>
             </div>
             <div className="text-right">
-              <p className="text-sm text-gray-500">Bienvenue</p>
+              <p className="text-sm text-gray-500">Welcome</p>
               <p className="font-medium text-gray-900">
-                {user?.nom} {user?.prenom} 
+                {user?.nom} {user?.prenom}
               </p>
             </div>
           </div>
@@ -268,25 +245,25 @@ const Reservation = () => {
             <div className="text-2xl font-semibold text-emerald-600">
               {stats.confirmees}
             </div>
-            <div className="text-xs text-gray-500">Confirmées</div>
+            <div className="text-xs text-gray-500">Confirmed</div>
           </div>
           <div className="bg-white rounded-lg border p-4 text-center">
             <div className="text-2xl font-semibold text-amber-600">
               {stats.enAttente}
             </div>
-            <div className="text-xs text-gray-500">En attente</div>
+            <div className="text-xs text-gray-500">Pending</div>
           </div>
           <div className="bg-white rounded-lg border p-4 text-center">
             <div className="text-2xl font-semibold text-red-600">
               {stats.annulees}
             </div>
-            <div className="text-xs text-gray-500">Annulées</div>
+            <div className="text-xs text-gray-500">Cancelled</div>
           </div>
           <div className="bg-white rounded-lg border p-4 text-center">
             <div className="text-2xl font-semibold text-gray-600">
               {stats.terminees}
             </div>
-            <div className="text-xs text-gray-500">Terminées</div>
+            <div className="text-xs text-gray-500">Completed</div>
           </div>
         </div>
 
@@ -325,7 +302,7 @@ const Reservation = () => {
                           </span>
                         </div>
                         <p className="text-sm text-gray-500">
-                          Réservé le {formatDate(reservation.dateReservation)}
+                          Booked on {formatDate(reservation.dateReservation)}
                         </p>
                       </div>
                     </div>
@@ -357,10 +334,10 @@ const Reservation = () => {
                           </div>
                           <div>
                             <p className="text-xs text-gray-500 uppercase tracking-wide">
-                              Départ
+                              Deparure
                             </p>
                             <p className="text-sm font-medium text-gray-900">
-                              {formatDateShort(reservation.dateDepart)}
+                              {formatDate(reservation.dateDepart)}
                             </p>
                           </div>
                         </div>
@@ -372,10 +349,10 @@ const Reservation = () => {
                           </div>
                           <div>
                             <p className="text-xs text-gray-500 uppercase tracking-wide">
-                              Durée
+                              Duration
                             </p>
                             <p className="text-sm font-medium text-gray-900">
-                              {reservation.duree || 1} jour
+                              {reservation.duree || 1} day
                               {(reservation.duree || 1) > 1 ? "s" : ""}
                             </p>
                           </div>
@@ -391,8 +368,8 @@ const Reservation = () => {
                               Participants
                             </p>
                             <p className="text-sm font-medium text-gray-900">
-                              {reservation.nombrePersonnes} personne
-                              {reservation.nombrePersonnes > 1 ? "s" : ""}
+                              {reservation.nombrePersonnes} {" "}
+                              {reservation.nombrePersonnes > 1 ? "people" : "person"}
                             </p>
                           </div>
                         </div>
@@ -406,7 +383,7 @@ const Reservation = () => {
                               <Route className="w-5 h-5 text-blue-600" />
                               <div className="flex-1">
                                 <p className="text-sm font-medium text-blue-900">
-                                  Circuit : {reservation.circuit.titre}
+                                  Tour : {reservation.circuit.titre}
                                 </p>
                                 <p className="text-xs text-blue-700">
                                   {reservation.circuit.description ||
@@ -428,11 +405,11 @@ const Reservation = () => {
                               <Car className="w-5 h-5 text-orange-600" />
                               <div className="flex-1">
                                 <p className="text-sm font-medium text-orange-900">
-                                  Véhicule : {reservation.vehicule.marque}{" "}
+                                  vehicle : {reservation.vehicule.marque}{" "}
                                   {reservation.vehicule.modele}
                                 </p>
                                 <p className="text-xs text-orange-700">
-                                  Véhicule tout-terrain
+                                  Off-road SUV
                                 </p>
                               </div>
                               {reservation.vehicule.prix && (
@@ -453,7 +430,7 @@ const Reservation = () => {
                         <div className="flex items-center justify-center space-x-2 mb-2">
                           <CreditCard className="w-4 h-4 text-gray-600" />
                           <span className="text-xs text-gray-500 uppercase tracking-wide">
-                            Prix total
+                            Total price
                           </span>
                         </div>
                         <p className="text-2xl font-bold text-gray-900">

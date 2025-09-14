@@ -260,17 +260,14 @@ const ProgrammeSolidaireDetail = () => {
 
     if (mutationLoading) return <p>Loading...</p>;
     if (mutationError) return <p>Error: {mutationError.message}</p>;
-
   };
 
   if (!dataFromState) {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-center">
-          <h2 className="text-2xl font-semibold mb-4">Circuit introuvable</h2>
-          <Button onClick={() => navigate("/circuits")}>
-            Retour aux circuits
-          </Button>
+          <h2 className="text-2xl font-semibold mb-4">Tour not found</h2>
+          <Button onClick={() => navigate("/circuits")}>Back to Tours</Button>
         </div>
       </div>
     );
@@ -361,10 +358,10 @@ const ProgrammeSolidaireDetail = () => {
                     {/* Texte de progression */}
                     <div className="flex flex-col">
                       <span className="text-sm font-medium text-gray-800">
-                        Affichage de destination en cours...
+                        Displaying destinations...
                       </span>
                       <span className="text-xs text-gray-500">
-                        Veuillez patienter, traitement des données en cours.
+                        Please wait, data is being processed.
                       </span>
                     </div>
 
@@ -426,17 +423,17 @@ const ProgrammeSolidaireDetail = () => {
                             </span>
                             {index === 0 && (
                               <span className="bg-green-100 text-green-800 px-2 py-1 rounded-full text-xs font-medium">
-                                🚀 DÉPART
+                                🚀 DEPARTURE
                               </span>
                             )}
                             {index === locations.length - 1 && (
                               <span className="bg-red-100 text-red-800 px-2 py-1 rounded-full text-xs font-medium">
-                                🏁 ARRIVÉE
+                                🏁 ARRIVAL
                               </span>
                             )}
                             {index > 0 && index < locations.length - 1 && (
                               <span className="bg-orange-100 text-orange-800 px-2 py-1 rounded-full text-xs font-medium">
-                                🛑 ÉTAPE
+                                🛑 STOP
                               </span>
                             )}
                           </div>
@@ -473,12 +470,12 @@ const ProgrammeSolidaireDetail = () => {
               <Card className="sticky top-6">
                 <CardHeader>
                   <CardTitle className="flex flex-col items-center justify-between">
-                    <p className="border-b pb-3">Réservation</p>
+                    <p className="border-b pb-3">Booking</p>
                     {dataFromState?.prix && (
                       <p className="text-xl font-bold font-sans pt-3">
                         {formatPrice(dataFromState.prix)}{" "}
                         <span className="text-sm font-normal text-gray-500">
-                          /personne
+                          /person
                         </span>
                       </p>
                     )}
@@ -487,7 +484,7 @@ const ProgrammeSolidaireDetail = () => {
                 <CardContent className="space-y-4">
                   {/* Date de depart */}
                   <DateDetail
-                    label="Date de depart"
+                    label="Departure date"
                     name="dateDepart"
                     value={formData.dateDepart}
                     handleInputChange={handleInputChange}
@@ -496,7 +493,7 @@ const ProgrammeSolidaireDetail = () => {
 
                   {/* Date de fin */}
                   <DateDetail
-                    label="Date de fin"
+                    label="End Date"
                     name="dateArrive"
                     value={formData.dateArrive}
                     handleInputChange={handleInputChange}
@@ -506,7 +503,7 @@ const ProgrammeSolidaireDetail = () => {
 
                   {/* Nombre de participants */}
                   <NombrePersonneDetail
-                    label="Nombre de personne"
+                    label="Number of people"
                     name="voyageur"
                     guestCount={guestCount}
                     handleGuestCountChange={handleGuestCountChange}
@@ -515,13 +512,13 @@ const ProgrammeSolidaireDetail = () => {
                   {/* Message */}
                   <div>
                     <label className="block text-sm font-medium mb-1">
-                      Message (optionnel)
+                      Message (optional)
                     </label>
                     <textarea
-                      name="commentaire"
+                      name="Comment"
                       value={formData.commentaire}
                       onChange={handleInputChange}
-                      placeholder="Demandes spéciales, régimes alimentaires, etc..."
+                      placeholder="Special requests, dietary requirements, etc..."
                       rows={3}
                       className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-primary/20 focus:border-primary resize-none"
                     />
@@ -531,20 +528,20 @@ const ProgrammeSolidaireDetail = () => {
                   {days > 0 && (
                     <div className="bg-gray-50 p-4 rounded-lg space-y-2">
                       <div className="flex justify-between items-center text-sm">
-                        <span className="text-gray-600">Durée</span>
+                        <span className="text-gray-600">Duration</span>
                         <span className="font-medium">
-                          {days} {days > 1 ? "jours" : "jour"}
+                          {days} {days > 1 ? "days" : "day"}
                         </span>
                       </div>
                       <div className="flex justify-between items-center text-sm">
-                        <span className="text-gray-600">Prix par personne</span>
+                        <span className="text-gray-600">Price per person</span>
                         <span className="font-medium">
                           {formatPrice(dataFromState.prix)}
                         </span>
                       </div>
                       <div className="flex justify-between items-center text-sm">
                         <span className="text-gray-600">
-                          Nombre de personnes
+                          Number of people
                         </span>
                         <span className="font-medium">{guestCount}</span>
                       </div>
@@ -569,12 +566,12 @@ const ProgrammeSolidaireDetail = () => {
                       isSubmitting || mutationLoading ? (
                         <>
                           <Loader2 className="h-5 w-5 mr-2 animate-spin" />
-                          Réservation en cours...
+                          Booking in progress...
                         </>
                       ) : (
                         <>
                           <Calendar className="h-5 w-5 mr-2" />
-                          Réserver maintenant
+                          Booking now
                         </>
                       )
                     ) : (

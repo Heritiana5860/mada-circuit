@@ -36,8 +36,8 @@ const Register = () => {
   const [tel, setTel] = useState("");
   const [mdp, setMdp] = useState("");
   const [confirm, setConfirm] = useState("");
-  const [image, setImage] = useState(null); 
-  const [imagePreview, setImagePreview] = useState(null); 
+  const [image, setImage] = useState(null);
+  const [imagePreview, setImagePreview] = useState(null);
 
   const { register, isAuthenticated } = useAuth();
   const navigate = useNavigate();
@@ -64,13 +64,13 @@ const Register = () => {
     if (file) {
       // Vérifier la taille du fichier (max 5MB)
       if (file.size > 15 * 1024 * 1024) {
-        setErrors(["L'image ne doit pas dépasser 15MB"]);
+        setErrors(["Maximum image size: 15MB"]);
         return;
       }
 
       // Vérifier le type de fichier
       if (!file.type.startsWith("image/")) {
-        setErrors(["Veuillez sélectionner une image valide"]);
+        setErrors(["Please choose a valid image"]);
         return;
       }
 
@@ -105,23 +105,23 @@ const Register = () => {
     const newErrors = [];
 
     if (!email || !mdp || !nom || !prenom) {
-      newErrors.push("Veuillez remplir tous les champs obligatoires");
+      newErrors.push("Please complete all mandatory fields");
     }
 
     if (!email.includes("@")) {
-      newErrors.push("Veuillez entrer une adresse email valide");
+      newErrors.push("Please provide a valid email address");
     }
 
     if (mdp.length < 6) {
-      newErrors.push("Le mot de passe doit contenir au moins 6 caractères");
+      newErrors.push("Your password must be at least 6 characters long");
     }
 
     if (mdp !== confirm) {
-      newErrors.push("Les mots de passe ne correspondent pas");
+      newErrors.push("Passwords don't match");
     }
 
     if (tel && !/^[0-9+\-\s()]+$/.test(tel)) {
-      newErrors.push("Veuillez entrer un numéro de téléphone valide");
+      newErrors.push("Please provide a valid phone number");
     }
 
     return newErrors;
@@ -155,11 +155,11 @@ const Register = () => {
       if (result.success) {
         navigate("/", { replace: true });
       } else {
-        setErrors(result.errors || ["Erreur lors de la création du compte"]);
+        setErrors(result.errors || ["Account creation error"]);
       }
     } catch (error) {
-      console.error("Erreur d'inscription:", error);
-      setErrors(["Une erreur est survenue. Veuillez réessayer."]);
+      console.error("Account creation error:", error);
+      setErrors(["An unexpected error has occurred. Please try again later."]);
     } finally {
       setLoading(false);
     }
@@ -187,10 +187,10 @@ const Register = () => {
               </div>
             </div>
             <CardTitle className="text-2xl font-bold text-foreground">
-              Créer un compte
+              Sign up
             </CardTitle>
             <CardDescription className="text-muted-foreground">
-              Rejoignez Madagascar Journey pour découvrir des aventures uniques
+              Join Madagascar Journey to discover unique adventures
             </CardDescription>
           </CardHeader>
 
@@ -238,9 +238,7 @@ const Register = () => {
                     <span className="inline-flex items-center px-3 py-1.5 text-xs font-medium text-primary bg-primary/10 border border-primary/20 rounded-full hover:bg-primary/20 transition-colors">
                       <Camera className="h-3 w-3 mr-1.5" />
                       <span className="ml-2">
-                        {imagePreview
-                          ? "Changer la photo"
-                          : "Choisir une photo"}
+                        {imagePreview ? "Change picture" : "Choose a picture"}
                       </span>
                     </span>
                     <input
@@ -261,7 +259,7 @@ const Register = () => {
               <div className="grid grid-cols-2 gap-4 mt-6">
                 <div className="space-y-2">
                   <Label htmlFor="nom" className="text-sm font-medium">
-                    Nom *
+                    Last name *
                   </Label>
                   <div className="relative">
                     <User className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
@@ -280,7 +278,7 @@ const Register = () => {
 
                 <div className="space-y-2">
                   <Label htmlFor="prenom" className="text-sm font-medium">
-                    Prénom *
+                    First name *
                   </Label>
                   <div className="relative">
                     <User className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
@@ -301,7 +299,7 @@ const Register = () => {
               <div className="grid grid-cols-2 gap-4 mt-4">
                 <div className="space-y-2">
                   <Label htmlFor="email" className="text-sm font-medium">
-                    Adresse email *
+                    Email address *
                   </Label>
                   <div className="relative">
                     <Mail className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
@@ -320,7 +318,7 @@ const Register = () => {
 
                 <div className="space-y-2">
                   <Label htmlFor="telephone" className="text-sm font-medium">
-                    Téléphone
+                    Phone
                   </Label>
                   <div className="relative">
                     <Phone className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
@@ -340,7 +338,7 @@ const Register = () => {
               <div className="grid grid-cols-2 gap-4 mt-4">
                 <div className="space-y-2">
                   <Label htmlFor="password" className="text-sm font-medium">
-                    Mot de passe *
+                    Password *
                   </Label>
                   <div className="relative">
                     <Lock className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
@@ -373,7 +371,7 @@ const Register = () => {
                     htmlFor="confirmPassword"
                     className="text-sm font-medium"
                   >
-                    Confirmer le mot de passe *
+                    Confirme Password *
                   </Label>
                   <div className="relative">
                     <Lock className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
@@ -412,10 +410,10 @@ const Register = () => {
                 {loading ? (
                   <div className="flex items-center space-x-2">
                     <div className="w-4 h-4 border-2 border-primary-foreground/30 border-t-primary-foreground rounded-full animate-spin" />
-                    <span>Création du compte...</span>
+                    <span>Creation...</span>
                   </div>
                 ) : (
-                  "Créer mon compte"
+                  "Sign up"
                 )}
               </Button>
             </form>
@@ -426,7 +424,7 @@ const Register = () => {
               </div>
               <div className="relative flex justify-center text-xs uppercase">
                 <span className="bg-card px-2 text-muted-foreground">
-                  Déjà un compte ?
+                  Already have an account ?
                 </span>
               </div>
             </div>
@@ -436,7 +434,7 @@ const Register = () => {
                 to="/login"
                 className="inline-flex items-center justify-center w-full h-12 px-4 py-2 text-sm font-medium text-primary border border-primary rounded-md hover:bg-primary/10 transition-colors"
               >
-                Se connecter
+                Sign in
               </Link>
             </div>
           </CardContent>
@@ -447,7 +445,7 @@ const Register = () => {
             to="/"
             className="text-sm text-white hover:text-foreground transition-colors"
           >
-            ← Retour à l'accueil
+            ← Back to home
           </Link>
         </div>
       </div>

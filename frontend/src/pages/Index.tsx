@@ -75,7 +75,7 @@ const Index = () => {
   return (
     <div className="min-h-screen flex flex-col">
       <SEO
-        title="Madagascar Travel | Tours, Pangalanes & 4x4 Rentals"
+        title="Voyage à Madagascar | Circuits, Canal des Pangalanes & Location de 4x4"
         description="Tailor-made tours in Madagascar, excursions on the Pangalanes Canal, and 4x4 rentals with a driver for an unforgettable adventure."
         canonical="https://madagascar-voyagesolidaire.com/"
         image="https://madagascar-voyagesolidaire.com/images/index-og.webp"

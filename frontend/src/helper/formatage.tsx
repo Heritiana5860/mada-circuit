@@ -32,3 +32,12 @@ export const formatterUS = new Intl.DateTimeFormat("en-US", {
   month: "2-digit",
   year: "numeric",
 });
+
+export const formatDate = (dateString) => {
+    return new Date(dateString).toLocaleDateString("en-US", {
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+      weekday: "long",
+    });
+  };

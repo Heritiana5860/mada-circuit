@@ -39,10 +39,10 @@ const NavBar = () => {
   const navItems = [
     { to: "/", label: "Home" },
     { to: "/circuits", label: "Tours" },
-    { to: "/voyages-sur-mesure", label: "Custom Tours" },
+    { to: "/voyages-sur-mesure", label: "Tailor-made tour" },
     { to: "/location-4x4", label: "4x4 Rentals" },
     { to: "/pangalanes", label: "Pangalanes Canal" },
-    { to: "/programme-solidaire", label: "Solidarity" },
+    { to: "/programme-solidaire", label: "Socially Responsible" },
     { to: "/blog", label: "Blog" },
     { to: "/contact", label: "Contact" },
   ];

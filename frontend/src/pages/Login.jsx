@@ -76,7 +76,7 @@ const Login = () => {
 
     // Validation des champs
     if (!formData.email?.trim() || !formData.password?.trim()) {
-      setError("Veuillez remplir tous les champs");
+      setError("Please complete all fields");
       setLoading(false);
       return;
     }
@@ -126,10 +126,10 @@ const Login = () => {
               </div>
             </div>
             <CardTitle className="text-2xl font-bold text-foreground">
-              Connexion
+              Login
             </CardTitle>
             <CardDescription className="text-muted-foreground">
-              Connectez-vous à votre compte Madagascar Journey
+              Log in to your Madagascar Journey account
             </CardDescription>
           </CardHeader>
 
@@ -144,7 +144,7 @@ const Login = () => {
             <form onSubmit={handleSubmit} className="space-y-4">
               <div className="space-y-2">
                 <Label htmlFor="email" className="text-sm font-medium">
-                  Adresse email
+                  Email address
                 </Label>
                 <div className="relative">
                   <Mail className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
@@ -152,7 +152,7 @@ const Login = () => {
                     id="email"
                     name="email"
                     type="email"
-                    placeholder="votre@email.com"
+                    placeholder="your@email.com"
                     value={formData.email}
                     onChange={handleChange}
                     className="pl-10 h-12"
@@ -163,7 +163,7 @@ const Login = () => {
 
               <div className="space-y-2">
                 <Label htmlFor="password" className="text-sm font-medium">
-                  Mot de passe
+                  Password
                 </Label>
                 <div className="relative">
                   <Lock className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
@@ -171,7 +171,7 @@ const Login = () => {
                     id="password"
                     name="password"
                     type={showPassword ? "text" : "password"}
-                    placeholder="Votre mot de passe"
+                    placeholder="Your password"
                     value={formData.password}
                     onChange={handleChange}
                     className="pl-10 pr-10 h-12"
@@ -199,10 +199,10 @@ const Login = () => {
                 {loading ? (
                   <div className="flex items-center space-x-2">
                     <div className="w-4 h-4 border-2 border-primary-foreground/30 border-t-primary-foreground rounded-full animate-spin" />
-                    <span>Connexion...</span>
+                    <span>Connecting...</span>
                   </div>
                 ) : (
-                  "Se connecter"
+                  "Log in"
                 )}
               </Button>
             </form>
@@ -212,7 +212,7 @@ const Login = () => {
                 to="/forgot-password"
                 className="text-sm text-primary hover:text-primary/80 transition-colors"
               >
-                Mot de passe oublié ?
+                Forgot your password?
               </Link>
             </div>
 
@@ -222,7 +222,7 @@ const Login = () => {
               </div>
               <div className="relative flex justify-center text-xs uppercase">
                 <span className="bg-card px-2 text-muted-foreground">
-                  Nouveau sur Madagascar Journey ?
+                  First time on Madagascar Voyage Solidaire?
                 </span>
               </div>
             </div>
@@ -232,7 +232,7 @@ const Login = () => {
                 to="/register"
                 className="inline-flex items-center justify-center w-full h-12 px-4 py-2 text-sm font-medium text-primary border border-primary rounded-md hover:bg-primary/10 transition-colors"
               >
-                Créer un compte
+                Sign up
               </Link>
             </div>
           </CardContent>
@@ -243,7 +243,7 @@ const Login = () => {
             to="/"
             className="text-sm text-muted-foreground hover:text-foreground transition-colors"
           >
-            ← Retour à l'accueil
+            ← Back to home
           </Link>
         </div>
       </div>

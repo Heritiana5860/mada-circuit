@@ -60,12 +60,12 @@ const ContenuPrincipal: React.FC<ContenuPrincipalProps> = ({
           {dataFromState?.duree && (
             <Badge variant="secondary" className="flex items-center">
               <Clock className="h-3 w-3 mr-1" />
-              {dataFromState.duree} jours
+              {dataFromState.duree} days
             </Badge>
           )}
           {dataFromState?.difficulte && (
             <Badge variant="outline">
-              Difficulté : {dataFromState.difficulte}
+              Difficulty : {dataFromState.difficulte}
             </Badge>
           )}
           {dataFromState?.transport && (
@@ -99,7 +99,7 @@ const ContenuPrincipal: React.FC<ContenuPrincipalProps> = ({
       {dataFromState?.itineraires && (
         <Card>
           <CardHeader>
-            <CardTitle>Itinéraire</CardTitle>
+            <CardTitle>Itinerary</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="space-y-4">
@@ -109,11 +109,11 @@ const ContenuPrincipal: React.FC<ContenuPrincipalProps> = ({
                   // Déterminer l’affichage des jours
                   let jourTexte = "";
                   if (item.isSejour && item.nuitees > 1) {
-                    jourTexte = `Jours ${currentDay}-${
+                    jourTexte = `days ${currentDay}-${
                       currentDay + item.nuitees - 1
                     }`;
                   } else {
-                    jourTexte = `Jour ${currentDay}`;
+                    jourTexte = `day ${currentDay}`;
                   }
 
                   // Incrémenter le compteur
@@ -180,7 +180,7 @@ const ContenuPrincipal: React.FC<ContenuPrincipalProps> = ({
           <Card>
             <CardHeader>
               <CardTitle className="text-green-800 border-b pb-3">
-                Inclus
+                Included
               </CardTitle>
             </CardHeader>
             <CardContent>
@@ -200,7 +200,7 @@ const ContenuPrincipal: React.FC<ContenuPrincipalProps> = ({
           <Card>
             <CardHeader>
               <CardTitle className="text-red-800 border-b pb-3">
-                Non inclus
+                Not Included
               </CardTitle>
             </CardHeader>
             <CardContent>

@@ -5,6 +5,7 @@ import { useQuery } from "@apollo/client";
 import { useParams } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { urlMedia } from "@/helper/UrlImage";
+import { formatDate } from "@/helper/formatage";
 
 const BlogDetail = () => {
   const { id } = useParams();
@@ -120,15 +121,6 @@ const BlogDetail = () => {
     return /\.(mp4|avi|mov|wmv|webm)$/i.test(url);
   };
 
-  const formatDate = (dateString) => {
-    return new Date(dateString).toLocaleDateString("fr-FR", {
-      year: "numeric",
-      month: "long",
-      day: "numeric",
-      weekday: "long",
-    });
-  };
-
   const estimateReadingTime = (content) => {
     const wordsPerMinute = 200;
     const words = content.replace(/<[^>]*>/g, "").split(/\s+/).length;
@@ -168,7 +160,7 @@ const BlogDetail = () => {
                     clipRule="evenodd"
                   />
                 </svg>
-                Article de blog
+                Blog post
               </span>
             </div>
 
@@ -230,7 +222,7 @@ const BlogDetail = () => {
                   </svg>
                 </div>
                 <span className="text-white font-medium">
-                  {estimateReadingTime(blog.contenu)} min de lecture
+                  Estimated reading time: {estimateReadingTime(blog.contenu)}
                 </span>
               </div>
             </div>
@@ -299,11 +291,11 @@ const BlogDetail = () => {
             <div className="px-8 md:px-12 py-16 bg-gradient-to-br from-gray-50/50 to-blue-50/50 backdrop-blur-sm">
               <div className="text-center mb-16">
                 <h2 className="text-4xl font-black text-gray-900 mb-4">
-                  <span className=" text-gray-600">Galerie Multimédia</span>
+                  <span className=" text-gray-600">Photo & Video Gallery</span>
                 </h2>
                 <div className="w-32 h-1.5 bg-gray-400 rounded-full mx-auto mb-4"></div>
                 <p className="text-gray-600 text-lg max-w-2xl mx-auto">
-                  Découvrez les visuels qui accompagnent cet article
+                  View the media that brings this article to life
                 </p>
               </div>
 
@@ -332,7 +324,7 @@ const BlogDetail = () => {
                           <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-black/20 group-hover:from-black/70 transition-all duration-500">
                             <div className="absolute top-4 left-4">
                               <span className="bg-red-500 text-white px-3 py-1.5 rounded-full text-xs font-bold shadow-lg">
-                                🎥 VIDÉO
+                                🎥 VIDEO
                               </span>
                             </div>
                             <div className="absolute inset-0 flex items-center justify-center">
@@ -418,9 +410,9 @@ const BlogDetail = () => {
                   </svg>
                 </div>
                 <div>
-                  <p className="font-semibold">Par {blog.auteur}</p>
+                  <p className="font-semibold">By {blog.auteur}</p>
                   <p className="text-sm text-gray-300">
-                    Publié le {formatDate(blog.datePublication)}
+                    Published on {formatDate(blog.datePublication)}
                   </p>
                 </div>
               </div>
@@ -491,7 +483,7 @@ const BlogDetail = () => {
                     src={`${urlMedia}${selectedMedia.file}`}
                     type="video/mp4"
                   />
-                  Votre navigateur ne supporte pas la balise vidéo.
+                  Your browser does not support the video tag.
                 </video>
               ) : (
                 <img

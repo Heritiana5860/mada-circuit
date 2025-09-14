@@ -181,8 +181,11 @@ const ProgrammeSolidairePage = () => {
       <NavBar />
 
       <main className="flex-grow">
-        <div className="p-10 bg-[url('https://images.unsplash.com/photo-1541976844346-f18aeac57b06?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2000&q=80')] bg-cover">
-          <div className="text-center mb-16">
+        
+        <div className="relative p-10 bg-[url('solidaire.JPG')] bg-cover bg-center">
+          {/* Overlay */}
+          <div className="absolute inset-0 bg-black/50"></div>
+          <div className=" relative text-center mb-16">
             <h1 className="text-5xl md:text-7xl lg:text-8xl font-black mb-8 leading-tight">
               <span className=" text-white">Devenez Voyageur Solidaire</span>
             </h1>
@@ -255,7 +258,7 @@ const ProgrammeSolidairePage = () => {
               </div>
               <div className="relative">
                 <img
-                  src="solid.webp"
+                  src="slogan.webp"
                   alt="Villageois du Canal des Pangalanes"
                   className="rounded-lg shadow-lg w-full h-auto"
                 />

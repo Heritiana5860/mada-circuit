@@ -44,11 +44,13 @@ const Circuits = () => {
 
   // Images de fond pour le carousel (remplacez par vos vraies images)
   const backgroundImages = [
-    "/doubo.webp",
-    "/rano.webp",
-    "/piscine.webp",
+    "circuits/vam_baobab.webp",
     "/gidro.webp",
-    "/jus.webp",
+    "circuits/balene.webp",
+    "/trano.webp",
+    "circuits/hazo.webp",
+    "soleil.webp",
+    "kaly.webp",
   ];
 
   // Filtres avancés
@@ -235,7 +237,7 @@ const Circuits = () => {
         {/* Section Hero */}
         <CarouselHeader
           backgroundImages={backgroundImages}
-          circuitsData={circuitsData}
+          // circuitsData={circuitsData}
           currentImageIndex={currentImageIndex}
           titre='Circuits Touristiques à <br /> <span class="text-yellow-300">Madagascar</span>'
           description="Explorez nos circuits soigneusement conçus pour vous faire
@@ -244,7 +246,7 @@ const Circuits = () => {
           goToNext={goToNext}
           goToPrevious={goToPrevious}
           goToSlide={goToSlide}
-          showCircuitsCount={true}
+          // showCircuitsCount={true}
         />
 
         {/* Section filtres et recherche */}

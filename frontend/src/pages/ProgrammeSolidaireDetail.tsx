@@ -12,7 +12,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import { formatPrice } from "@/helper/formatage";
 import { useContext, useEffect, useState } from "react";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
-import { useMutation, gql } from "@apollo/client";
+import { useMutation } from "@apollo/client";
 import { CREATE_RESERVATION } from "@/graphql/mutations";
 import { Calendar, Loader2 } from "lucide-react";
 import { StatistiqueReservationContext } from "@/provider/DataContext";
@@ -74,7 +74,7 @@ const ProgrammeSolidaireDetail = () => {
   // Données de détail
   const dataFromState = location.state?.pangalanes;
 
-  const regions = dataFromState.destination.nom;
+  const regions = dataFromState.destination;
   const regionsCircuit = regions.split(",");
 
   // Géocoder toutes les régions
@@ -391,7 +391,6 @@ const ProgrammeSolidaireDetail = () => {
                   }
                   zoom={locations.length > 0 ? 6 : 6}
                   scrollWheelZoom={true}
-                  // style={{ height: "400px", width: "100%" }}
                   className="rounded-lg h-64 md:h-96 lg:h-[500px]"
                 >
                   <TileLayer

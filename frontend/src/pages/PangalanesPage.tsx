@@ -186,47 +186,43 @@ const PangalanesPage = () => {
       <NavBar />
 
       <main className="flex-grow">
-        <section className="h-[36vh] overflow-hidden pt-4">
-          <img
-            src="slogan.webp"
-            alt="Canal des Pangalanes"
-            className="w-full h-full object-contain bg-left"
-            loading="lazy"
-          />
-        </section>
-
-        {/* Section Bouton */}
-        <section className="py-8">
-          <div className="inset-0 flex items-center">
-            <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-              <div className="max-w-3xl">
-                <Button
-                  onClick={() => {
-                    document.getElementById("offres")?.scrollIntoView({
-                      behavior: "smooth",
-                    });
-                  }}
-                  className="mr-5"
-                >
-                  Découvrir nos offres
-                </Button>
-                <Button
-                  size="lg"
-                  variant="secondary"
-                  onClick={() => {
-                    document
-                      .getElementById("pangalanesVoyages")
-                      ?.scrollIntoView({
-                        behavior: "smooth",
-                      });
-                  }}
-                >
-                  Pourquoi choisir pangalanes voyages?
-                </Button>
-              </div>
-            </div>
+        <div className="relative p-10 bg-[url('canal.webp')] bg-cover bg-center">
+          {/* Overlay */}
+          <div className="absolute inset-0 bg-black/50"></div>
+          <div className=" relative text-center mb-16">
+            <h1 className="text-5xl md:text-7xl lg:text-8xl font-black mb-8 leading-tight">
+              <span className=" text-white">
+                Decouvrez le Canal de Pangalanes
+              </span>
+            </h1>
+            <p className="text-xl md:text-2xl text-white/90 max-w-4xl mx-auto leading-relaxed mb-12">
+              Embarquez pour une aventure inoubliable: croisières, excursions en
+              pirogue et immersion au cœur d’une nature sauvage et des villages
+              authentiques.
+            </p>
+            <Button
+              onClick={() => {
+                document.getElementById("offres")?.scrollIntoView({
+                  behavior: "smooth",
+                });
+              }}
+              className="mr-5"
+            >
+              Découvrir nos offres
+            </Button>
+            <Button
+              size="lg"
+              variant="secondary"
+              onClick={() => {
+                document.getElementById("pangalanesVoyages")?.scrollIntoView({
+                  behavior: "smooth",
+                });
+              }}
+            >
+              Pourquoi choisir pangalanes voyages?
+            </Button>
           </div>
-        </section>
+        </div>
 
         <section className="py-16 bg-primary/5">
           <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">

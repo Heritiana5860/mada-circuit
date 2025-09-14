@@ -366,6 +366,8 @@ export const ALL_TESTIMONIA = gql`
         id
         nom
         prenom
+        email
+        image
       }
     }
   }

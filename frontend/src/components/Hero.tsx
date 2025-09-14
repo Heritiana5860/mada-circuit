@@ -16,125 +16,30 @@ const Hero = () => {
         <div className="relative w-full h-full">
           {/* Photo 1 - Paysage Madagascar */}
           <div
-            className="absolute w-72 h-48 rounded-xl overflow-hidden shadow-2xl transition-all duration-700 hover:scale-105 hover:rotate-2 hover:shadow-3xl"
+            className="absolute w-72 h-48 rounded-xl overflow-hidden shadow-2xl transition-all duration-700 hover:scale-105 hover:shadow-3xl"
+            style={{
+              top: "6%",
+              left: "16%",
+              // animation: "float1 6s ease-in-out infinite",
+            }}
+          >
+            <video autoPlay loop muted className="w-full h-full object-cover">
+              <source src="videos/varika.mp4" type="video/mp4" />
+              Ton navigateur ne supporte pas les vidéos HTML5.
+            </video>
+
+            <div className="absolute inset-0 bg-gradient-to-br from-white/20 via-transparent to-transparent"></div>
+          </div>
+
+          <div
+            className="absolute w-56 h-72 rounded-xl overflow-hidden shadow-2xl transition-all duration-700 hover:scale-105  hover:shadow-3xl"
             style={{
               top: "10%",
-              left: "5%",
-              transform: "rotate(-8deg)",
-              backgroundImage: "url(soleil.webp)",
-              backgroundSize: "cover",
-              backgroundPosition: "center",
-              animation: "float1 6s ease-in-out infinite",
-            }}
-          >
-            <div className="absolute inset-0 bg-gradient-to-br from-white/20 via-transparent to-transparent"></div>
-          </div>
-
-          {/* Photo 2 - Baobabs */}
-          <div
-            className="absolute w-64 h-80 rounded-xl overflow-hidden shadow-2xl transition-all duration-700 hover:scale-105 hover:rotate-2 hover:shadow-3xl"
-            style={{
-              top: "15%",
-              right: "8%",
-              transform: "rotate(12deg)",
-              backgroundImage: "url(baobab.webp)",
-              backgroundSize: "cover",
-              backgroundPosition: "center",
-              animation: "float2 7s ease-in-out infinite",
-            }}
-          >
-            <div className="absolute inset-0 bg-gradient-to-br from-white/20 via-transparent to-transparent"></div>
-          </div>
-
-          {/* Photo 3 - Canal des Pangalanes */}
-          <div
-            className="absolute w-80 h-52 rounded-xl overflow-hidden shadow-2xl transition-all duration-700 hover:scale-105 hover:rotate-2 hover:shadow-3xl"
-            style={{
-              bottom: "15%",
-              left: "10%",
-              transform: "rotate(6deg)",
-              backgroundImage: "url(viavy.webp)",
-              backgroundSize: "cover",
-              backgroundPosition: "center",
-              animation: "float3 8s ease-in-out infinite",
-            }}
-          >
-            <div className="absolute inset-0 bg-gradient-to-br from-white/20 via-transparent to-transparent"></div>
-          </div>
-
-          {/* Photo 4 - Village local */}
-          <div
-            className="absolute w-56 h-72 rounded-xl overflow-hidden shadow-2xl transition-all duration-700 hover:scale-105 hover:rotate-2 hover:shadow-3xl"
-            style={{
-              bottom: "15%",
-              right: "15%",
-              transform: "rotate(-10deg)",
+              left: "4%",
               backgroundImage: "url(lemur.webp)",
               backgroundSize: "cover",
               backgroundPosition: "center",
-              animation: "float4 5.5s ease-in-out infinite",
-            }}
-          >
-            <div className="absolute inset-0 bg-gradient-to-br from-white/20 via-transparent to-transparent"></div>
-          </div>
-
-          {/* Photo 5 - Faune Madagascar */}
-          <div
-            className="absolute w-60 h-44 rounded-xl overflow-hidden shadow-2xl transition-all duration-700 hover:scale-105 hover:rotate-2 hover:shadow-3xl"
-            style={{
-              top: "50%",
-              left: "25%",
-              transform: "rotate(-3deg)",
-              backgroundImage: "url(feu.webp)",
-              backgroundSize: "cover",
-              backgroundPosition: "center",
-              animation: "float5 6.5s ease-in-out infinite",
-            }}
-          >
-            <div className="absolute inset-0 bg-gradient-to-br from-white/20 via-transparent to-transparent"></div>
-          </div>
-
-          {/* Photo 6 - Plage tropicale */}
-          <div
-            className="absolute w-80 h-52 rounded-xl overflow-hidden shadow-2xl transition-all duration-700 hover:scale-105 hover:rotate-2 hover:shadow-3xl"
-            style={{
-              top: "35%",
-              right: "25%",
-              transform: "rotate(-10deg)",
-              backgroundImage: "url(plage.webp)",
-              backgroundSize: "cover",
-              backgroundPosition: "center",
-              animation: "float6 7.5s ease-in-out infinite",
-            }}
-          >
-            <div className="absolute inset-0 bg-gradient-to-br from-white/20 via-transparent to-transparent"></div>
-          </div>
-          <div
-            className="absolute w-80 h-64 rounded-xl overflow-hidden shadow-2xl transition-all duration-700 hover:scale-105 hover:rotate-2 hover:shadow-3xl"
-            style={{
-              top: "15%",
-              right: "60%",
-              transform: "rotate(-3deg)",
-              backgroundImage: "url(solidaire.JPG)",
-              backgroundSize: "cover",
-              backgroundPosition: "center",
-              animation: "float6 7.5s ease-in-out infinite",
-            }}
-          >
-            <div className="absolute inset-0 bg-gradient-to-br from-white/20 via-transparent to-transparent"></div>
-          </div>
-
-          {/* Photo 7 - Coucher de soleil */}
-          <div
-            className="absolute w-44 h-32 rounded-xl overflow-hidden shadow-2xl transition-all duration-700 hover:scale-105 hover:rotate-2 hover:shadow-3xl"
-            style={{
-              bottom: "45%",
-              right: "5%",
-              transform: "rotate(-12deg)",
-              backgroundImage: "url(foza.webp)",
-              backgroundSize: "cover",
-              backgroundPosition: "center",
-              animation: "float7 6s ease-in-out infinite",
+              animation: "float1 6s ease-in-out infinite",
             }}
           >
             <div className="absolute inset-0 bg-gradient-to-br from-white/20 via-transparent to-transparent"></div>
@@ -218,7 +123,8 @@ const Hero = () => {
             animationDelay: "0.4s",
           }}
         >
-          Tailor-made tours, the discovery of the Pangalanes Canal, and 4x4 vehicle rentals for an{" "}
+          Tailor-made tours, the discovery of the Pangalanes Canal, and 4x4
+          vehicle rentals for an{" "}
           <span className="font-semibold text-accent">
             unforgettable adventure
           </span>

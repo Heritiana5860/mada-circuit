@@ -80,7 +80,7 @@ export const getConnectionCoordinates = (locations) => {
 };
 
 // Calculer le centre de la carte
-export const calculateMapBounds = (locations) => {
+export const calculateMapBounds = (locations): [number, number] => {
   if (locations.length === 0) return [-18.8792, 47.5079];
 
   const lats = locations.map((loc) => loc.lat);
@@ -89,5 +89,5 @@ export const calculateMapBounds = (locations) => {
   const centerLat = (Math.min(...lats) + Math.max(...lats)) / 2;
   const centerLng = (Math.min(...lngs) + Math.max(...lngs)) / 2;
 
-  return [centerLat, centerLng];
+  return [centerLat, centerLng] as [number, number];
 };

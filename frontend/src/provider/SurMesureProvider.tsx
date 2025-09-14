@@ -8,7 +8,7 @@ export const SurMesureProvider = ({ children }) => {
   return (
     <SurMesureContext.Provider
       value={{
-        data: data?.allSurMesure || null,
+        data: data?.allSurMesure,
         loading,
         error,
       }}

@@ -6,11 +6,7 @@ import { useAuth } from "@/contexts/AuthContext";
 export const UtilisateurProvider = ({ children }) => {
   const { user, loading: authLoading } = useAuth();
 
-  const {
-    data,
-    loading: queryLoading,
-    error,
-  } = useQuery(GET_UTILISATEUR_BY_EMAIL, {
+  const { data, loading, error } = useQuery(GET_UTILISATEUR_BY_EMAIL, {
     variables: {
       email: user?.email,
     },
@@ -20,8 +16,8 @@ export const UtilisateurProvider = ({ children }) => {
   return (
     <DataContext.Provider
       value={{
-        utilisateur: data?.utilisateurByEmail || null,
-        loading: authLoading || queryLoading,
+        utilisateur: data?.utilisateurByEmail,
+        loading,
         error,
       }}
     >

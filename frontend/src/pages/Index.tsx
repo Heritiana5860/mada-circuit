@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useContext, useEffect, useState } from "react";
 import NavBar from "../components/NavBar";
 import Hero from "../components/Hero";
 import HomeFeatures from "../components/HomeFeatures";
@@ -7,6 +7,9 @@ import PangalanesSection from "../components/PangalanesSection";
 import Vehicles4x4 from "../components/Vehicles4x4";
 import Footer from "../components/Footer";
 import SEO from "@/SEO";
+import { DataContext, TestimoniaContext } from "@/provider/DataContext";
+import { urlMedia } from "@/helper/UrlImage";
+import { TestimoniaCarousel } from "@/components/TestimoniaCarousel";
 
 const Index = () => {
   useEffect(() => {
@@ -17,6 +20,54 @@ const Index = () => {
     document.title =
       "Madagascar Travel - Tours, Pangalanes Canal & 4x4 Rentals";
   }, []);
+
+  const [currentIndex, setCurrentIndex] = useState(0);
+
+  const {
+    testimoniaData,
+    loading: testimoniaLoading,
+    error: testimoniaError,
+  } = useContext(TestimoniaContext);
+
+  // Recuperer l'utilisateur afin d'afficher son image sur testimonia
+  const {
+    loading: utilisateurLoading,
+    error: utilisateurError,
+    utilisateur,
+  } = useContext(DataContext);
+
+  if (utilisateurLoading || testimoniaLoading)
+    return (
+      <div className="min-h-screen flex flex-col">
+        <NavBar />
+        <main className="flex-grow flex items-center justify-center">
+          <p>Chargement...</p>
+        </main>
+        <Footer />
+      </div>
+    );
+
+  if (utilisateurError || testimoniaError)
+    return (
+      <div className="min-h-screen flex flex-col">
+        <NavBar />
+        <main className="flex-grow flex items-center justify-center">
+          <p>Erreur lors du chargement.</p>
+        </main>
+        <Footer />
+      </div>
+    );
+
+  // Grouper les témoignages par lots de 3 pour chaque diapositive
+  const testimonialsPerSlide = 3;
+  const groupedTestimonials = [];
+  for (let i = 0; i < testimoniaData.length; i += testimonialsPerSlide) {
+    groupedTestimonials.push(testimoniaData.slice(i, i + testimonialsPerSlide));
+  }
+
+  const utilisateurImage = utilisateur?.image
+    ? `${urlMedia}${utilisateur.image}`
+    : null;
 
   return (
     <div className="min-h-screen flex flex-col">
@@ -31,6 +82,15 @@ const Index = () => {
 
       <main className="flex-grow">
         <Hero />
+
+        <TestimoniaCarousel
+          currentIndex={currentIndex}
+          datas={testimoniaData}
+          groupedTestimonials={groupedTestimonials}
+          setCurrentIndex={setCurrentIndex}
+          testimonialsPerSlide={testimonialsPerSlide}
+          utilisateurImage={utilisateurImage}
+        />
 
         <HomeFeatures />
 

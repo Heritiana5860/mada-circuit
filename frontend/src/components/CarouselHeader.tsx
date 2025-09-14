@@ -1,16 +1,14 @@
 const CarouselHeader = ({
   backgroundImages,
   currentImageIndex,
-  circuitsData,
   titre,
   description,
   goToSlide,
   goToPrevious,
   goToNext,
-  showCircuitsCount = true,
 }) => {
   return (
-    <section className="relative py-10 overflow-hidden">
+    <section className="relative py-40 overflow-hidden">
       {/* Carousel d'images de fond */}
       <div className="absolute inset-0">
         {backgroundImages.map((image, index) => (

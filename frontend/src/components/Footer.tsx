@@ -10,7 +10,7 @@ const Footer = () => {
           <div>
             <h3 className="text-xl font-semibold mb-4">Madagascar Voyage</h3>
             <p className="text-muted-foreground mb-4">
-              Découvrez les merveilles de Madagascar avec nos circuits sur mesure et nos services de location de véhicules 4x4.
+              Discover the wonders of Madagascar with our tailor-made tours and 4x4 vehicle rental services.
             </p>
             <div className="flex space-x-4">
               <a href="#" className="text-foreground hover:text-primary transition-colors" aria-label="Facebook">
@@ -28,12 +28,12 @@ const Footer = () => {
           <div>
             <h3 className="text-xl font-semibold mb-4">Navigation</h3>
             <ul className="space-y-2">
-              <li><Link to="/" className="text-muted-foreground hover:text-primary transition-colors">Accueil</Link></li>
-              <li><Link to="/circuits" className="text-muted-foreground hover:text-primary transition-colors">Circuits</Link></li>
-              <li><Link to="/voyages-sur-mesure" className="text-muted-foreground hover:text-primary transition-colors">Sur Mesure</Link></li>
-              <li><Link to="/location-4x4" className="text-muted-foreground hover:text-primary transition-colors">Location 4x4</Link></li>
-              <li><Link to="/pangalanes" className="text-muted-foreground hover:text-primary transition-colors">Canal des Pangalanes</Link></li>
-              <li><Link to="/programme-solidaire" className="text-muted-foreground hover:text-primary transition-colors">Solidaire</Link></li>
+              <li><Link to="/" className="text-muted-foreground hover:text-primary transition-colors">Home</Link></li>
+              <li><Link to="/circuits" className="text-muted-foreground hover:text-primary transition-colors">Tours</Link></li>
+              <li><Link to="/voyages-sur-mesure" className="text-muted-foreground hover:text-primary transition-colors">Custom Tours</Link></li>
+              <li><Link to="/location-4x4" className="text-muted-foreground hover:text-primary transition-colors">4x4 Rental</Link></li>
+              <li><Link to="/pangalanes" className="text-muted-foreground hover:text-primary transition-colors">Pangalanes Canal</Link></li>
+              <li><Link to="/programme-solidaire" className="text-muted-foreground hover:text-primary transition-colors">Solidarity</Link></li>
               <li><Link to="/blog" className="text-muted-foreground hover:text-primary transition-colors">Blog</Link></li>
             </ul>
           </div>
@@ -62,7 +62,7 @@ const Footer = () => {
         </div>
         
         <div className="border-t border-muted-foreground/20 mt-8 pt-8 text-center text-muted-foreground">
-          <p>&copy; {new Date().getFullYear()} Madagascar Voyage. Tous droits réservés.</p>
+          <p>&copy; {new Date().getFullYear()} Madagascar Voyage. All rights reserved.</p>
         </div>
       </div>
     </footer>

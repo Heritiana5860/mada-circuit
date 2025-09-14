@@ -4,22 +4,22 @@ def message(utilisateur, date_depart, date_fin, duree, nombre_personnes, budget,
             f"🧲 Marque             : {vehicule.marque}\n"
             f"🛡️ Modèle             : {vehicule.modele}\n"
             f"📆 Année              : {vehicule.annee}\n"
-            f"💰 Prix               : {vehicule.prix} Ar /jour"
+            f"💰 Prix               : {vehicule.prix}  /day"
         )
         vehicule_ou_circuit = "Véhicule"
     else:
         detail = (
             f"✨ Titre          : {circuit.titre}\n"
             f"🚩 Destination    : {circuit.destination}\n"
-            f"⏳ Durée          : {circuit.duree} jours\n"
-            f"💰 Prix           : {circuit.prix} Ar /jour\n"
+            f"⏳ Durée          : {circuit.duree} days\n"
+            f"💰 Prix           : {circuit.prix} Ar /day\n"
             f"👍 Inclus         : {circuit.inclus}\n"
             f"👎 Non-Inclus     : {circuit.non_inclus}\n"
         )
         vehicule_ou_circuit = "Circuit"
         
     return (
-        f"Bonjour,\n\n"
+        f"Bonday,\n\n"
         f"Une nouvelle demande de réservation a été effectuée via notre site.\n\n"
         
         f"Informations du client :\n"
@@ -31,7 +31,7 @@ def message(utilisateur, date_depart, date_fin, duree, nombre_personnes, budget,
         f"Détails de la réservation :\n"
         f"═══════════════════════════\n"
         f"- 📅 Dates            : du {date_depart} au {date_fin}\n"
-        f"- ⏳ Durée            : {duree} jour(s)\n"
+        f"- ⏳ Durée            : {duree} day(s)\n"
         f"- 👥 Nombre de pers.  : {nombre_personnes}\n"
         f"- 💰 Budget           : {budget} Ar\n"
         
@@ -50,13 +50,13 @@ def message(utilisateur, date_depart, date_fin, duree, nombre_personnes, budget,
     
 def confirmation_message(utilisateur, date_depart, date_fin, duree, nombre_personnes, budget, commentaire, type_circuit):
     ligne_date = (
-        f"- 📅 Circuit du {date_depart} au {date_fin} ({duree} jour(s))\n"
+        f"- 📅 Circuit du {date_depart} au {date_fin} ({duree} day(s))\n"
         if type_circuit else
-        f"- 📅 Location du {date_depart} au {date_fin} ({duree} jour(s))\n"
+        f"- 📅 Location du {date_depart} au {date_fin} ({duree} day(s))\n"
     )
     
     return (
-        f"Bonjour {utilisateur.prenom},\n\n"
+        f"Bonday {utilisateur.prenom},\n\n"
         f"Nous avons bien reçu votre demande de réservation.\n"
         f"Voici un résumé :\n"
         f"═════════════════\n"
@@ -76,7 +76,7 @@ def confirmation_message(utilisateur, date_depart, date_fin, duree, nombre_perso
     
 def sur_mesure_message(point_depart, point_arrivee, lieu_visiter, activite, date_debut, date_fin, duree, nombre_de_personne, hebergement, budget, nom, prenom, email, contact, commentaire):
     return (
-        f"Bonjour,\n\n"
+        f"Bonday,\n\n"
         f"Une nouvelle demande de devis de circuit sur mesure a été effectuée via notre site.\n\n"
         
         f"📌 INFORMATIONS DU CLIENT\n"
@@ -91,7 +91,7 @@ def sur_mesure_message(point_depart, point_arrivee, lieu_visiter, activite, date
         f"🚩 Itinéraire       : {point_depart} → {point_arrivee}\n"
         f"🏞️ Lieux à visiter  : {lieu_visiter}\n"
         f"🎯 Activité(s)      : {activite}\n"
-        f"⏳ Durée            : {duree} jour(s)\n"
+        f"⏳ Durée            : {duree} day(s)\n"
         f"👥 Nombre de pers.  : {nombre_de_personne}\n"
         f"🏨 Hébergement      : {hebergement}\n"
         f"💰 Budget           : {budget}\n\n"
@@ -107,7 +107,7 @@ def sur_mesure_message(point_depart, point_arrivee, lieu_visiter, activite, date
 def confirmation_message_sur_mesure(point_depart, point_arrivee, lieu_visiter, activite, date_debut, date_fin, duree, nombre_de_personne, hebergement, budget, prenom, commentaire):
     
     return (
-        f"Bonjour {prenom},\n\n"
+        f"Bonday {prenom},\n\n"
         f"Nous avons bien reçu votre demande du devis sur mesure.\n\n"
         f"Voici un résumé :\n"
         f"═════════════════\n"
@@ -115,7 +115,7 @@ def confirmation_message_sur_mesure(point_depart, point_arrivee, lieu_visiter, a
         f"🚩 Itinéraire       : {point_depart} → {point_arrivee}\n"
         f"🏞️ Lieux à visiter  : {lieu_visiter}\n"
         f"🎯 Activité(s)      : {activite}\n"
-        f"⏳ Durée            : {duree} jour(s)\n"
+        f"⏳ Durée            : {duree} day(s)\n"
         f"👥 Nombre de pers.  : {nombre_de_personne}\n"
         f"🏨 Hébergement      : {hebergement}\n"
         f"💰 Budget           : {budget}\n\n"

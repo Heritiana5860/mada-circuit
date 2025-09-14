@@ -455,7 +455,7 @@ const VehicleDetail = () => {
                     <div className="pt-4">
                       <div className="flex justify-between items-center mb-4">
                         <span className="text-sm text-gray-600">
-                          Prix par jour
+                          Price per day
                         </span>
                         <span className="font-semibold">
                           {vehicle.prix?.toLocaleString("fr-FR") || "N/A"} Ar

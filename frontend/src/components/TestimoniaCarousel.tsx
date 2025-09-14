@@ -18,16 +18,16 @@ export const TestimoniaCarousel = ({
 }) => {
   return (
     <div>
-      {datas.length > 0 && (
+      {datas?.length > 0 && (
         <section className="py-16">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center max-w-3xl mx-auto mb-12">
               <h2 className="text-3xl font-bold mb-4">
-                Ce que disent nos voyageurs
+                What our travelers say
               </h2>
               <p className="text-muted-foreground">
-                Découvrez les expériences de ceux qui ont déjà profité de nos
-                services de voyages personnalisés.
+                Discover the experiences of those who have already enjoyed our
+                personalized travel services.
               </p>
             </div>
 
@@ -107,11 +107,10 @@ export const TestimoniaCarousel = ({
                 <div className="text-center py-12">
                   <Quote className="w-16 h-16 text-gray-300 mx-auto mb-4" />
                   <h3 className="text-xl font-semibold text-gray-600 mb-2">
-                    Aucun témoignage disponible
+                    No testimonials available
                   </h3>
                   <p className="text-gray-500">
-                    Les témoignages de nos clients apparaîtront ici
-                    prochainement.
+                    Customer testimonials will appear here soon.
                   </p>
                 </div>
               )}

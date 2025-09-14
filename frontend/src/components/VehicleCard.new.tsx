@@ -66,7 +66,7 @@ const VehicleCard: React.FC<VehicleCardProps> = ({
             <span className="text-xl font-bold text-primary">
               {formatPrice(vehicle.prix)}
             </span>
-            <span className="text-sm text-muted-foreground ml-1">/jour</span>
+            <span className="text-sm text-muted-foreground ml-1">/day</span>
           </div>
 
           <Link

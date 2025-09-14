@@ -61,10 +61,13 @@ const Index = () => {
   // Grouper les témoignages par lots de 3 pour chaque diapositive
   const testimonialsPerSlide = 3;
   const groupedTestimonials = [];
-  for (let i = 0; i < testimoniaData.length; i += testimonialsPerSlide) {
-    groupedTestimonials.push(testimoniaData.slice(i, i + testimonialsPerSlide));
+  if (testimoniaData?.length) {
+    for (let i = 0; i < testimoniaData.length; i += testimonialsPerSlide) {
+      groupedTestimonials.push(
+        testimoniaData.slice(i, i + testimonialsPerSlide)
+      );
+    }
   }
-
   const utilisateurImage = utilisateur?.image
     ? `${urlMedia}${utilisateur.image}`
     : null;

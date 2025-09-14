@@ -93,7 +93,7 @@ const Location4x4: React.FC = () => {
       <NavBar />
       <main className="flex-grow">
         <div className="container mx-auto px-4 py-8">
-          <h1 className="text-4xl font-bold mb-8">Location de véhicules</h1>
+          <h1 className="text-4xl font-bold mb-8">Vehicle Rental</h1>
 
           <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
             {/* Filtres */}
@@ -101,21 +101,21 @@ const Location4x4: React.FC = () => {
               <div className="bg-white p-6 rounded-lg shadow-md">
                 <h2 className="text-xl font-semibold mb-4 flex items-center">
                   <Filter className="w-5 h-5 mr-2" />
-                  Filtres
+                  Filters
                 </h2>
 
                 <div className="space-y-4">
                   {/* Filtrer par type */}
                   <div>
                     <label className="block text-sm font-medium mb-2">
-                      Filtrer par type
+                      Filter by type
                     </label>
                     <select
                       onChange={(e) => setFilter(e.target.value)}
                       value={filter}
                       className="w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-primary focus:border-transparent"
                     >
-                      <option value="">Tous les types</option>
+                      <option value="">All types</option>
                       {vehicleTypes.map((type, index) => (
                         <option key={index} value={type}>
                           {type}

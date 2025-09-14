@@ -80,32 +80,32 @@ const generateDescription = (vehicle) => {
   const annee = vehicle.annee;
   const places = getCapacite(vehicle);
 
-  let description = `Découvrez notre ${typeVehicule} ${marque} ${modele} de ${annee}, `;
+  let description = `Discover our ${annee} ${marque} ${modele}, a ${typeVehicule} designed to make your journey in Madagascar unforgettable. `;
 
   if (typeVehicule.includes("4x4")) {
-    description += `parfaitement équipé pour l'aventure malgache. Ce véhicule tout-terrain vous permettra d'explorer les routes les plus difficiles de Madagascar en toute sécurité. `;
+    description += `Perfectly equipped for adventure, this 4x4 lets you explore Madagascar's most challenging terrains with confidence and ease. `;
   } else if (
     typeVehicule.includes("berline") ||
     typeVehicule.includes("citadine")
   ) {
-    description += `idéal pour vos déplacements urbains et périurbains à Madagascar. Confortable et économique, ce véhicule est parfait pour découvrir les villes malgaches. `;
+    description += `Ideal for urban and suburban travel, this vehicle combines comfort and efficiency, making it perfect for discovering Madagascar's vibrant cities. `;
   } else if (typeVehicule.includes("suv")) {
-    description += `combinant confort et robustesse pour tous vos trajets à Madagascar. Ce SUV offre une excellente tenue de route sur tous types de terrains. `;
+    description += `Blending comfort and durability, this SUV ensures a smooth ride across all types of roads, making every trip in Madagascar enjoyable. `;
   } else {
-    description += `parfaitement adapté à vos besoins de déplacement à Madagascar. `;
+    description += `Versatile and reliable, it is perfectly suited to all your transportation needs in Madagascar. `;
   }
 
-  description += `Avec ses ${places} places, il convient parfaitement `;
+  description += `With seating for ${places} people, it is perfectly suited `;
 
   if (places <= 2) {
-    description += `pour un voyage en couple ou en solo, offrant intimité et agilité sur les routes malgaches.`;
+    description += `for couples or solo travelers, offering privacy and agility for navigating Madagascar's roads.`;
   } else if (places <= 5) {
-    description += `pour une famille ou un petit groupe d'amis souhaitant explorer Madagascar ensemble.`;
+    description += `for families or small groups of friends looking to explore Madagascar together.`;
   } else {
-    description += `pour un groupe plus important, idéal pour les excursions familiales ou entre amis à travers l'île.`;
+    description += `for larger groups, ideal for family trips or excursions with friends across the island.`;
   }
 
-  description += ` Ce véhicule est régulièrement entretenu et vérifié pour garantir votre sécurité et votre confort durant votre séjour à Madagascar.`;
+  description += ` Regularly maintained and thoroughly checked, this vehicle guarantees your safety and comfort throughout your stay in Madagascar.`;
 
   return description;
 };
@@ -201,30 +201,28 @@ const VehicleDetailSimple = () => {
   // Validation du formulaire
   const validateForm = (): boolean => {
     if (!formData.dateDebut) {
-      setError("Veuillez sélectionner une date de début");
+      setError("Please select a start date");
       return false;
     }
 
     if (!formData.dateFin) {
-      setError("Veuillez sélectionner une date de fin");
+      setError("Please select an end date");
       return false;
     }
 
     if (new Date(formData.dateDebut) >= new Date(formData.dateFin)) {
-      setError("La date de fin doit être postérieure à la date de début");
+      setError("The end date must be after the start date");
       return false;
     }
 
     if (formData.personne < 1) {
-      setError("Le nombre de personnes doit être d'au moins 1");
+      setError("The number of people must be at least 1");
       return false;
     }
 
     const maxPlaces = getCapacite(data?.vehicule);
     if (formData.personne > maxPlaces) {
-      setError(
-        `Le nombre de personnes ne peut pas excéder ${maxPlaces} places`
-      );
+      setError(`The number of people cannot exceed ${maxPlaces} seats`);
       return false;
     }
 
@@ -307,13 +305,13 @@ const VehicleDetailSimple = () => {
               Erreur requête 2: {error2?.message}
             </p>
             <p className="text-gray-600 mb-4">
-              Data1: {data1 ? "Trouvé" : "Non trouvé"}
+              Data1: {data1 ? "Found" : "Not found"}
             </p>
             <p className="text-gray-600 mb-4">
-              Data2: {data2 ? "Trouvé" : "Non trouvé"}
+              Data2: {data2 ? "Found" : "Not found"}
             </p>
             <Button onClick={() => navigate("/location-4x4")}>
-              Retour à la liste des véhicules
+              Back to the vehicle list
             </Button>
           </div>
         </main>
@@ -463,10 +461,10 @@ const VehicleDetailSimple = () => {
                     <Users className="w-5 h-5 mr-3 text-green-600" />
                     <div>
                       <span className="text-sm text-gray-500 block">
-                        Capacité
+                        Capacity
                       </span>
                       <span className="font-medium">
-                        {getCapacite(vehicle)} places
+                        {getCapacite(vehicle)} Seats
                       </span>
                     </div>
                   </div>
@@ -474,7 +472,9 @@ const VehicleDetailSimple = () => {
                   <div className="flex items-center p-3 bg-gray-50 rounded-lg">
                     {getEtatIcon(vehicle.etat)}
                     <div>
-                      <span className="text-sm text-gray-500 block">État</span>
+                      <span className="text-sm text-gray-500 block">
+                        Condition
+                      </span>
                       <span className="font-medium">{vehicle.etat}</span>
                     </div>
                   </div>
@@ -483,7 +483,7 @@ const VehicleDetailSimple = () => {
                     <Hash className="w-5 h-5 mr-3 text-purple-600" />
                     <div>
                       <span className="text-sm text-gray-500 block">
-                        Un chauffeur qui parle
+                        A driver who speaks
                       </span>
                       <span className="font-medium font-mono">
                         {vehicle.langue}
@@ -506,8 +506,7 @@ const VehicleDetailSimple = () => {
                   <div className="flex items-center">
                     <Calendar className="w-5 h-5 mr-2 text-blue-600" />
                     <p className="text-sm text-blue-800">
-                      <strong>Année de mise en circulation :</strong>{" "}
-                      {vehicle.annee}
+                      <strong>Year of release :</strong> {vehicle.annee}
                     </p>
                   </div>
                 </div>
@@ -518,13 +517,13 @@ const VehicleDetailSimple = () => {
                 <Card className="shadow-lg">
                   <CardContent className="p-6">
                     <h2 className="text-2xl text-center font-semibold mb-4 text-gray-800 border-b pb-3">
-                      Réservation
+                      Reservation
                     </h2>
 
                     <form onSubmit={handleReservation} className="space-y-4">
                       <div>
                         <label className="block text-sm font-medium mb-2 text-gray-700">
-                          Date de début
+                          Start date
                         </label>
                         <input
                           type="date"
@@ -539,7 +538,7 @@ const VehicleDetailSimple = () => {
 
                       <div>
                         <label className="block text-sm font-medium mb-2 text-gray-700">
-                          Date de fin
+                          End date
                         </label>
                         <input
                           type="date"
@@ -557,7 +556,7 @@ const VehicleDetailSimple = () => {
 
                       <div>
                         <label className="block text-sm font-medium mb-2 text-gray-700">
-                          Nombre de personnes
+                          Number of people
                         </label>
                         <input
                           type="number"
@@ -574,13 +573,13 @@ const VehicleDetailSimple = () => {
 
                       <div>
                         <label className="block text-sm font-medium mb-2 text-gray-700">
-                          Message (optionnel)
+                          Message (optional)
                         </label>
                         <textarea
                           name="commentaire"
                           value={formData.commentaire}
                           onChange={handleInputChange}
-                          placeholder="Ajouter un message ou une demande spéciale"
+                          placeholder="Add a message or special request"
                           className="w-full p-3 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                           rows={3}
                         />
@@ -596,7 +595,7 @@ const VehicleDetailSimple = () => {
                       <div className="pt-4 border-t">
                         <div className="flex justify-between items-center mb-4">
                           <span className="text-sm text-gray-600">
-                            Prix par jour
+                            Price per day
                           </span>
                           <span className="font-semibold text-lg">
                             {formatPrice(vehicle.prix)}
@@ -607,10 +606,10 @@ const VehicleDetailSimple = () => {
                           <>
                             <div className="flex justify-between items-center mb-4">
                               <span className="text-sm text-gray-600">
-                                Nombre de jours
+                                Number of days
                               </span>
                               <span className="font-semibold">
-                                {days} {days > 1 ? "jours" : "jour"}
+                                {days} {days > 1 ? "days" : "day"}
                               </span>
                             </div>
                             <div className="flex justify-between items-center mb-6 p-3 bg-blue-50 rounded-lg">
@@ -618,7 +617,7 @@ const VehicleDetailSimple = () => {
                                 Total
                               </span>
                               <span className="text-2xl font-bold text-blue-600">
-                                {total.toLocaleString("fr-FR")} Ar
+                                {formatPrice(total)}
                               </span>
                             </div>
                           </>
@@ -639,10 +638,10 @@ const VehicleDetailSimple = () => {
                           }
                         >
                           {isSubmitting || reservationLoading
-                            ? "Réservation en cours..."
+                            ? "Booking in progress..."
                             : !isAuthenticated
-                            ? "Se connecter pour réserver"
-                            : "Réserver maintenant"}
+                            ? "Log in to book"
+                            : "Book now"}
                         </Button>
                       </div>
                     </form>

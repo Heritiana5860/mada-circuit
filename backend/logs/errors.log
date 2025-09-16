@@ -1,2 +1,0 @@
-[2025-08-03 14:57:43,560] ERROR myapp (queries.py:376): Erreur lors du traitement de l'user_id: UmVzZXJ2YXRpb25UeXBlOmM4YTc4ZDdhLWIxMzktNDNmMy1hZTk2LWUyNDJhZTRlMmM2ZA==, erreur: name 're' is not defined
-[2025-08-03 15:08:36,255] ERROR myapp (queries.py:363): Erreur de décodage Base64 pour user_id 'c8a78d7a-b139-43f3-ae96-e242ae4e2c6d==': Excess padding not allowed

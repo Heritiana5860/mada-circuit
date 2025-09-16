@@ -196,38 +196,37 @@ EMAIL_HOST_PASSWORD = os.getenv("EMAIL_HOST_PASSWORD")
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': "madaga47_mada_db",
-        'USER': "madaga47_mada_db",
-        'PASSWORD': "rBbFadV7FWA6zZpfdemn",
-        'HOST': "mysql",
-        'PORT': "3306",
-        'OPTIONS': {
-            'charset': 'utf8mb4',
-            # Supprimez toutes les options liées aux plugins
-            'init_command': "SET sql_mode='STRICT_TRANS_TABLES'",
-        }
-    }
-}
-
 # DATABASES = {
 #     'default': {
 #         'ENGINE': 'django.db.backends.mysql',
-#         'NAME': 'madaga47_circuit_db',
-#         'USER': 'madaga47_circuit_db',    
-#         'PASSWORD': 'rBbFadV7FWA6zZpfdemn',
-#         # 'HOST': 'localhost', # En production
-#         'HOST': 'db',
-#         'PORT': '3306',
+#         'NAME': "madaga47_mada_db",
+#         'USER': "madaga47_mada_db",
+#         'PASSWORD': "rBbFadV7FWA6zZpfdemn",
+#         'HOST': "mysql",
+#         'PORT': "3306",
 #         'OPTIONS': {
 #             'charset': 'utf8mb4',
-#             # Supprimez toutes les options li  es aux plugins
+#             # Supprimez toutes les options liées aux plugins
 #             'init_command': "SET sql_mode='STRICT_TRANS_TABLES'",
 #         }
 #     }
 # }
+
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'madaga47_circuit_db',
+        'USER': 'madaga47_circuit_db',    
+        'PASSWORD': 'rBbFadV7FWA6zZpfdemn',
+        'HOST': 'localhost',
+        'PORT': '3306',
+        'OPTIONS': {
+            'charset': 'utf8mb4',
+            # Supprimez toutes les options li  es aux plugins
+            'init_command': "SET sql_mode='STRICT_TRANS_TABLES'",
+        }
+    }
+}
 
 AUTH_USER_MODEL = 'mada_journey.Utilisateur'
 

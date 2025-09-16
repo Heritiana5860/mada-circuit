@@ -1,0 +1,6 @@
+.custom-bg {
+  background-image: url("pangalanes2.jpg"), url("pangalanes1.webp"), url("pangalanes3.jpg");
+  background-position: left center, center center, right center;
+  background-repeat: no-repeat;
+  background-size: 33.33% 100%, 33.33% 100%, 33.33% 100%;
+}

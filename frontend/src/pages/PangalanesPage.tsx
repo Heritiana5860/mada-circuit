@@ -17,6 +17,7 @@ import EmptyData from "@/components/EmptyData";
 import { useActivities } from "@/helper/pangalanes/Activities";
 import { useWhyChooseUs } from "@/helper/pangalanes/WhyChooseUs";
 import { useTravelOptions } from "@/helper/pangalanes/TravelOptions";
+import "./pangalanesCss.css";
 
 const PangalanesPage = () => {
   const navigate = useNavigate();
@@ -63,7 +64,7 @@ const PangalanesPage = () => {
       <NavBar />
 
       <main className="flex-grow">
-        <div className="relative p-10 bg-[url('canal.webp')] bg-cover bg-center">
+        <div className="relative p-10 custom-bg">
           {/* Overlay */}
           <div className="absolute inset-0 bg-black/50"></div>
 

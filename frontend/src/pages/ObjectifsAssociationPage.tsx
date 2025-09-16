@@ -3,18 +3,17 @@ import NavBar from "../components/NavBar";
 import Footer from "../components/Footer";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import {
-  School,
-  Mail,
-  Globe,
-} from "lucide-react";
+import { School, Mail, Globe } from "lucide-react";
 import { Link } from "react-router-dom";
 import { FaqContext } from "@/provider/DataContext";
 import { FaqCard } from "@/components/FaqCard";
-import { objectifs } from "@/helper/ObjectifsAssociations";
+import { useObjectifs } from "@/helper/ObjectifsAssociations";
+import { useTranslation, Trans } from "react-i18next";
 
 const ObjectifsAssociationPage = () => {
   const { allDataFaq, faqLoading, faqError } = useContext(FaqContext);
+  const { t } = useTranslation();
+  const objectifs = useObjectifs();
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -68,16 +67,21 @@ const ObjectifsAssociationPage = () => {
           <div className="absolute inset-0 bg-gradient-to-r from-black/70 to-black/30 flex items-center">
             <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
               <div className="max-w-3xl">
-                <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-6">
-                  Objectifs de l'Association
-                </h1>
-                <p className="text-xl text-white/90 mb-8">
-                  Parrainer un enfant est synonyme de lui ouvrir la porte à une
-                  meilleure éducation
-                </p>
+                <Trans i18nKey="pages.solidaire.solidaireObjectifs">
+                  <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-6">
+                    Objectifs de l'Association
+                  </h1>
+                  <p className="text-xl text-white/90 mb-8">
+                    Parrainer un enfant est synonyme de lui ouvrir la porte à
+                    une meilleure éducation
+                  </p>
+                </Trans>
                 <Link to="/contact">
                   <Button size="lg" className="mr-4">
-                    Parrainer un enfant
+                    {t(
+                      "pages.solidaire.solidaireParrainer",
+                      "Parrainer un enfant"
+                    )}
                   </Button>
                 </Link>
               </div>
@@ -90,34 +94,44 @@ const ObjectifsAssociationPage = () => {
           <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
               <div>
-                <h2 className="text-3xl font-bold mb-6">Notre Mission</h2>
-                <p className="text-muted-foreground mb-4">
-                  À Madagascar, sur le canal des pangalanes entre
-                  Tamatave-Mahanoro-Mananjary-Manakara, seulement 35% des
-                  enfants sont scolarisés par leurs parents et uniquement 10%
-                  peuvent continuer jusqu'aux classes secondaires en raison du
-                  manque de moyens, de l'isolement et du manque de subventions.
-                </p>
-                <p className="text-muted-foreground mb-6">
-                  De nombreux villages sont isolés à cause de l'ensablement du
-                  canal et manquent d'accès routier, ce qui provoque la hausse
-                  du prix des fournitures scolaires. Pire encore, les
-                  instituteurs ne veulent plus enseigner dans ces conditions et
-                  abandonnent l'école et les enfants, alors que nombre d'entre
-                  eux ont envie de continuer leurs études et de réaliser leurs
-                  rêves de devenir médecin, instituteur ou ingénieur.
-                </p>
+                <Trans i18nKey="pages.solidaire.solidaireNotreMission">
+                  <h2 className="text-3xl font-bold mb-6">Notre Mission</h2>
+                  <p className="text-muted-foreground mb-4">
+                    À Madagascar, sur le canal des pangalanes entre
+                    Tamatave-Mahanoro-Mananjary-Manakara, seulement 35% des
+                    enfants sont scolarisés par leurs parents et uniquement 10%
+                    peuvent continuer jusqu'aux classes secondaires en raison du
+                    manque de moyens, de l'isolement et du manque de
+                    subventions.
+                  </p>
+                  <p className="text-muted-foreground mb-6">
+                    De nombreux villages sont isolés à cause de l'ensablement du
+                    canal et manquent d'accès routier, ce qui provoque la hausse
+                    du prix des fournitures scolaires. Pire encore, les
+                    instituteurs ne veulent plus enseigner dans ces conditions
+                    et abandonnent l'école et les enfants, alors que nombre
+                    d'entre eux ont envie de continuer leurs études et de
+                    réaliser leurs rêves de devenir médecin, instituteur ou
+                    ingénieur.
+                  </p>
+                </Trans>
                 <div className="flex items-center space-x-4">
                   <div className="flex flex-col items-center p-4 bg-white rounded-lg shadow-sm">
                     <span className="text-3xl font-bold text-primary">35%</span>
                     <span className="text-sm text-muted-foreground">
-                      enfants scolarisés
+                      {t(
+                        "pages.solidaire.solidaireenfantsscolarisés",
+                        "enfants scolarisés"
+                      )}
                     </span>
                   </div>
                   <div className="flex flex-col items-center p-4 bg-white rounded-lg shadow-sm">
                     <span className="text-3xl font-bold text-primary">10%</span>
                     <span className="text-sm text-muted-foreground">
-                      continuent au secondaire
+                      {t(
+                        "pages.solidaire.solidairecontinuentausecondaire",
+                        "continuent au secondaire"
+                      )}
                     </span>
                   </div>
                   <div className="flex flex-col items-center p-4 bg-white rounded-lg shadow-sm">
@@ -125,7 +139,10 @@ const ObjectifsAssociationPage = () => {
                       100%
                     </span>
                     <span className="text-sm text-muted-foreground">
-                      d'espoir avec vous
+                      {t(
+                        "pages.solidaire.solidaireespoir",
+                        "d'espoir avec vous"
+                      )}
                     </span>
                   </div>
                 </div>
@@ -148,14 +165,16 @@ const ObjectifsAssociationPage = () => {
         <section className="py-16">
           <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center max-w-3xl mx-auto mb-12">
-              <h2 className="text-3xl font-bold mb-4">
-                Objectifs de l'Association
-              </h2>
-              <p className="text-muted-foreground">
-                Notre association œuvre pour offrir une éducation de qualité aux
-                enfants vivant le long du canal des pangalanes, tout en
-                respectant leur culture et leur environnement.
-              </p>
+              <Trans i18nKey="pages.solidaire.solidaireAssociation">
+                <h2 className="text-3xl font-bold mb-4">
+                  Objectifs de l'Association
+                </h2>
+                <p className="text-muted-foreground">
+                  Notre association œuvre pour offrir une éducation de qualité
+                  aux enfants vivant le long du canal des pangalanes, tout en
+                  respectant leur culture et leur environnement.
+                </p>
+              </Trans>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -178,14 +197,16 @@ const ObjectifsAssociationPage = () => {
         <section className="py-12">
           <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
             <div className="max-w-3xl mx-auto">
-              <h3 className="text-2xl font-bold mb-6 italic">
-                "Le possible est déjà fait, pour le miracle il faut attendre
-                48h"
-              </h3>
-              <p className="text-lg text-muted-foreground">
-                Vous êtes le miracle qu'ils attendent depuis 48h, aidez-les s'il
-                vous plaît à continuer leurs études.
-              </p>
+              <Trans i18nKey="pages.solidaire.solidairepossible">
+                <h3 className="text-2xl font-bold mb-6 italic">
+                  "Le possible est déjà fait, pour le miracle il faut attendre
+                  48h"
+                </h3>
+                <p className="text-lg text-muted-foreground">
+                  Vous êtes le miracle qu'ils attendent depuis 48h, aidez-les
+                  s'il vous plaît à continuer leurs études.
+                </p>
+              </Trans>
             </div>
           </div>
         </section>
@@ -205,25 +226,29 @@ const ObjectifsAssociationPage = () => {
                 </div>
               </div>
               <div className="order-1 lg:order-2">
-                <h2 className="text-3xl font-bold mb-6">Nos Projets Futurs</h2>
-                <p className="text-muted-foreground mb-4">
-                  Au cours d'une première phase, un site Web sera mis en ligne
-                  pour devenir un portail d'information permettant de rencontrer
-                  en temps réel les enfants, les villageois et suivre leur
-                  progression.
-                </p>
-                <p className="text-muted-foreground mb-6">
-                  Nous souhaitons également développer des programmes de
-                  formation pour les enseignants locaux, améliorer les
-                  infrastructures scolaires existantes et créer des
-                  bibliothèques mobiles qui pourront naviguer le long du canal
-                  pour atteindre les villages les plus isolés.
-                </p>
+                <Trans i18nKey="pages.solidaire.solidaireNosProjetsFuturs">
+                  <h2 className="text-3xl font-bold mb-6">
+                    Nos Projets Futurs
+                  </h2>
+                  <p className="text-muted-foreground mb-4">
+                    Au cours d'une première phase, un site Web sera mis en ligne
+                    pour devenir un portail d'information permettant de
+                    rencontrer en temps réel les enfants, les villageois et
+                    suivre leur progression.
+                  </p>
+                  <p className="text-muted-foreground mb-6">
+                    Nous souhaitons également développer des programmes de
+                    formation pour les enseignants locaux, améliorer les
+                    infrastructures scolaires existantes et créer des
+                    bibliothèques mobiles qui pourront naviguer le long du canal
+                    pour atteindre les villages les plus isolés.
+                  </p>
+                </Trans>
                 <div className="flex flex-col sm:flex-row gap-4">
                   <Link to="/contact">
                     <Button className="flex items-center">
                       <Mail className="mr-2 h-4 w-4" />
-                      <span>Contactez-nous</span>
+                      <span>{t("pages.hero.contactUs", "Contactez-nous")}</span>
                     </Button>
                   </Link>
                 </div>
@@ -244,18 +269,23 @@ const ObjectifsAssociationPage = () => {
           </div>
 
           <div className="relative z-10 max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 text-white text-center">
-            <h2 className="text-3xl md:text-4xl font-bold mb-6">
-              Participez au changement aujourd'hui
-            </h2>
-            <p className="text-lg text-white/80 mb-8 max-w-3xl mx-auto">
-              Votre parrainage peut transformer la vie d'un enfant sur le canal
-              des pangalanes. Contactez-nous dès maintenant pour découvrir
-              comment vous pouvez faire la différence.
-            </p>
+            <Trans i18nKey="pages.solidaire.solidaireParticipez">
+              <h2 className="text-3xl md:text-4xl font-bold mb-6">
+                Participez au changement aujourd'hui
+              </h2>
+              <p className="text-lg text-white/80 mb-8 max-w-3xl mx-auto">
+                Votre parrainage peut transformer la vie d'un enfant sur le
+                canal des pangalanes. Contactez-nous dès maintenant pour
+                découvrir comment vous pouvez faire la différence.
+              </p>
+            </Trans>
             <div>
               <Link to="/contact">
                 <Button size="lg" variant="default">
-                  Parrainer un enfant
+                  {t(
+                    "pages.solidaire.solidaireParrainer",
+                    "Parrainer un enfant"
+                  )}
                 </Button>
               </Link>
             </div>

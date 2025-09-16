@@ -1,8 +1,10 @@
 import { ArrowRight, MapPin, Star } from "lucide-react";
 import { useState, useEffect } from "react";
+import { useTranslation } from "react-i18next";
 
 const Hero = () => {
   const [isVisible, setIsVisible] = useState(false);
+  const { t } = useTranslation();
 
   useEffect(() => {
     const timer = setTimeout(() => setIsVisible(true), 100);
@@ -107,10 +109,10 @@ const Hero = () => {
           Madagascar
           <br />
           <span className="text-transparent bg-gradient-to-r from-primary via-accent to-secondary bg-clip-text">
-            Solidarity
+            Voyage
           </span>
           <br />
-          Travel
+          Solidaire
         </h1>
 
         {/* Sous-titre élégant */}
@@ -123,12 +125,19 @@ const Hero = () => {
             animationDelay: "0.4s",
           }}
         >
-          Tailor-made tours, the discovery of the Pangalanes Canal, and 4x4
-          vehicle rentals for an{" "}
+          {t(
+            "nav.desc",
+            "Tailor-made tours, the discovery of the Pangalanes Canal, and 4x4 vehicle rentals for an"
+          )}{" "}
           <span className="font-semibold text-accent">
-            unforgettable adventure
+            {t("nav.exp", "unforgettable adventure")}
           </span>
-          .
+          . <br />
+          <span className=" font-semibold text-accent">
+            {t("nav.canal", "Canal Evasion dirigé par Sylvain Black")}
+          </span>{" "}
+          {t("nav.agence", "est l’agence partenaire de")}{" "}
+          <span className="font-semibold">Madagascar Voyage Solidaire</span>.
         </p>
 
         {/* Boutons professionnels */}
@@ -153,7 +162,7 @@ const Hero = () => {
             <div className="absolute -inset-1 bg-primary/30 rounded-md blur-lg opacity-0 group-hover:opacity-60 transition-all duration-300"></div>
 
             <div className="relative flex items-center justify-center gap-2 z-10 font-semibold text-white">
-              <span>Discover our tours</span>
+              <span>{t("pages.hero.discover", "Discover our tours")}</span>
               <ArrowRight className="w-5 h-5 transition-transform duration-300 group-hover:translate-x-1" />
             </div>
           </a>
@@ -173,7 +182,7 @@ const Hero = () => {
 
             <div className="relative flex items-center justify-center gap-2 z-10">
               <MapPin className="w-4 h-4 transition-transform duration-300 group-hover:rotate-6" />
-              <span>Contact Us</span>
+              <span>{t("pages.hero.contactUs", "Contact Us")}</span>
             </div>
           </a>
         </div>

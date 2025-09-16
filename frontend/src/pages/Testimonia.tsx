@@ -3,8 +3,6 @@ import NavBar from "@/components/NavBar";
 import { useAuth } from "@/contexts/AuthContext";
 import { CREATE_TESTIMONIA } from "@/graphql/mutations";
 import { useMutation } from "@apollo/client";
-import { Description } from "@radix-ui/react-toast";
-import { describe } from "node:test";
 import { useState } from "react";
 
 const Testimonia = () => {
@@ -20,7 +18,7 @@ const Testimonia = () => {
     setTem(event.target.value);
   };
 
-  const [creationTestimonia, { loading, error, data }] =
+  const [creationTestimonia] =
     useMutation(CREATE_TESTIMONIA);
 
   const handleInputChange = (e) => {

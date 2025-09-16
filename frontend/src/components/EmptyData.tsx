@@ -1,11 +1,13 @@
 import { Compass } from "lucide-react";
 import { Card, CardContent } from "./ui/card";
+import { useTranslation } from "react-i18next";
 
 interface DataType {
   titre: string;
 }
 
 const EmptyData: React.FC<DataType> = ({ titre }) => {
+  const { t } = useTranslation();
   return (
     <div className="text-center">
       <Card className="border-0 shadow-sm">
@@ -15,7 +17,10 @@ const EmptyData: React.FC<DataType> = ({ titre }) => {
           </div>
           <h3 className="text-xl font-sans font-semibold mb-2">{titre}</h3>
           <p className="text-muted-foreground mb-6">
-            We appreciate your patience as we prepare something special.
+            {t(
+              "common.weAppreciate",
+              "We appreciate your patience as we prepare something special."
+            )}
           </p>
         </CardContent>
       </Card>

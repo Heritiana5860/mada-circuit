@@ -5,9 +5,12 @@ import VehicleCard from "./VehicleCard";
 import { ArrowRight, Loader2 } from "lucide-react";
 import { Link } from "react-router-dom";
 import { Alert, AlertDescription } from "@/components/ui/alert";
+import { useTranslation, Trans } from "react-i18next";
+import EmptyData from "./EmptyData";
 
 const Vehicles4x4: React.FC = () => {
   const { data, loading, error } = useQuery(GET_ALL_VEHICULES);
+  const { t } = useTranslation();
 
   // Prendre les 4 derniers véhicules (les plus récemment ajoutés)
   const vehicles =
@@ -19,24 +22,26 @@ const Vehicles4x4: React.FC = () => {
         <div>
           <div className="inline-flex items-center px-4 py-2 bg-gradient-to-r from-blue-100 to-purple-100 rounded-full mb-6">
             <span className="text-sm font-semibold bg-gradient-to-r from-primary via-accent to-secondary bg-clip-text text-transparent">
-              4x4 Vehicles
+              {t("pages.hero.homeVehiculeTitre", "4x4 Vehicles")}
             </span>
           </div>
 
-          <h2 className="text-4xl md:text-6xl font-bold mb-6 leading-tight">
-            Our Available Vehicles
-          </h2>
-          <p className="text-xl text-gray-600 leading-relaxed max-w-3xl mx-auto">
-            Discover our fleet of 4x4 vehicles, perfectly suited to explore
-            Madagascar's roads safely and comfortably.
-          </p>
+          <Trans i18nKey="pages.hero.homeVehiculeDescription">
+            <h2 className="text-4xl md:text-6xl font-bold mb-6 leading-tight">
+              Our Available Vehicles
+            </h2>
+            <p className="text-xl text-gray-600 leading-relaxed max-w-3xl mx-auto">
+              Discover our fleet of 4x4 vehicles, perfectly suited to explore
+              Madagascar's roads safely and comfortably.
+            </p>
+          </Trans>
         </div>
 
         <Link
           to="/location-4x4"
           className="mt-4 md:mt-0 flex items-center text-primary hover:text-primary/80 transition-colors font-medium"
         >
-          <span>See All Vehicles</span>
+          <span>{t("pages.hero.SeeAllVehicles", "See All Vehicles")}</span>
           <ArrowRight className="ml-2 h-4 w-4" />
         </Link>
       </div>
@@ -53,11 +58,12 @@ const Vehicles4x4: React.FC = () => {
           </AlertDescription>
         </Alert>
       ) : vehicles.length === 0 ? (
-        <div className="text-center py-12">
-          <p className="text-muted-foreground">
-            No vehicles available at the moment.
-          </p>
-        </div>
+        <EmptyData
+          titre={t(
+            "pages.hero.upcomingVehicles",
+            "Upcoming Vehicles coming soon."
+          )}
+        />
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
           {vehicles.map((vehicle, index: number) => (

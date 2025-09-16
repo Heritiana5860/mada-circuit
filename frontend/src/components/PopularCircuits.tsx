@@ -5,6 +5,8 @@ import { GET_ALL_CIRCUITS } from "@/graphql/queries";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import CardContentDetail from "./detail/CardContentDetail";
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
+import EmptyData from "./EmptyData";
 
 const PopularCircuits = () => {
   // Requête GraphQL pour récupérer tous les circuits (on prendra les 3 premiers)
@@ -13,6 +15,7 @@ const PopularCircuits = () => {
   });
 
   const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
+  const { t } = useTranslation();
 
   const circuits = data?.allCircuitsByType;
 
@@ -22,23 +25,25 @@ const PopularCircuits = () => {
         <div className="text-center max-w-4xl mx-auto mb-20">
           <div className="inline-flex items-center px-4 py-2 bg-gradient-to-r from-blue-100 to-purple-100 rounded-full mb-6">
             <span className="text-sm font-semibold bg-gradient-to-r from-primary via-accent to-secondary bg-clip-text text-transparent">
-              Popular Tours
+              {t("pages.hero.popularTours", "Popular Tours")}
             </span>
           </div>
 
           <h2 className="text-4xl md:text-6xl font-bold mb-6 leading-tight">
-            Explore Our Top Tours
+            {t("pages.hero.popularExplore", "Explore Our Top Tours")}
           </h2>
           <p className="text-xl text-gray-600 leading-relaxed max-w-3xl mx-auto">
-            Carefully crafted itineraries to help you discover Madagascar's
-            unique biodiversity, rich culture, and breathtaking landscapes.
+            {t(
+              "pages.hero.popularCarefully",
+              "Carefully crafted itineraries to help you discover Madagascar's unique biodiversity, rich culture, and breathtaking landscapes."
+            )}
           </p>
         </div>
         <Link
           to="/circuits"
           className="mt-4 md:mt-0 flex items-center text-primary hover:text-primary/80 transition-colors font-medium"
         >
-          <span>See All Tours</span>
+          <span>{t("pages.hero.popularSeeAll", "See All Tours")}</span>
           <ArrowRight className="ml-2 h-4 w-4" />
         </Link>
       </div>
@@ -46,7 +51,7 @@ const PopularCircuits = () => {
       {loading ? (
         <div className="flex justify-center items-center py-12">
           <Loader2 className="h-8 w-8 animate-spin" />
-          <span className="ml-2">Loading tours…</span>
+          <span className="ml-2">{t("common.loading", "Loading...")}</span>
         </div>
       ) : error ? (
         <Alert variant="destructive" className="mb-6">
@@ -55,11 +60,9 @@ const PopularCircuits = () => {
           </AlertDescription>
         </Alert>
       ) : circuits.length === 0 ? (
-        <div className="text-center py-12">
-          <p className="text-muted-foreground">
-            No tours available at the moment.
-          </p>
-        </div>
+        <EmptyData
+          titre={t("pages.hero.popularNoTours", "Upcoming tours coming soon.")}
+        />
       ) : (
         <div
           className={

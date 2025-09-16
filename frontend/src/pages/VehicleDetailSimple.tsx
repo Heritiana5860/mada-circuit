@@ -16,13 +16,12 @@ import {
   XCircle,
   Calendar,
   MapPin,
-  Share2,
-  Heart,
 } from "lucide-react";
 import { useVehicleReservation } from "@/hooks/useVehicleReservation";
 import { formatPrice } from "@/helper/formatage";
 import { StatistiqueReservationContext } from "@/provider/DataContext";
 import { urlMedia } from "@/helper/UrlImage";
+import { useTranslation } from "react-i18next";
 
 // Fonction pour décoder l'ID Relay
 const decodeRelayId = (relayId: string): string => {
@@ -114,6 +113,7 @@ const VehicleDetailSimple = () => {
   const { id: rawId } = useParams();
   const navigate = useNavigate();
   const { isAuthenticated, user } = useAuth();
+  const { t } = useTranslation();
 
   // Actualiser l'affichage de la liste reservation
   const { refetchReservations } = useContext(StatistiqueReservationContext);

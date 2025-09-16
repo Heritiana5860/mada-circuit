@@ -7,6 +7,7 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from "./ui/carousel";
+import { useTranslation } from "react-i18next";
 
 export const TestimoniaCarousel = ({
   datas,
@@ -16,6 +17,7 @@ export const TestimoniaCarousel = ({
   testimonialsPerSlide,
   currentIndex,
 }) => {
+  const { t } = useTranslation();
   return (
     <div>
       {datas?.length > 0 && (
@@ -23,11 +25,13 @@ export const TestimoniaCarousel = ({
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center max-w-3xl mx-auto mb-12">
               <h2 className="text-3xl font-bold mb-4">
-                What our travelers say
+                {t("pages.testimonia.title", "What our travelers say")}
               </h2>
               <p className="text-muted-foreground">
-                Discover the experiences of those who have already enjoyed our
-                personalized travel services.
+                {t(
+                  "pages.testimonia.description",
+                  "Discover the experiences of those who have already enjoyed ourpersonalized travel services."
+                )}
               </p>
             </div>
 

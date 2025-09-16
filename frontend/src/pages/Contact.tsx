@@ -11,6 +11,7 @@ import { useMutation } from "@apollo/client";
 import { useToast } from "@/components/ui/use-toast";
 import { CREATE_CONTACT_US } from "@/graphql/mutations";
 import { Helmet } from "react-helmet-async";
+import { useTranslation } from "react-i18next";
 
 const Contact = () => {
   // État du formulaire
@@ -24,6 +25,7 @@ const Contact = () => {
   });
 
   const { toast } = useToast();
+  const { t } = useTranslation();
 
   const [CreateContactUsMutation, { loading }] = useMutation(CREATE_CONTACT_US);
 
@@ -115,7 +117,9 @@ const Contact = () => {
           <div className="relative max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-16">
               <h1 className="text-5xl md:text-7xl lg:text-8xl font-black mb-8 leading-tight">
-                <span className="text-white">Contact us</span>
+                <span className="text-white">
+                  {t("pages.hero.contactUs", "Contact us")}
+                </span>
               </h1>
               <p className="text-xl md:text-2xl text-white/90 max-w-4xl mx-auto leading-relaxed mb-12">
                 We’re here to assist you with any questions and guide you in
@@ -130,15 +134,22 @@ const Contact = () => {
           <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
               <div className="bg-card rounded-lg shadow-md p-8">
-                <h2 className="text-2xl font-bold mb-6">Reach out to us</h2>
+                <h2 className="text-2xl font-bold mb-6">
+                  {t("pages.contact.ReachOutToUs", "Reach out to us")}
+                </h2>
 
                 <form onSubmit={handleSubmit} className="space-y-6">
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div className="space-y-2">
-                      <Label htmlFor="nom">Last name</Label>
+                      <Label htmlFor="nom">
+                        {t("pages.contact.lastName", "Last name")}
+                      </Label>
                       <Input
                         id="nom"
-                        placeholder="Your last name"
+                        placeholder={t(
+                          "pages.contact.lnPlaceholder",
+                          "Your last name"
+                        )}
                         required
                         value={formData.nom}
                         onChange={handleChange}
@@ -146,10 +157,15 @@ const Contact = () => {
                     </div>
 
                     <div className="space-y-2">
-                      <Label htmlFor="prenom">First name</Label>
+                      <Label htmlFor="prenom">
+                        {t("pages.contact.firstName", "First name")}
+                      </Label>
                       <Input
                         id="prenom"
-                        placeholder="Your first name"
+                        placeholder={t(
+                          "pages.contact.fnPlaceholder",
+                          "Your first name"
+                        )}
                         required
                         value={formData.prenom}
                         onChange={handleChange}
@@ -162,7 +178,10 @@ const Contact = () => {
                     <Input
                       id="email"
                       type="email"
-                      placeholder="your.email@example.com"
+                      placeholder={t(
+                        "pages.contact.emailPlaceholder",
+                        "your.email@example.com"
+                      )}
                       required
                       value={formData.email}
                       onChange={handleChange}
@@ -170,7 +189,9 @@ const Contact = () => {
                   </div>
 
                   <div className="space-y-2">
-                    <Label htmlFor="contact">Phone *</Label>
+                    <Label htmlFor="contact">
+                      {t("pages.contact.phone", "Phone")} *
+                    </Label>
                     <Input
                       type="number"
                       id="contact"
@@ -182,10 +203,15 @@ const Contact = () => {
                   </div>
 
                   <div className="space-y-2">
-                    <Label htmlFor="objet">Subject</Label>
+                    <Label htmlFor="objet">
+                      {t("pages.contact.subject", "Subject")}
+                    </Label>
                     <Input
                       id="objet"
-                      placeholder="Email subject"
+                      placeholder={t(
+                        "pages.contact.subjectPlaceholder",
+                        "Email subject"
+                      )}
                       required
                       value={formData.objet}
                       onChange={handleChange}
@@ -196,7 +222,10 @@ const Contact = () => {
                     <Label htmlFor="message">Message</Label>
                     <Textarea
                       id="message"
-                      placeholder="Let us know what you need..."
+                      placeholder={t(
+                        "pages.contact.messagePlaceholder",
+                        "Let us know what you need..."
+                      )}
                       rows={5}
                       required
                       value={formData.message}
@@ -227,12 +256,12 @@ const Contact = () => {
                             d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
                           ></path>
                         </svg>
-                        Sending...
+                        {t("pages.contact.contactSending", "Sending...")}
                       </span>
                     ) : (
                       <>
                         <Send className="mr-2 h-4 w-4" />
-                        Send
+                        {t("pages.contact.contactSend", "Send")}
                       </>
                     )}
                   </Button>
@@ -243,7 +272,10 @@ const Contact = () => {
               <div className="flex flex-col">
                 <div className="bg-card shadow-md p-8 rounded-lg mb-6">
                   <h2 className="text-2xl font-bold mb-6">
-                    Our contact information
+                    {t(
+                      "pages.contact.contactOurContactInformation",
+                      "Our contact information"
+                    )}
                   </h2>
 
                   <div className="space-y-6">
@@ -252,7 +284,9 @@ const Contact = () => {
                         <MapPin className="h-6 w-6 text-primary" />
                       </div>
                       <div>
-                        <h3 className="font-semibold text-lg mb-1">Address</h3>
+                        <h3 className="font-semibold text-lg mb-1">
+                          {t("pages.contact.contactAddress", "Address")}
+                        </h3>
                         <p className="text-muted-foreground">
                           Antananarivo Madagascar
                         </p>
@@ -276,7 +310,9 @@ const Contact = () => {
                         <Phone className="h-6 w-6 text-primary" />
                       </div>
                       <div>
-                        <h3 className="font-semibold text-lg mb-1">Phone</h3>
+                        <h3 className="font-semibold text-lg mb-1">
+                          {t("pages.contact.phone", "Phone")}
+                        </h3>
                         <p className="text-muted-foreground">
                           +33 7 44 89 44 08
                           <br />
@@ -293,14 +329,19 @@ const Contact = () => {
                       </div>
                       <div>
                         <h3 className="font-semibold text-lg mb-1">
-                          Opening Hours
+                          {t(
+                            "pages.contact.contactOpeningHours",
+                            "Opening Hours"
+                          )}
                         </h3>
                         <p className="text-muted-foreground">
-                          Monday – Friday: 8:30 AM – 5:30 PM
+                          {t("pages.contact.contactMonday", "Monday – Friday")}:
+                          8:30 AM – 5:30 PM
                           <br />
-                          Saturday: 9:00 AM – 12:00 PM
+                          {t("pages.contact.contactSaturday", "Saturday")}: 9:00
+                          AM – 12:00 PM
                           <br />
-                          Sunday: Closed
+                          {t("pages.contact.contactSunday", "Sunday: Closed")}
                         </p>
                       </div>
                     </div>
@@ -309,11 +350,16 @@ const Contact = () => {
 
                 <div className="bg-card rounded-lg shadow-md p-8 flex-grow">
                   <h2 className="text-2xl font-bold mb-6">
-                    Need immediate assistance?
+                    {t(
+                      "pages.contact.contactNeed",
+                      "Need immediate assistance?"
+                    )}
                   </h2>
                   <p className="text-muted-foreground mb-6">
-                    If you experience an emergency while in Madagascar, our team
-                    is here for you 24/7 through our helpline.
+                    {t(
+                      "pages.contact.contactIfyou",
+                      "If you experience an emergency while in Madagascar, our team is here for you 24/7 through our helpline."
+                    )}
                   </p>
 
                   <Separator className="my-6" />

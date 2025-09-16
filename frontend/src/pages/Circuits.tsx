@@ -5,15 +5,7 @@ import Footer from "../components/Footer";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
-import { Card, CardContent } from "@/components/ui/card";
-import {
-  Search,
-  SlidersHorizontal,
-  X,
-  Star,
-  Users,
-  Compass,
-} from "lucide-react";
+import { Search, SlidersHorizontal, X, Star, Users } from "lucide-react";
 import { GET_ALL_CIRCUITS } from "@/graphql/queries";
 import CarouselHeader from "@/components/CarouselHeader";
 import { Link } from "react-router-dom";
@@ -27,10 +19,10 @@ import {
 } from "@/provider/DataContext";
 import { FaqCard } from "@/components/FaqCard";
 import { TestimoniaCarousel } from "@/components/TestimoniaCarousel";
-import { Helmet } from "react-helmet-async";
 import SEO from "@/SEO";
 import { urlMedia } from "@/helper/UrlImage";
 import EmptyData from "@/components/EmptyData";
+import { useTranslation, Trans } from "react-i18next";
 
 const Circuits = () => {
   const [selectedRegion, setSelectedRegion] = useState<string>("all");
@@ -52,6 +44,8 @@ const Circuits = () => {
     "soleil.webp",
     "kaly.webp",
   ];
+
+  const { t } = useTranslation();
 
   // Filtres avancés
   const [filters, setFilters] = useState({
@@ -239,8 +233,11 @@ const Circuits = () => {
           backgroundImages={backgroundImages}
           // circuitsData={circuitsData}
           currentImageIndex={currentImageIndex}
-          titre='Explore <br /> <span class="text-yellow-300">Madagascar</span> Through Our Guided Tours'
-          description="Embark on unforgettable journeys through Madagascar’s breathtaking landscapes, rare wildlife, and vibrant cultural heritage."
+          titre={t("pages.circuits.circuitsTitle")}
+          description={t(
+            "pages.circuits.circuitsDescription",
+            "Embark on unforgettable journeys through Madagascar’s breathtaking landscapes, rare wildlife, and vibrant cultural heritage."
+          )}
           goToNext={goToNext}
           goToPrevious={goToPrevious}
           goToSlide={goToSlide}
@@ -256,7 +253,10 @@ const Circuits = () => {
                 <div className="relative">
                   <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
                   <Input
-                    placeholder="Find your ideal tour or destination..."
+                    placeholder={t(
+                      "pages.circuits.searchPlaceholder",
+                      "Find your ideal tour or destination..."
+                    )}
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
                     className="pl-10 pr-4"
@@ -276,11 +276,14 @@ const Circuits = () => {
                 {/* Onglets de région */}
                 <div className="flex bg-gray-100 rounded-lg p-1">
                   {[
-                    { value: "all", label: "All" },
-                    { value: "nord", label: "North" },
-                    { value: "sud", label: "South" },
-                    { value: "est", label: "East" },
-                    { value: "ouest", label: "West" },
+                    { value: "all", label: t("pages.circuits.all", "All") },
+                    {
+                      value: "nord",
+                      label: t("pages.circuits.north", "North"),
+                    },
+                    { value: "sud", label: t("pages.circuits.south", "South") },
+                    { value: "est", label: t("pages.circuits.east", "East") },
+                    { value: "ouest", label: t("pages.circuits.west", "West") },
                   ].map((region) => (
                     <button
                       key={region.value}
@@ -303,7 +306,7 @@ const Circuits = () => {
                   className="flex items-center gap-2"
                 >
                   <SlidersHorizontal className="h-4 w-4" />
-                  Filters
+                  {t("pages.circuits.filters", "Filters")}
                   {activeFiltersCount > 0 && (
                     <Badge
                       variant="default"
@@ -322,7 +325,7 @@ const Circuits = () => {
                 <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
                   <div>
                     <label className="block text-sm font-medium mb-2">
-                      Duration
+                      {t("pages.circuits.duration", "Duration")}
                     </label>
                     <select
                       value={filters.duration}
@@ -331,10 +334,18 @@ const Circuits = () => {
                       }
                       className="w-full border border-gray-300 rounded-md px-3 py-2 text-sm"
                     >
-                      <option value="all">All duration</option>
-                      <option value="short">1-5 days</option>
-                      <option value="medium">6-10 days</option>
-                      <option value="long">11+ days</option>
+                      <option value="all">
+                        {t("pages.circuits.allDuration", "All duration")}
+                      </option>
+                      <option value="short">
+                        1-5 {t("common.days", "days")}
+                      </option>
+                      <option value="medium">
+                        6-10 {t("common.days", "days")}
+                      </option>
+                      <option value="long">
+                        11+ {t("common.days", "days")}
+                      </option>
                     </select>
                   </div>
 
@@ -349,16 +360,22 @@ const Circuits = () => {
                       }
                       className="w-full border border-gray-300 rounded-md px-3 py-2 text-sm"
                     >
-                      <option value="all">All budgets</option>
-                      <option value="budget">Under €95</option>
+                      <option value="all">
+                        {t("pages.circuits.all", "All")} budgets
+                      </option>
+                      <option value="budget">
+                        {t("pages.circuits.under", "Under")} €95
+                      </option>
                       <option value="mid">€95 – €285</option>
-                      <option value="luxury">Over €285</option>
+                      <option value="luxury">
+                        {t("pages.circuits.over", "Over")} €285
+                      </option>
                     </select>
                   </div>
 
                   <div>
                     <label className="block text-sm font-medium mb-2">
-                      Season
+                      {t("pages.circuits.season", "Season")}
                     </label>
                     <select
                       value={filters.season}
@@ -443,7 +460,12 @@ const Circuits = () => {
                 ))}
               </div>
             ) : (
-              <EmptyData titre="Upcoming Tours Coming Soon" />
+              <EmptyData
+                titre={t(
+                  "pages.circuits.upcomingCircuit",
+                  "Upcoming Tours Coming Soon"
+                )}
+              />
             )}
           </div>
         </section>
@@ -451,17 +473,21 @@ const Circuits = () => {
         {/* Section promotionnelle */}
         <section className="py-16 bg-gradient-to-r from-green-50 to-blue-50">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-            <h2 className="text-3xl font-bold mb-6">Need help choosing?</h2>
+            <h2 className="text-3xl font-bold mb-6">
+              {t("pages.circuits.circuitsNeed", "Need help choosing?")}
+            </h2>
             <p className="text-lg text-muted-foreground mb-8 max-w-2xl mx-auto">
-              Our travel experts are here to guide you and craft the perfect
-              itinerary based on your preferences.
+              {t(
+                "pages.circuits.circuitsOurTravel",
+                "Our travel experts are here to guide you and craft the perfect itinerary based on your preferences."
+              )}
             </p>
 
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Link to={"/guides"}>
                 <Button size="lg" className="flex items-center">
                   <Users className="h-5 w-5 mr-2" />
-                  Talk to an expert
+                  {t("pages.circuits.circuitsTalkTo", "Talk to an expert")}
                 </Button>
               </Link>
               <Link to={"/voyages-sur-mesure"}>
@@ -471,7 +497,7 @@ const Circuits = () => {
                   className="flex items-center"
                 >
                   <Star className="h-5 w-5 mr-2" />
-                  Tailor-made tour
+                  {t("pages.circuits.circuitsTailorMade", "Tailor-made tour")}
                 </Button>
               </Link>
             </div>

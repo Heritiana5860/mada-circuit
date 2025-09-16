@@ -6,12 +6,14 @@ import { useParams } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { urlMedia } from "@/helper/UrlImage";
 import { formatDate } from "@/helper/formatage";
+import { useTranslation } from "react-i18next";
 
 const BlogDetail = () => {
   const { id } = useParams();
   const [selectedMedia, setSelectedMedia] = useState(null);
   const [scrollProgress, setScrollProgress] = useState(0);
   const [isVisible, setIsVisible] = useState(false);
+  const { t } = useTranslation();
 
   const { loading, error, data } = useQuery(GET_BLOG_BY_ID, {
     variables: { id: id },
@@ -160,7 +162,7 @@ const BlogDetail = () => {
                     clipRule="evenodd"
                   />
                 </svg>
-                Blog post
+                {t("pages.blog.blogPost", "Blog post")}
               </span>
             </div>
 
@@ -222,7 +224,8 @@ const BlogDetail = () => {
                   </svg>
                 </div>
                 <span className="text-white font-medium">
-                  Estimated reading time: {estimateReadingTime(blog.contenu)}
+                  {t("pages.blog.blogEstimation", "Estimated reading time")}:{" "}
+                  {estimateReadingTime(blog.contenu)}
                 </span>
               </div>
             </div>
@@ -295,7 +298,10 @@ const BlogDetail = () => {
                 </h2>
                 <div className="w-32 h-1.5 bg-gray-400 rounded-full mx-auto mb-4"></div>
                 <p className="text-gray-600 text-lg max-w-2xl mx-auto">
-                  View the media that brings this article to life
+                  {t(
+                    "pages.blog.photoVideo",
+                    "View the media that brings this article to life"
+                  )}
                 </p>
               </div>
 
@@ -410,9 +416,12 @@ const BlogDetail = () => {
                   </svg>
                 </div>
                 <div>
-                  <p className="font-semibold">By {blog.auteur}</p>
+                  <p className="font-semibold">
+                    {t("common.by", "By")} {blog.auteur}
+                  </p>
                   <p className="text-sm text-gray-300">
-                    Published on {formatDate(blog.datePublication)}
+                    {t("pages.blog.blogPublish", "Published on")}{" "}
+                    {formatDate(blog.datePublication)}
                   </p>
                 </div>
               </div>

@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Calendar, Share2, ArrowRight, User, Compass } from "lucide-react";
+import { Calendar, Share2, ArrowRight, User } from "lucide-react";
 import NavBar from "@/components/NavBar";
 import Footer from "@/components/Footer";
 import { useQuery } from "@apollo/client";
@@ -8,15 +8,15 @@ import { Link } from "react-router-dom";
 import { urlMedia } from "@/helper/UrlImage";
 import PageHeader from "@/components/PageHeader";
 import { Helmet } from "react-helmet-async";
-import { Card, CardContent } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
 import EmptyData from "@/components/EmptyData";
 import { formatDate } from "@/helper/formatage";
+import { useTranslation } from "react-i18next";
 
 // Composant principal amélioré
 const Blog = () => {
   const [selectedPost, setSelectedPost] = useState(null);
   const [hoveredCard, setHoveredCard] = useState(null);
+  const { t } = useTranslation();
 
   const { loading, error, data } = useQuery(GET_ALL_BLOGS);
 
@@ -64,8 +64,11 @@ const Blog = () => {
 
       {/* Header Section */}
       <PageHeader
-        titre="Blog & News"
-        description="Stay informed with our newest posts, expert tips, and curated stories designed to inspire."
+        titre={t("pages.blog.blogNew", "Blog & News")}
+        description={t(
+          "pages.blog.blogDesc",
+          "Stay informed with our newest posts, expert tips, and curated stories designed to inspire."
+        )}
         background="piscine.webp"
         bg_position="bg-end"
       />
@@ -118,15 +121,6 @@ const Blog = () => {
                         {post.category}
                       </span>
                     </div>
-
-                    {/* Featured Badge */}
-                    {post.featured && (
-                      <div className="absolute top-4 right-4">
-                        <span className="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-gradient-to-r from-yellow-400 to-orange-400 text-white shadow-lg">
-                          ⭐ À la Une
-                        </span>
-                      </div>
-                    )}
 
                     {/* Action Buttons */}
                     <div

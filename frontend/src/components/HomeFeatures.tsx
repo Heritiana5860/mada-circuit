@@ -1,6 +1,7 @@
-import { Map, Calendar, Compass, Truck, ArrowRight } from "lucide-react";
+import { ArrowRight, Map, Calendar, Compass, Truck } from "lucide-react";
 import { useState } from "react";
 import { Link } from "react-router-dom";
+import { useTranslation, Trans } from "react-i18next";
 
 const FeatureCard = ({
   title,
@@ -11,6 +12,7 @@ const FeatureCard = ({
   onHover,
   lien,
 }) => {
+  const { t } = useTranslation();
   return (
     <div
       className={`group relative bg-white/80 backdrop-blur-sm border border-gray-200/50 rounded-2xl p-8 transition-all duration-700 hover:bg-white hover:shadow-2xl hover:shadow-blue-500/10 hover:-translate-y-2 hover:border-blue-500/30 cursor-pointer ${
@@ -53,7 +55,7 @@ const FeatureCard = ({
         {/* Animated arrow */}
         <Link to={lien} className="group-hover:underline">
           <div className="flex items-center text-blue-600 font-semibold opacity-0 group-hover:opacity-100 transition-all duration-500 transform translate-x-0 group-hover:translate-x-2">
-            <span className="mr-2">Explorer</span>
+            <span className="mr-2">{t("pages.hero.explorer", "Explorer")}</span>
             <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
           </div>
         </Link>
@@ -68,33 +70,42 @@ const FeatureCard = ({
 
 const HomeFeatures = () => {
   const [hoveredCard, setHoveredCard] = useState(null);
+  const { t } = useTranslation();
 
   const features = [
     {
-      title: "Tourist Tours",
-      description:
-        "Discover our carefully crafted tours to explore the wonders of Madagascar.",
+      title: t("pages.hero.touristTours", "Tourist Tours"),
+      description: t(
+        "pages.hero.carefullyCrafted",
+        "Discover our carefully crafted tours to explore the wonders of Madagascar."
+      ),
       icon: <Map className="h-7 w-7" />,
       lien: "/circuits",
     },
     {
-      title: "Tailor-Made Trips",
-      description:
-        "Create your own itinerary with the help of our experts for a unique experience.",
+      title: t("pages.hero.tailorMadeTrips", "Tailor-Made Trips"),
+      description: t(
+        "pages.hero.ownItinerary",
+        "Create your own itinerary with the help of our experts for a unique experience."
+      ),
       icon: <Calendar className="h-7 w-7" />,
       lien: "/voyages-sur-mesure",
     },
     {
-      title: "Pangalanes Canal",
-      description:
-        "Explore this unique 700 km canal connecting Farafangana to Toamasina.",
+      title: t("pages.hero.pangalanesCanal", "Pangalanes Canal"),
+      description: t(
+        "pages.hero.700km",
+        "Explore this unique 700 km canal connecting Farafangana to Toamasina."
+      ),
       icon: <Compass className="h-7 w-7" />,
       lien: "/pangalanes",
     },
     {
-      title: "4x4 Rentals",
-      description:
-        "Rent an off-road vehicle to freely explore the island's diverse landscapes.",
+      title: t("pages.hero.4x4Rentals", "4x4 Rentals"),
+      description: t(
+        "pages.hero.rentAn",
+        "Rent an off-road vehicle to freely explore the island's diverse landscapes."
+      ),
       icon: <Truck className="h-7 w-7" />,
       lien: "/location-4x4",
     },
@@ -115,20 +126,27 @@ const HomeFeatures = () => {
         <div className="text-center max-w-4xl mx-auto mb-20">
           <div className="inline-flex items-center px-4 py-2 bg-gradient-to-r from-blue-100 to-purple-100 rounded-full mb-6">
             <span className="text-sm font-semibold bg-gradient-to-r from-primary via-accent to-secondary bg-clip-text text-transparent">
-              ✨ Our Premium Services
+              ✨ {t("pages.hero.premium", "Our Premium Services")}
             </span>
           </div>
 
           <h2 className="text-4xl md:text-6xl font-bold mb-6 leading-tight">
-            <span>Discover Our Exclusive </span>
-            <br />
-            <span>Offers</span>
+            <Trans i18nKey="pages.hero.exclusive">
+              <span>Discover Our Exclusive </span>
+              <br />
+              <span>Offers</span>
+            </Trans>
           </h2>
 
           <p className="text-xl text-gray-600 leading-relaxed max-w-3xl mx-auto">
-            We offer a full range of services to make your stay in Madagascar
-            <span className="font-semibold text-blue-600"> unforgettable</span>,
-            from exploring tourist tours to renting 4x4 vehicles.
+            <Trans i18nKey="pages.hero.exclusiveDescription">
+              We offer a full range of services to make your stay in Madagascar
+              <span className="font-semibold text-blue-600">
+                {" "}
+                unforgettable
+              </span>
+              , from exploring tourist tours to renting 4x4 vehicles.
+            </Trans>
           </p>
 
           {/* Decorative line */}
@@ -160,7 +178,7 @@ const HomeFeatures = () => {
         <div className="text-center mt-16">
           <Link to={"/voyages-sur-mesure"}>
             <button className="group relative inline-flex items-center px-8 py-4 bg-primary text-white font-semibold rounded-2xl shadow-xl hover:scale-105 transition-all duration-300 px-8 py-4 text-base">
-              <span>Plan My Trip</span>
+              <span>{t("pages.hero.planMyTrip", "Plan My Trip")}</span>
               <ArrowRight className="ml-2 h-5 w-5 transition-transform duration-300 group-hover:translate-x-1" />
               <div className="absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
             </button>

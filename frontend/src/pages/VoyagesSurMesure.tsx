@@ -28,10 +28,9 @@ import { destinations } from "@/helper/AllRegions";
 import { CREATE_SUR_MESURE } from "@/graphql/mutations";
 import { FaqCard } from "@/components/FaqCard";
 import { TestimoniaCarousel } from "@/components/TestimoniaCarousel";
-import { Helmet } from "react-helmet-async";
 import SEO from "@/SEO";
 import { urlMedia } from "@/helper/UrlImage";
-import PageHeader from "@/components/PageHeader";
+import { useTranslation } from "react-i18next";
 
 const VoyagesSurMesure = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -59,6 +58,8 @@ const VoyagesSurMesure = () => {
   const [lieuxAVisiter, setLieuxAVisiter] = useState([]);
   const [showDestinationsList, setShowDestinationsList] = useState(false);
   const [activeSelection, setActiveSelection] = useState("");
+
+  const { t } = useTranslation();
 
   const [
     createSurMesure,
@@ -111,12 +112,30 @@ const VoyagesSurMesure = () => {
   const totalSteps = 4;
 
   const activities = [
-    { name: "Hiking", icon: <Compass className="h-5 w-5" /> },
-    { name: "Beach", icon: <Compass className="h-5 w-5" /> },
-    { name: "Safari", icon: <Compass className="h-5 w-5" /> },
-    { name: "Scuba Diving", icon: <Compass className="h-5 w-5" /> },
-    { name: "Culture", icon: <Compass className="h-5 w-5" /> },
-    { name: "Gastronomy", icon: <Compass className="h-5 w-5" /> },
+    {
+      name: t("pages.surmesure.surmesureHiking", "Hiking"),
+      icon: <Compass className="h-5 w-5" />,
+    },
+    {
+      name: t("pages.surmesure.surmesureBeach", "Beach"),
+      icon: <Compass className="h-5 w-5" />,
+    },
+    {
+      name: t("pages.surmesure.surmesureSafari", "Safari"),
+      icon: <Compass className="h-5 w-5" />,
+    },
+    {
+      name: t("pages.surmesure.surmesureScubaDiving", "Scuba Diving"),
+      icon: <Compass className="h-5 w-5" />,
+    },
+    {
+      name: t("pages.surmesure.surmesureCulture", "Culture"),
+      icon: <Compass className="h-5 w-5" />,
+    },
+    {
+      name: t("pages.surmesure.surmesureGastronomy", "Gastronomy"),
+      icon: <Compass className="h-5 w-5" />,
+    },
   ];
 
   if (testimoniaLoading || utilisateurLoading || faqLoading) {
@@ -321,12 +340,17 @@ const VoyagesSurMesure = () => {
             <div className="text-center mb-16">
               <h1 className="text-5xl md:text-7xl lg:text-8xl font-black mb-8 leading-tight">
                 <span className="text-white">
-                  Create your Custom Tour Journey
+                  {t(
+                    "pages.surmesure.surmesureCreateYourCustom",
+                    "Create your Custom Tour Journey"
+                  )}
                 </span>
               </h1>
               <p className="text-xl md:text-2xl text-white/90 max-w-4xl mx-auto leading-relaxed mb-12">
-                A unique trip, designed according to your preferences, to
-                explore Madagascar at your own pace and on your own terms.
+                {t(
+                  "pages.surmesure.surmesureAUnique",
+                  "A unique trip, designed according to your preferences, to explore Madagascar at your own pace and on your own terms."
+                )}
               </p>
             </div>
           </div>
@@ -338,10 +362,14 @@ const VoyagesSurMesure = () => {
               <div className="p-6 border-b">
                 <div className="flex items-center justify-between mb-2">
                   <h2 className="text-2xl font-bold">
-                    Your Personalized Itinerary
+                    {t(
+                      "pages.surmesure.surmesureYourPersonalized",
+                      "Your Personalized Itinerary"
+                    )}
                   </h2>
                   <span className="text-sm text-muted-foreground">
-                    Step {step} sur {totalSteps}
+                    {t("pages.surmesure.surmesureStep", "Step")} {step}{" "}
+                    {t("pages.surmesure.surmesureTo", "to")} {totalSteps}
                   </span>
                 </div>
 
@@ -358,11 +386,16 @@ const VoyagesSurMesure = () => {
                   <div className="space-y-6">
                     <div className="text-center">
                       <h3 className="text-2xl font-bold text-gray-900 mb-2">
-                        Plan Your Itinerary
+                        {t(
+                          "pages.surmesure.surmesurePlan",
+                          "Plan Your Itinerary"
+                        )}
                       </h3>
                       <p className="text-gray-600">
-                        Set your starting point, destination, and the places you
-                        wish to visit.
+                        {t(
+                          "pages.surmesure.surmesureSetYourStarting",
+                          "Set your starting point, destination, and the places you wish to visit."
+                        )}
                       </p>
                     </div>
 
@@ -377,7 +410,10 @@ const VoyagesSurMesure = () => {
                                 <Plane className="h-4 w-4 text-white rotate-45" />
                               </div>
                               <span className="font-semibold text-green-800">
-                                Starting Point
+                                {t(
+                                  "pages.surmesure.surmesureStartingPoint",
+                                  "Starting Point"
+                                )}
                               </span>
                             </div>
                             {pointDepart && (
@@ -402,7 +438,10 @@ const VoyagesSurMesure = () => {
                                   {pointDepart}
                                 </div>
                                 <div className="text-sm text-gray-500">
-                                  Departure City
+                                  {t(
+                                    "pages.surmesure.surmesureDepartureCity",
+                                    "Departure City"
+                                  )}
                                 </div>
                               </div>
                             </div>
@@ -414,7 +453,10 @@ const VoyagesSurMesure = () => {
                             >
                               <Plus className="h-5 w-5 mr-2 text-green-600" />
                               <span className="text-green-700">
-                                Select the starting point
+                                {t(
+                                  "pages.surmesure.surmesureSelectTheStartingPoint",
+                                  "Select the starting point"
+                                )}
                               </span>
                             </Button>
                           )}
@@ -436,7 +478,10 @@ const VoyagesSurMesure = () => {
                               <Route className="h-4 w-4 text-white" />
                             </div>
                             <span className="font-semibold text-blue-800">
-                              Places to Visit
+                              {t(
+                                "pages.surmesure.surmesurePlacesToVisit",
+                                "Places to Visit"
+                              )}
                             </span>
                             <span className="text-sm text-blue-600">
                               ({lieuxAVisiter.length})
@@ -484,7 +529,10 @@ const VoyagesSurMesure = () => {
                             >
                               <Plus className="h-5 w-5 mr-2 text-blue-600" />
                               <span className="text-blue-700">
-                                Add a Place to Visit
+                                {t(
+                                  "pages.surmesure.surmesureAddAPlaceToVisit",
+                                  "Add a Place to Visit"
+                                )}
                               </span>
                             </Button>
                           </div>
@@ -507,7 +555,10 @@ const VoyagesSurMesure = () => {
                                 <Plane className="h-4 w-4 text-white -rotate-45" />
                               </div>
                               <span className="font-semibold text-red-800">
-                                Destination Point
+                                {t(
+                                  "pages.surmesure.surmesureDestinationPoint",
+                                  "Destination Point"
+                                )}
                               </span>
                             </div>
                             {pointArrivee && (
@@ -532,7 +583,10 @@ const VoyagesSurMesure = () => {
                                   {pointArrivee}
                                 </div>
                                 <div className="text-sm text-gray-500">
-                                  Arrival City
+                                  {t(
+                                    "pages.surmesure.surmesureArrivalCity",
+                                    "Arrival City"
+                                  )}
                                 </div>
                               </div>
                             </div>
@@ -544,7 +598,10 @@ const VoyagesSurMesure = () => {
                             >
                               <Plus className="h-5 w-5 mr-2 text-red-600" />
                               <span className="text-red-700">
-                                Select the destination point
+                                {t(
+                                  "pages.surmesure.surmesureSelect",
+                                  "Select the destination point"
+                                )}
                               </span>
                             </Button>
                           )}
@@ -559,12 +616,21 @@ const VoyagesSurMesure = () => {
                           <div className="p-6 border-b">
                             <div className="flex items-center justify-between">
                               <h3 className="text-xl font-bold">
-                                Choose{" "}
+                                {t("pages.surmesure.surmesureChoose", "Choose")}{" "}
                                 {activeSelection === "depart"
-                                  ? "your starting point"
+                                  ? t(
+                                      "pages.surmesure.surmesureStarting",
+                                      "your starting point"
+                                    )
                                   : activeSelection === "arrivee"
-                                  ? "your destination point"
-                                  : "a place to visit"}
+                                  ? t(
+                                      "pages.surmesure.surmesureDestination",
+                                      "your destination point"
+                                    )
+                                  : t(
+                                      "pages.surmesure.surmesurePlace",
+                                      "a place to visit"
+                                    )}
                               </h3>
                               <Button
                                 variant="ghost"
@@ -645,7 +711,10 @@ const VoyagesSurMesure = () => {
                         <CardContent className="p-6">
                           <h4 className="text-lg font-bold text-gray-800 mb-4 flex items-center">
                             <Route className="h-5 w-5 mr-2 text-blue-600" />
-                            Your Itinerary Summary
+                            {t(
+                              "pages.surmesure.surmesureYourItinerarySummary",
+                              "Your Itinerary Summary"
+                            )}
                           </h4>
 
                           <div className="space-y-2 text-sm">
@@ -653,7 +722,11 @@ const VoyagesSurMesure = () => {
                               <div className="flex items-center space-x-2">
                                 <div className="w-2 h-2 bg-green-500 rounded-full"></div>
                                 <span className="text-gray-600">
-                                  Departure:
+                                  {t(
+                                    "pages.surmesure.surmesureDeparture",
+                                    "Departure"
+                                  )}
+                                  :
                                 </span>
                                 <span className="font-medium text-gray-800">
                                   {pointDepart}
@@ -665,7 +738,13 @@ const VoyagesSurMesure = () => {
                               <div className="flex items-start space-x-2">
                                 <div className="w-2 h-2 bg-blue-500 rounded-full mt-1"></div>
                                 <div>
-                                  <span className="text-gray-600">Visits:</span>
+                                  <span className="text-gray-600">
+                                    {t(
+                                      "pages.surmesure.surmesureVisits",
+                                      "Visits"
+                                    )}
+                                    :
+                                  </span>
                                   <div className="ml-2">
                                     {lieuxAVisiter.map((lieu, index) => (
                                       <div
@@ -683,7 +762,13 @@ const VoyagesSurMesure = () => {
                             {pointArrivee && (
                               <div className="flex items-center space-x-2">
                                 <div className="w-2 h-2 bg-red-500 rounded-full"></div>
-                                <span className="text-gray-600">Arrival:</span>
+                                <span className="text-gray-600">
+                                  {t(
+                                    "pages.surmesure.surmesureArrival",
+                                    "Arrival"
+                                  )}
+                                  :
+                                </span>
                                 <span className="font-medium text-gray-800">
                                   {pointArrivee}
                                 </span>
@@ -698,16 +783,24 @@ const VoyagesSurMesure = () => {
 
                 {step === 2 && (
                   <div>
-                    <h3 className="text-xl font-bold mb-4">Trip Details</h3>
+                    <h3 className="text-xl font-bold mb-4">
+                      {t(
+                        "pages.surmesure.surmesureTripDetails",
+                        "Trip Details"
+                      )}
+                    </h3>
                     <p className="text-muted-foreground mb-6">
-                      Enter the dates and number of travelers for your stay.
+                      {t(
+                        "pages.surmesure.surmesureEnter",
+                        "Enter the dates and number of travelers for your stay."
+                      )}
                     </p>
 
                     <div className="space-y-4 mb-6">
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div>
                           <label className="block text-sm font-medium mb-1">
-                            Started date
+                            {t("common.StartedDate", "Started date")}
                           </label>
                           <div className="relative">
                             <input
@@ -723,7 +816,7 @@ const VoyagesSurMesure = () => {
                         </div>
                         <div>
                           <label className="block text-sm font-medium mb-1">
-                            End date
+                            {t("common.EndDate", "End date")}
                           </label>
                           <div className="relative">
                             <input
@@ -744,7 +837,11 @@ const VoyagesSurMesure = () => {
 
                       <div>
                         <label className="block text-sm font-medium mb-1">
-                          Preferred Duration (days)
+                          {t(
+                            "pages.surmesure.surmesurePreferred",
+                            "Preferred Duration"
+                          )}{" "}
+                          ({t("common.days", "days")})
                         </label>
                         <div className="relative">
                           <input
@@ -773,17 +870,25 @@ const VoyagesSurMesure = () => {
                 {step === 3 && (
                   <div>
                     <h3 className="text-xl font-bold mb-4">
-                      Preferences and Activities
+                      {t(
+                        "pages.surmesure.surmesurePreferences",
+                        "Preferences and Activities"
+                      )}
                     </h3>
                     <p className="text-muted-foreground mb-6">
-                      Choose the type of accommodation and activities that
-                      interest you.
+                      {t(
+                        "pages.surmesure.surmesureChooseTheType",
+                        "Choose the type of accommodation and activities that interest you."
+                      )}
                     </p>
 
                     <div className="space-y-6 mb-6">
                       <div>
                         <h4 className="font-medium mb-3">
-                          Type of Accommodation
+                          {t(
+                            "pages.surmesure.surmesureTypeOfAccommodation",
+                            "Type of Accommodation"
+                          )}
                         </h4>
                         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                           {["STANDARD", "CONFORT", "LUXE"].map((type) => (
@@ -815,7 +920,12 @@ const VoyagesSurMesure = () => {
                       </div>
 
                       <div>
-                        <h4 className="font-medium mb-3">Desired Activities</h4>
+                        <h4 className="font-medium mb-3">
+                          {t(
+                            "pages.surmesure.surmesureDesiredActivities",
+                            "Desired Activities"
+                          )}
+                        </h4>
                         <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
                           {activities.map((activity) => (
                             <label
@@ -847,14 +957,29 @@ const VoyagesSurMesure = () => {
 
                       <div>
                         <h4 className="font-medium mb-3">
-                          Estimated Budget per Person
+                          {t(
+                            "pages.surmesure.surmesureEstimatedBudgetPerPerson",
+                            "Estimated Budget per Person"
+                          )}
                         </h4>
                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                           {[
-                            "Less than €1 100",
-                            "From €1,100 to €2 200",
-                            "From €2,200 to €3 300",
-                            "More than €3 300",
+                            t(
+                              "pages.surmesure.surmesureLessthan",
+                              "Less than €1 100"
+                            ),
+                            t(
+                              "pages.surmesure.surmesureFrom",
+                              "From €1,100 to €2 200"
+                            ),
+                            t(
+                              "pages.surmesure.surmesureFromTo",
+                              "From €2,200 to €3 300"
+                            ),
+                            t(
+                              "pages.surmesure.surmesureMorethan",
+                              "More than €3 300"
+                            ),
                           ].map((budget) => (
                             <label
                               key={budget}
@@ -894,18 +1019,23 @@ const VoyagesSurMesure = () => {
                 {step === 4 && (
                   <div>
                     <h3 className="text-xl font-bold mb-4">
-                      Your Contact Information
+                      {t(
+                        "pages.surmesure.surmesureYourContactInformation",
+                        "Your Contact Information"
+                      )}
                     </h3>
                     <p className="text-muted-foreground mb-6">
-                      Leave us your contact details to receive your personalized
-                      quote.
+                      {t(
+                        "pages.surmesure.surmesureLeaveUs",
+                        "Leave us your contact details to receive your personalized quote."
+                      )}
                     </p>
 
                     <div className="space-y-4 mb-6">
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div>
                           <label className="block text-sm font-medium mb-1">
-                            Last Name
+                            {t("common.LastName", "Last Name")}
                           </label>
                           <input
                             type="text"
@@ -913,12 +1043,15 @@ const VoyagesSurMesure = () => {
                             value={formData.nom}
                             onChange={handleInputChange}
                             className="w-full p-2 border rounded-lg"
-                            placeholder="Your last name"
+                            placeholder={t(
+                              "common.LastNamePlaceholder",
+                              "Your last name"
+                            )}
                           />
                         </div>
                         <div>
                           <label className="block text-sm font-medium mb-1">
-                            First Name
+                            {t("common.LastName", "First Name")}
                           </label>
                           <input
                             type="text"
@@ -926,7 +1059,10 @@ const VoyagesSurMesure = () => {
                             value={formData.prenom}
                             onChange={handleInputChange}
                             className="w-full p-2 border rounded-lg"
-                            placeholder="Your first name"
+                            placeholder={t(
+                              "common.LastNamePlaceholder",
+                              "Your first name"
+                            )}
                           />
                         </div>
                       </div>
@@ -941,13 +1077,16 @@ const VoyagesSurMesure = () => {
                           value={formData.email}
                           onChange={handleInputChange}
                           className="w-full p-2 border rounded-lg"
-                          placeholder="your.email@example.com"
+                          placeholder={t(
+                            "common.EmailPlaceholder",
+                            "your.email@example.com"
+                          )}
                         />
                       </div>
 
                       <div>
                         <label className="block text-sm font-medium mb-1">
-                          Phone
+                          {t("common.Phone", "Phone")}
                         </label>
                         <input
                           type="tel"
@@ -961,7 +1100,10 @@ const VoyagesSurMesure = () => {
 
                       <div>
                         <label className="block text-sm font-medium mb-1">
-                          Additional Information
+                          {t(
+                            "pages.surmesure.surmesureAdditionalInformation",
+                            "Additional Information"
+                          )}
                         </label>
                         <textarea
                           rows={4}
@@ -969,7 +1111,10 @@ const VoyagesSurMesure = () => {
                           value={formData.commentaire}
                           onChange={handleInputChange}
                           className="w-full p-2 border rounded-lg"
-                          placeholder="Please specify any special requests or additional information for your trip..."
+                          placeholder={t(
+                            "pages.surmesure.surmesureAdditionalInformationPlaceholder",
+                            "Please specify any special requests or additional information for your trip..."
+                          )}
                         ></textarea>
                       </div>
                     </div>
@@ -979,14 +1124,16 @@ const VoyagesSurMesure = () => {
                 <div className="flex justify-between mt-8">
                   {step > 1 ? (
                     <Button variant="outline" onClick={() => setStep(step - 1)}>
-                      Previous
+                      {t("pages.surmesure.surmesurePrevious", "Previous")}
                     </Button>
                   ) : (
                     <div></div>
                   )}
 
                   {step < totalSteps ? (
-                    <Button onClick={() => setStep(step + 1)}>Next</Button>
+                    <Button onClick={() => setStep(step + 1)}>
+                      {t("pages.surmesure.surmesureNext", "Next")}
+                    </Button>
                   ) : (
                     <Button
                       onClick={handleCreateSurMesure}
@@ -994,7 +1141,12 @@ const VoyagesSurMesure = () => {
                       className="flex items-center"
                     >
                       <Send className="mr-2 h-4 w-4" />
-                      <span>Submit my request</span>
+                      <span>
+                        {t(
+                          "pages.surmesure.surmesureSubmitMyRequest",
+                          "Submit my request"
+                        )}
+                      </span>
                     </Button>
                   )}
                 </div>
@@ -1007,11 +1159,16 @@ const VoyagesSurMesure = () => {
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center max-w-3xl mx-auto mb-12">
               <h2 className="text-3xl font-bold mb-4">
-                Why Choose a Tailor-Made Trip?
+                {t(
+                  "pages.surmesure.surmesureWhyChooseaTailorMadeTrip",
+                  "Why Choose a Tailor-Made Trip?"
+                )}
               </h2>
               <p className="text-muted-foreground">
-                A personalized journey offers you a unique experience, tailored
-                to your desires and your own pace.
+                {t(
+                  "pages.surmesure.surmesureApersonalizedjourney",
+                  "A personalized journey offers you a unique experience, tailored to your desires and your own pace."
+                )}
               </p>
             </div>
 
@@ -1021,10 +1178,17 @@ const VoyagesSurMesure = () => {
                   <div className="bg-primary/10 p-3 rounded-full w-12 h-12 flex items-center justify-center mb-4">
                     <Compass className="h-6 w-6 text-primary" />
                   </div>
-                  <h3 className="text-xl font-bold mb-2">Total Freedom</h3>
+                  <h3 className="text-xl font-bold mb-2">
+                    {t(
+                      "pages.surmesure.surmesureTotalFreedom",
+                      "Total Freedom"
+                    )}
+                  </h3>
                   <p className="text-muted-foreground">
-                    Freely choose your destinations, the length of your stay in
-                    each place, and the activities that interest you most.
+                    {t(
+                      "pages.surmesure.surmesureFreely",
+                      "Freely choose your destinations, the length of your stay in each place, and the activities that interest you most."
+                    )}
                   </p>
                 </CardContent>
               </Card>
@@ -1034,10 +1198,17 @@ const VoyagesSurMesure = () => {
                   <div className="bg-primary/10 p-3 rounded-full w-12 h-12 flex items-center justify-center mb-4">
                     <Users className="h-6 w-6 text-primary" />
                   </div>
-                  <h3 className="text-xl font-bold mb-2">Local Assistance</h3>
+                  <h3 className="text-xl font-bold mb-2">
+                    {t(
+                      "pages.surmesure.surmesureLocalAssistance",
+                      "Local Assistance"
+                    )}
+                  </h3>
                   <p className="text-muted-foreground">
-                    Our local guides accompany you throughout your journey to
-                    help you discover Madagascar’s hidden treasures.
+                    {t(
+                      "pages.surmesure.surmesureOurlocal",
+                      "Our local guides accompany you throughout your journey to help you discover Madagascar’s hidden treasures."
+                    )}
                   </p>
                 </CardContent>
               </Card>
@@ -1048,11 +1219,16 @@ const VoyagesSurMesure = () => {
                     <MapPin className="h-6 w-6 text-primary" />
                   </div>
                   <h3 className="text-xl font-bold mb-2">
-                    Authentic Experience
+                    {t(
+                      "pages.surmesure.surmesureAuthenticExperience",
+                      "Authentic Experience"
+                    )}
                   </h3>
                   <p className="text-muted-foreground">
-                    Live unique experiences off the beaten path and discover
-                    Malagasy culture in an authentic way.
+                    {t(
+                      "pages.surmesure.surmesureLiveunique",
+                      "Live unique experiences off the beaten path and discover Malagasy culture in an authentic way."
+                    )}
                   </p>
                 </CardContent>
               </Card>

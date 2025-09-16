@@ -3,36 +3,27 @@ import NavBar from "../components/NavBar";
 import Footer from "../components/Footer";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import {
-  ArrowRight,
-  MapPin,
-  Compass,
-  Sailboat,
-  Fish,
-  Camera,
-  Trees,
-  Users,
-  Heart,
-  Globe,
-  Shield,
-  Star,
-} from "lucide-react";
+import { useTranslation, Trans } from "react-i18next";
+import { MapPin, Heart } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import { useQuery } from "@apollo/client";
 import { GET_ALL_CIRCUITS } from "@/graphql/queries";
 import ContentLoading from "@/components/Loading";
 import ContentError from "@/components/error";
 import { SectionCitation } from "./pangalanes/SectionCitation";
-import { formatPrice } from "@/helper/formatage";
 import CardContentDetail from "@/components/detail/CardContentDetail";
 import { Helmet } from "react-helmet-async";
 import EmptyData from "@/components/EmptyData";
-import { activities } from "@/helper/pangalanes/Activities";
-import { whyChooseUs } from "@/helper/pangalanes/WhyChooseUs";
-import { travelOptions } from "@/helper/pangalanes/TravelOptions";
+import { useActivities } from "@/helper/pangalanes/Activities";
+import { useWhyChooseUs } from "@/helper/pangalanes/WhyChooseUs";
+import { useTravelOptions } from "@/helper/pangalanes/TravelOptions";
 
 const PangalanesPage = () => {
   const navigate = useNavigate();
+  const { t } = useTranslation();
+  const activities = useActivities();
+  const whyChooseUs = useWhyChooseUs();
+  const travelOptions = useTravelOptions();
 
   const handleClick = () => {
     navigate("/programme-solidaire");
@@ -80,13 +71,17 @@ const PangalanesPage = () => {
             <div className=" relative text-center mb-16">
               <h1 className="text-5xl md:text-7xl lg:text-8xl font-black mb-8 leading-tight">
                 <span className="text-white">
-                  Discover the Pangalanes Canal
+                  {t(
+                    "pages.pangalanes.pangalanesTitle",
+                    "Discover the Pangalanes Canal"
+                  )}
                 </span>
               </h1>
               <p className="text-xl md:text-2xl text-white/90 max-w-4xl mx-auto leading-relaxed mb-12">
-                Embark on an unforgettable adventure: cruises, pirogue
-                excursions, and immersion into the heart of wild nature and
-                authentic local villages.
+                {t(
+                  "pages.pangalanes.pangalanesDescription",
+                  "Embark on an unforgettable adventure: cruises, pirogue excursions, and immersion into the heart of wild nature and authentic local villages."
+                )}
               </p>
 
               <Button
@@ -97,7 +92,7 @@ const PangalanesPage = () => {
                 }}
                 className="mr-5"
               >
-                Discover our offers
+                {t("pages.pangalanes.offers", "Discover our offers")}
               </Button>
               <Button
                 size="lg"
@@ -108,7 +103,7 @@ const PangalanesPage = () => {
                   });
                 }}
               >
-                Why choose Pangalanes Voyages?
+                {t("pages.pangalanes.why", "Why choose Pangalanes Voyages?")}
               </Button>
             </div>
           </div>
@@ -118,25 +113,29 @@ const PangalanesPage = () => {
           <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
               <div>
-                <h2 className="text-3xl font-bold mb-6">A Historic Waterway</h2>
-                <p className="text-muted-foreground mb-4">
-                  The Canal des Pangalanes, one of the longest man-made
-                  waterways in the world, was built during the French colonial
-                  era to facilitate the transport of goods along Madagascar’s
-                  eastern coast.
-                </p>
-                <p className="text-muted-foreground mb-6">
-                  Today, this nearly 700-kilometer-long canal has become a major
-                  tourist attraction, offering visitors a deep immersion into
-                  Malagasy nature and culture. It connects several lakes,
-                  lagoons, and rivers between Farafangana in the south and
-                  Toamasina (Tamatave) in the north.
-                </p>
+                <Trans i18nKey="pages.pangalanes.pangalanesAHistoricWaterway">
+                  <h2 className="text-3xl font-bold mb-6">
+                    A Historic waterway
+                  </h2>
+                  <p className="text-muted-foreground mb-4">
+                    The Canal des Pangalanes, one of the longest man-made
+                    waterways in the world, was built during the French colonial
+                    era to facilitate the transport of goods along Madagascar’s
+                    eastern coast.
+                  </p>
+                  <p className="text-muted-foreground mb-6">
+                    Today, this nearly 700-kilometer-long canal has become a
+                    major tourist attraction, offering visitors a deep immersion
+                    into Malagasy nature and culture. It connects several lakes,
+                    lagoons, and rivers between Farafangana in the south and
+                    Toamasina (Tamatave) in the north.
+                  </p>
+                </Trans>
                 <div className="flex items-center space-x-4">
                   <div className="flex flex-col items-center p-4 bg-white rounded-lg shadow-sm">
                     <span className="text-3xl font-bold text-primary">700</span>
                     <span className="text-sm text-muted-foreground">
-                      kilometers
+                      {t("pages.pangalanes.pangalaneskilometers", "kilometers")}
                     </span>
                   </div>
                   <div className="flex flex-col items-center p-4 bg-white rounded-lg shadow-sm">
@@ -144,7 +143,7 @@ const PangalanesPage = () => {
                       1896
                     </span>
                     <span className="text-sm text-muted-foreground">
-                      year of creation
+                      {t("pages.pangalanes.pangalanesyear", "year of creation")}
                     </span>
                   </div>
                   <div className="flex flex-col items-center p-4 bg-white rounded-lg shadow-sm">
@@ -152,7 +151,7 @@ const PangalanesPage = () => {
                       100+
                     </span>
                     <span className="text-sm text-muted-foreground">
-                      bird species
+                      {t("pages.pangalanes.pangalanesbird", "bird species")}
                     </span>
                   </div>
                 </div>
@@ -176,14 +175,16 @@ const PangalanesPage = () => {
         <section className="py-16">
           <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center max-w-3xl mx-auto mb-12">
-              <h2 className="text-3xl font-bold mb-4">
-                Activities on the Canal
-              </h2>
-              <p className="text-muted-foreground">
-                From serene boat rides to cultural encounters, the Pangalanes
-                Canal invites every traveler—whether a nature enthusiast or an
-                explorer—to experience Madagascar’s hidden gems.
-              </p>
+              <Trans i18nKey="pages.pangalanes.pangalanesActivitiesontheCanal">
+                <h2 className="text-3xl font-bold mb-4">
+                  Activities on the Canal
+                </h2>
+                <p className="text-muted-foreground">
+                  From serene boat rides to cultural encounters, the Pangalanes
+                  Canal invites every traveler—whether a nature enthusiast or an
+                  explorer—to experience Madagascar’s hidden gems.
+                </p>
+              </Trans>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -205,13 +206,15 @@ const PangalanesPage = () => {
         <section className="py-16 bg-primary/5">
           <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center max-w-3xl mx-auto mb-12">
-              <h2 className="text-3xl font-bold mb-4" id="offres">
-                Our Travel Packages
-              </h2>
-              <p className="text-muted-foreground">
-                Explore our curated travel packages crafted to offer you a truly
-                unforgettable journey along the Pangalanes Canal.
-              </p>
+              <Trans i18nKey="pages.pangalanes.pangalanesPackages">
+                <h2 className="text-3xl font-bold mb-4" id="offres">
+                  Our Travel Packages
+                </h2>
+                <p className="text-muted-foreground">
+                  Explore our curated travel packages crafted to offer you a
+                  truly unforgettable journey along the Pangalanes Canal.
+                </p>
+              </Trans>
             </div>
 
             {dataPangalanes.length > 0 ? (
@@ -225,7 +228,12 @@ const PangalanesPage = () => {
                 ))}
               </div>
             ) : (
-              <EmptyData titre="Upcoming pangalanes tours Coming Soon" />
+              <EmptyData
+                titre={t(
+                  "pages.pangalanes.pangalanesUpcoming",
+                  "Upcoming pangalanes tours Coming Soon"
+                )}
+              />
             )}
           </div>
         </section>
@@ -235,12 +243,13 @@ const PangalanesPage = () => {
           <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center max-w-3xl mx-auto mb-12">
               <h2 className="text-3xl font-bold mb-4">
-                Why Choose Pangalanes Voyages
+                {t("pages.pangalanes.why", "Why Choose Pangalanes Voyages")}
               </h2>
               <p className="text-muted-foreground">
-                Discover the true essence of Madagascar with travel options
-                designed for every budget—crafted to deliver a truly
-                unforgettable journey.
+                {t(
+                  "pages.pangalanes.whyDesc",
+                  "Discover the true essence of Madagascar with travel options designed for every budget—crafted to deliver a truly unforgettable journey."
+                )}
               </p>
             </div>
 
@@ -265,11 +274,13 @@ const PangalanesPage = () => {
         <section className="py-16">
           <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center max-w-3xl mx-auto mb-12">
-              <h2 className="text-3xl font-bold mb-4">Our Travel Packages</h2>
-              <p className="text-muted-foreground">
-                Embark on a fully personalized journey, designed just for you by
-                experts who know Madagascar inside and out.
-              </p>
+              <Trans i18nKey="pages.pangalanes.pangalanesOurTravelPackages">
+                <h2 className="text-3xl font-bold mb-4">Our Travel Packages</h2>
+                <p className="text-muted-foreground">
+                  Embark on a fully personalized journey, designed just for you
+                  by experts who know Madagascar inside and out.
+                </p>
+              </Trans>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -293,30 +304,33 @@ const PangalanesPage = () => {
           <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
               <div>
-                <h2 className="text-3xl font-bold mb-6">
-                  Sustainable and Community-Based Tourism
-                </h2>
-                <p className="text-muted-foreground mb-4">
-                  "You’re surrounded by nature, beside a lake with water at
-                  22°C, and your only concern is comparing the position of the
-                  stars in the sky. You’re in the southern hemisphere. In the
-                  villages along the canal, tourism can help the locals who
-                  welcome you, share their catch and fruits, gain access to
-                  electricity in their homes—opening up to the world and telling
-                  stories to their children."
-                </p>
-                <p className="text-muted-foreground mb-6">
-                  "Develop sustainable tourism tailored to travelers’ desires—3
-                  to 6-day cruises, community-based tourism, and local
-                  potential. Encourage and support the transfer of renewable
-                  energy technologies, and establish dynamic, respectful
-                  international partnerships. Sponsor children by giving them
-                  the opportunity to continue their education through secondary
-                  school and even university."
-                </p>
-                <Button onClick={handleClick} size="lg">
-                  Discover Our Solidarity Program
-                </Button>
+                <Trans i18nKey="pages.pangalanes.pangalanesSustainable">
+                  <h2 className="text-3xl font-bold mb-6">
+                    Sustainable and Community-Based Tourism
+                  </h2>
+                  <p className="text-muted-foreground mb-4">
+                    "You’re surrounded by nature, beside a lake with water at
+                    22°C, and your only concern is comparing the position of the
+                    stars in the sky. You’re in the southern hemisphere. In the
+                    villages along the canal, tourism can help the locals who
+                    welcome you, share their catch and fruits, gain access to
+                    electricity in their homes—opening up to the world and
+                    telling stories to their children."
+                  </p>
+                  <p className="text-muted-foreground mb-6">
+                    "Develop sustainable tourism tailored to travelers’
+                    desires—3 to 6-day cruises, community-based tourism, and
+                    local potential. Encourage and support the transfer of
+                    renewable energy technologies, and establish dynamic,
+                    respectful international partnerships. Sponsor children by
+                    giving them the opportunity to continue their education
+                    through secondary school and even university."
+                  </p>
+
+                  <Button onClick={handleClick} size="lg">
+                    Discover Our Solidarity Program
+                  </Button>
+                </Trans>
               </div>
 
               <div className="relative">
@@ -346,14 +360,16 @@ const PangalanesPage = () => {
           </div>
 
           <div className="relative z-10 max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 text-white text-center">
-            <h2 className="text-3xl md:text-4xl font-bold mb-6">
-              Ready to Explore the Pangalanes Canal?
-            </h2>
-            <p className="text-lg text-white/80 mb-8 max-w-3xl mx-auto">
-              Reach out now to reserve your journey along the Pangalanes Canal
-              and dive into an unforgettable escape through Madagascar’s vibrant
-              landscapes.
-            </p>
+            <Trans i18nKey="pages.pangalanes.pangalanesReadytoExplore">
+              <h2 className="text-3xl md:text-4xl font-bold mb-6">
+                Ready to Explore the Pangalanes Canal?
+              </h2>
+              <p className="text-lg text-white/80 mb-8 max-w-3xl mx-auto">
+                Reach out now to reserve your journey along the Pangalanes Canal
+                and dive into an unforgettable escape through Madagascar’s
+                vibrant landscapes.
+              </p>
+            </Trans>
             <div>
               <Link to="/contact">
                 <Button
@@ -361,7 +377,7 @@ const PangalanesPage = () => {
                   variant="outline"
                   className="bg-transparent border-white text-white hover:bg-white hover:text-black"
                 >
-                  Contact us
+                  {t("pages.hero.contactUs", "Contact us")}
                 </Button>
               </Link>
             </div>

@@ -23,6 +23,7 @@ import { componentTagger } from "lovable-tagger";
 // }));
 
 export default defineConfig(({ mode }) => ({
+  base: mode === "production" ? "/static/" : "/",
   server: {
     host: "::",
     port: 5173,

@@ -1,5 +1,5 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600;700&display=swap');
-@import 'leaflet/dist/leaflet.css';
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600;700&display=swap");
+@import "leaflet/dist/leaflet.css";
 
 @tailwind base;
 @tailwind components;
@@ -90,7 +90,8 @@
 @layer base {
   * {
     @apply border-border;
-    transition-property: background-color, border-color, color, fill, stroke, opacity, box-shadow, transform, filter, backdrop-filter;
+    transition-property: background-color, border-color, color, fill, stroke,
+      opacity, box-shadow, transform, filter, backdrop-filter;
     transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
     transition-duration: 150ms;
   }
@@ -100,7 +101,12 @@
     font-feature-settings: "rlig" 1, "calt" 1;
   }
 
-  h1, h2, h3, h4, h5, h6 {
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
     @apply font-serif;
   }
 }
@@ -109,7 +115,7 @@
   .glass-card {
     @apply bg-white/70 backdrop-blur-md border border-white/20 shadow-xl;
   }
-  
+
   .glass {
     background: rgba(255, 255, 255, 0.8);
     backdrop-filter: blur(10px);
@@ -125,34 +131,36 @@
   }
 
   .hero-section {
-  @apply relative min-h-screen flex items-center justify-center overflow-hidden;
-  background-image: 
-    linear-gradient(to bottom, rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.1)),
-    url("baobab.webp"),
-    url("plage.webp");
-  background-size: contain, 33.33% 100%;
-  background-position: center, right top, left bottom;
-  background-repeat: no-repeat, no-repeat, no-repeat;
-  background-attachment: fixed, fixed, fixed;
-}
-  
+    @apply relative min-h-screen flex items-center justify-center overflow-hidden;
+    background-image: linear-gradient(
+        to bottom,
+        rgba(0, 0, 0, 0.2),
+        rgba(0, 0, 0, 0.1)
+      ),
+      url("baobab.webp"), url("plage.webp");
+    background-size: contain, 33.33% 100%;
+    background-position: center, right top, left bottom;
+    background-repeat: no-repeat, no-repeat, no-repeat;
+    background-attachment: fixed, fixed, fixed;
+  }
+
   .section-container {
     @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-24;
   }
-  
+
   .nav-link {
     @apply relative px-3 py-2 text-foreground/80 hover:text-foreground transition-colors duration-200;
   }
-  
+
   .nav-link::after {
-    content: '';
+    content: "";
     @apply absolute bottom-0 left-0 w-0 h-0.5 bg-primary transition-all duration-300;
   }
-  
+
   .nav-link:hover::after {
     @apply w-full;
   }
-  
+
   .btn-primary {
     @apply inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors 
     focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 
@@ -160,7 +168,7 @@
     bg-primary text-primary-foreground hover:bg-primary/90 h-10 px-4 py-2 shadow-md hover:shadow-lg
     transition-all duration-200;
   }
-  
+
   .btn-secondary {
     @apply inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors 
     focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 
@@ -168,7 +176,7 @@
     bg-secondary text-secondary-foreground hover:bg-secondary/90 h-10 px-4 py-2 shadow-md hover:shadow-lg
     transition-all duration-200;
   }
-  
+
   .btn-accent {
     @apply inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors 
     focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 
@@ -176,15 +184,15 @@
     bg-accent text-accent-foreground hover:bg-accent/90 h-10 px-4 py-2 shadow-md hover:shadow-lg
     transition-all duration-200;
   }
-  
+
   .card-hover {
     @apply transition-all duration-300 hover:translate-y-[-5px] hover:shadow-lg;
   }
-  
+
   .img-zoom-container {
     @apply overflow-hidden rounded-lg;
   }
-  
+
   .img-zoom {
     @apply transition-transform duration-700 ease-in-out hover:scale-110;
   }
@@ -194,18 +202,18 @@
     opacity: 0;
     transform: translateY(8px);
   }
-  
+
   .page-transition-enter-active {
     opacity: 1;
     transform: translateY(0);
     transition: opacity 300ms, transform 300ms;
   }
-  
+
   .page-transition-exit {
     opacity: 1;
     transform: translateY(0);
   }
-  
+
   .page-transition-exit-active {
     opacity: 0;
     transform: translateY(-8px);
@@ -218,15 +226,15 @@
     border-collapse: separate;
     border-spacing: 0;
   }
-  
+
   .admin-table th {
     @apply bg-secondary text-secondary-foreground text-sm font-medium tracking-wider text-left px-6 py-3 border-b;
   }
-  
+
   .admin-table td {
     @apply px-6 py-4 border-b border-border whitespace-nowrap;
   }
-  
+
   .admin-table tr:hover td {
     @apply bg-secondary/30;
   }

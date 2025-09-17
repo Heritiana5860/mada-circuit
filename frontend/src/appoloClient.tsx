@@ -23,9 +23,6 @@ const errorLink = onError(({ graphQLErrors, networkError }) => {
 // Lien upload pour gérer les fichiers (remplace createHttpLink)
 const uploadLink = createUploadLink({
   uri: "https://api.madagascar-voyagesolidaire.com/graphql/",
-  headers: {
-    "Apollo-Require-Preflight": "true",
-  },
 });
 
 // Lien d'authentification pour ajouter le token aux headers
@@ -36,8 +33,8 @@ const authLink = setContext((_, { headers }) => {
     headers: {
       ...headers,
       authorization: token ? `JWT ${token}` : "",
-      // Ne pas définir Content-Type pour les uploads multipart
-      // Apollo Upload Client s'en charge automatiquement
+      "apollographql-client-name": "madagascar-voyagesolidaire-web",
+      "apollographql-client-version": "1.0.0",
     },
   };
 });

@@ -123,6 +123,8 @@ CORS_ALLOW_HEADERS = list(default_headers) + [
     'x-csrftoken',
     'x-requested-with',
     "apollo-require-preflight",
+    'apollographql-client-name',
+    'apollographql-client-version',
 ]
 
 

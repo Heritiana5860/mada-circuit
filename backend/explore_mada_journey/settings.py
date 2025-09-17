@@ -96,11 +96,11 @@ ALLOWED_HOSTS = [
     'administration.madagascar-voyagesolidaire.com'
     ]
 
-CORS_ALLOWED_ORIGINS = [
-    'https://madagascar-voyagesolidaire.com',
-    'https://api.madagascar-voyagesolidaire.com',
-    'https://administration.madagascar-voyagesolidaire.com'
-]
+# CORS_ALLOWED_ORIGINS = [
+#     'https://madagascar-voyagesolidaire.com',
+#     'https://api.madagascar-voyagesolidaire.com',
+#     'https://administration.madagascar-voyagesolidaire.com'
+# ]
 
 CSRF_TRUSTED_ORIGINS = [
     'https://madagascar-voyagesolidaire.com',
@@ -125,6 +125,9 @@ CORS_ALLOW_HEADERS = list(default_headers) + [
     "apollo-require-preflight",
     'apollographql-client-name',
     'apollographql-client-version',
+    # Add these variations
+    'ApolloGraphQL-Client-Name',
+    'ApolloGraphQL-Client-Version',
 ]
 
 

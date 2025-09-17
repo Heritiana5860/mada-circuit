@@ -33,8 +33,6 @@ const authLink = setContext((_, { headers }) => {
     headers: {
       ...headers,
       authorization: token ? `JWT ${token}` : "",
-      "apollographql-client-name": "madagascar-voyagesolidaire.com",
-      "apollographql-client-version": "1.0.0",
     },
   };
 });

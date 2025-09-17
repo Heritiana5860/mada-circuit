@@ -93,19 +93,19 @@ DEBUG = True
 ALLOWED_HOSTS = [
     'https://madagascar-voyagesolidaire.com', 
     'https://api.madagascar-voyagesolidaire.com', 
-    'administration.madagascar-voyagesolidaire.com'
+    'https://administration.madagascar-voyagesolidaire.com'
     ]
 
 CORS_ALLOWED_ORIGINS = [
     'https://madagascar-voyagesolidaire.com',
     'https://api.madagascar-voyagesolidaire.com',
-    'administration.madagascar-voyagesolidaire.com'
+    'https://administration.madagascar-voyagesolidaire.com'
 ]
 
 CSRF_TRUSTED_ORIGINS = [
     'https://madagascar-voyagesolidaire.com',
     'https://api.madagascar-voyagesolidaire.com',
-    'administration.madagascar-voyagesolidaire.com'
+    'https://administration.madagascar-voyagesolidaire.com'
 ]
 
 CORS_ALLOW_ALL_ORIGINS = True

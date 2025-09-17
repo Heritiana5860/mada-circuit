@@ -48,7 +48,7 @@ const PangalanesSection = () => {
           <div className="order-1 lg:order-2 relative">
             <div className="relative rounded-xl overflow-hidden shadow-2xl transform lg:translate-x-6 animate-fade-in">
               <img
-                src="pangalanes1.webp"
+                src="/pangalanes1.webp"
                 alt="Canal des Pangalanes"
                 className="w-full h-auto object-cover rounded-xl"
               />

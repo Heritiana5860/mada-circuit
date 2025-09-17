@@ -36,13 +36,13 @@ const Circuits = () => {
 
   // Images de fond pour le carousel (remplacez par vos vraies images)
   const backgroundImages = [
-    "circuits/vam_baobab.webp",
+    "/circuits/vam_baobab.webp",
     "/gidro.webp",
-    "circuits/balene.webp",
+    "/circuits/balene.webp",
     "/trano.webp",
-    "circuits/hazo.webp",
-    "soleil.webp",
-    "kaly.webp",
+    "/circuits/hazo.webp",
+    "/soleil.webp",
+    "/kaly.webp",
   ];
 
   const { t } = useTranslation();

@@ -137,7 +137,7 @@
         rgba(0, 0, 0, 0.2),
         rgba(0, 0, 0, 0.1)
       ),
-      url("baobab.webp"), url("plage.webp");
+      url("/baobab.webp"), url("/plage.webp");
     background-size: contain, 33.33% 100%;
     background-position: center, right top, left bottom;
     background-repeat: no-repeat, no-repeat, no-repeat;

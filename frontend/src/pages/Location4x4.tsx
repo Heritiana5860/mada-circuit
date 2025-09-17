@@ -16,6 +16,7 @@ import { TestimoniaCarousel } from "@/components/TestimoniaCarousel";
 import SEO from "@/SEO";
 import { urlMedia } from "@/helper/UrlImage";
 import EmptyData from "@/components/EmptyData";
+import ContentLoading from "@/components/Loading";
 
 const Location4x4: React.FC = () => {
   const { loading, error, data } = useQuery(GET_ALL_VEHICULES);
@@ -49,15 +50,7 @@ const Location4x4: React.FC = () => {
     : vehicles;
 
   if (loading || faqLoading || utilisateurLoading || testimoniaLoading)
-    return (
-      <div className="min-h-screen flex flex-col">
-        <NavBar />
-        <main className="flex-grow flex items-center justify-center">
-          <p>Chargement des véhicules...</p>
-        </main>
-        <Footer />
-      </div>
-    );
+    return <ContentLoading />;
 
   if (error || faqError || utilisateurError || testimoniaError)
     return (

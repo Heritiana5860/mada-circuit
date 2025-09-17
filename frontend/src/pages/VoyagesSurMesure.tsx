@@ -31,6 +31,7 @@ import { TestimoniaCarousel } from "@/components/TestimoniaCarousel";
 import SEO from "@/SEO";
 import { urlMedia } from "@/helper/UrlImage";
 import { useTranslation } from "react-i18next";
+import ContentLoading from "@/components/Loading";
 
 const VoyagesSurMesure = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -140,16 +141,7 @@ const VoyagesSurMesure = () => {
 
   if (testimoniaLoading || utilisateurLoading || faqLoading) {
     return (
-      <section className="bg-gradient-to-br from-primary/5 via-accent/5 to-secondary/5 py-20">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center">
-            <div className="inline-block animate-spin rounded-full h-12 w-12 border-4 border-primary border-t-transparent"></div>
-            <p className="mt-4 text-lg text-gray-600">
-              Chargement des témoignages...
-            </p>
-          </div>
-        </div>
-      </section>
+      <ContentLoading />
     );
   }
 
@@ -331,7 +323,7 @@ const VoyagesSurMesure = () => {
 
       <main className="flex-grow">
         {/* Header */}
-        <div className="relative p-10 bg-[url('surmesure.webp')] bg-cover bg-center">
+        <div className="relative p-10 bg-[url('/surmesure.webp')] bg-cover bg-center">
           {/* Overlay */}
           <div className="absolute inset-0 bg-black/50"></div>
 

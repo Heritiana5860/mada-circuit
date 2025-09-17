@@ -61,7 +61,7 @@ const ProgrammeSolidairePage = () => {
       <NavBar />
 
       <main className="flex-grow">
-        <div className="relative p-10 bg-[url('solidaire.JPG')] bg-cover bg-center">
+        <div className="relative p-10 bg-[url('/solidaire.JPG')] bg-cover bg-center">
           {/* Overlay */}
           <div className="absolute inset-0 bg-black/50"></div>
           <div className="max-w-6xl mx-auto">
@@ -153,7 +153,7 @@ const ProgrammeSolidairePage = () => {
 
               <div className="relative">
                 <img
-                  src="slogan.webp"
+                  src="/slogan.webp"
                   alt="Villageois du Canal des Pangalanes"
                   className="rounded-lg shadow-lg w-full h-auto"
                 />
@@ -351,7 +351,7 @@ const ProgrammeSolidairePage = () => {
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
               <div className="relative">
                 <img
-                  src="solidaire.JPG"
+                  src="/solidaire.JPG"
                   alt="École dans un village du Canal des Pangalanes"
                   className="rounded-lg shadow-lg w-full h-auto"
                 />

@@ -160,7 +160,7 @@ const PangalanesPage = () => {
 
               <div className="relative">
                 <img
-                  src="navigale.webp"
+                  src="/navigale.webp"
                   alt="Canal des Pangalanes"
                   className="rounded-lg shadow-lg w-full h-auto"
                   loading="lazy"
@@ -336,7 +336,7 @@ const PangalanesPage = () => {
 
               <div className="relative">
                 <img
-                  src="canal.webp"
+                  src="/canal.webp"
                   alt="Tourisme solidaire à Madagascar"
                   className="rounded-lg shadow-lg w-full h-auto"
                   loading="lazy"

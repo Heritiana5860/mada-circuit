@@ -38,7 +38,7 @@ const Hero = () => {
             style={{
               top: "10%",
               left: "4%",
-              backgroundImage: "url(lemur.webp)",
+              backgroundImage: "url(/lemur.webp)",
               backgroundSize: "cover",
               backgroundPosition: "center",
               animation: "float1 6s ease-in-out infinite",

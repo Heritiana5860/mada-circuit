@@ -109,7 +109,7 @@ const Contact = () => {
 
       <main className="flex-grow">
         {/* Contactez-nous */}
-        <div className="relative p-10 bg-[url('i.webp')] bg-cover bg-center">
+        <div className="relative p-10 bg-[url('/i.webp')] bg-cover bg-center">
           {/* Overlay */}
           <div className="absolute inset-0 bg-black/50"></div>
 

@@ -60,7 +60,7 @@ const ObjectifsAssociationPage = () => {
         {/* Hero Section */}
         <section className="relative h-[50vh] overflow-hidden">
           <img
-            src="solidaire2.webp"
+            src="/solidaire2.webp"
             alt="Enfants malgaches à l'école"
             className="w-full h-full object-cover"
           />

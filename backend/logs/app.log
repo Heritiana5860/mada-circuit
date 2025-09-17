@@ -1,0 +1,7 @@
+[2025-09-17 10:32:32,418] DEBUG myapp (queries.py:133): filter type CIRCUIT
+[2025-09-17 10:32:52,618] DEBUG myapp (queries.py:133): filter type pangalane
+[2025-09-17 10:32:54,381] DEBUG myapp (queries.py:133): filter type solidaire
+[2025-09-17 10:42:15,937] DEBUG myapp (queries.py:133): filter type solidaire
+[2025-09-17 10:42:18,568] DEBUG myapp (queries.py:133): filter type pangalane
+[2025-09-17 10:42:23,284] DEBUG myapp (queries.py:133): filter type CIRCUIT
+[2025-09-17 10:42:28,720] DEBUG myapp (queries.py:133): filter type CIRCUIT

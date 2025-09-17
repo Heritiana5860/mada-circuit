@@ -11,6 +11,7 @@ import { Helmet } from "react-helmet-async";
 import EmptyData from "@/components/EmptyData";
 import { formatDate } from "@/helper/formatage";
 import { useTranslation } from "react-i18next";
+import ContentLoading from "@/components/Loading";
 
 // Composant principal amélioré
 const Blog = () => {
@@ -32,7 +33,7 @@ const Blog = () => {
   };
 
   if (loading) {
-    return <div>Loading...</div>;
+    return <ContentLoading />;
   }
 
   if (error) {
@@ -69,7 +70,7 @@ const Blog = () => {
           "pages.blog.blogDesc",
           "Stay informed with our newest posts, expert tips, and curated stories designed to inspire."
         )}
-        background="piscine.webp"
+        background="/piscine.webp"
         bg_position="bg-end"
       />
 

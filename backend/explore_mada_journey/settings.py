@@ -90,18 +90,14 @@ SECRET_KEY = 'django-insecure-=-^c))dt)dbi(g%h2kmtgkp)o!q3cr12=m0cs2#3(j2jg(qodf
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['localhost', '127.0.0.1', 'https://administration.madagascar-voyagesolidaire.com', 'https://madagascar-voyagesolidaire.com', 'https://api.madagascar-voyagesolidaire.com']
+ALLOWED_HOSTS = ['https://madagascar-voyagesolidaire.com', 'https://api.madagascar-voyagesolidaire.com']
 
 CORS_ALLOWED_ORIGINS = [
-    "http://localhost:8080",
-    'https://administration.madagascar-voyagesolidaire.com',
     'https://madagascar-voyagesolidaire.com',
     'https://api.madagascar-voyagesolidaire.com'
 ]
 
 CSRF_TRUSTED_ORIGINS = [
-    "http://localhost:8080",
-    'https://administration.madagascar-voyagesolidaire.com',
     'https://madagascar-voyagesolidaire.com',
     'https://api.madagascar-voyagesolidaire.com'
 ]
@@ -265,7 +261,7 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, "frontend/dist/assets"),
+    os.path.join(BASE_DIR, "static"),
     os.path.join(BASE_DIR, 'static'),
 ]
 

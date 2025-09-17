@@ -108,7 +108,7 @@ CSRF_TRUSTED_ORIGINS = [
     'https://administration.madagascar-voyagesolidaire.com'
 ]
 
-CORS_ALLOW_ALL_ORIGINS = True
+CORS_ALLOW_ALL_ORIGINS = False
 
 CORS_ALLOW_CREDENTIALS = True
 
@@ -130,10 +130,20 @@ CORS_ALLOW_HEADERS = list(default_headers) + [
     'ApolloGraphQL-Client-Version',
 ]
 
+CORS_ALLOW_METHODS = [
+    "GET",
+    "POST",
+    "PUT",
+    "PATCH",
+    "DELETE",
+    "OPTIONS",
+]
+
 
 # Application definition
 
 INSTALLED_APPS = [
+    'corsheaders',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -145,7 +155,6 @@ INSTALLED_APPS = [
     'graphql_jwt',
     "graphql_jwt.refresh_token",
     'rest_framework',
-    'corsheaders',
     'django_filters',
     'mada_journey',
 ]

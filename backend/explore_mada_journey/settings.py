@@ -91,9 +91,9 @@ SECRET_KEY = 'django-insecure-=-^c))dt)dbi(g%h2kmtgkp)o!q3cr12=m0cs2#3(j2jg(qodf
 DEBUG = True
 
 ALLOWED_HOSTS = [
-    'https://madagascar-voyagesolidaire.com', 
-    'https://api.madagascar-voyagesolidaire.com', 
-    'https://administration.madagascar-voyagesolidaire.com'
+    'madagascar-voyagesolidaire.com', 
+    'api.madagascar-voyagesolidaire.com', 
+    'administration.madagascar-voyagesolidaire.com'
     ]
 
 CORS_ALLOWED_ORIGINS = [

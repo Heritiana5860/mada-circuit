@@ -74,7 +74,7 @@ const TestGraphQL = () => {
                 <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
                   <h4 className="font-semibold text-blue-800 mb-2">Solutions possibles:</h4>
                   <ul className="list-disc list-inside text-blue-700 text-sm space-y-1">
-                    <li>Vérifiez que le serveur Django est démarré sur http://localhost:8000</li>
+                    <li>Vérifiez que le serveur Django est démarré sur https://api.madagascar-voyagesolidaire.com</li>
                     <li>Vérifiez que l'endpoint GraphQL est accessible à /graphql/</li>
                     <li>Vérifiez la configuration CORS dans Django</li>
                     <li>Vérifiez que les migrations sont appliquées</li>
@@ -124,7 +124,7 @@ const TestGraphQL = () => {
                 <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
                   <h4 className="font-semibold text-blue-800 mb-2">Informations techniques:</h4>
                   <div className="text-sm text-blue-700 space-y-1">
-                    <p><strong>Endpoint:</strong> http://localhost:8000/graphql/</p>
+                    <p><strong>Endpoint:</strong> https://api.madagascar-voyagesolidaire.com/graphql/</p>
                     <p><strong>Query testée:</strong> allDestinations</p>
                     <p><strong>Apollo Client:</strong> Configuré avec upload support</p>
                     <p><strong>CORS:</strong> Configuré correctement</p>

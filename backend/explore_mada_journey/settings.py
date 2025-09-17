@@ -90,19 +90,20 @@ SECRET_KEY = 'django-insecure-=-^c))dt)dbi(g%h2kmtgkp)o!q3cr12=m0cs2#3(j2jg(qodf
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['localhost', '127.0.0.1', 'https://administration.madagascar-voyagesolidaire.com', 'https://madagascar-voyagesolidaire.com']
+ALLOWED_HOSTS = ['localhost', '127.0.0.1', 'https://administration.madagascar-voyagesolidaire.com', 'https://madagascar-voyagesolidaire.com', 'https://api.madagascar-voyagesolidaire.com']
 
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:8080",
     'https://administration.madagascar-voyagesolidaire.com',
     'https://madagascar-voyagesolidaire.com',
-    
+    'https://api.madagascar-voyagesolidaire.com'
 ]
 
 CSRF_TRUSTED_ORIGINS = [
     "http://localhost:8080",
     'https://administration.madagascar-voyagesolidaire.com',
     'https://madagascar-voyagesolidaire.com',
+    'https://api.madagascar-voyagesolidaire.com'
 ]
 
 CORS_ALLOW_ALL_ORIGINS = True
@@ -196,29 +197,13 @@ EMAIL_HOST_PASSWORD = os.getenv("EMAIL_HOST_PASSWORD")
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.mysql',
-#         'NAME': "madaga47_mada_db",
-#         'USER': "madaga47_mada_db",
-#         'PASSWORD': "rBbFadV7FWA6zZpfdemn",
-#         'HOST': "mysql",
-#         'PORT': "3306",
-#         'OPTIONS': {
-#             'charset': 'utf8mb4',
-#             # Supprimez toutes les options liées aux plugins
-#             'init_command': "SET sql_mode='STRICT_TRANS_TABLES'",
-#         }
-#     }
-# }
-
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'madaga47_circuit_db',
-        'USER': 'madaga47_circuit_db',    
-        'PASSWORD': 'rBbFadV7FWA6zZpfdemn',
-        'HOST': 'localhost',
+        'NAME': 'madaga47_solidaire_db',
+        'USER': 'madaga47_solidaire_db',    
+        'PASSWORD': 'WJVKHdayMuhT5Vyg3Vtr',
+        'HOST': '5.101.142.84',
         'PORT': '3306',
         'OPTIONS': {
             'charset': 'utf8mb4',

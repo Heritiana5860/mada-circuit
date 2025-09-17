@@ -1,1 +1,1 @@
-export const urlMedia = "http://localhost:8000/media/";
+export const urlMedia = "https://api.madagascar-voyagesolidaire.com/media/";

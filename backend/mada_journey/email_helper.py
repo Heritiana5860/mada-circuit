@@ -19,7 +19,7 @@ def message(utilisateur, date_depart, date_fin, duree, nombre_personnes, budget,
         vehicule_ou_circuit = "Circuit"
         
     return (
-        f"Bonday,\n\n"
+        f"Bonjour,\n\n"
         f"Une nouvelle demande de réservation a été effectuée via notre site.\n\n"
         
         f"Informations du client :\n"
@@ -46,6 +46,21 @@ def message(utilisateur, date_depart, date_fin, duree, nombre_personnes, budget,
         f"Veuillez contacter le client pour finaliser les détails.\n\n"
         f"Cordialement,\n"
         f"Madagascar Voyage Solidaire"
+    )
+    
+def message_temoignage(utilisateur, score, description):
+    return (
+        f"Bonjour,\n\n"
+        f"Une nouvelle temoignage a été effectuée via notre site.\n\n"
+        
+        f"Informations du client :\n"
+        f"════════════════════════\n"
+        f"👤 Nom & Prénom       : {utilisateur.nom} {utilisateur.prenom}\n"
+        f"📧 E-mail             : {utilisateur.email}\n"
+        f"📱 Téléphone          : {utilisateur.telephone}\n"
+        f"✨ Score              : {score}\n"
+        f"📄 Description        : {description}\n\n"
+        
     )
     
 def confirmation_message(utilisateur, date_depart, date_fin, duree, nombre_personnes, budget, commentaire, type_circuit):
@@ -132,6 +147,9 @@ def confirmation_message_sur_mesure(point_depart, point_arrivee, lieu_visiter, a
     
 def objet_message(type):
     return (f"📩 Nouvelle demande de réservation de {type}")
+
+def objet_message_temoignage():
+    return (f"📩 Nouvelle temoignage d'un client")
 
 def objet_message_sur_mesure():
     return (f"📩 Nouvelle demande de devis du circuit sur mesure")

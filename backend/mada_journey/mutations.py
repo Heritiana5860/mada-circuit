@@ -19,7 +19,9 @@ from .email_helper import (
     objet_message_sur_mesure, 
     sur_mesure_message, 
     confirmation_message_sur_mesure,
-    objet_confirmation_message_sur_mesure)
+    objet_confirmation_message_sur_mesure,
+    objet_message_temoignage,
+    message_temoignage)
 
 from .models import (
     Utilisateur, Circuit, Itineraire, Vehicule, Reservation, Blog, BlogCommentaire, Faq,
@@ -1278,6 +1280,17 @@ class CreateTestimonia(graphene.Mutation):
                 description=description,
                 type=type,
                 utilisateur=utilisateur,
+            )
+            
+            site_email = site_mail()
+            
+            # Mail pour un temoignage
+            send_mail(
+                subject=objet_message_temoignage(),
+                message=message_temoignage(utilisateur, score, description),
+                from_email= utilisateur.email,
+                recipient_list=[site_email],
+                fail_silently=False,
             )
 
             return CreateTestimonia(

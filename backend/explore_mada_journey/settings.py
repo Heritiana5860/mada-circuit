@@ -20,10 +20,7 @@ import django.conf.global_settings as DEFAULT_SETTINGS
 
 
 
-CSRF_TRUSTED_ORIGINS = [
-    "https://ton-domaine.com",
-    "https://www.ton-domaine.com",
-]
+CSRF_TRUSTED_ORIGINS = ["https://api.madagascar-voyagesolidaire.com"]
 
 SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
 

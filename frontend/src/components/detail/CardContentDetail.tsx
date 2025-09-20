@@ -54,7 +54,7 @@ const CardContentDetail: React.FC<CardContentDetailProps> = ({
           <p className="text-muted-foreground mb-4 line-clamp-2">{pack.description}</p>
           <div className="flex justify-between items-center">
             <span className="text-xl font-bold text-primary">
-              {formatPrice(pack.prix)}
+              {/* {formatPrice(pack.prix)} */}
             </span>
             <Link to={`/${lien}/${pack.id}`} state={{ dataState: pack }}>
               <Button variant="outline" size="sm" className="flex items-center">

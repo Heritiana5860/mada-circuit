@@ -8,7 +8,7 @@ const ContactInfoDetail = () => {
         <div className="space-y-2 text-sm">
           <div className="flex items-center text-gray-600">
             <Phone className="h-4 w-4 mr-2" />
-            +33 7 83 39 91 41 | +261 34 52 981 05 
+            +33 7 44 89 44 08 | +261 34 52 981 05 
           </div>
           <div className="flex items-center text-gray-600">
             <Mail className="h-4 w-4 mr-2" />

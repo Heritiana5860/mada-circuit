@@ -442,14 +442,14 @@ const CircuitDetail = () => {
                 <CardHeader>
                   <CardTitle className="flex flex-col items-center justify-between">
                     <p className="border-b pb-3">Réservation</p>
-                    {circuitFromState?.prix && (
+                    {/* {circuitFromState?.prix && (
                       <p className="text-xl font-bold font-sans pt-3">
                         {formatPrice(circuitFromState.prix)}{" "}
                         <span className="text-sm font-normal text-gray-500">
                           /personne
                         </span>
                       </p>
-                    )}
+                    )} */}
                   </CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-4">
@@ -504,26 +504,26 @@ const CircuitDetail = () => {
                           {days} {days > 1 ? "jours" : "jour"}
                         </span>
                       </div>
-                      <div className="flex justify-between items-center text-sm">
+                      {/* <div className="flex justify-between items-center text-sm">
                         <span className="text-gray-600">Prix par personne</span>
                         <span className="font-medium">
                           {formatPrice(circuitFromState.prix)}
                         </span>
-                      </div>
+                      </div> */}
                       <div className="flex justify-between items-center text-sm">
                         <span className="text-gray-600">
                           Nombre de personnes
                         </span>
                         <span className="font-medium">{guestCount}</span>
                       </div>
-                      <div className="border-t pt-2">
+                      {/* <div className="border-t pt-2">
                         <div className="flex justify-between items-center">
                           <span className="font-semibold">Total</span>
                           <span className="text-xl font-bold text-primary">
                             {formatPrice(totalPrice)}
                           </span>
                         </div>
-                      </div>
+                      </div> */}
                     </div>
                   )}
 

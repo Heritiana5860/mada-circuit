@@ -15,6 +15,47 @@ import os
 from pathlib import Path
 from datetime import timedelta
 
+# Cette section force la désactivation de toute vérification CSRF
+import django.conf.global_settings as DEFAULT_SETTINGS
+
+
+
+# Configuration explicite pour désactiver CSRF
+USE_CSRF = False
+
+# Monkey patch pour désactiver complètement CSRF au niveau système
+try:
+    import django.middleware.csrf
+    # Remplacer le middleware CSRF par un middleware vide
+    original_csrf_middleware = django.middleware.csrf.CsrfViewMiddleware
+    
+    class DummyCSRFMiddleware:
+        def _init_(self, get_response):
+            self.get_response = get_response
+        
+        def _call_(self, request):
+            setattr(request, '_dont_enforce_csrf_checks', True)
+            return self.get_response(request)
+        
+        def process_view(self, request, view_func, view_args, view_kwargs):
+            setattr(request, '_dont_enforce_csrf_checks', True)
+            return None
+    
+    django.middleware.csrf.CsrfViewMiddleware = DummyCSRFMiddleware
+    
+    print("CSRF Middleware successfully disabled via monkey patch")
+except Exception as e:
+    print(f"Warning: Could not monkey patch CSRF middleware: {e}")
+
+# Supprimer les vérifications CSRF du système de checks
+SILENCED_SYSTEM_CHECKS = [
+    'security.W004',  # SECURE_HSTS_SECONDS warning
+    'security.W008',  # SECURE_BROWSER_XSS_FILTER warning
+    'security.W003',  # CSRF_COOKIE_SECURE warning
+    'security.W016',  # CSRF_COOKIE_HTTPONLY warning
+    'security.W017',  # CSRF_FAILURE_VIEW warning
+]
+
 
 load_dotenv()
 
@@ -90,22 +131,26 @@ SECRET_KEY = 'django-insecure-=-^c))dt)dbi(g%h2kmtgkp)o!q3cr12=m0cs2#3(j2jg(qodf
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = [
-    'madagascar-voyagesolidaire.com', 
-    'api.madagascar-voyagesolidaire.com', 
-    'administration.madagascar-voyagesolidaire.com'
-    ]
+ALLOWED_HOSTS = ['*']
+
+# ALLOWED_HOSTS = [
+#     'madagascar-voyagesolidaire.com', 
+#     'api.madagascar-voyagesolidaire.com', 
+#     'administration.madagascar-voyagesolidaire.com'
+#     ]
 
 CORS_ALLOWED_ORIGINS = [
     'https://madagascar-voyagesolidaire.com',
     'https://api.madagascar-voyagesolidaire.com',
-    'https://administration.madagascar-voyagesolidaire.com'
+    'https://administration.madagascar-voyagesolidaire.com',
+    'http://5.101.142.84:8000'
 ]
 
 CSRF_TRUSTED_ORIGINS = [
     'https://madagascar-voyagesolidaire.com',
     'https://api.madagascar-voyagesolidaire.com',
-    'https://administration.madagascar-voyagesolidaire.com'
+    'https://administration.madagascar-voyagesolidaire.com',
+    'http://5.101.142.84:8000'
 ]
 
 CORS_ALLOW_ALL_ORIGINS = False

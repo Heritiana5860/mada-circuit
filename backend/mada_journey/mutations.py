@@ -159,9 +159,9 @@ class ItineraireInput(graphene.InputObjectType):
 class CreateCircuit(graphene.Mutation):
     class Arguments:
         titre = graphene.String(required=True)
-        description = graphene.String(required=True)
+        description = graphene.String(required=False)
         duree = graphene.Int(required=True)
-        prix = graphene.Int(required=True)
+        prix = graphene.Int(required=False)
         type_circuit = graphene.String(required=True)
         transport = graphene.String(required=True)
         inclus = graphene.String()
@@ -169,7 +169,7 @@ class CreateCircuit(graphene.Mutation):
         images = graphene.List(Upload, required=False)
         difficulte = graphene.String(required=True)
         destination = graphene.String(required=True)
-        region = graphene.String(required=True)
+        region = graphene.String(required=False)
         saison = graphene.String(required=True)
         itineraires = graphene.List(ItineraireInput, required=True, description="Liste des itinéraires")
 

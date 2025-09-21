@@ -437,16 +437,16 @@ export const DELETE_USER = gql`
 export const CREATE_CIRCUIT = gql`
   mutation CreateCircuit(
     $titre: String!
-    $description: String!
+    $description: String
     $duree: Int!
-    $prix: Int!
+    $prix: Int
     $typeCircuit: String!
     $transport: String!
     $difficulte: String!
     $inclus: String
     $nonInclus: String
     $destination: String!
-    $region: String!
+    $region: String
     $saison: String!
     $itineraires: [ItineraireInput]!
     $images: [Upload]

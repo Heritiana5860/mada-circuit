@@ -104,7 +104,7 @@ class Circuit(models.Model):
     titre = models.CharField(max_length=200)
     description = models.TextField(blank=True, null=True)
     duree = models.IntegerField(help_text="Durée en jours")
-    prix = models.DecimalField(max_digits=10, decimal_places=2)
+    prix = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)
     inclus = models.TextField(blank=True, help_text="Services inclus (ex: hébergement, guide, petit-déjeuner), lister en separant par ';'")
     non_inclus = models.TextField(blank=True, help_text="Services non inclus (ex: essence, péages), lister en separant par ';'")
     destination = models.CharField(max_length=100, blank=True, help_text="Destination principale du circuit")

@@ -353,10 +353,13 @@ REST_FRAMEWORK = {
 }
 
 # Configuration CSRF (désactiver uniquement pour déboguer)
+CSRF_COOKIE_DOMAIN = '.madagascar-voyagesolidaire.com'
 CSRF_COOKIE_SECURE = True  # En production, mettre à True si HTTPS
 CSRF_COOKIE_HTTPONLY = False  # Doit être False pour que JS puisse accéder au token
 CSRF_USE_SESSIONS = False  # Utiliser des cookies au lieu des sessions
-CSRF_COOKIE_SAMESITE = None  # 'None' permet le partage entre sites
-SESSION_COOKIE_SAMESITE = None  # 'None' permet le partage entre sites
-# SESSION_COOKIE_SECURE = True # En production, mettre à True si HTTPS
-# SESSION_COOKIE_HTTPONLY = True # Empêche l'accès JS au cookie de session
+CSRF_COOKIE_SAMESITE = 'Lax'  # 'None' permet le partage entre sites
+
+SESSION_COOKIE_DOMAIN = '.madagascar-voyagesolidaire.com'
+SESSION_COOKIE_SAMESITE = 'Lax'  # 'None' permet le partage entre sites
+SESSION_COOKIE_SECURE = True # En production, mettre à True si HTTPS
+SESSION_COOKIE_HTTPONLY = True # Empêche l'accès JS au cookie de session

@@ -107,7 +107,7 @@ class Circuit(models.Model):
     prix = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)
     inclus = models.TextField(blank=True, help_text="Services inclus (ex: hébergement, guide, petit-déjeuner), lister en separant par ';'")
     non_inclus = models.TextField(blank=True, help_text="Services non inclus (ex: essence, péages), lister en separant par ';'")
-    destination = models.CharField(max_length=100, blank=True, help_text="Destination principale du circuit")
+    destination = models.TextField(max_length=100, blank=True, help_text="Destination principale du circuit")
     region = models.CharField(max_length=100, blank=True, help_text="Région principale du circuit")
     saison = models.CharField(max_length=100, blank=True, help_text="Saison recommandée pour ce circuit")
     

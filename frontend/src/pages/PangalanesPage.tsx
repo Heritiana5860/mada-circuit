@@ -354,7 +354,7 @@ const PangalanesPage = () => {
             <img
               src="/navigale.webp"
               alt="Background"
-              className="w-full h-full object-cover"
+              className="w-full h-full object-fill"
               loading="lazy"
             />
             <div className="absolute inset-0 bg-black/60"></div>

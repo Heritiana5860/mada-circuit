@@ -125,7 +125,7 @@ const CreateCircuit = () => {
       {
         id: "1",
         jour: 1,
-        type: "trajet", // Nouveau champ
+        type: "trajet", 
         depart: "",
         arrivee: "",
         distance: 0,
@@ -205,8 +205,6 @@ const CreateCircuit = () => {
 
     try {
       const result = await createACircuit({ variables: data });
-      console.log("Resultat de la mutation:", result);
-      console.log("Data:", data);
 
       if (result.data.createCircuit.success) {
         emptyFields();

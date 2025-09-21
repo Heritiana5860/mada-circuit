@@ -1,12 +1,10 @@
 import {
   Captions,
-  Clock,
   Fingerprint,
   House,
   MapPinHouse,
   ShieldBan,
   ShieldCheck,
-  Wallet,
 } from "lucide-react";
 import Field from "../composants/Field";
 import { Dispatch, SetStateAction } from "react";

@@ -143,7 +143,6 @@ const CreateCircuit = () => {
     // Validation des données de base
     if (
       !titre ||
-      !description ||
       !destination ||
       !region ||
       !saison ||
@@ -205,12 +204,15 @@ const CreateCircuit = () => {
 
     try {
       const result = await createACircuit({ variables: data });
+      console.log("Data: ", data);
+      
 
       if (result.data.createCircuit.success) {
         emptyFields();
         setCurrentStep(1);
         setErrorMessage("Circuit créé avec succès !");
       } else {
+        console.log("Resultat: ", result);
         setErrorMessage(result.data.createCircuit.errors.join(", "));
       }
     } catch (err) {

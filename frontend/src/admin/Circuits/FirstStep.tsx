@@ -208,9 +208,9 @@ const FirstStep: React.FC<FirstType> = ({
               className="h-12 px-2 border rounded-md w-full"
             >
               <option value="">Choisissez un type...</option>
-              <option value="PANGALANE">Pangalanes</option>
-              <option value="CIRCUIT">Circuit</option>
-              <option value="SOLIDAIRE">Solidaire</option>
+              <option value="pangalane">Pangalanes</option>
+              <option value="circuit">Circuit</option>
+              <option value="solidaire">Solidaire</option>
             </select>
           </div>
 

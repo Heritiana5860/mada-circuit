@@ -204,7 +204,6 @@ const CreateCircuit = () => {
 
     try {
       const result = await createACircuit({ variables: data });
-      console.log("Data: ", data);
       
 
       if (result.data.createCircuit.success) {

@@ -296,9 +296,9 @@ const ProgrammeSolidairePage = () => {
                         {pack.description}
                       </p>
                       <div className="flex justify-between items-center">
-                        <span className="text-xl font-bold text-primary">
+                        {/* <span className="text-xl font-bold text-primary">
                           {formatPrice(pack.prix)}
-                        </span>
+                        </span> */}
                         <Link
                           to={`/programme-solidaire/${pack.id}`}
                           state={{ pangalanes: pack }}

@@ -73,7 +73,7 @@ const CreateCircuit = () => {
       // Validation de base avant de passer à l'étape suivante
       if (
         currentStep === 1 &&
-        (!titre || !description || !destination || !region || !saison)
+        (!titre || !destination || !region || !saison)
       ) {
         setErrorMessage("Veuillez remplir tous les champs obligatoires.");
         return;

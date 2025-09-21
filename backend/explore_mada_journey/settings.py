@@ -111,14 +111,14 @@ CORS_ALLOWED_ORIGINS = [
     'https://madagascar-voyagesolidaire.com',
     'https://api.madagascar-voyagesolidaire.com',
     'https://administration.madagascar-voyagesolidaire.com',
-    'http://5.101.142.84:8000'
+    # 'http://5.101.142.84:8000'
 ]
 
 CSRF_TRUSTED_ORIGINS = [
     'https://madagascar-voyagesolidaire.com',
     'https://api.madagascar-voyagesolidaire.com',
     'https://administration.madagascar-voyagesolidaire.com',
-    'http://5.101.142.84:8000'
+    # 'http://5.101.142.84:8000'
 ]
 
 CORS_ALLOW_ALL_ORIGINS = False

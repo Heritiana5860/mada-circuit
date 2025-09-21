@@ -353,7 +353,7 @@ REST_FRAMEWORK = {
 }
 
 # Configuration CSRF (désactiver uniquement pour déboguer)
-CSRF_COOKIE_SECURE = False  # En production, mettre à True si HTTPS
+CSRF_COOKIE_SECURE = True  # En production, mettre à True si HTTPS
 CSRF_COOKIE_HTTPONLY = False  # Doit être False pour que JS puisse accéder au token
 CSRF_USE_SESSIONS = False  # Utiliser des cookies au lieu des sessions
 CSRF_COOKIE_SAMESITE = None  # 'None' permet le partage entre sites

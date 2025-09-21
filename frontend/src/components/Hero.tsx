@@ -117,7 +117,7 @@ const Hero = () => {
 
         {/* Sous-titre élégant */}
         <p
-          className={`text-lg md:text-xl text-white/90 mb-10 max-w-3xl mx-auto leading-relaxed transition-all duration-1000 transform ${
+          className={`text-lg text-justify md:text-xl text-white/90 mb-10 max-w-3xl mx-auto leading-relaxed transition-all duration-1000 transform ${
             isVisible ? "translate-y-0 opacity-100" : "translate-y-8 opacity-0"
           }`}
           style={{

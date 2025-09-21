@@ -14,7 +14,10 @@ import { CREATE_CIRCUIT } from "@/graphql/mutations";
 
 const CreateCircuit = () => {
   const [currentStep, setCurrentStep] = useState(1);
-  const [createACircuit, { loading, error }] = useMutation(CREATE_CIRCUIT);
+  const [createACircuit, { loading, error }] = useMutation(CREATE_CIRCUIT, {
+    errorPolicy: "all",
+    fetchPolicy: "no-cache",
+  });
 
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
@@ -71,10 +74,7 @@ const CreateCircuit = () => {
   const nextStep = () => {
     if (currentStep < steps.length) {
       // Validation de base avant de passer à l'étape suivante
-      if (
-        currentStep === 1 &&
-        (!titre || !destination || !region || !saison)
-      ) {
+      if (currentStep === 1 && (!titre || !destination || !region || !saison)) {
         setErrorMessage("Veuillez remplir tous les champs obligatoires.");
         return;
       }
@@ -125,7 +125,7 @@ const CreateCircuit = () => {
       {
         id: "1",
         jour: 1,
-        type: "trajet", 
+        type: "trajet",
         depart: "",
         arrivee: "",
         distance: 0,
@@ -141,13 +141,7 @@ const CreateCircuit = () => {
     e.preventDefault();
 
     // Validation des données de base
-    if (
-      !titre ||
-      !destination ||
-      !region ||
-      !saison ||
-      days.length === 0
-    ) {
+    if (!titre || !destination || !region || !saison || days.length === 0) {
       setErrorMessage("Veuillez remplir tous les champs obligatoires.");
       return;
     }
@@ -204,7 +198,6 @@ const CreateCircuit = () => {
 
     try {
       const result = await createACircuit({ variables: data });
-      
 
       if (result.data.createCircuit.success) {
         emptyFields();

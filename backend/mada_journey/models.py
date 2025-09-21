@@ -257,7 +257,7 @@ class Activite(models.TextChoices):
     RANDONNEE = 'RANDONNEE', 'Randonnée'
     PLAGE = 'PLAGE', 'Plage'
     SAFARI = 'SAFARI', 'Safari'
-    PLONGEE = 'PLONFEE', 'Plongée'  # Corriger la faute dans le modèle Prisma
+    PLONGEE = 'PLONFEE', 'Plongée'
     CULTURE = 'CULTURE', 'Culture'
     GASTRONOMIE = 'GASTRONOMIE', 'Gastronomie'
 

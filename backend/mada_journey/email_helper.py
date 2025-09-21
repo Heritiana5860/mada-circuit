@@ -1,4 +1,4 @@
-def message(utilisateur, date_depart, date_fin, duree, nombre_personnes, budget, commentaire, vehicule, circuit):
+def message(utilisateur, date_depart, date_fin, duree, nombre_personnes, commentaire, vehicule, circuit):
     if vehicule is not None:
         detail = (
             f"🧲 Marque             : {vehicule.marque}\n"
@@ -33,7 +33,6 @@ def message(utilisateur, date_depart, date_fin, duree, nombre_personnes, budget,
         f"- 📅 Dates            : du {date_depart} au {date_fin}\n"
         f"- ⏳ Durée            : {duree} day(s)\n"
         f"- 👥 Nombre de pers.  : {nombre_personnes}\n"
-        f"- 💰 Budget           : {budget} Ar\n"
         
         f"💬 DEMANDE PERSONNALISÉE\n"
         f"═════════════════════════\n"
@@ -63,7 +62,7 @@ def message_temoignage(utilisateur, score, description):
         
     )
     
-def confirmation_message(utilisateur, date_depart, date_fin, duree, nombre_personnes, budget, commentaire, type_circuit):
+def confirmation_message(utilisateur, date_depart, date_fin, duree, nombre_personnes, commentaire, type_circuit):
     ligne_date = (
         f"- 📅 Circuit du {date_depart} au {date_fin} ({duree} day(s))\n"
         if type_circuit else
@@ -77,7 +76,6 @@ def confirmation_message(utilisateur, date_depart, date_fin, duree, nombre_perso
         f"═════════════════\n"
         f"{ligne_date}"
         f"- 👥 Nombre de pers.      : {nombre_personnes}\n"
-        f"- 💰 Budget               : {budget} Ar\n"
         
         f"💬 DEMANDE PERSONNALISÉE\n"
         f"═════════════════════════\n"
@@ -89,7 +87,7 @@ def confirmation_message(utilisateur, date_depart, date_fin, duree, nombre_perso
         f"L’équipe Madagascar Voyage Solidaire"
     )
     
-def sur_mesure_message(point_depart, point_arrivee, lieu_visiter, activite, date_debut, date_fin, duree, nombre_de_personne, hebergement, budget, nom, prenom, email, contact, commentaire):
+def sur_mesure_message(point_depart, point_arrivee, lieu_visiter, activite, date_debut, date_fin, duree, nombre_de_personne, hebergement, nom, prenom, email, contact, commentaire):
     return (
         f"Bonday,\n\n"
         f"Une nouvelle demande de devis de circuit sur mesure a été effectuée via notre site.\n\n"
@@ -108,8 +106,7 @@ def sur_mesure_message(point_depart, point_arrivee, lieu_visiter, activite, date
         f"🎯 Activité(s)      : {activite}\n"
         f"⏳ Durée            : {duree} day(s)\n"
         f"👥 Nombre de pers.  : {nombre_de_personne}\n"
-        f"🏨 Hébergement      : {hebergement}\n"
-        f"💰 Budget           : {budget}\n\n"
+        f"🏨 Hébergement      : {hebergement}\n\n"
         
         f"💬 DEMANDE PERSONNALISÉE\n"
         f"═════════════════════════\n"
@@ -119,7 +116,7 @@ def sur_mesure_message(point_depart, point_arrivee, lieu_visiter, activite, date
         f"L’équipe Madagascar Voyage Solidaire"
     )
     
-def confirmation_message_sur_mesure(point_depart, point_arrivee, lieu_visiter, activite, date_debut, date_fin, duree, nombre_de_personne, hebergement, budget, prenom, commentaire):
+def confirmation_message_sur_mesure(point_depart, point_arrivee, lieu_visiter, activite, date_debut, date_fin, duree, nombre_de_personne, hebergement, prenom, commentaire):
     
     return (
         f"Bonday {prenom},\n\n"
@@ -132,8 +129,7 @@ def confirmation_message_sur_mesure(point_depart, point_arrivee, lieu_visiter, a
         f"🎯 Activité(s)      : {activite}\n"
         f"⏳ Durée            : {duree} day(s)\n"
         f"👥 Nombre de pers.  : {nombre_de_personne}\n"
-        f"🏨 Hébergement      : {hebergement}\n"
-        f"💰 Budget           : {budget}\n\n"
+        f"🏨 Hébergement      : {hebergement}\n\n"
         
         f"══════════════════════════════\n"
         f"💬 DEMANDE PERSONNALISÉE\n"

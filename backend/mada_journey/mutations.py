@@ -496,7 +496,7 @@ class CreateReservation(graphene.Mutation):
                 # Envoi au site
                 send_mail(
                     subject=email_subject,
-                    message=message(utilisateur, date_depart, date_fin, duree, nombre_personnes, budget, commentaire, vehicule, circuit),
+                    message=message(utilisateur, date_depart, date_fin, duree, nombre_personnes, commentaire, vehicule, circuit),
                     from_email=utilisateur.email,
                     recipient_list=[site_email],
                     fail_silently=False,
@@ -507,7 +507,7 @@ class CreateReservation(graphene.Mutation):
                     subject=objet_confirmation_message(),
                     message=confirmation_message(
                         utilisateur, date_depart, date_fin, duree, 
-                        nombre_personnes, budget, commentaire, 
+                        nombre_personnes, commentaire, 
                         type_circuit=not is_vehicule
                     ),
                     from_email=site_email,
@@ -1207,7 +1207,7 @@ class CreateVehiculeReservation(graphene.Mutation):
             # Envoi au site
             send_mail(
                 subject=objet_message("location voiture"),
-                message=message(utilisateur, date_depart, date_fin, duree, nombre_personnes, budget, commentaire, vehicule, circuit=None),
+                message=message(utilisateur, date_depart, date_fin, duree, nombre_personnes, commentaire, vehicule, circuit=None),
                 from_email= utilisateur.email,
                 recipient_list=[site_email],
                 fail_silently=False,
@@ -1216,7 +1216,7 @@ class CreateVehiculeReservation(graphene.Mutation):
             # Envoi de confirmation au client            
             send_mail(
                 subject=objet_confirmation_message(),
-                message=confirmation_message(utilisateur, date_depart, date_fin, duree, nombre_personnes, budget, commentaire, type_circuit=False),
+                message=confirmation_message(utilisateur, date_depart, date_fin, duree, nombre_personnes, commentaire, type_circuit=False),
                 from_email=site_email,
                 recipient_list=[utilisateur.email],
                 fail_silently=False,

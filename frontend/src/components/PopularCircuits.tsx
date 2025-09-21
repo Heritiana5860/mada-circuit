@@ -15,7 +15,7 @@ const PopularCircuits = () => {
   const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
   const { t } = useTranslation();
 
-  const circuits = data?.allCircuitsByType;
+  const circuits = data?.allCircuits;
 
   return (
     <section className="section-container">

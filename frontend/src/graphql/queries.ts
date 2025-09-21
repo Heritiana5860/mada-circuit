@@ -49,16 +49,30 @@ export const ALL_CIRCUITS = gql`
       prix
       inclus
       nonInclus
+      image
+      typeCircuit
+      difficulte
+      transport
       destination
       region
       saison
-      image
-      difficulte
-      typeCircuit
-      transport
-      reservationsCount
-      isAvailable
-      imagesCount
+      images {
+        id
+        image
+      }
+      itineraires {
+        jour
+        typeItineraire
+        lieuDepart
+        lieuArrivee
+        distanceKm
+        dureeTrajet
+        lieu
+        nuitees
+        description
+        isTrajet
+        isSejour
+      }
     }
   }
 `;

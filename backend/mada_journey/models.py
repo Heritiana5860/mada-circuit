@@ -102,7 +102,7 @@ class Circuit(models.Model):
     
     id = models.CharField(primary_key=True, default=uuid.uuid4, editable=False, max_length=36)
     titre = models.CharField(max_length=200)
-    description = models.TextField()
+    description = models.TextField(blank=True, null=True)
     duree = models.IntegerField(help_text="Durée en jours")
     prix = models.DecimalField(max_digits=10, decimal_places=2)
     inclus = models.TextField(blank=True, help_text="Services inclus (ex: hébergement, guide, petit-déjeuner), lister en separant par ';'")

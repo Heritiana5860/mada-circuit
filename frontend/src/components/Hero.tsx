@@ -127,17 +127,8 @@ const Hero = () => {
         >
           {t(
             "nav.desc",
-            "Tailor-made tours, the discovery of the Pangalanes Canal, and 4x4 vehicle rentals for an"
-          )}{" "}
-          <span className="font-semibold text-accent">
-            {t("nav.exp", "unforgettable adventure")}
-          </span>
-          . <br />
-          <span className=" font-semibold text-accent">
-            {t("nav.canal", "Canal Evasion dirigé par Sylvain Black")}
-          </span>{" "}
-          {t("nav.agence", "est l’agence partenaire de")}{" "}
-          <span className="font-semibold">Madagascar Voyage Solidaire</span>.
+            "Madagascar tours and responsible travel with Canal Evasion, led by Sylvain Black. Guided or customized tours, car rental with English- and French-speaking driver-guides."
+          )}
         </p>
 
         {/* Boutons professionnels */}

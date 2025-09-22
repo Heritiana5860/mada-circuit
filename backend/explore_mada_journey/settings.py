@@ -241,7 +241,7 @@ CSRF_USE_SESSIONS = False
 # SECURE_HSTS_SECONDS = 3600   # Définir la durée HSTS 
 # SECURE_SSL_REDIRECT = True   # Rediriger toutes les requêtes HTTP vers HTTPS
 
-ROOT_URLCONF = os.getenv("ROOT_URLCONF")
+ROOT_URLCONF = 'explore_mada_journey.urls'
 
 TEMPLATES = [
     {
@@ -258,7 +258,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = os.getenv("WSGI_APPLICATION", "explore_mada_journey.wsgi.application")
+WSGI_APPLICATION = "explore_mada_journey.wsgi.application
 
 EMAIL_BACKEND = os.getenv("EMAIL_BACKEND")
 EMAIL_HOST = os.getenv("EMAIL_HOST")

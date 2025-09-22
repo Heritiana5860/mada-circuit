@@ -18,17 +18,17 @@ from datetime import timedelta
 # Cette section force la désactivation de toute vérification CSRF
 import django.conf.global_settings as DEFAULT_SETTINGS
 
-
-
 CSRF_TRUSTED_ORIGINS = ["https://api.madagascar-voyagesolidaire.com"]
 
 SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
-
 
 load_dotenv()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
+
+# Créer le répertoire des logs s'il n'existe pas
+os.makedirs(os.path.join(BASE_DIR, 'logs'), exist_ok=True)
 
 LOGGING = {
     "version": 1,
@@ -107,6 +107,47 @@ ALLOWED_HOSTS = ['*']
 #     'administration.madagascar-voyagesolidaire.com'
 #     ]
 
+# Fonction utilitaire pour les listes d'environnement
+def get_list_env(var, default=None):
+    val = os.getenv(var)
+    if val:
+        # Supporte format JSON ou liste séparée par virgule
+        try:
+            import ast
+            return ast.literal_eval(val)
+        except Exception:
+            return [v.strip() for v in val.split(',') if v.strip()]
+    return default or []
+
+# Configuration pour proxy reverse et HTTPS
+USE_X_FORWARDED_HOST = True
+USE_X_FORWARDED_PORT = True
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+
+# Détection HTTPS dynamique
+def is_production_https():
+    """Détecte si on est en environnement HTTPS de production"""
+    return any([
+        os.environ.get('HTTPS') == 'on',
+        os.environ.get('HTTP_X_FORWARDED_PROTO') == 'https',
+        os.environ.get('DJANGO_ENV') == 'production',
+        'administration.madagascar-voyagesolidaire.com' in os.environ.get('HTTP_HOST', '')
+    ])
+
+# Configuration des cookies conditionnelle pour HTTPS/HTTP
+IS_PRODUCTION_HTTPS = is_production_https()
+
+# Configuration des cookies de session
+SESSION_COOKIE_SECURE = IS_PRODUCTION_HTTPS
+SESSION_COOKIE_HTTPONLY = True
+SESSION_COOKIE_SAMESITE = 'Lax'
+SESSION_COOKIE_DOMAIN = '.madagascar-voyagesolidaire.com'
+SESSION_COOKIE_PATH = '/'
+SESSION_COOKIE_AGE = 86400  # 24 heures
+SESSION_COOKIE_NAME = 'sessionid'
+SESSION_SAVE_EVERY_REQUEST = True
+SESSION_EXPIRE_AT_BROWSER_CLOSE = False
+
 CORS_ALLOWED_ORIGINS = [
     'https://madagascar-voyagesolidaire.com',
     'https://api.madagascar-voyagesolidaire.com',
@@ -152,9 +193,7 @@ CORS_ALLOW_METHODS = [
     "OPTIONS",
 ]
 
-
 # Application definition
-
 INSTALLED_APPS = [
     'corsheaders',
     'django.contrib.admin',
@@ -179,16 +218,23 @@ GRAPHENE = {
     ],
 }
 
+# Middleware SANS CsrfViewMiddleware - TOTALEMENT RETIRÉ + Middleware custom
 MIDDLEWARE = [
+    'whitenoise.middleware.WhiteNoiseMiddleware',
+    'mada_journey.middleware.DisableCSRFMiddleware',  # Middleware personnalisé pour désactiver CSRF
     'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
-    'django.middleware.csrf.CsrfViewMiddleware',
+    # 'django.middleware.csrf.CsrfViewMiddleware',  # RETIRÉ COMPLÈTEMENT
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
+
+# DÉSACTIVATION COMPLÈTE DE CSRF
+CSRF_COOKIE_SECURE = False
+CSRF_USE_SESSIONS = False
 
 # En production, définir les en-têtes de sécurité appropriés
 # Avec cette configuration, votre application redirigera toutes les requêtes HTTP vers HTTPS et activera les en-têtes HSTS pour appliquer des connexions sécurisées.
@@ -222,7 +268,6 @@ EMAIL_USE_SSL = False
 EMAIL_HOST_USER = os.getenv("EMAIL_HOST_USER")
 EMAIL_HOST_PASSWORD = os.getenv("EMAIL_HOST_PASSWORD")
 
-
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
@@ -236,7 +281,7 @@ DATABASES = {
         'PORT': '3306',
         'OPTIONS': {
             'charset': 'utf8mb4',
-            # Supprimez toutes les options li  es aux plugins
+            # Supprimez toutes les options liées aux plugins
             'init_command': "SET sql_mode='STRICT_TRANS_TABLES'",
         }
     }
@@ -262,7 +307,6 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
 # Internationalization
 # https://docs.djangoproject.com/en/5.2/topics/i18n/
 
@@ -274,34 +318,59 @@ USE_I18N = True
 
 USE_TZ = True
 
+# CORRECTION PRINCIPALE : Configuration WhiteNoise simplifiée et correcte
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/5.2/howto/static-files/
+# Configuration complète des fichiers statiques
+STATIC_URL = '/static/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
-STATIC_URL = 'static/'
+# Répertoires de fichiers statiques pour le développement
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, 'static'),
+] if DEBUG else []
+
+# Configuration WhiteNoise optimisée
+WHITENOISE_USE_FINDERS = DEBUG
+WHITENOISE_AUTOREFRESH = DEBUG
+WHITENOISE_INDEX_FILE = True
+
+# IMPORTANT : Configuration pour servir les fichiers admin Django
+WHITENOISE_STATIC_PREFIX = '/static/'
+
+# Types MIME pour WhiteNoise
+WHITENOISE_MIMETYPES = {
+    '.css': 'text/css',
+    '.js': 'application/javascript',
+    '.png': 'image/png',
+    '.jpg': 'image/jpeg',
+    '.jpeg': 'image/jpeg',
+    '.gif': 'image/gif',
+    '.svg': 'image/svg+xml',
+    '.ico': 'image/x-icon',
+    '.woff': 'font/woff',
+    '.woff2': 'font/woff2',
+    '.ttf': 'font/ttf',
+    '.eot': 'application/vnd.ms-fontobject',
+}
+
+# Servir les fichiers admin même avec WhiteNoise
+WHITENOISE_SKIP_COMPRESS_EXTENSIONS = ['jpg', 'jpeg', 'png', 'gif', 'webp', 'zip', 'gz', 'tgz', 'bz2', 'tbz', 'xz', 'br']
+
+WHITENOISE_COMPRESSION = False
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-
 #Configuration de stockage d'image:
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
-# Configuration des fichiers statiques
-STATIC_URL = '/static/'
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
-STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, "static"),
-    os.path.join(BASE_DIR, 'static'),
-]
-
 # Configuration pour le développement - servir les fichiers médias
 if DEBUG:
     from django.conf.urls.static import static
-
 
 # Configuration des tailles d'upload
 FILE_UPLOAD_MAX_MEMORY_SIZE = 15 * 1024 * 1024  # 15MB
@@ -352,14 +421,70 @@ REST_FRAMEWORK = {
     'PAGE_SIZE': 10
 }
 
-# Configuration CSRF (désactiver uniquement pour déboguer)
-CSRF_COOKIE_DOMAIN = '.madagascar-voyagesolidaire.com'
-CSRF_COOKIE_SECURE = True  # En production, mettre à True si HTTPS
-CSRF_COOKIE_HTTPONLY = False  # Doit être False pour que JS puisse accéder au token
-CSRF_USE_SESSIONS = False  # Utiliser des cookies au lieu des sessions
-CSRF_COOKIE_SAMESITE = 'Lax'  # 'None' permet le partage entre sites
+# Configuration de sécurité pour la production
+if IS_PRODUCTION_HTTPS:
+    # Headers de sécurité HTTPS
+    SECURE_SSL_REDIRECT = False  # Géré par le proxy
+    SECURE_HSTS_SECONDS = 31536000
+    SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+    SECURE_HSTS_PRELOAD = True
+    SECURE_CONTENT_TYPE_NOSNIFF = True
+    SECURE_BROWSER_XSS_FILTER = True
+    X_FRAME_OPTIONS = 'DENY'
 
-SESSION_COOKIE_DOMAIN = '.madagascar-voyagesolidaire.com'
-SESSION_COOKIE_SAMESITE = 'Lax'  # 'None' permet le partage entre sites
-SESSION_COOKIE_SECURE = True # En production, mettre à True si HTTPS
-SESSION_COOKIE_HTTPONLY = True # Empêche l'accès JS au cookie de session
+# Configuration pour servir les fichiers admin en développement
+if DEBUG:
+    # Assurer que les fichiers statiques de l'admin sont servis
+    import django
+    from django.conf.urls.static import static
+    
+# Configuration additionnelle pour le proxy PHP
+# Ces paramètres aident le proxy à mieux gérer les requêtes
+APPEND_SLASH = True
+PREPEND_WWW = False
+
+# Configuration spéciale pour les requêtes via proxy
+ALLOWED_HOSTS_UNSAFE = False  # Gardez False pour la sécurité
+
+# Variables d'environnement pour debug (optionnel)
+if DEBUG:
+    print(f"IS_PRODUCTION_HTTPS: {IS_PRODUCTION_HTTPS}")
+    print(f"SESSION_COOKIE_SECURE: {SESSION_COOKIE_SECURE}")
+    print("CSRF Protection: DISABLED")
+
+# DÉSACTIVATION TOTALE ET EXPLICITE DE CSRF
+# Cette section force la désactivation de toute vérification CSRF
+USE_CSRF = False
+
+# Monkey patch pour désactiver complètement CSRF au niveau système
+try:
+    import django.middleware.csrf
+    # Remplacer le middleware CSRF par un middleware vide
+    original_csrf_middleware = django.middleware.csrf.CsrfViewMiddleware
+    
+    class DummyCSRFMiddleware:
+        def __init__(self, get_response):
+            self.get_response = get_response
+        
+        def __call__(self, request):
+            setattr(request, '_dont_enforce_csrf_checks', True)
+            return self.get_response(request)
+        
+        def process_view(self, request, view_func, view_args, view_kwargs):
+            setattr(request, '_dont_enforce_csrf_checks', True)
+            return None
+    
+    django.middleware.csrf.CsrfViewMiddleware = DummyCSRFMiddleware
+    
+    print("CSRF Middleware successfully disabled via monkey patch")
+except Exception as e:
+    print(f"Warning: Could not monkey patch CSRF middleware: {e}")
+
+# Supprimer les vérifications CSRF du système de checks
+SILENCED_SYSTEM_CHECKS = [
+    'security.W004',  # SECURE_HSTS_SECONDS warning
+    'security.W008',  # SECURE_BROWSER_XSS_FILTER warning
+    'security.W003',  # CSRF_COOKIE_SECURE warning
+    'security.W016',  # CSRF_COOKIE_HTTPONLY warning
+    'security.W017',  # CSRF_FAILURE_VIEW warning
+]

@@ -258,7 +258,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = "explore_mada_journey.wsgi.application
+WSGI_APPLICATION = 'explore_mada_journey.wsgi.application'
 
 EMAIL_BACKEND = os.getenv("EMAIL_BACKEND")
 EMAIL_HOST = os.getenv("EMAIL_HOST")

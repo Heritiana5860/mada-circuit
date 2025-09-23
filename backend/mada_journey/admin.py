@@ -43,12 +43,75 @@ class ItineraireInline(admin.TabularInline):
     # Tous les champs du modèle Itineraire
     fields = ('jour', 'type_itineraire', 'lieu_depart', 'lieu_arrivee', 'lieu', 'distance_km', 'duree_trajet', 'nuitees', 'description', 'carte_gps')
     
-    # Configuration responsive selon le type d'itinéraire
-    class Media:
-        js = ('admin/js/itineraire_inline.js',)  # JavaScript personnalisé pour masquer/afficher les champs
-        css = {
-            'all': ('admin/css/itineraire_inline.css',)
+    # CSS et JS intégrés directement dans les méthodes
+    def get_formset(self, request, obj=None, **kwargs):
+        formset = super().get_formset(request, obj, **kwargs)
+        
+        # Ajouter le CSS inline via un widget personnalisé
+        css_content = """
+        <style>
+        .itineraires .form-row {
+            border-left: 3px solid #2196F3;
+            margin-bottom: 8px;
+            padding-left: 10px;
         }
+        
+        .itineraires select[name*="type_itineraire"] {
+            background-color: #e3f2fd;
+            font-weight: bold;
+        }
+        
+        .itineraires input[type="number"] {
+            width: 80px;
+        }
+        
+        .itineraires textarea {
+            height: 60px;
+        }
+        
+        /* Styles pour masquer/afficher selon le type */
+        .trajet-only { display: none; }
+        .sejour-only { display: none; }
+        
+        .type-trajet .trajet-only { display: table-cell; }
+        .type-sejour .sejour-only { display: table-cell; }
+        </style>
+        
+        <script>
+        (function($) {
+            function toggleItineraireFields(row) {
+                var typeField = row.find('select[name*="type_itineraire"]');
+                var type = typeField.val();
+                
+                row.removeClass('type-trajet type-sejour');
+                
+                if (type === 'trajet') {
+                    row.addClass('type-trajet');
+                    row.find('input[name*="lieu"], input[name*="nuitees"]').val('');
+                } else if (type === 'sejour') {
+                    row.addClass('type-sejour');
+                    row.find('input[name*="lieu_depart"], input[name*="lieu_arrivee"], input[name*="distance_km"], input[name*="duree_trajet"]').val('');
+                }
+            }
+            
+            $(document).ready(function() {
+                $('.dynamic-itineraires tr.form-row').each(function() {
+                    toggleItineraireFields($(this));
+                });
+                
+                $(document).on('change', 'select[name*="type_itineraire"]', function() {
+                    toggleItineraireFields($(this).closest('tr'));
+                });
+            });
+        })(django.jQuery);
+        </script>
+        """
+        
+        # Injecter le CSS et JS dans le formulaire
+        if hasattr(formset, 'form'):
+            formset.form.media += admin.widgets.Media(css={'all': []}, js=[])
+            
+        return formset
     
     
 @admin.register(Itineraire)
@@ -127,7 +190,6 @@ class ItineraireAdmin(admin.ModelAdmin):
                     messages.error(request, f"{field}: {error}")
         except Exception as e:
             messages.error(request, f"Erreur lors de la sauvegarde : {e}")
-
 
 class PointInteretInline(admin.TabularInline):
     model = PointInteret

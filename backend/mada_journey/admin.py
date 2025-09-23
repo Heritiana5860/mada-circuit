@@ -39,12 +39,16 @@ class ItineraireInline(admin.TabularInline):
     extra = 1
     can_delete = True
     
-    # Tous les champs du modèle Itineraire
     fields = ('jour', 'type_itineraire', 'lieu_depart', 'lieu_arrivee', 'lieu', 'distance_km', 'duree_trajet', 'nuitees', 'description', 'carte_gps')
     
-    # PAS DE FICHIERS EXTERNES - Tout intégré ici
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
+    # Ajout d'une classe CSS pour cibler spécifiquement cet inline
+    classes = ['itineraires-inline']
+    
+    class Media:
+        css = {
+            'all': ('admin/css/itineraires.css',)  # Créer ce fichier dans static/admin/css/
+        }
+        js = ('admin/js/itineraires.js',)
     
     
 @admin.register(Itineraire)
@@ -61,6 +65,7 @@ class PointInteretInline(admin.TabularInline):
     extra = 1
     can_delete = True
     readonly_fields = ('image_preview',)
+    fields = ('nom', 'description', 'image', 'image_preview')
 
     def image_preview(self, obj):
         if obj.image:
@@ -166,113 +171,6 @@ class CircuitAdmin(admin.ModelAdmin):
     def nombre_reservations(self, obj):
         return obj.reservations.count() if hasattr(obj, 'reservations') else 0
     nombre_reservations.short_description = "Réservations"
-    
-    # CSS ET JAVASCRIPT INTÉGRÉS DIRECTEMENT DANS LA VUE
-    def change_view(self, request, object_id, form_url='', extra_context=None):
-        extra_context = extra_context or {}
-        
-        # Injecter le CSS et JS directement dans le template
-        extra_context['extra_css_js'] = mark_safe("""
-        <style>
-        /* CSS pour les itinéraires - INTÉGRÉ DIRECTEMENT */
-        .itineraires .form-row {
-            border-left: 3px solid #2196F3;
-            margin-bottom: 8px;
-            padding-left: 10px;
-            transition: all 0.3s ease;
-        }
-        
-        .itineraires .form-row:hover {
-            background-color: #f8f9fa;
-        }
-        
-        .itineraires select[name*="type_itineraire"] {
-            background-color: #e3f2fd;
-            font-weight: bold;
-            border: 2px solid #2196F3;
-            border-radius: 4px;
-        }
-        
-        .itineraires input[type="number"] {
-            width: 80px;
-        }
-        
-        .itineraires textarea {
-            height: 60px;
-            resize: vertical;
-        }
-        
-        .trajet-fields {
-            background-color: #e8f4fd;
-            border-radius: 4px;
-            padding: 5px;
-        }
-        
-        .sejour-fields {
-            background-color: #e8f5e8;
-            border-radius: 4px;
-            padding: 5px;
-        }
-        </style>
-        
-        <script>
-        (function($) {
-            'use strict';
-            
-            function toggleItineraireFields(row) {
-                var typeField = row.find('select[name*="type_itineraire"]');
-                var type = typeField.val();
-                
-                // Champs pour trajet
-                var trajetFields = row.find('input[name*="lieu_depart"], input[name*="lieu_arrivee"], input[name*="distance_km"], input[name*="duree_trajet"]');
-                var trajetCells = trajetFields.closest('td');
-                
-                // Champs pour séjour  
-                var sejourFields = row.find('input[name*="lieu"], input[name*="nuitees"]');
-                var sejourCells = sejourFields.closest('td');
-                
-                // Reset styles
-                trajetCells.removeClass('trajet-fields');
-                sejourCells.removeClass('sejour-fields');
-                
-                if (type === 'trajet') {
-                    trajetCells.show().addClass('trajet-fields');
-                    sejourCells.hide();
-                    sejourFields.val('');
-                } else if (type === 'sejour') {
-                    trajetCells.hide();
-                    sejourCells.show().addClass('sejour-fields');
-                    trajetFields.val('');
-                }
-            }
-            
-            $(document).ready(function() {
-                console.log('Initialisation des itinéraires...');
-                
-                $('.dynamic-itineraires tr.form-row').each(function() {
-                    toggleItineraireFields($(this));
-                });
-                
-                $(document).on('change', 'select[name*="type_itineraire"]', function() {
-                    toggleItineraireFields($(this).closest('tr'));
-                });
-                
-                $(document).on('click', '.add-row a', function() {
-                    setTimeout(function() {
-                        $('.dynamic-itineraires tr.form-row:last').each(function() {
-                            toggleItineraireFields($(this));
-                        });
-                    }, 200);
-                });
-            });
-        })(django.jQuery);
-        </script>
-        """)
-        
-        return super().change_view(request, object_id, form_url, extra_context)
-    
-    def add_view(self, request, form_url='', extra_context=None):
-        return self.change_view(request, None, form_url, extra_context)
 
 
 @admin.register(PointInteret)

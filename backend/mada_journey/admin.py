@@ -1,6 +1,8 @@
 from django.contrib import admin
 from django.utils.html import format_html
 from django.contrib.auth.admin import UserAdmin
+from django.core.exceptions import ValidationError
+from django.contrib import messages
 from .models import (
     Utilisateur, Circuit, PointInteret, Vehicule, Reservation, Personnel, Blog, BlogCommentaire, Faq,
     CircuitImage, VehiculeImage, BlogImage, Itineraire, Testimonia, ContactUsModele, SurMesure, SurMesureActivite, LieuAVisiter
@@ -36,22 +38,103 @@ class UtilisateurAdmin(UserAdmin):
 class ItineraireInline(admin.TabularInline):
     model = Itineraire
     extra = 1
-    fields = ('jour', 'lieu_depart', 'lieu_arrivee', 'distance_km', 'duree_trajet', 'description', 'carte_gps')
+    can_delete = True
+    
+    # Tous les champs du modèle Itineraire
+    fields = ('jour', 'type_itineraire', 'lieu_depart', 'lieu_arrivee', 'lieu', 'distance_km', 'duree_trajet', 'nuitees', 'description', 'carte_gps')
+    
+    # Configuration responsive selon le type d'itinéraire
+    class Media:
+        js = ('admin/js/itineraire_inline.js',)  # JavaScript personnalisé pour masquer/afficher les champs
+        css = {
+            'all': ('admin/css/itineraire_inline.css',)
+        }
     
     
 @admin.register(Itineraire)
 class ItineraireAdmin(admin.ModelAdmin):
-    list_display = ('jour', 'lieu_depart', 'lieu_arrivee', 'distance_km', 'duree_trajet', 'description', 'type_itineraire', 'circuit', 'nombre_circuits')
-
-    def nombre_circuits(self, obj):
-        return 1 if obj.circuit else 0
-    nombre_circuits.short_description = "Circuits"
+    list_display = (
+        'circuit', 
+        'jour', 
+        'type_itineraire', 
+        'display_itineraire', 
+        'distance_km', 
+        'duree_trajet'
+    )
+    
+    list_filter = (
+        'type_itineraire', 
+        'circuit__destination',
+        'circuit__type_circuit'
+    )
+    
+    search_fields = (
+        'lieu_depart', 
+        'lieu_arrivee', 
+        'lieu', 
+        'description',
+        'circuit__titre'
+    )
+    
+    ordering = ('circuit', 'jour')
+    
+    fieldsets = (
+        ('Information de base', {
+            'fields': ('circuit', 'jour', 'type_itineraire')
+        }),
+        ('Détails du trajet', {
+            'fields': ('lieu_depart', 'lieu_arrivee', 'distance_km', 'duree_trajet'),
+            'classes': ('collapse',),
+            'description': 'À remplir uniquement pour les trajets'
+        }),
+        ('Détails du séjour', {
+            'fields': ('lieu', 'nuitees'),
+            'classes': ('collapse',),
+            'description': 'À remplir uniquement pour les séjours'
+        }),
+        ('Informations supplémentaires', {
+            'fields': ('description', 'carte_gps'),
+            'classes': ('collapse',)
+        }),
+    )
+    
+    def display_itineraire(self, obj):
+        """Affichage intelligent selon le type d'itinéraire"""
+        if obj.type_itineraire == 'trajet':
+            return format_html(
+                '<strong style="color: #2196F3;">🚗 {} → {}</strong>',
+                obj.lieu_depart or '?',
+                obj.lieu_arrivee or '?'
+            )
+        else:  # séjour
+            nuitees = f" ({obj.nuitees} nuitée{'s' if obj.nuitees and obj.nuitees > 1 else ''})" if obj.nuitees else ""
+            return format_html(
+                '<strong style="color: #4CAF50;">🏨 {}{}</strong>',
+                obj.lieu or '?',
+                nuitees
+            )
+    display_itineraire.short_description = "Itinéraire"
+    
+    def save_model(self, request, obj, form, change):
+        """Validation personnalisée selon le type d'itinéraire"""
+        try:
+            obj.clean()  # Utilise la validation du modèle
+            super().save_model(request, obj, form, change)
+            messages.success(request, "Itinéraire sauvegardé avec succès!")
+        except ValidationError as e:
+            for field, errors in e.message_dict.items():
+                for error in errors:
+                    messages.error(request, f"{field}: {error}")
+        except Exception as e:
+            messages.error(request, f"Erreur lors de la sauvegarde : {e}")
 
 
 class PointInteretInline(admin.TabularInline):
     model = PointInteret
     extra = 1
+    can_delete = True
     readonly_fields = ('image_preview',)
+    fields = ('nom', 'description', 'image', 'image_preview')
 
     def image_preview(self, obj):
         if obj.image:
@@ -64,6 +147,7 @@ class PointInteretInline(admin.TabularInline):
 class CircuitImageInline(admin.TabularInline):
     model = CircuitImage
     extra = 1
+    can_delete = True
     readonly_fields = ('image_preview',)
     fields = ('image', 'titre', 'description', 'ordre', 'image_preview')
     ordering = ('ordre',)
@@ -107,33 +191,157 @@ class BlogImageInline(admin.TabularInline):
 
 @admin.register(Circuit)
 class CircuitAdmin(admin.ModelAdmin):
-    list_display = ('titre', 'destination', 'duree', 'prix', 'inclus', 'non_inclus', 'type_circuit', 'transport', 'difficulte', 'saison', 'image_preview', 'nombre_reservations')
-    list_filter = ('difficulte', 'destination', 'saison')
-    search_fields = ('titre', 'description')
-    readonly_fields = ('image_preview',)
+    list_display = (
+        'titre', 
+        'destination', 
+        'duree_display', 
+        'prix_display', 
+        'type_circuit', 
+        'transport', 
+        'difficulte_display', 
+        'saison', 
+        'image_preview', 
+        'nombre_reservations'
+    )
+    
+    list_filter = (
+        'difficulte', 
+        'type_circuit', 
+        'transport', 
+        'destination', 
+        'saison'
+    )
+    
+    search_fields = ('titre', 'description', 'destination', 'region')
+    readonly_fields = ('image_preview', 'id')
+    
+    # Inlines avec gestion d'erreur
     inlines = [PointInteretInline, CircuitImageInline, ItineraireInline]
     
+    # Fieldsets optimisés selon votre modèle
     fieldsets = (
-        ('Informations générales', {
-            'fields': ('titre', 'description', 'destination', 'saison')
+        ('Informations essentielles', {
+            'fields': (
+                'id',  # Lecture seule pour montrer l'UUID
+                'titre', 
+                'description'
+            ),
         }),
-        ('Détails du circuit', {
-            'fields': ('duree', 'prix', 'type_circuit', 'transport', 'difficulte', 'inclus', 'non_inclus')
+        ('Configuration du circuit', {
+            'fields': (
+                ('duree', 'prix'),
+                ('type_circuit', 'transport'),
+                'difficulte'
+            ),
+            'description': 'Configuration technique du circuit'
         }),
-        ('Image', {
-            'fields': ('image', 'image_preview')
+        ('Localisation et période', {
+            'fields': (
+                ('destination', 'region'),
+                'saison'
+            ),
+        }),
+        ('Services', {
+            'fields': ('inclus', 'non_inclus'),
+            'classes': ('collapse',),
+            'description': 'Services inclus et non inclus (séparer par ";")'
+        }),
+        ('Image principale', {
+            'fields': ('image', 'image_preview'),
+            'classes': ('collapse',)
         }),
     )
     
+    # Méthodes d'affichage améliorées
+    def duree_display(self, obj):
+        if obj.duree:
+            return f"{obj.duree} jour{'s' if obj.duree > 1 else ''}"
+        return "Non définie"
+    duree_display.short_description = "Durée"
+    duree_display.admin_order_field = 'duree'
+    
+    def prix_display(self, obj):
+        if obj.prix:
+            return f"{obj.prix:,.0f} Ar"
+        return "Prix à définir"
+    prix_display.short_description = "Prix"
+    prix_display.admin_order_field = 'prix'
+    
+    def difficulte_display(self, obj):
+        colors = {
+            'FACILE': 'green',
+            'MOYEN': 'orange', 
+            'DIFFICILE': 'red'
+        }
+        color = colors.get(obj.difficulte, 'gray')
+        return format_html(
+            '<span style="color: {}; font-weight: bold;">{}</span>',
+            color,
+            obj.get_difficulte_display()
+        )
+    difficulte_display.short_description = "Difficulté"
+    difficulte_display.admin_order_field = 'difficulte'
+    
     def image_preview(self, obj):
         if obj.image:
-            return format_html('<img src="{}" width="50" height="50" style="border-radius: 5px;" />', obj.image.url)
-        return "Pas d'image"
-    image_preview.short_description = "Aperçu"
+            return format_html('<img src="{}" width="60" height="60" style="border-radius: 8px; border: 2px solid #ddd;" />', obj.image.url)
+        return format_html('<div style="width: 60px; height: 60px; background: #f0f0f0; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 10px;">Pas d\'image</div>')
+    image_preview.short_description = "Image"
     
     def nombre_reservations(self, obj):
-        return obj.reservations.count()
+        count = obj.reservations.count() if hasattr(obj, 'reservations') else 0
+        if count > 0:
+            return format_html(
+                '<span style="background: #4CAF50; color: white; padding: 2px 8px; border-radius: 12px; font-size: 11px;">{}</span>',
+                count
+            )
+        return format_html('<span style="color: #666;">0</span>')
     nombre_reservations.short_description = "Réservations"
+    
+    # Actions personnalisées
+    actions = ['dupliquer_circuit', 'activer_circuits', 'archiver_circuits']
+    
+    def dupliquer_circuit(self, request, queryset):
+        """Duplique les circuits sélectionnés"""
+        for circuit in queryset:
+            # Logique de duplication ici
+            pass
+        self.message_user(request, f"{queryset.count()} circuit(s) dupliqué(s).")
+    dupliquer_circuit.short_description = "Dupliquer les circuits sélectionnés"
+    
+    # Validation personnalisée
+    def save_model(self, request, obj, form, change):
+        """Validation avant sauvegarde"""
+        try:
+            # Validation des champs obligatoires
+            if not obj.titre:
+                messages.error(request, "Le titre est obligatoire.")
+                return
+            
+            if not obj.duree:
+                messages.error(request, "La durée est obligatoire.")
+                return
+            
+            if obj.duree <= 0:
+                messages.error(request, "La durée doit être supérieure à 0.")
+                return
+                
+            if obj.prix and obj.prix < 0:
+                messages.error(request, "Le prix ne peut pas être négatif.")
+                return
+            
+            # Sauvegarde
+            super().save_model(request, obj, form, change)
+            
+            if not change:  # Nouveau circuit
+                messages.success(request, f"Circuit '{obj.titre}' créé avec succès!")
+            else:  # Modification
+                messages.info(request, f"Circuit '{obj.titre}' modifié avec succès!")
+                
+        except ValidationError as e:
+            messages.error(request, f"Erreur de validation : {e}")
+        except Exception as e:
+            messages.error(request, f"Erreur lors de la sauvegarde : {e}")
 
 
 @admin.register(PointInteret)

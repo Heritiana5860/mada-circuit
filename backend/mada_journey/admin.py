@@ -1,8 +1,7 @@
 from django.contrib import admin
 from django.utils.html import format_html
 from django.contrib.auth.admin import UserAdmin
-from django.core.exceptions import ValidationError
-from django.contrib import messages
+from django.utils.safestring import mark_safe
 from .models import (
     Utilisateur, Circuit, PointInteret, Vehicule, Reservation, Personnel, Blog, BlogCommentaire, Faq,
     CircuitImage, VehiculeImage, BlogImage, Itineraire, Testimonia, ContactUsModele, SurMesure, SurMesureActivite, LieuAVisiter

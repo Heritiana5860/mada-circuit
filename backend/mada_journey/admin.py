@@ -43,153 +43,31 @@ class ItineraireInline(admin.TabularInline):
     # Tous les champs du modèle Itineraire
     fields = ('jour', 'type_itineraire', 'lieu_depart', 'lieu_arrivee', 'lieu', 'distance_km', 'duree_trajet', 'nuitees', 'description', 'carte_gps')
     
-    # CSS et JS intégrés directement dans les méthodes
-    def get_formset(self, request, obj=None, **kwargs):
-        formset = super().get_formset(request, obj, **kwargs)
-        
-        # Ajouter le CSS inline via un widget personnalisé
-        css_content = """
-        <style>
-        .itineraires .form-row {
-            border-left: 3px solid #2196F3;
-            margin-bottom: 8px;
-            padding-left: 10px;
-        }
-        
-        .itineraires select[name*="type_itineraire"] {
-            background-color: #e3f2fd;
-            font-weight: bold;
-        }
-        
-        .itineraires input[type="number"] {
-            width: 80px;
-        }
-        
-        .itineraires textarea {
-            height: 60px;
-        }
-        
-        /* Styles pour masquer/afficher selon le type */
-        .trajet-only { display: none; }
-        .sejour-only { display: none; }
-        
-        .type-trajet .trajet-only { display: table-cell; }
-        .type-sejour .sejour-only { display: table-cell; }
-        </style>
-        
-        <script>
-        (function($) {
-            function toggleItineraireFields(row) {
-                var typeField = row.find('select[name*="type_itineraire"]');
-                var type = typeField.val();
-                
-                row.removeClass('type-trajet type-sejour');
-                
-                if (type === 'trajet') {
-                    row.addClass('type-trajet');
-                    row.find('input[name*="lieu"], input[name*="nuitees"]').val('');
-                } else if (type === 'sejour') {
-                    row.addClass('type-sejour');
-                    row.find('input[name*="lieu_depart"], input[name*="lieu_arrivee"], input[name*="distance_km"], input[name*="duree_trajet"]').val('');
-                }
-            }
-            
-            $(document).ready(function() {
-                $('.dynamic-itineraires tr.form-row').each(function() {
-                    toggleItineraireFields($(this));
-                });
-                
-                $(document).on('change', 'select[name*="type_itineraire"]', function() {
-                    toggleItineraireFields($(this).closest('tr'));
-                });
-            });
-        })(django.jQuery);
-        </script>
-        """
-        
-        # Injecter le CSS et JS dans le formulaire
-        if hasattr(formset, 'form'):
-            formset.form.media += admin.widgets.Media(css={'all': []}, js=[])
-            
-        return formset
+    # PAS DE FICHIERS EXTERNES - Tout intégré ici
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
     
     
 @admin.register(Itineraire)
 class ItineraireAdmin(admin.ModelAdmin):
-    list_display = (
-        'circuit', 
-        'jour', 
-        'type_itineraire', 
-        'display_itineraire', 
-        'distance_km', 
-        'duree_trajet'
-    )
-    
-    list_filter = (
-        'type_itineraire', 
-        'circuit__destination',
-        'circuit__type_circuit'
-    )
-    
-    search_fields = (
-        'lieu_depart', 
-        'lieu_arrivee', 
-        'lieu', 
-        'description',
-        'circuit__titre'
-    )
-    
-    ordering = ('circuit', 'jour')
-    
-    fieldsets = (
-        ('Information de base', {
-            'fields': ('circuit', 'jour', 'type_itineraire')
-        }),
-        ('Détails du trajet', {
-            'fields': ('lieu_depart', 'lieu_arrivee', 'distance_km', 'duree_trajet'),
-            'classes': ('collapse',),
-            'description': 'À remplir uniquement pour les trajets'
-        }),
-        ('Détails du séjour', {
-            'fields': ('lieu', 'nuitees'),
-            'classes': ('collapse',),
-            'description': 'À remplir uniquement pour les séjours'
-        }),
-        ('Informations supplémentaires', {
-            'fields': ('description', 'carte_gps'),
-            'classes': ('collapse',)
-        }),
-    )
-    
-    def display_itineraire(self, obj):
-        """Affichage intelligent selon le type d'itinéraire"""
-        if obj.type_itineraire == 'trajet':
-            return format_html(
-                '<strong style="color: #2196F3;">🚗 {} → {}</strong>',
-                obj.lieu_depart or '?',
-                obj.lieu_arrivee or '?'
-            )
-        else:  # séjour
-            nuitees = f" ({obj.nuitees} nuitée{'s' if obj.nuitees and obj.nuitees > 1 else ''})" if obj.nuitees else ""
-            return format_html(
-                '<strong style="color: #4CAF50;">🏨 {}{}</strong>',
-                obj.lieu or '?',
-                nuitees
-            )
-    display_itineraire.short_description = "Itinéraire"
-    
-    def save_model(self, request, obj, form, change):
-        """Validation personnalisée selon le type d'itinéraire"""
-        try:
-            obj.clean()  # Utilise la validation du modèle
-            super().save_model(request, obj, form, change)
-            messages.success(request, "Itinéraire sauvegardé avec succès!")
-        except ValidationError as e:
-            for field, errors in e.message_dict.items():
-                for error in errors:
-                    messages.error(request, f"{field}: {error}")
-        except Exception as e:
-            messages.error(request, f"Erreur lors de la sauvegarde : {e}")
+    list_display = ('jour', 'lieu_depart', 'lieu_arrivee', 'distance_km', 'duree_trajet', 'description', 'type_itineraire', 'circuit', 'nombre_circuits')
+
+    def nombre_circuits(self, obj):
+        return 1 if obj.circuit else 0
+    nombre_circuits.short_description = "Circuits"
+
+
+class PointInteretInline(admin.TabularInline):
+    model = PointInteret
+    extra = 1
+    can_delete = True
+    readonly_fields = ('image_preview',)
+
+    def image_preview(self, obj):
+        if obj.image:
+            return format_html('<img src="{}" width="30" height="30" style="border-radius: 3px;" />', obj.image.url)
+        return "Pas d'image"
+    image_preview.short_description = "Aperçu"
 
 class PointInteretInline(admin.TabularInline):
     model = PointInteret
@@ -224,6 +102,7 @@ class CircuitImageInline(admin.TabularInline):
 class VehiculeImageInline(admin.TabularInline):
     model = VehiculeImage
     extra = 1
+    can_delete = True
     readonly_fields = ('image_preview',)
     fields = ('image', 'titre', 'description', 'ordre', 'image_preview')
     ordering = ('ordre',)
@@ -238,6 +117,7 @@ class VehiculeImageInline(admin.TabularInline):
 class BlogImageInline(admin.TabularInline):
     model = BlogImage
     extra = 1
+    can_delete = True
     readonly_fields = ('image_preview',)
     fields = ('file', 'titre', 'description', 'ordre', 'image_preview')
     ordering = ('ordre',)
@@ -253,157 +133,147 @@ class BlogImageInline(admin.TabularInline):
 
 @admin.register(Circuit)
 class CircuitAdmin(admin.ModelAdmin):
-    list_display = (
-        'titre', 
-        'destination', 
-        'duree_display', 
-        'prix_display', 
-        'type_circuit', 
-        'transport', 
-        'difficulte_display', 
-        'saison', 
-        'image_preview', 
-        'nombre_reservations'
-    )
-    
-    list_filter = (
-        'difficulte', 
-        'type_circuit', 
-        'transport', 
-        'destination', 
-        'saison'
-    )
-    
-    search_fields = ('titre', 'description', 'destination', 'region')
-    readonly_fields = ('image_preview', 'id')
-    
-    # Inlines avec gestion d'erreur
+    list_display = ('titre', 'destination', 'duree', 'prix', 'inclus', 'non_inclus', 'type_circuit', 'transport', 'difficulte', 'saison', 'image_preview', 'nombre_reservations')
+    list_filter = ('difficulte', 'destination', 'saison')
+    search_fields = ('titre', 'description')
+    readonly_fields = ('image_preview',)
     inlines = [PointInteretInline, CircuitImageInline, ItineraireInline]
     
-    # Fieldsets optimisés selon votre modèle
     fieldsets = (
-        ('Informations essentielles', {
-            'fields': (
-                'id',  # Lecture seule pour montrer l'UUID
-                'titre', 
-                'description'
-            ),
+        ('Informations obligatoires *', {
+            'fields': ('titre', 'duree', 'type_circuit', 'transport', 'difficulte'),
+            'description': 'Ces champs sont obligatoires'
         }),
-        ('Configuration du circuit', {
-            'fields': (
-                ('duree', 'prix'),
-                ('type_circuit', 'transport'),
-                'difficulte'
-            ),
-            'description': 'Configuration technique du circuit'
-        }),
-        ('Localisation et période', {
-            'fields': (
-                ('destination', 'region'),
-                'saison'
-            ),
+        ('Informations complémentaires', {
+            'fields': ('description', 'destination', 'region', 'saison', 'prix'),
+            'classes': ('collapse',)
         }),
         ('Services', {
             'fields': ('inclus', 'non_inclus'),
-            'classes': ('collapse',),
-            'description': 'Services inclus et non inclus (séparer par ";")'
+            'classes': ('collapse',)
         }),
-        ('Image principale', {
+        ('Image', {
             'fields': ('image', 'image_preview'),
             'classes': ('collapse',)
         }),
     )
     
-    # Méthodes d'affichage améliorées
-    def duree_display(self, obj):
-        if obj.duree:
-            return f"{obj.duree} jour{'s' if obj.duree > 1 else ''}"
-        return "Non définie"
-    duree_display.short_description = "Durée"
-    duree_display.admin_order_field = 'duree'
-    
-    def prix_display(self, obj):
-        if obj.prix:
-            return f"{obj.prix:,.0f} Ar"
-        return "Prix à définir"
-    prix_display.short_description = "Prix"
-    prix_display.admin_order_field = 'prix'
-    
-    def difficulte_display(self, obj):
-        colors = {
-            'FACILE': 'green',
-            'MOYEN': 'orange', 
-            'DIFFICILE': 'red'
-        }
-        color = colors.get(obj.difficulte, 'gray')
-        return format_html(
-            '<span style="color: {}; font-weight: bold;">{}</span>',
-            color,
-            obj.get_difficulte_display()
-        )
-    difficulte_display.short_description = "Difficulté"
-    difficulte_display.admin_order_field = 'difficulte'
-    
     def image_preview(self, obj):
         if obj.image:
-            return format_html('<img src="{}" width="60" height="60" style="border-radius: 8px; border: 2px solid #ddd;" />', obj.image.url)
-        return format_html('<div style="width: 60px; height: 60px; background: #f0f0f0; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 10px;">Pas d\'image</div>')
-    image_preview.short_description = "Image"
+            return format_html('<img src="{}" width="50" height="50" style="border-radius: 5px;" />', obj.image.url)
+        return "Pas d'image"
+    image_preview.short_description = "Aperçu"
     
     def nombre_reservations(self, obj):
-        count = obj.reservations.count() if hasattr(obj, 'reservations') else 0
-        if count > 0:
-            return format_html(
-                '<span style="background: #4CAF50; color: white; padding: 2px 8px; border-radius: 12px; font-size: 11px;">{}</span>',
-                count
-            )
-        return format_html('<span style="color: #666;">0</span>')
+        return obj.reservations.count() if hasattr(obj, 'reservations') else 0
     nombre_reservations.short_description = "Réservations"
     
-    # Actions personnalisées
-    actions = ['dupliquer_circuit', 'activer_circuits', 'archiver_circuits']
-    
-    def dupliquer_circuit(self, request, queryset):
-        """Duplique les circuits sélectionnés"""
-        for circuit in queryset:
-            # Logique de duplication ici
-            pass
-        self.message_user(request, f"{queryset.count()} circuit(s) dupliqué(s).")
-    dupliquer_circuit.short_description = "Dupliquer les circuits sélectionnés"
-    
-    # Validation personnalisée
-    def save_model(self, request, obj, form, change):
-        """Validation avant sauvegarde"""
-        try:
-            # Validation des champs obligatoires
-            if not obj.titre:
-                messages.error(request, "Le titre est obligatoire.")
-                return
+    # CSS ET JAVASCRIPT INTÉGRÉS DIRECTEMENT DANS LA VUE
+    def change_view(self, request, object_id, form_url='', extra_context=None):
+        extra_context = extra_context or {}
+        
+        # Injecter le CSS et JS directement dans le template
+        extra_context['extra_css_js'] = mark_safe("""
+        <style>
+        /* CSS pour les itinéraires - INTÉGRÉ DIRECTEMENT */
+        .itineraires .form-row {
+            border-left: 3px solid #2196F3;
+            margin-bottom: 8px;
+            padding-left: 10px;
+            transition: all 0.3s ease;
+        }
+        
+        .itineraires .form-row:hover {
+            background-color: #f8f9fa;
+        }
+        
+        .itineraires select[name*="type_itineraire"] {
+            background-color: #e3f2fd;
+            font-weight: bold;
+            border: 2px solid #2196F3;
+            border-radius: 4px;
+        }
+        
+        .itineraires input[type="number"] {
+            width: 80px;
+        }
+        
+        .itineraires textarea {
+            height: 60px;
+            resize: vertical;
+        }
+        
+        .trajet-fields {
+            background-color: #e8f4fd;
+            border-radius: 4px;
+            padding: 5px;
+        }
+        
+        .sejour-fields {
+            background-color: #e8f5e8;
+            border-radius: 4px;
+            padding: 5px;
+        }
+        </style>
+        
+        <script>
+        (function($) {
+            'use strict';
             
-            if not obj.duree:
-                messages.error(request, "La durée est obligatoire.")
-                return
-            
-            if obj.duree <= 0:
-                messages.error(request, "La durée doit être supérieure à 0.")
-                return
+            function toggleItineraireFields(row) {
+                var typeField = row.find('select[name*="type_itineraire"]');
+                var type = typeField.val();
                 
-            if obj.prix and obj.prix < 0:
-                messages.error(request, "Le prix ne peut pas être négatif.")
-                return
-            
-            # Sauvegarde
-            super().save_model(request, obj, form, change)
-            
-            if not change:  # Nouveau circuit
-                messages.success(request, f"Circuit '{obj.titre}' créé avec succès!")
-            else:  # Modification
-                messages.info(request, f"Circuit '{obj.titre}' modifié avec succès!")
+                // Champs pour trajet
+                var trajetFields = row.find('input[name*="lieu_depart"], input[name*="lieu_arrivee"], input[name*="distance_km"], input[name*="duree_trajet"]');
+                var trajetCells = trajetFields.closest('td');
                 
-        except ValidationError as e:
-            messages.error(request, f"Erreur de validation : {e}")
-        except Exception as e:
-            messages.error(request, f"Erreur lors de la sauvegarde : {e}")
+                // Champs pour séjour  
+                var sejourFields = row.find('input[name*="lieu"], input[name*="nuitees"]');
+                var sejourCells = sejourFields.closest('td');
+                
+                // Reset styles
+                trajetCells.removeClass('trajet-fields');
+                sejourCells.removeClass('sejour-fields');
+                
+                if (type === 'trajet') {
+                    trajetCells.show().addClass('trajet-fields');
+                    sejourCells.hide();
+                    sejourFields.val('');
+                } else if (type === 'sejour') {
+                    trajetCells.hide();
+                    sejourCells.show().addClass('sejour-fields');
+                    trajetFields.val('');
+                }
+            }
+            
+            $(document).ready(function() {
+                console.log('Initialisation des itinéraires...');
+                
+                $('.dynamic-itineraires tr.form-row').each(function() {
+                    toggleItineraireFields($(this));
+                });
+                
+                $(document).on('change', 'select[name*="type_itineraire"]', function() {
+                    toggleItineraireFields($(this).closest('tr'));
+                });
+                
+                $(document).on('click', '.add-row a', function() {
+                    setTimeout(function() {
+                        $('.dynamic-itineraires tr.form-row:last').each(function() {
+                            toggleItineraireFields($(this));
+                        });
+                    }, 200);
+                });
+            });
+        })(django.jQuery);
+        </script>
+        """)
+        
+        return super().change_view(request, object_id, form_url, extra_context)
+    
+    def add_view(self, request, form_url='', extra_context=None):
+        return self.change_view(request, None, form_url, extra_context)
 
 
 @admin.register(PointInteret)

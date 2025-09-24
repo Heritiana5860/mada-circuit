@@ -72,6 +72,9 @@ const Index = () => {
     ? `${urlMedia}${utilisateur.image}`
     : null;
 
+    console.log(utilisateurImage);
+    
+
   return (
     <div className="min-h-screen flex flex-col">
       <SEO

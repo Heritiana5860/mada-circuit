@@ -8,16 +8,19 @@ import {
   CarouselPrevious,
 } from "./ui/carousel";
 import { useTranslation } from "react-i18next";
+import { urlMedia } from "@/helper/UrlImage";
 
 export const TestimoniaCarousel = ({
   datas,
-  utilisateurImage,
   setCurrentIndex,
   groupedTestimonials,
   testimonialsPerSlide,
   currentIndex,
 }) => {
   const { t } = useTranslation();
+    const utilisateurImage = datas.utilisateur.image
+    ? `${urlMedia}${datas.utilisateur.image}`
+    : null;
   return (
     <div>
       {datas?.length > 0 && (

@@ -67,7 +67,6 @@ export const TestimoniaCarousel = ({
                             >
                               <TestimonialCard
                                 allData={testimonial}
-                                image={`${urlMedia}${datas.utilisateur.image}`}
                               />
                             </div>
                           ))}

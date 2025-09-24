@@ -7,8 +7,7 @@ import PangalanesSection from "../components/PangalanesSection";
 import Vehicles4x4 from "../components/Vehicles4x4";
 import Footer from "../components/Footer";
 import SEO from "@/SEO";
-import { AllTestimoniaContext, DataContext } from "@/provider/DataContext";
-import { urlMedia } from "@/helper/UrlImage";
+import { AllTestimoniaContext } from "@/provider/DataContext";
 import { TestimoniaCarousel } from "@/components/TestimoniaCarousel";
 
 const Index = () => {
@@ -29,14 +28,16 @@ const Index = () => {
     error: testimoniaError,
   } = useContext(AllTestimoniaContext);
 
-  // Recuperer l'utilisateur afin d'afficher son image sur testimonia
-  const {
-    loading: utilisateurLoading,
-    error: utilisateurError,
-    utilisateur,
-  } = useContext(DataContext);
+  console.log("Testimonia Data:", testimoniaData);
 
-  if (utilisateurLoading || testimoniaLoading)
+  // Recuperer l'utilisateur afin d'afficher son image sur testimonia
+  // const {
+  //   loading: utilisateurLoading,
+  //   error: utilisateurError,
+  //   utilisateur,
+  // } = useContext(DataContext);
+
+  if (testimoniaLoading)
     return (
       <div className="min-h-screen flex flex-col">
         <NavBar />
@@ -47,7 +48,7 @@ const Index = () => {
       </div>
     );
 
-  if (utilisateurError || testimoniaError)
+  if (testimoniaError)
     return (
       <div className="min-h-screen flex flex-col">
         <NavBar />

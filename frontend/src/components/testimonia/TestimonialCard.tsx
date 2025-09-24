@@ -1,9 +1,12 @@
+import { urlMedia } from "@/helper/UrlImage";
 import { Star, Calendar, Eye, X } from "lucide-react";
 import { useState } from "react";
 
 interface UtilisateurType {
   nom: string;
   prenom: string;
+  email?: string;
+  image?: string;
 }
 
 interface TestimonialTypes {
@@ -15,12 +18,10 @@ interface TestimonialTypes {
 
 interface TestimonialCardProps {
   allData: TestimonialTypes;
-  image: string;
 }
 
 const TestimonialCard: React.FC<TestimonialCardProps> = ({
   allData,
-  image,
 }) => {
   const user = allData.utilisateur || { nom: "Inconnu", prenom: "" };
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -89,7 +90,7 @@ const TestimonialCard: React.FC<TestimonialCardProps> = ({
             )}`}
           >
             <img 
-            src={image} 
+            src={`${urlMedia}${user.image}` } 
             alt={initial}
             className="w-full h-full object-cover rounded-full" 
             />

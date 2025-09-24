@@ -20,10 +20,13 @@ interface TestimonialCardProps {
   allData: TestimonialTypes;
 }
 
-const TestimonialCard: React.FC<TestimonialCardProps> = ({
-  allData,
-}) => {
-  const user = allData.utilisateur || { nom: "Inconnu", prenom: "", image: "" , email: ""};
+const TestimonialCard: React.FC<TestimonialCardProps> = ({ allData }) => {
+  const user = allData.utilisateur || {
+    nom: "Inconnu",
+    prenom: "",
+    image: "",
+    email: "",
+  };
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const CHAR_LIMIT = 150;
@@ -91,17 +94,21 @@ const TestimonialCard: React.FC<TestimonialCardProps> = ({
               user.nom + user.prenom
             )}`}
           >
-            <img 
-            src={`${urlMedia}${user?.image}` } 
-            alt={initial}
-            className="w-full h-full object-cover rounded-full" 
-            />
+            {user.image ? (
+              <img
+                src={`${urlMedia}${user.image}`}
+                alt={initial}
+                className="w-full h-full object-cover rounded-full"
+              />
+            ) : (
+              <span>{initial}</span>
+            )}
             {/* {getInitials(user.nom, user.prenom)} */}
           </div>
 
           <div className="flex-1">
             <h3 className="font-semibold text-gray-900">
-              {user.nom} {user.prenom} 
+              {user.nom} {user.prenom}
             </h3>
             <div className="flex items-center gap-1 text-sm text-gray-500">
               <Calendar className="w-3 h-3" />

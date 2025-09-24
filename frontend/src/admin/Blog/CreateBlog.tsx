@@ -29,7 +29,7 @@ const CreateBlog = () => {
   const steps = [
     { id: 1, label: "Informations" },
     { id: 2, label: "Média/YouTube" },
-    { id: 3, label: "Confirmation" },
+    // { id: 3, label: "Confirmation" },
   ];
 
   // Fonction pour valider une URL YouTube
@@ -362,12 +362,12 @@ const CreateBlog = () => {
 
             {currentStep === 2 && <ContentTypeStep />}
 
-            {currentStep === 3 && (
+            {/* {currentStep === 3 && (
               <ThirdStep
                 selectedImages={selectedImages}
                 setSelectedImages={setSelectedImages}
               />
-            )}
+            )} */}
           </div>
         </CardContent>
 

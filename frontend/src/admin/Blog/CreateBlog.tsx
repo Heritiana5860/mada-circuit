@@ -168,7 +168,6 @@ const CreateBlog = () => {
       if (result.data.createBlog.success) {
         emptyFields();
         setCurrentStep(1);
-        setErrorMessage("Blog créé avec succès !");
       } else {
         setErrorMessage(result.data.createBlog.errors.join(", "));
       }

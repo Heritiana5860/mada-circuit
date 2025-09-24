@@ -18,9 +18,6 @@ export const TestimoniaCarousel = ({
   currentIndex,
 }) => {
   const { t } = useTranslation();
-    const utilisateurImage = datas.utilisateur.image
-    ? `${urlMedia}${datas.utilisateur.image}`
-    : null;
   return (
     <div>
       {datas?.length > 0 && (

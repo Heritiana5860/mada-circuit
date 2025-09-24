@@ -113,12 +113,12 @@ const Blog = () => {
                 <div className="bg-white rounded-2xl shadow-lg overflow-hidden hover:shadow-2xl transition-all duration-500 h-full">
                   {/* Contenu multimédia */}
                   <div className="relative overflow-hidden">
-                    {post.content_type === "youtube" &&
-                    post.youtube_embed_id ? (
+                    {post.contentType === "youtube" &&
+                    post.youtubeEmbedId ? (
                       // Affichage YouTube
                       <div className="relative">
                         <img
-                          src={post.youtube_thumbnail}
+                          src={post.youtubeThumbnail}
                           alt={post.titre}
                           className={`w-full object-cover transition-transform duration-700 group-hover:scale-110 ${
                             post.featured ? "h-80" : "h-64"
@@ -324,7 +324,7 @@ const Blog = () => {
                 selectedPost.youtube_embed_id ? (
                   <div className="mb-6">
                     <YouTubeEmbed
-                      embedId={selectedPost.youtube_embed_id}
+                      embedId={selectedPost.youtubeEmbedId}
                       title={selectedPost.titre}
                     />
                   </div>

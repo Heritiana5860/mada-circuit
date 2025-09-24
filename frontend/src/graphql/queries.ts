@@ -156,6 +156,8 @@ export const GET_ALL_BLOGS = gql`
       tags
       contentType
       youtubeUrl
+      youtubeEmbedId
+      youtubeThumbnail
       medias {
         id
         file

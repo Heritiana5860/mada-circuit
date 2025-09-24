@@ -283,11 +283,11 @@ const Blog = () => {
                     <div className="mt-auto">
                       <button className="flex items-center text-blue-600 font-semibold group-hover:text-blue-800 transition-colors duration-300">
                         <span className="mr-2">
-                          {post.contentType === "youtube"
+                          {post.contentType.toLowerCase() === "youtube"
                             ? "Watch Video"
                             : "Read more"}
                         </span>
-                        {post.contentType === "youtube" ? (
+                        {post.contentType.toLowerCase() === "youtube" ? (
                           <Play className="w-4 h-4 transform group-hover:translate-x-1 transition-transform duration-300" />
                         ) : (
                           <ArrowRight className="w-4 h-4 transform group-hover:translate-x-1 transition-transform duration-300" />

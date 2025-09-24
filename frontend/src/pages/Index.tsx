@@ -7,7 +7,7 @@ import PangalanesSection from "../components/PangalanesSection";
 import Vehicles4x4 from "../components/Vehicles4x4";
 import Footer from "../components/Footer";
 import SEO from "@/SEO";
-import { AllTestimoniaContext } from "@/provider/DataContext";
+import { TestimoniaContext } from "@/provider/DataContext";
 import { TestimoniaCarousel } from "@/components/TestimoniaCarousel";
 
 const Index = () => {
@@ -23,10 +23,10 @@ const Index = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
 
   const {
-    data: testimoniaData,
-    loading: testimoniaLoading,
-    error: testimoniaError,
-  } = useContext(AllTestimoniaContext);
+    testimoniaData,
+    testimoniaLoading,
+    testimoniaError,
+  } = useContext(TestimoniaContext);
 
   if (testimoniaLoading)
     return (
@@ -61,7 +61,6 @@ const Index = () => {
     }
   }
 
-  console.log("Testimonia Data:", testimoniaData);
   return (
     <div className="min-h-screen flex flex-col">
       <SEO

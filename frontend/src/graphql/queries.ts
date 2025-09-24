@@ -175,6 +175,10 @@ export const GET_BLOG_BY_ID = gql`
       datePublication
       auteur
       tags
+      contentType
+      youtubeUrl
+      youtubeEmbedId
+      youtubeThumbnail
       medias {
         id
         file

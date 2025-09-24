@@ -225,6 +225,7 @@ class BlogType(DjangoObjectType):
     medias = graphene.List(BlogImageType)
     medias_count = graphene.Int()
     file_url = graphene.String() 
+    youtube_thumbnail = graphene.String()
 
     class Meta:
         model = Blog
@@ -251,6 +252,9 @@ class BlogType(DjangoObjectType):
             request = info.context
             return request.build_absolute_uri(self.file.url)
         return None
+    
+    def resolve_youtube_thumbnail(self, info):
+        return self.youtube_thumbnail
 
 
 class BlogCommentaireType(DjangoObjectType):

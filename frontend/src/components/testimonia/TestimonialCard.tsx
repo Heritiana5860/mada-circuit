@@ -133,8 +133,17 @@ const TestimonialCard: React.FC<TestimonialCardProps> = ({ allData }) => {
           </p>
         </div>
 
-        {/* Date */}
-        <p className="text-sm text-gray-500">{formatDate(allData.postDate)}</p>
+        {/* Email et Date côte à côte */}
+        <div className="flex justify-between items-center">
+          {/* Email */}
+          <p className="text-sm text-gray-500">
+            {user.email || "Email non disponible"}
+          </p>
+          {/* Date */}
+          <p className="text-sm text-gray-500">
+            {formatDate(allData.postDate)}
+          </p>
+        </div>
       </div>
     </div>
   );

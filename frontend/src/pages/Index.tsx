@@ -28,15 +28,6 @@ const Index = () => {
     error: testimoniaError,
   } = useContext(AllTestimoniaContext);
 
-  console.log("Testimonia Data:", testimoniaData);
-
-  // Recuperer l'utilisateur afin d'afficher son image sur testimonia
-  // const {
-  //   loading: utilisateurLoading,
-  //   error: utilisateurError,
-  //   utilisateur,
-  // } = useContext(DataContext);
-
   if (testimoniaLoading)
     return (
       <div className="min-h-screen flex flex-col">
@@ -69,8 +60,8 @@ const Index = () => {
       );
     }
   }
-   
 
+  console.log("Testimonia Data:", testimoniaData);
   return (
     <div className="min-h-screen flex flex-col">
       <SEO

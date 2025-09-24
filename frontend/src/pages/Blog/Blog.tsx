@@ -71,6 +71,20 @@ const Blog = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-blue-50 p-8">
+      <Helmet>
+        <title>Blog & News</title>
+        <meta
+          name="description"
+          content="Discover our latest articles, practical guides, and news updates."
+        />
+        <link
+          rel="canonical"
+          href="https://madagascar-voyagesolidaire.com/contact"
+        />
+      </Helmet>
+
+      <NavBar />
+
       <div className="max-w-7xl mx-auto">
         <header className="text-center mb-16">
           <h1 className="text-5xl font-black text-gray-900 mb-4">
@@ -374,6 +388,8 @@ const Blog = () => {
           </div>
         )}
       </div>
+
+      <Footer />
     </div>
   );
 };

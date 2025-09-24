@@ -34,8 +34,18 @@ const Blog = () => {
       navigator.share({
         title: post.title,
         text: post.excerpt,
-        url: window.location.href,
+        url:
+          post.contentType === "youtube" && post.youtube_url
+            ? post.youtube_url
+            : window.location.href,
       });
+    } else {
+      navigator.clipboard.writeText(
+        post.contentType === "youtube" && post.youtube_url
+          ? post.youtube_url
+          : window.location.href
+      );
+      alert("Lien copié dans le presse-papier !");
     }
   };
 
@@ -64,6 +74,7 @@ const Blog = () => {
         frameBorder="0"
         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
         allowFullScreen
+        loading="lazy"
         className="absolute inset-0"
       />
     </div>
@@ -79,7 +90,7 @@ const Blog = () => {
         />
         <link
           rel="canonical"
-          href="https://madagascar-voyagesolidaire.com/contact"
+          href="https://madagascar-voyagesolidaire.com/blog"
         />
       </Helmet>
 
@@ -113,8 +124,7 @@ const Blog = () => {
                 <div className="bg-white rounded-2xl shadow-lg overflow-hidden hover:shadow-2xl transition-all duration-500 h-full">
                   {/* Contenu multimédia */}
                   <div className="relative overflow-hidden">
-                    {post.contentType === "youtube" &&
-                    post.youtubeEmbedId ? (
+                    {post.contentType === "youtube" && post.youtubeEmbedId ? (
                       // Affichage YouTube
                       <div className="relative">
                         <img
@@ -208,7 +218,7 @@ const Blog = () => {
                     <div
                       className={`absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 flex gap-3 opacity-0 transition-all duration-300 ${
                         hoveredCard === post.id &&
-                        post.content_type !== "youtube"
+                        post.contentType !== "youtube"
                           ? "opacity-100 translate-y-0"
                           : "translate-y-4"
                       }`}
@@ -271,11 +281,11 @@ const Blog = () => {
                     <div className="mt-auto">
                       <button className="flex items-center text-blue-600 font-semibold group-hover:text-blue-800 transition-colors duration-300">
                         <span className="mr-2">
-                          {post.content_type === "youtube"
+                          {post.contentType === "youtube"
                             ? "Watch Video"
                             : "Read more"}
                         </span>
-                        {post.content_type === "youtube" ? (
+                        {post.contentType === "youtube" ? (
                           <Play className="w-4 h-4 transform group-hover:translate-x-1 transition-transform duration-300" />
                         ) : (
                           <ArrowRight className="w-4 h-4 transform group-hover:translate-x-1 transition-transform duration-300" />
@@ -320,8 +330,8 @@ const Blog = () => {
                 </div>
 
                 {/* Contenu YouTube ou média */}
-                {selectedPost.content_type === "youtube" &&
-                selectedPost.youtube_embed_id ? (
+                {selectedPost.contentType === "youtube" &&
+                selectedPost.youtubeEmbedId ? (
                   <div className="mb-6">
                     <YouTubeEmbed
                       embedId={selectedPost.youtubeEmbedId}
@@ -351,7 +361,7 @@ const Blog = () => {
                     <Calendar className="w-4 h-4" />
                     <span>{formatDate(selectedPost.datePublication)}</span>
                   </div>
-                  {selectedPost.content_type === "youtube" && (
+                  {selectedPost.contentType === "youtube" && (
                     <a
                       href={selectedPost.youtube_url}
                       target="_blank"

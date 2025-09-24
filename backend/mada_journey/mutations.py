@@ -601,6 +601,8 @@ class CreateBlog(graphene.Mutation):
                     contenu=contenu,
                     auteur=auteur,
                     tags=tags,
+                    content_type=content_type,
+                    youtube_url=youtube_url,
                 )
                 
                 if files:

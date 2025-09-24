@@ -277,15 +277,25 @@ class BlogCommentaireInline(admin.TabularInline):
 
 @admin.register(Blog)
 class BlogAdmin(admin.ModelAdmin):
-    list_display = ('titre', 'auteur', 'datePublication', 'nombre_medias')
-    list_filter = ('datePublication', 'auteur')
+    list_display = ('titre', 'auteur', 'content_type', 'datePublication', 'nombre_medias', 'youtube_preview')
+    list_filter = ('datePublication', 'auteur', 'content_type')
     search_fields = ('titre', 'contenu', 'auteur')
     date_hierarchy = 'datePublication'
     inlines = [BlogImageInline]
+    readonly_fields = ('youtube_embed_id', 'youtube_preview_admin')
 
     fieldsets = (
         ('Contenu', {
             'fields': ('titre', 'contenu', 'auteur')
+        }),
+        ('Type de contenu', {
+            'fields': ('content_type',),
+            'description': 'Choisissez le type de contenu principal de votre blog'
+        }),
+        ('YouTube (optionnel)', {
+            'fields': ('youtube_url', 'youtube_embed_id', 'youtube_preview_admin'),
+            'description': 'Ajoutez une URL YouTube pour intégrer une vidéo',
+            'classes': ('collapse',)  # Section repliable
         }),
         ('Métadonnées', {
             'fields': ('tags', 'datePublication')
@@ -294,7 +304,55 @@ class BlogAdmin(admin.ModelAdmin):
 
     def nombre_medias(self, obj):
         return obj.medias.count()
-    nombre_medias.short_description = "Nombre de médias"
+    nombre_medias.short_description = "Médias"
+
+    def youtube_preview(self, obj):
+        """Aperçu YouTube dans la liste"""
+        if obj.youtube_embed_id:
+            return format_html(
+                '<a href="{}" target="_blank" title="Voir sur YouTube">📺 YouTube</a>',
+                obj.youtube_url
+            )
+        return "-"
+    youtube_preview.short_description = "YouTube"
+
+    def youtube_preview_admin(self, obj):
+        """Aperçu YouTube dans le formulaire d'édition"""
+        if obj.youtube_embed_id:
+            return format_html(
+                '''
+                <div style="margin-top: 10px;">
+                    <p><strong>Aperçu de la vidéo :</strong></p>
+                    <iframe width="300" height="169" 
+                            src="https://www.youtube.com/embed/{}" 
+                            frameborder="0" 
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                            allowfullscreen>
+                    </iframe>
+                    <br><br>
+                    <a href="{}" target="_blank">🔗 Voir sur YouTube</a>
+                </div>
+                ''',
+                obj.youtube_embed_id,
+                obj.youtube_url
+            )
+        elif obj.youtube_url:
+            return format_html(
+                '<p style="color: orange;">URL YouTube détectée mais ID non extrait. Sauvegardez pour générer l\'aperçu.</p>'
+            )
+        return format_html('<p style="color: gray;">Aucune URL YouTube</p>')
+    youtube_preview_admin.short_description = "Aperçu YouTube"
+
+    def get_readonly_fields(self, request, obj=None):
+        """Rendre youtube_embed_id readonly seulement en édition"""
+        readonly = list(self.readonly_fields)
+        if obj:  # Si on édite un objet existant
+            if 'youtube_embed_id' not in readonly:
+                readonly.append('youtube_embed_id')
+        return readonly
+
+    class Media:
+        js = ('admin/js/youtube_admin.js',)
 
 
 @admin.register(BlogCommentaire)

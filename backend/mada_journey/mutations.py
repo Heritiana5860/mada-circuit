@@ -578,14 +578,24 @@ class CreateBlog(graphene.Mutation):
         auteur = graphene.String(required=False)
         tags = graphene.String(required=False)
         files = graphene.List(Upload, required=False)
+        content_type = graphene.String(required=False)
+        youtube_url = graphene.String(required=False)
 
     blog = graphene.Field(BlogType)
     success = graphene.Boolean()
     errors = graphene.List(graphene.String)
 
-    def mutate(self, info, titre, contenu, auteur=None, files=None, tags=None):
+    def mutate(self, info, titre, contenu, auteur=None, files=None, tags=None, content_type='media', youtube_url=None):
         try:
             with transaction.atomic():
+                # Validation : si c'est un blog YouTube, l'URL est requise
+                if content_type == 'youtube' and not youtube_url:
+                    return CreateBlog(success=False, errors=["L'URL YouTube est requise pour ce type de contenu"])
+                
+                # Validation : si c'est un blog média, au moins un fichier est requis
+                if content_type == 'media' and (not files or len(files) == 0):
+                    return CreateBlog(success=False, errors=["Au moins un fichier est requis pour ce type de contenu"])
+                
                 blog = Blog.objects.create(
                     titre=titre,
                     contenu=contenu,

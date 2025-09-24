@@ -62,7 +62,7 @@ class VehiculeImageType(DjangoObjectType):
 class BlogImageType(DjangoObjectType):
     class Meta:
         model = BlogImage
-        fields = ('id', 'blog', 'file', 'titre', 'description', 'ordre')
+        fields = "__all__"
         interfaces = (relay.Node,)
 
 # Types GraphQL pour les modèles
@@ -228,10 +228,7 @@ class BlogType(DjangoObjectType):
 
     class Meta:
         model = Blog
-        fields = (
-            'id', 'titre', 'contenu', 'datePublication',
-            'auteur', 'tags'
-        )
+        fields = "__all__"
         interfaces = (relay.Node,)
 
     def resolve_commentaires(self, info):

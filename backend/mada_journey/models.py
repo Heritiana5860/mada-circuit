@@ -1,3 +1,4 @@
+import re
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 from django.utils.translation import gettext_lazy as _
@@ -317,12 +318,81 @@ class Personnel(models.Model):
 
 
 class Blog(models.Model):
+    CONTENT_TYPE_CHOICES = [
+        ('media', 'Média (Photos/Vidéos)'),
+        ('youtube', 'Vidéo YouTube'),
+        ('mixed', 'Contenu mixte'),
+    ]
+    
     id = models.CharField(primary_key=True, default=uuid.uuid4, editable=False, max_length=36)
     titre = models.CharField(max_length=200)
     contenu = models.TextField()
     datePublication = models.DateTimeField(default=timezone.now)
     auteur = models.CharField(max_length=100, blank=True, null=True)
     tags = models.CharField(max_length=255, blank=True)
+    content_type = models.CharField(
+        max_length=20, 
+        choices=CONTENT_TYPE_CHOICES, 
+        default='media',
+        help_text="Type de contenu du blog"
+    )
+    youtube_url = models.URLField(
+        blank=True, 
+        null=True,
+        help_text="URL de la vidéo YouTube (optionnel)"
+    )
+    youtube_embed_id = models.CharField(
+        max_length=20, 
+        blank=True, 
+        null=True,
+        help_text="ID d'intégration YouTube (généré automatiquement)"
+    )
+    def save(self, *args, **kwargs):
+        # Extraire l'ID YouTube depuis l'URL
+        if self.youtube_url:
+            self.youtube_embed_id = self.extract_youtube_id(self.youtube_url)
+            if not self.content_type or self.content_type == 'media':
+                self.content_type = 'youtube'
+        super().save(*args, **kwargs)
+        
+    @staticmethod
+    def extract_youtube_id(url):
+        """
+        Extrait l'ID YouTube depuis différents formats d'URL :
+        - https://www.youtube.com/watch?v=VIDEO_ID
+        - https://youtu.be/VIDEO_ID
+        - https://www.youtube.com/embed/VIDEO_ID
+        """
+        patterns = [
+            r'(?:youtube\.com\/watch\?v=|youtu\.be\/|youtube\.com\/embed\/)([^&\n?#]+)',
+            r'youtube\.com\/watch\?.*v=([^&\n?#]+)',
+        ]
+        
+        for pattern in patterns:
+            match = re.search(pattern, url)
+            if match:
+                return match.group(1)
+        return None
+    
+    @property
+    def youtube_thumbnail(self):
+        """Retourne l'URL de la miniature YouTube"""
+        if self.youtube_embed_id:
+            return f"https://img.youtube.com/vi/{self.youtube_embed_id}/maxresdefault.jpg"
+        return None
+    
+    @property
+    def youtube_embed_url(self):
+        """Retourne l'URL d'intégration YouTube"""
+        if self.youtube_embed_id:
+            return f"https://www.youtube.com/embed/{self.youtube_embed_id}"
+        return None
+
+    def __str__(self):
+        return self.titre
+
+    class Meta:
+        ordering = ['-datePublication']
 
     def __str__(self):
         return self.titre

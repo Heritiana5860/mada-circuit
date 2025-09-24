@@ -585,7 +585,7 @@ class CreateBlog(graphene.Mutation):
     success = graphene.Boolean()
     errors = graphene.List(graphene.String)
 
-    def mutate(self, info, titre, contenu, auteur=None, files=None, tags=None, content_type='media', youtube_url=None):
+    def mutate(self, info, titre, contenu, auteur=None, files=None, tags=None, content_type=None, youtube_url=None):
         try:
             with transaction.atomic():
                 # Validation : si c'est un blog YouTube, l'URL est requise

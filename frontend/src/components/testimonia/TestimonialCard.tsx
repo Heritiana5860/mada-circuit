@@ -31,8 +31,6 @@ const TestimonialCard: React.FC<TestimonialCardProps> = ({ allData }) => {
 
   const CHAR_LIMIT = 150;
 
-  console.log("User:", user);
-
   // Génération des étoiles simplifiée
   const renderStars = (score: number) => {
     return Array.from({ length: 5 }, (_, i) => (

@@ -23,10 +23,12 @@ interface TestimonialCardProps {
 const TestimonialCard: React.FC<TestimonialCardProps> = ({
   allData,
 }) => {
-  const user = allData.utilisateur || { nom: "Inconnu", prenom: "" };
+  const user = allData.utilisateur || { nom: "Inconnu", prenom: "", image: "" , email: ""};
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const CHAR_LIMIT = 150;
+
+  console.log("User:", user);
 
   // Génération des étoiles simplifiée
   const renderStars = (score: number) => {
@@ -90,7 +92,7 @@ const TestimonialCard: React.FC<TestimonialCardProps> = ({
             )}`}
           >
             <img 
-            src={`${urlMedia}${user.image}` } 
+            src={`${urlMedia}${user?.image}` } 
             alt={initial}
             className="w-full h-full object-cover rounded-full" 
             />

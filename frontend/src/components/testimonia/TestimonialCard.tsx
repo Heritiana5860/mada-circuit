@@ -1,6 +1,7 @@
 import { urlMedia } from "@/helper/UrlImage";
 import { Star, Calendar, Eye, X } from "lucide-react";
 import { useState } from "react";
+import { createPortal } from "react-dom";
 
 interface UtilisateurType {
   nom: string;
@@ -81,6 +82,63 @@ const TestimonialCard: React.FC<TestimonialCardProps> = ({ allData }) => {
 
   const initial = getInitials(user.nom, user.prenom);
 
+  // Composant Modal séparé
+  const Modal = () => (
+    <div
+      className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50"
+      onClick={() => setIsModalOpen(false)}
+    >
+      <div
+        className="bg-white rounded-xl p-6 max-w-lg w-full max-h-96 overflow-y-auto"
+        onClick={(e) => e.stopPropagation()}
+      >
+        {/* En-tête modal */}
+        <div className="flex justify-between items-start mb-4">
+          <div className="flex items-center gap-3">
+            <div
+              className={`w-10 h-10 rounded-full flex items-center justify-center text-white font-semibold ${getAvatarColor(
+                user.nom + user.prenom
+              )}`}
+            >
+              {user.image ? (
+                <img
+                  src={`${urlMedia}${user.image}`}
+                  alt={initial}
+                  className="w-full h-full object-cover rounded-full"
+                />
+              ) : (
+                <span>{initial}</span>
+              )}
+            </div>
+            <div>
+              <h3 className="font-semibold text-gray-900">
+                {user.prenom} {user.nom}
+              </h3>
+              <div className="flex gap-1">{renderStars(allData.score)}</div>
+            </div>
+          </div>
+
+          <button
+            onClick={() => setIsModalOpen(false)}
+            className="p-1 hover:bg-gray-100 rounded transition-colors"
+          >
+            <X className="w-5 h-5 text-gray-500" />
+          </button>
+        </div>
+
+        {/* Contenu complet */}
+        <div className="mb-4">
+          <p className="text-gray-700 leading-relaxed">
+            "{allData.description || "Aucun témoignage disponible."}"
+          </p>
+        </div>
+
+        {/* Date */}
+        <p className="text-sm text-gray-500">{formatDate(allData.postDate)}</p>
+      </div>
+    </div>
+  );
+
   return (
     <>
       {/* Carte principale */}
@@ -101,7 +159,6 @@ const TestimonialCard: React.FC<TestimonialCardProps> = ({ allData }) => {
             ) : (
               <span>{initial}</span>
             )}
-            {/* {getInitials(user.nom, user.prenom)} */}
           </div>
 
           <div className="flex-1">
@@ -139,56 +196,10 @@ const TestimonialCard: React.FC<TestimonialCardProps> = ({ allData }) => {
         )}
       </div>
 
-      {/* Modal simplifié */}
-      {isModalOpen && (
-        <div
-          className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50"
-          onClick={() => setIsModalOpen(false)}
-        >
-          <div
-            className="bg-white rounded-xl p-6 max-w-lg w-full max-h-96 overflow-y-auto"
-            onClick={(e) => e.stopPropagation()}
-          >
-            {/* En-tête modal */}
-            <div className="flex justify-between items-start mb-4">
-              <div className="flex items-center gap-3">
-                <div
-                  className={`w-10 h-10 rounded-full flex items-center justify-center text-white font-semibold ${getAvatarColor(
-                    user.nom + user.prenom
-                  )}`}
-                >
-                  {getInitials(user.nom, user.prenom)}
-                </div>
-                <div>
-                  <h3 className="font-semibold text-gray-900">
-                    {user.prenom} {user.nom}
-                  </h3>
-                  <div className="flex gap-1">{renderStars(allData.score)}</div>
-                </div>
-              </div>
-
-              <button
-                onClick={() => setIsModalOpen(false)}
-                className="p-1 hover:bg-gray-100 rounded"
-              >
-                <X className="w-5 h-5 text-gray-500" />
-              </button>
-            </div>
-
-            {/* Contenu complet */}
-            <div className="mb-4">
-              <p className="text-gray-700 leading-relaxed">
-                "{allData.description || "Aucun témoignage disponible."}"
-              </p>
-            </div>
-
-            {/* Date */}
-            <p className="text-sm text-gray-500">
-              {formatDate(allData.postDate)}
-            </p>
-          </div>
-        </div>
-      )}
+      {/* Modal rendu via portal au niveau racine */}
+      {isModalOpen &&
+        typeof document !== "undefined" &&
+        createPortal(<Modal />, document.body)}
     </>
   );
 };

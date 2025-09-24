@@ -534,6 +534,8 @@ export const CREATE_BLOG = gql`
     $auteur: String
     $tags: String
     $files: [Upload]
+    $contentType: String
+    $youtubeUrl: String
   ) {
     createBlog(
       contenu: $contenu
@@ -541,6 +543,8 @@ export const CREATE_BLOG = gql`
       auteur: $auteur
       tags: $tags
       files: $files
+      contentType: $contentType
+      youtubeUrl: $youtubeUrl
     ) {
       success
       errors

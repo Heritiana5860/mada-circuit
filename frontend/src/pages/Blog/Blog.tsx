@@ -85,17 +85,18 @@ const Blog = () => {
 
       <NavBar />
 
-      <div className="max-w-7xl mx-auto">
-        <header className="text-center mb-16">
-          <h1 className="text-5xl font-black text-gray-900 mb-4">
-            Blog & <span className="text-blue-600">News</span>
-          </h1>
-          <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-            Découvrez nos derniers articles, guides pratiques, et vidéos
-            inspirantes
-          </p>
-        </header>
+      {/* Header Section */}
+      <PageHeader
+        titre={t("pages.blog.blogNew", "Blog & News")}
+        description={t(
+          "pages.blog.blogDesc",
+          "Stay informed with our newest posts, expert tips, and curated stories designed to inspire."
+        )}
+        background="/piscine.webp"
+        bg_position="bg-end"
+      />
 
+      <div className="max-w-7xl mx-auto">
         {/* Articles Grid */}
         {allBlogs.length > 0 ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">

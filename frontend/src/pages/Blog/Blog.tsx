@@ -35,14 +35,14 @@ const Blog = () => {
         title: post.title,
         text: post.excerpt,
         url:
-          post.contentType === "youtube" && post.youtube_url
-            ? post.youtube_url
+          post.contentType === "YOUTUBE" && post.youtubeUrl
+            ? post.youtubeUrl
             : window.location.href,
       });
     } else {
       navigator.clipboard.writeText(
-        post.contentType === "youtube" && post.youtube_url
-          ? post.youtube_url
+        post.contentType === "YOUTUBE" && post.youtubeUrl
+          ? post.youtubeUrl
           : window.location.href
       );
       alert("Lien copié dans le presse-papier !");
@@ -126,7 +126,7 @@ const Blog = () => {
                 <div className="bg-white rounded-2xl shadow-lg overflow-hidden hover:shadow-2xl transition-all duration-500 h-full">
                   {/* Contenu multimédia */}
                   <div className="relative overflow-hidden">
-                    {post.contentType === "youtube" && post.youtubeEmbedId ? (
+                    {post.contentType === "YOUTUBE" && post.youtubeEmbedId ? (
                       // Affichage YouTube
                       <div className="relative">
                         <img
@@ -220,7 +220,7 @@ const Blog = () => {
                     <div
                       className={`absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 flex gap-3 opacity-0 transition-all duration-300 ${
                         hoveredCard === post.id &&
-                        post.contentType !== "youtube"
+                        post.contentType !== "YOUTUBE"
                           ? "opacity-100 translate-y-0"
                           : "translate-y-4"
                       }`}
@@ -332,7 +332,7 @@ const Blog = () => {
                 </div>
 
                 {/* Contenu YouTube ou média */}
-                {selectedPost.contentType === "youtube" &&
+                {selectedPost.contentType === "YOUTUBE" &&
                 selectedPost.youtubeEmbedId ? (
                   <div className="mb-6">
                     <YouTubeEmbed
@@ -363,9 +363,9 @@ const Blog = () => {
                     <Calendar className="w-4 h-4" />
                     <span>{formatDate(selectedPost.datePublication)}</span>
                   </div>
-                  {selectedPost.contentType === "youtube" && (
+                  {selectedPost.contentType === "YOUTUBE" && (
                     <a
-                      href={selectedPost.youtube_url}
+                      href={selectedPost.youtubeUrl}
                       target="_blank"
                       rel="noopener noreferrer"
                       className="flex items-center gap-1 text-red-600 hover:text-red-800 transition-colors"

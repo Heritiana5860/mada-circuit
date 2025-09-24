@@ -154,6 +154,8 @@ export const GET_ALL_BLOGS = gql`
       datePublication
       auteur
       tags
+      contentType
+      youtubeUrl
       medias {
         id
         file

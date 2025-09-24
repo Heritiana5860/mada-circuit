@@ -1,5 +1,5 @@
 import { urlMedia } from "@/helper/UrlImage";
-import { Star, Calendar, Eye, X } from "lucide-react";
+import { Star, Calendar, Eye, X, Mail } from "lucide-react";
 import { useState } from "react";
 import { createPortal } from "react-dom";
 
@@ -137,10 +137,16 @@ const TestimonialCard: React.FC<TestimonialCardProps> = ({ allData }) => {
         <div className="flex justify-between items-center">
           {/* Email */}
           <p className="text-sm text-gray-500">
+            <span>
+              <Mail className="w-5 h-5 text-gray-500" />
+            </span>{" "}
             {user.email || "Email non disponible"}
           </p>
           {/* Date */}
           <p className="text-sm text-gray-500">
+            <span>
+              <Calendar className="w-5 h-5 text-gray-500" />
+            </span>{" "}
             {formatDate(allData.postDate)}
           </p>
         </div>

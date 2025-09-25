@@ -6,6 +6,7 @@ import {
   User,
   ExternalLink,
   Play,
+  X,
 } from "lucide-react";
 import NavBar from "@/components/NavBar";
 import Footer from "@/components/Footer";
@@ -59,7 +60,6 @@ const Blog = () => {
 
   const allBlogs = data?.allBlogs;
   console.log(allBlogs);
-  
 
   // Fonction pour déterminer si c'est une image ou vidéo
   const isVideo = (url) => {
@@ -306,97 +306,153 @@ const Blog = () => {
         {/* Modal pour post sélectionné */}
         {selectedPost && (
           <div
-            className="fixed inset-0 bg-black/80 backdrop-blur-sm flex items-start justify-center z-50 p-4"
+            className="fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center z-50 p-4"
             onClick={() => setSelectedPost(null)}
           >
             <div
-              className="bg-white rounded-2xl w-full sm:max-w-4xl max-h-[90vh] overflow-y-auto"
+              className="bg-white rounded-2xl w-full max-w-5xl max-h-[95vh] flex flex-col overflow-hidden shadow-2xl"
               onClick={(e) => e.stopPropagation()}
             >
-              <div className="p-6">
-                <div className="flex justify-between items-start mb-6">
-                  <h2 className="text-3xl font-bold text-gray-900 pr-4">
-                    {selectedPost.titre}
-                  </h2>
-                  <button
-                    onClick={() => setSelectedPost(null)}
-                    className="p-2 hover:bg-gray-100 rounded-full transition-colors"
-                  >
-                    <div className="w-6 h-6 relative">
-                      <div className="absolute inset-0 w-6 h-6">
-                        <div className="absolute top-1/2 left-1/2 w-4 h-0.5 bg-gray-600 transform -translate-x-1/2 -translate-y-1/2 rotate-45"></div>
-                        <div className="absolute top-1/2 left-1/2 w-4 h-0.5 bg-gray-600 transform -translate-x-1/2 -translate-y-1/2 -rotate-45"></div>
-                      </div>
-                    </div>
-                  </button>
-                </div>
+              {/* Header fixe */}
+              <div className="flex-shrink-0 p-6 border-b border-gray-200 bg-white rounded-t-2xl">
+                <div className="flex justify-between items-start">
+                  <div className="flex-1 pr-4">
+                    <h2 className="text-2xl md:text-3xl font-bold text-gray-900 leading-tight">
+                      {selectedPost.titre}
+                    </h2>
 
-                {/* Contenu YouTube ou média */}
-                {selectedPost.contentType === "YOUTUBE" &&
-                selectedPost.youtubeEmbedId ? (
-                  <div className="mb-6">
-                    <YouTubeEmbed
-                      embedId={selectedPost.youtubeEmbedId}
-                      title={selectedPost.titre}
-                    />
+                    {/* Métadonnées */}
+                    <div className="flex flex-wrap gap-4 text-sm text-gray-600 mt-3">
+                      <div className="flex items-center gap-1">
+                        <User className="w-4 h-4" />
+                        <span>Par {selectedPost.auteur}</span>
+                      </div>
+                      <div className="flex items-center gap-1">
+                        <Calendar className="w-4 h-4" />
+                        <span>{formatDate(selectedPost.datePublication)}</span>
+                      </div>
+                      {selectedPost.contentType === "YOUTUBE" && (
+                        <a
+                          href={selectedPost.youtubeUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="flex items-center gap-1 text-red-600 hover:text-red-800 transition-colors"
+                        >
+                          <ExternalLink className="w-4 h-4" />
+                          <span>Voir sur YouTube</span>
+                        </a>
+                      )}
+                    </div>
                   </div>
-                ) : (
-                  selectedPost.medias &&
-                  selectedPost.medias.length > 0 && (
-                    <div className="mb-6">
-                      <img
-                        src={selectedPost.medias[0].file}
-                        alt={selectedPost.titre}
-                        className="w-full h-64 md:h-96 object-cover rounded-lg"
+
+                  {/* Bouton de fermeture */}
+                  <div className="flex-shrink-0 flex gap-2">
+                    {/* Bouton de partage */}
+                    <button
+                      onClick={(e) => handleShare(selectedPost, e)}
+                      className="p-2 hover:bg-gray-100 rounded-full transition-colors"
+                      title="Partager"
+                    >
+                      <Share2 className="w-5 h-5 text-gray-600" />
+                    </button>
+
+                    {/* Bouton de fermeture */}
+                    <button
+                      onClick={() => setSelectedPost(null)}
+                      className="p-2 hover:bg-gray-100 rounded-full transition-colors"
+                      title="Fermer"
+                    >
+                      <X className="w-6 h-6 text-gray-600" />
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+              {/* Contenu scrollable */}
+              <div className="flex-1 overflow-y-auto">
+                <div className="p-6 space-y-6">
+                  {/* Média */}
+                  {selectedPost.contentType === "YOUTUBE" &&
+                  selectedPost.youtubeEmbedId ? (
+                    <div className="w-full">
+                      <YouTubeEmbed
+                        embedId={selectedPost.youtubeEmbedId}
+                        title={selectedPost.titre}
                       />
                     </div>
-                  )
-                )}
+                  ) : (
+                    selectedPost.medias &&
+                    selectedPost.medias.length > 0 && (
+                      <div className="w-full">
+                        <img
+                          src={selectedPost.medias[0].file}
+                          alt={selectedPost.titre}
+                          className="w-full h-64 md:h-96 object-cover rounded-lg"
+                        />
+                      </div>
+                    )
+                  )}
 
-                {/* Métadonnées */}
-                <div className="flex flex-wrap gap-4 text-sm text-gray-600 mb-6">
-                  <div className="flex items-center gap-1">
-                    <User className="w-4 h-4" />
-                    <span>Par {selectedPost.auteur}</span>
-                  </div>
-                  <div className="flex items-center gap-1">
-                    <Calendar className="w-4 h-4" />
-                    <span>{formatDate(selectedPost.datePublication)}</span>
-                  </div>
-                  {selectedPost.contentType === "YOUTUBE" && (
-                    <a
-                      href={selectedPost.youtubeUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="flex items-center gap-1 text-red-600 hover:text-red-800 transition-colors"
+                  {/* Contenu principal */}
+                  <div className="prose prose-lg max-w-none">
+                    <div
+                      className="text-gray-700 leading-relaxed whitespace-pre-wrap"
+                      style={{
+                        lineHeight: "1.8",
+                        fontSize: "1.1rem",
+                      }}
                     >
-                      <ExternalLink className="w-4 h-4" />
-                      <span>Voir sur YouTube</span>
-                    </a>
+                      {/* Formatage du contenu avec paragraphes */}
+                      {selectedPost.contenu
+                        .split("\n")
+                        .map((paragraph, index) =>
+                          paragraph.trim() ? (
+                            <p key={index} className="mb-4">
+                              {paragraph.trim()}
+                            </p>
+                          ) : (
+                            <br key={index} />
+                          )
+                        )}
+                    </div>
+                  </div>
+
+                  {/* Galerie d'images supplémentaires si disponibles */}
+                  {selectedPost.medias && selectedPost.medias.length > 1 && (
+                    <div className="space-y-4">
+                      <h3 className="text-xl font-semibold text-gray-900">
+                        Images supplémentaires
+                      </h3>
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        {selectedPost.medias.slice(1).map((media, index) => (
+                          <img
+                            key={index}
+                            src={media.file}
+                            alt={`${selectedPost.titre} - Image ${index + 2}`}
+                            className="w-full h-48 object-cover rounded-lg hover:scale-105 transition-transform duration-300"
+                          />
+                        ))}
+                      </div>
+                    </div>
                   )}
                 </div>
+              </div>
 
-                {/* Contenu */}
-                <div className="prose max-w-none">
-                  <p className="text-gray-700 leading-relaxed text-lg">
-                    {selectedPost.contenu}
-                  </p>
-                </div>
-
-                {/* Tags */}
-                {selectedPost.tags && (
-                  <div className="flex flex-wrap gap-2 mt-6 pt-6 border-t border-gray-200">
+              {/* Footer avec tags */}
+              {selectedPost.tags && (
+                <div className="flex-shrink-0 p-6 border-t border-gray-200 bg-gray-50 rounded-b-2xl">
+                  <div className="flex flex-wrap gap-2">
                     {selectedPost.tags.split(";").map((tag, index) => (
                       <span
                         key={index}
-                        className="px-3 py-1 bg-blue-100 text-blue-800 text-sm rounded-full"
+                        className="px-3 py-1 bg-blue-100 text-blue-800 text-sm rounded-full hover:bg-blue-200 transition-colors cursor-pointer"
                       >
                         #{tag.trim()}
                       </span>
                     ))}
                   </div>
-                )}
-              </div>
+                </div>
+              )}
             </div>
           </div>
         )}

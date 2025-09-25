@@ -378,7 +378,7 @@ const Blog = () => {
 
                 {/* Contenu */}
                 <div className="prose max-w-none">
-                  <p className="text-gray-700 leading-relaxed text-lg">
+                  <p className="text-gray-700 leading-relaxed text-md">
                     {selectedPost.contenu}
                   </p>
                 </div>

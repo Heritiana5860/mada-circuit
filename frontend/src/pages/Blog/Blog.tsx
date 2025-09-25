@@ -310,7 +310,7 @@ const Blog = () => {
             onClick={() => setSelectedPost(null)}
           >
             <div
-              className="bg-white rounded-2xl w-full sm:max-w-6xl max-h-[95vh] overflow-y-auto"
+              className="bg-white rounded-2xl w-full sm:max-w-4xl max-h-[90vh] overflow-y-auto"
               onClick={(e) => e.stopPropagation()}
             >
               <div className="p-6">
@@ -378,7 +378,7 @@ const Blog = () => {
 
                 {/* Contenu */}
                 <div className="prose max-w-none">
-                  <p className="text-gray-700 leading-relaxed text-md whitespace-normal break-words">
+                  <p className="text-gray-700 leading-relaxed text-md">
                     {selectedPost.contenu}
                   </p>
                 </div>

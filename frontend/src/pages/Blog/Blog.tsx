@@ -310,7 +310,7 @@ const Blog = () => {
             onClick={() => setSelectedPost(null)}
           >
             <div
-              className="bg-white rounded-2xl w-full sm:max-w-4xl max-h-[90vh] overflow-y-auto"
+              className="bg-white rounded-2xl w-full sm:max-w-6xl max-h-[95vh] overflow-y-auto"
               onClick={(e) => e.stopPropagation()}
             >
               <div className="p-6">

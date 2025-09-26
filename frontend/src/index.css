@@ -143,14 +143,9 @@
   .hero-section {
     @apply relative min-h-screen flex items-center justify-center overflow-hidden;
     background: linear-gradient(
-        135deg,
-        rgba(52, 152, 219, 0.15) 0%,
-        rgba(155, 89, 182, 0.15) 100%
-      ),
-      linear-gradient(
-        45deg,
-        rgba(46, 204, 113, 0.1) 0%,
-        rgba(241, 196, 15, 0.1) 100%
+        to bottom,
+        rgba(0, 0, 0, 0.2),
+        rgba(0, 0, 0, 0.1)
       ),
       url("/plage.webp"), url("/baobab.webp");
     background-size: cover, cover, 60% 100%, 40% 100%;

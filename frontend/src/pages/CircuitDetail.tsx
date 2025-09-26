@@ -441,14 +441,14 @@ const CircuitDetail = () => {
                 <CardHeader>
                   <CardTitle className="flex flex-col items-center justify-between">
                     <p className="border-b pb-3">Réservation</p>
-                    {/* {circuitFromState?.prix && (
+                    {circuitFromState?.prix && (
                       <p className="text-xl font-bold font-sans pt-3">
                         {formatPrice(circuitFromState.prix)}{" "}
                         <span className="text-sm font-normal text-gray-500">
                           /personne
                         </span>
                       </p>
-                    )} */}
+                    )}
                   </CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-4">

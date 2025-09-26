@@ -138,7 +138,7 @@
     background-size: 33.33% 100%, 33.33% 100%, 33.33% 100%, cover;
     background-position: left center, center center, right center, center;
     background-repeat: no-repeat;
-    background-attachment: scroll;
+    background-attachment: fixed, fixed, fixed;
   }
 
   .section-container {

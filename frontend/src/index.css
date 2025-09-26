@@ -134,8 +134,8 @@
     @apply relative min-h-screen flex items-center justify-center overflow-hidden;
     background-image: url("/plage.webp"), url("/baobab.webp"),
       linear-gradient(to bottom, rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.1));
-    background-size: 33.33% 100%, 100%, cover;
-    background-position: left center, center center, right center, center;
+    background-size: contain, 33.33% 100%, 100%;
+    background-position: left center, center center, right center;
     background-repeat: no-repeat;
     background-attachment: fixed, fixed, fixed;
   }

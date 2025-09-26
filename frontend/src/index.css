@@ -130,14 +130,14 @@
     border: 1px solid rgba(255, 255, 255, 0.1);
   }
 
-  .hero-section {
+  Je vais créer un arrière-plan plus attrayant .hero-section {
     @apply relative min-h-screen flex items-center justify-center overflow-hidden;
     background-image: url("/plage.webp"), url("/baobab.webp"),
       linear-gradient(to bottom, rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.1));
-    background-size: contain, 33.33% 100%, 100%;
-    background-position: left center, center center, right center;
-    background-repeat: no-repeat;
-    background-attachment: fixed, fixed, fixed;
+    background-size: 33.33% 100%, 33.33% 100%, cover;
+    background-position: left center, center center, center center;
+    background-repeat: no-repeat, no-repeat, no-repeat;
+    background-attachment: fixed;
   }
 
   .section-container {

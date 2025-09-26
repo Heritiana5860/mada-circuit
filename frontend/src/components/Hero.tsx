@@ -47,6 +47,20 @@ const Hero = () => {
             <div className="absolute inset-0 bg-gradient-to-br from-white/20 via-transparent to-transparent"></div>
           </div>
 
+          <div
+            className="absolute w-72 h-48 rounded-xl overflow-hidden shadow-2xl transition-all duration-700 hover:scale-105  hover:shadow-3xl"
+            style={{
+              top: "4%",
+              left: "36%",
+              backgroundImage: "url(/vam.png)",
+              backgroundSize: "cover",
+              backgroundPosition: "center",
+              animation: "float1 6s ease-in-out infinite",
+            }}
+          >
+            <div className="absolute inset-0 bg-gradient-to-br from-white/20 via-transparent to-transparent"></div>
+          </div>
+
           {/* Particules flottantes */}
           {[...Array(12)].map((_, i) => (
             <div

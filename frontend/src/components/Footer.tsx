@@ -7,6 +7,7 @@ import {
   Facebook,
   Instagram,
   Twitter,
+  Linkedin,
 } from "lucide-react";
 
 const Footer = () => {
@@ -26,7 +27,7 @@ const Footer = () => {
             <div className="flex space-x-4">
               <a
                 href="https://web.facebook.com/profile.php?id=61580665146774"
-                target="_blank" 
+                target="_blank"
                 rel="noopener noreferrer"
                 className="text-foreground hover:text-primary transition-colors"
                 aria-label="Facebook"
@@ -41,11 +42,13 @@ const Footer = () => {
                 <Instagram size={20} />
               </a>
               <a
-                href="#"
+                href="https://www.linkedin.com/in/canal-evasion-madagascar-1a201114b/"
+                target="_blank"
+                rel="noopener noreferrer"
                 className="text-foreground hover:text-primary transition-colors"
-                aria-label="Twitter"
+                aria-label="Linkedin"
               >
-                <Twitter size={20} />
+                <Linkedin size={20} />
               </a>
             </div>
           </div>

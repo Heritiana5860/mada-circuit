@@ -236,12 +236,12 @@ class EtatVehicule(models.TextChoices):
 
 class Vehicule(models.Model):
     id = models.CharField(primary_key=True, default=uuid.uuid4, editable=False, max_length=36)
-    marque = models.CharField(max_length=100, help_text="Marque du véhicule (ex: Toyota, Ford)")
-    modele = models.CharField(max_length=100, help_text="Modèle du véhicule (ex: Corolla, Focus)")
-    annee = models.IntegerField()
-    prix = models.DecimalField(max_digits=10, decimal_places=2)
-    capacite = models.IntegerField(blank=True, help_text="Nombre de places assises")
-    type = models.CharField(max_length=100, blank=True, help_text="Type de véhicule (ex: 4x4, berline)")
+    marque = models.CharField(max_length=100, help_text="Marque du véhicule (ex: Toyota, Ford)", blank=True, null=True)
+    modele = models.CharField(max_length=100, help_text="Modèle du véhicule (ex: Corolla, Focus)", blank=True, null=True)
+    annee = models.IntegerField(blank=True, null=True)
+    prix = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)
+    capacite = models.IntegerField(blank=True, help_text="Nombre de places assises", blank=True, null=True)
+    type = models.CharField(max_length=100, blank=True, help_text="Type de véhicule (ex: 4x4, berline)", blank=True, null=True)
     langue = models.CharField(max_length=100, blank=True, null=True, help_text="Langue parlé par le chauffeur, ex: Anglais, Français, ...")
     etat = models.CharField(max_length=20, choices=EtatVehicule.choices, default=EtatVehicule.DISPONIBLE)
     

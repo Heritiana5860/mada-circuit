@@ -34,13 +34,13 @@ const CreateVehicule = () => {
   const nextStep = () => {
     if (currentStep < steps.length) {
       // Validation de base avant de passer à l'étape suivante
-      if (
-        currentStep === 1 &&
-        (!marque || !modele || !types || !annee || !capacite || !etat || !prix)
-      ) {
-        setErrorMessage("Veuillez remplir tous les champs obligatoires.");
-        return;
-      }
+      // if (
+      //   currentStep === 1 &&
+      //   (!marque || !modele || !types || !annee || !capacite || !etat || !prix)
+      // ) {
+      //   setErrorMessage("Veuillez remplir tous les champs obligatoires.");
+      //   return;
+      // }
       setErrorMessage(null);
       setCurrentStep((prev) => prev + 1);
     }
@@ -79,19 +79,19 @@ const CreateVehicule = () => {
     e.preventDefault();
 
     // Validation des données
-    if (
-      !marque ||
-      !modele ||
-      !types ||
-      !langue ||
-      !annee ||
-      !capacite ||
-      !etat ||
-      prix === 0
-    ) {
-      setErrorMessage("Veuillez remplir tous les champs obligatoires.");
-      return;
-    }
+    // if (
+    //   !marque ||
+    //   !modele ||
+    //   !types ||
+    //   !langue ||
+    //   !annee ||
+    //   !capacite ||
+    //   !etat ||
+    //   prix === 0
+    // ) {
+    //   setErrorMessage("Veuillez remplir tous les champs obligatoires.");
+    //   return;
+    // }
 
     const data = {
       marque: marque,

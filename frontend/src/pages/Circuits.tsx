@@ -510,7 +510,7 @@ const Circuits = () => {
           groupedTestimonials={groupedTestimonials}
           setCurrentIndex={setCurrentIndex}
           testimonialsPerSlide={testimonialsPerSlide}
-          utilisateurImage={utilisateurImage}
+          // utilisateurImage={utilisateurImage}
         />
 
         {/* Foire Aux Questions */}

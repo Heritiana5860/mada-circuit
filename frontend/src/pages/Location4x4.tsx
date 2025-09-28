@@ -14,7 +14,6 @@ import {
 import { FaqCard } from "@/components/FaqCard";
 import { TestimoniaCarousel } from "@/components/TestimoniaCarousel";
 import SEO from "@/SEO";
-import { urlMedia } from "@/helper/UrlImage";
 import EmptyData from "@/components/EmptyData";
 import ContentLoading from "@/components/Loading";
 
@@ -35,12 +34,7 @@ const Location4x4: React.FC = () => {
 
   // Recuperer les FAQ
   const { allDataFaq, faqLoading, faqError } = useContext(FaqContext);
-  // Recuperer l'utilisateur afin d'afficher son image sur testimonia
-  const {
-    loading: utilisateurLoading,
-    error: utilisateurError,
-    utilisateur,
-  } = useContext(DataContext);
+  
   // Recuperer les Testimonias
   const { testimoniaData, testimoniaLoading, testimoniaError } =
     useContext(TestimoniaContext);
@@ -49,10 +43,10 @@ const Location4x4: React.FC = () => {
     ? vehicles.filter((v) => v.type === filter)
     : vehicles;
 
-  if (loading || faqLoading || utilisateurLoading || testimoniaLoading)
+  if (loading || faqLoading || testimoniaLoading)
     return <ContentLoading />;
 
-  if (error || faqError || utilisateurError || testimoniaError)
+  if (error || faqError || testimoniaError)
     return (
       <div className="min-h-screen flex flex-col">
         <NavBar />
@@ -72,10 +66,6 @@ const Location4x4: React.FC = () => {
   for (let i = 0; i < allData.length; i += testimonialsPerSlide) {
     groupedTestimonials.push(allData.slice(i, i + testimonialsPerSlide));
   }
-
-  const utilisateurImage = utilisateur?.image
-    ? `${urlMedia}${utilisateur.image}`
-    : null;
 
   return (
     <div className="min-h-screen flex flex-col">
@@ -148,7 +138,6 @@ const Location4x4: React.FC = () => {
           groupedTestimonials={groupedTestimonials}
           setCurrentIndex={setCurrentIndex}
           testimonialsPerSlide={testimonialsPerSlide}
-          utilisateurImage={utilisateurImage}
         />
 
         {/* Foire Aux Questions */}

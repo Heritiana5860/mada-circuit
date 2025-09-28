@@ -368,82 +368,148 @@ const VehicleDetailSimple = () => {
             {/* Informations du véhicule */}
             <div>
               <div className="relative mb-10">
-                <div className="w-full h-96 relative overflow-hidden rounded-2xl group">
+                {/* Container principal avec aspect ratio dynamique */}
+                <div className="w-full aspect-[16/10] lg:aspect-[16/9] relative overflow-hidden rounded-2xl bg-gray-100 shadow-xl group">
                   <img
                     src={allVehiculeImages[selectedImageIndex]}
                     alt={`${vehicle.marque} ${vehicle.modele} - Image ${
                       selectedImageIndex + 1
                     }`}
-                    className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+                    className="w-full h-full object-cover transition-all duration-500 ease-out group-hover:scale-110 cursor-zoom-in"
                     onError={() => handleImageError(selectedImageIndex)}
                     loading="lazy"
+                    // onClick={() => setIsFullscreen(true)} // Pour ouvrir en plein écran
                   />
 
-                  {/* Indicateur du nombre d'images */}
+                  {/* Overlay gradient pour améliorer la lisibilité des contrôles */}
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-black/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+
+                  {/* Indicateur du nombre d'images - Design amélioré */}
                   {allVehiculeImages.length > 1 && (
-                    <div className="absolute bottom-4 right-4 bg-black/60 text-white px-2 py-1 rounded text-sm">
+                    <div className="absolute bottom-6 right-6 bg-black/70 backdrop-blur-sm text-white px-3 py-2 rounded-full text-sm font-medium shadow-lg">
                       {selectedImageIndex + 1} / {allVehiculeImages.length}
                     </div>
                   )}
+
+                  {/* Boutons de navigation améliorés */}
+                  {allVehiculeImages.length > 1 && (
+                    <>
+                      <button
+                        onClick={() =>
+                          setSelectedImageIndex((prev) =>
+                            prev === 0 ? allVehiculeImages.length - 1 : prev - 1
+                          )
+                        }
+                        className="absolute left-4 top-1/2 transform -translate-y-1/2 bg-white/90 hover:bg-white backdrop-blur-sm p-3 rounded-full shadow-xl transition-all duration-200 hover:scale-110 focus:outline-none focus:ring-2 focus:ring-blue-500 group-hover:translate-x-0 -translate-x-2 opacity-0 group-hover:opacity-100"
+                        aria-label="Image précédente"
+                      >
+                        <svg
+                          className="w-5 h-5 text-gray-700"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M15 19l-7-7 7-7"
+                          />
+                        </svg>
+                      </button>
+
+                      <button
+                        onClick={() =>
+                          setSelectedImageIndex(
+                            (prev) => (prev + 1) % allVehiculeImages.length
+                          )
+                        }
+                        className="absolute right-4 top-1/2 transform -translate-y-1/2 bg-white/90 hover:bg-white backdrop-blur-sm p-3 rounded-full shadow-xl transition-all duration-200 hover:scale-110 focus:outline-none focus:ring-2 focus:ring-blue-500 group-hover:translate-x-0 translate-x-2 opacity-0 group-hover:opacity-100"
+                        aria-label="Image suivante"
+                      >
+                        <svg
+                          className="w-5 h-5 text-gray-700"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth={2}
+                            d="M9 5l7 7-7 7"
+                          />
+                        </svg>
+                      </button>
+                    </>
+                  )}
+
+                  {/* Icône pour indiquer qu'on peut zoomer */}
+                  <div className="absolute top-4 right-4 bg-black/50 backdrop-blur-sm p-2 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                    <svg
+                      className="w-4 h-4 text-white"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v3m0 0v3m0-3h3m-3 0H7"
+                      />
+                    </svg>
+                  </div>
                 </div>
 
-                {/* Navigation par flèches (optionnel) */}
+                {/* Miniatures pour navigation rapide */}
                 {allVehiculeImages.length > 1 && (
-                  <>
-                    <button
-                      onClick={() =>
-                        setSelectedImageIndex((prev) =>
-                          prev === 0 ? allVehiculeImages.length - 1 : prev - 1
-                        )
-                      }
-                      className="absolute left-4 top-1/2 transform -translate-y-1/2 bg-white/80 hover:bg-white p-2 rounded-full shadow-lg transition-all"
-                      aria-label="Image précédente"
-                    >
-                      <svg
-                        className="w-4 h-4"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
+                  <div className="flex gap-2 mt-4 overflow-x-auto pb-2">
+                    {allVehiculeImages.map((image, index) => (
+                      <button
+                        key={index}
+                        onClick={() => setSelectedImageIndex(index)}
+                        className={`flex-shrink-0 w-20 h-16 rounded-lg overflow-hidden transition-all duration-200 ${
+                          index === selectedImageIndex
+                            ? "ring-2 ring-blue-500 ring-offset-2 scale-105"
+                            : "opacity-70 hover:opacity-100 hover:scale-105"
+                        }`}
                       >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={2}
-                          d="M15 19l-7-7 7-7"
+                        <img
+                          src={image}
+                          alt={`Miniature ${index + 1}`}
+                          className="w-full h-full object-cover"
+                          onError={() => handleImageError(index)}
                         />
-                      </svg>
-                    </button>
-                    <button
-                      onClick={() =>
-                        setSelectedImageIndex(
-                          (prev) => (prev + 1) % allVehiculeImages.length
-                        )
-                      }
-                      className="absolute right-4 top-1/2 transform -translate-y-1/2 bg-white/80 hover:bg-white p-2 rounded-full shadow-lg transition-all"
-                      aria-label="Image suivante"
-                    >
-                      <svg
-                        className="w-4 h-4"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={2}
-                          d="M9 5l7 7-7 7"
-                        />
-                      </svg>
-                    </button>
-                  </>
+                      </button>
+                    ))}
+                  </div>
                 )}
+
+                {/* Indicateurs de points (alternative aux miniatures pour économiser l'espace) */}
+                {allVehiculeImages.length > 1 &&
+                  allVehiculeImages.length <= 10 && (
+                    <div className="flex justify-center gap-2 mt-4">
+                      {allVehiculeImages.map((_, index) => (
+                        <button
+                          key={index}
+                          onClick={() => setSelectedImageIndex(index)}
+                          className={`w-2 h-2 rounded-full transition-all duration-200 ${
+                            index === selectedImageIndex
+                              ? "bg-blue-500 w-6"
+                              : "bg-gray-300 hover:bg-gray-400"
+                          }`}
+                          aria-label={`Aller à l'image ${index + 1}`}
+                        />
+                      ))}
+                    </div>
+                  )}
               </div>
             </div>
 
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
               {/* Description */}
-              <div className="bg-white rounded-lg shadow-md p-6">
+              <div className="bg-white rounded-lg shadow-md p-6 col-span-2">
                 <h1 className="text-3xl font-bold mb-4 text-gray-800">
                   {vehicle.marque} {vehicle.modele} ({vehicle.annee})
                 </h1>

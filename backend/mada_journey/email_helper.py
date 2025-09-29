@@ -158,3 +158,11 @@ def objet_confirmation_message_sur_mesure():
 
 def site_mail():
     return 'info@madagascar-voyagesolidaire.com'
+
+def message_confirmer_reservation_status():
+    return (
+        "Votre réservation a bien été confirmée. Notre responsable vous contactera prochainement, par e-mail ou par téléphone, selon votre préférence.\n\n"
+        "Nous vous remercions chaleureusement pour votre confiance.\n\n"
+        "Bien cordialement,\n"
+        "L’équipe de Madagascar Voyage Solidaire"
+    )

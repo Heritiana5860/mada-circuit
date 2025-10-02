@@ -21,7 +21,7 @@ from .email_helper import (
     confirmation_message_sur_mesure,
     objet_confirmation_message_sur_mesure,
     objet_message_temoignage,
-    message_temoignage)
+    message_temoignage, message_confirmer_reservation_status)
 
 from .models import (
     Utilisateur, Circuit, Itineraire, Vehicule, Reservation, Blog, BlogCommentaire, Faq,
@@ -545,6 +545,17 @@ class UpdateReservationStatus(graphene.Mutation):
                 reservation = Reservation.objects.get(id=real_reservation_id)
                 reservation.statut = statut
                 reservation.save()
+                
+                # Envoie de l'email
+                site_email = site_mail()
+                
+                send_mail(
+                    subject= objet_confirmation_message(),
+                    message= message_confirmer_reservation_status(),
+                    from_email=site_email,
+                    recipient_list=[reservation.utilisateur.email],
+                    fail_silently=False,
+                )
 
                 return UpdateReservationStatus(reservation=reservation, success=True)
         except Reservation.DoesNotExist:

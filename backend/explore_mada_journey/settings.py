@@ -233,8 +233,8 @@ MIDDLEWARE = [
 ]
 
 # DÉSACTIVATION COMPLÈTE DE CSRF
-CSRF_COOKIE_SECURE = False
-CSRF_USE_SESSIONS = False
+CSRF_COOKIE_SECURE = True
+CSRF_USE_SESSIONS = True
 
 # En production, définir les en-têtes de sécurité appropriés
 # Avec cette configuration, votre application redirigera toutes les requêtes HTTP vers HTTPS et activera les en-têtes HSTS pour appliquer des connexions sécurisées.
@@ -424,7 +424,7 @@ REST_FRAMEWORK = {
 # Configuration de sécurité pour la production
 if IS_PRODUCTION_HTTPS:
     # Headers de sécurité HTTPS
-    SECURE_SSL_REDIRECT = False  # Géré par le proxy
+    SECURE_SSL_REDIRECT = True  # Géré par le proxy
     SECURE_HSTS_SECONDS = 31536000
     SECURE_HSTS_INCLUDE_SUBDOMAINS = True
     SECURE_HSTS_PRELOAD = True

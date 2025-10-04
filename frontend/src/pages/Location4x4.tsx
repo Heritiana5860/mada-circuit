@@ -34,7 +34,7 @@ const Location4x4: React.FC = () => {
 
   // Recuperer les FAQ
   const { allDataFaq, faqLoading, faqError } = useContext(FaqContext);
-  
+
   // Recuperer les Testimonias
   const { testimoniaData, testimoniaLoading, testimoniaError } =
     useContext(TestimoniaContext);
@@ -43,8 +43,7 @@ const Location4x4: React.FC = () => {
     ? vehicles.filter((v) => v.type === filter)
     : vehicles;
 
-  if (loading || faqLoading || testimoniaLoading)
-    return <ContentLoading />;
+  if (loading || faqLoading || testimoniaLoading) return <ContentLoading />;
 
   if (error || faqError || testimoniaError)
     return (
@@ -83,53 +82,53 @@ const Location4x4: React.FC = () => {
             {t("pages.vehicule.rental", "Vehicle Rental")}
           </h1>
 
-          <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
-            {/* Filtres */}
-            <div className="lg:col-span-1 space-y-6">
-              <div className="bg-white p-6 rounded-lg shadow-md">
-                <h2 className="text-xl font-semibold mb-4 flex items-center">
-                  <Filter className="w-5 h-5 mr-2" />
-                  {t("pages.circuits.filters", "Filters")}
-                </h2>
+          {filteredVehicles.length === 0 ? (
+            <EmptyData titre="Upcoming Vehicles Comming Soon." />
+          ) : (
+            <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
+              {/* Filtres */}
+              <div className="lg:col-span-1 space-y-6">
+                <div className="bg-white p-6 rounded-lg shadow-md">
+                  <h2 className="text-xl font-semibold mb-4 flex items-center">
+                    <Filter className="w-5 h-5 mr-2" />
+                    {t("pages.circuits.filters", "Filters")}
+                  </h2>
 
-                <div className="space-y-4">
-                  {/* Filtrer par type */}
-                  <div>
-                    <label className="block text-sm font-medium mb-2">
-                      {t("pages.vehicule.byType", "Filter by type")}
-                    </label>
-                    <select
-                      onChange={(e) => setFilter(e.target.value)}
-                      value={filter}
-                      className="w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-primary focus:border-transparent"
-                    >
-                      <option value="">
-                        {t("pages.vehicule.allTypes", "All types")}
-                      </option>
-                      {vehicleTypes.map((type, index) => (
-                        <option key={index} value={type}>
-                          {type}
+                  <div className="space-y-4">
+                    {/* Filtrer par type */}
+                    <div>
+                      <label className="block text-sm font-medium mb-2">
+                        {t("pages.vehicule.byType", "Filter by type")}
+                      </label>
+                      <select
+                        onChange={(e) => setFilter(e.target.value)}
+                        value={filter}
+                        className="w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-primary focus:border-transparent"
+                      >
+                        <option value="">
+                          {t("pages.vehicule.allTypes", "All types")}
                         </option>
-                      ))}
-                    </select>
+                        {vehicleTypes.map((type, index) => (
+                          <option key={index} value={type}>
+                            {type}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
                   </div>
                 </div>
               </div>
-            </div>
 
-            {/* Liste des véhicules */}
-            <div className="lg:col-span-3">
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {filteredVehicles.length === 0 ? (
-                  <EmptyData titre="Upcoming Vehicles Comming Soon." />
-                ) : (
-                  filteredVehicles.map((vehicle) => (
+              {/* Liste des véhicules */}
+              <div className="lg:col-span-3">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                  {filteredVehicles.map((vehicle) => (
                     <VehicleCard key={vehicle.id} vehicle={vehicle} />
-                  ))
-                )}
+                  ))}
+                </div>
               </div>
             </div>
-          </div>
+          )}
         </div>
 
         <TestimoniaCarousel

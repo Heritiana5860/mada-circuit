@@ -17,10 +17,8 @@ from datetime import timedelta
 
 # Cette section force la désactivation de toute vérification CSRF
 import django.conf.global_settings as DEFAULT_SETTINGS
-
-CSRF_TRUSTED_ORIGINS = ["https://api.madagascar-voyagesolidaire.com"]
-
-SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
+import pymysql
+pymysql.install_as_MySQLdb()
 
 load_dotenv()
 
@@ -90,8 +88,6 @@ LOGGING = {
 # Import default_headers after defining BASE_DIR
 from corsheaders.defaults import default_headers
 
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'django-insecure-=-^c))dt)dbi(g%h2kmtgkp)o!q3cr12=m0cs2#3(j2jg(qodf'
@@ -119,50 +115,23 @@ def get_list_env(var, default=None):
             return [v.strip() for v in val.split(',') if v.strip()]
     return default or []
 
-# Configuration pour proxy reverse et HTTPS
-USE_X_FORWARDED_HOST = True
-USE_X_FORWARDED_PORT = True
-SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
-
-# Détection HTTPS dynamique
-def is_production_https():
-    """Détecte si on est en environnement HTTPS de production"""
-    return any([
-        os.environ.get('HTTPS') == 'on',
-        os.environ.get('HTTP_X_FORWARDED_PROTO') == 'https',
-        os.environ.get('DJANGO_ENV') == 'production',
-        'administration.madagascar-voyagesolidaire.com' in os.environ.get('HTTP_HOST', '')
-    ])
-
-# Configuration des cookies conditionnelle pour HTTPS/HTTP
-IS_PRODUCTION_HTTPS = is_production_https()
-
-# Configuration des cookies de session
-SESSION_COOKIE_SECURE = IS_PRODUCTION_HTTPS
-SESSION_COOKIE_HTTPONLY = True
-SESSION_COOKIE_SAMESITE = 'Lax'
-SESSION_COOKIE_DOMAIN = '.madagascar-voyagesolidaire.com'
-SESSION_COOKIE_PATH = '/'
-SESSION_COOKIE_AGE = 86400  # 24 heures
-SESSION_COOKIE_NAME = 'sessionid'
-SESSION_SAVE_EVERY_REQUEST = True
-SESSION_EXPIRE_AT_BROWSER_CLOSE = False
-
 CORS_ALLOWED_ORIGINS = [
     'https://madagascar-voyagesolidaire.com',
     'https://api.madagascar-voyagesolidaire.com',
     'https://administration.madagascar-voyagesolidaire.com',
     'http://5.101.142.84:8000',
+    'http://localhost:5173'
 ]
 
 CSRF_TRUSTED_ORIGINS = [
     'https://madagascar-voyagesolidaire.com',
     'https://api.madagascar-voyagesolidaire.com',
     'https://administration.madagascar-voyagesolidaire.com',
-    'http://5.101.142.84:8000'
+    'http://5.101.142.84:8000',
+    
 ]
 
-CORS_ALLOW_ALL_ORIGINS = False
+CORS_ALLOW_ALL_ORIGINS = True
 
 CORS_ALLOW_CREDENTIALS = True
 
@@ -218,23 +187,17 @@ GRAPHENE = {
     ],
 }
 
-# Middleware SANS CsrfViewMiddleware - TOTALEMENT RETIRÉ + Middleware custom
 MIDDLEWARE = [
     'whitenoise.middleware.WhiteNoiseMiddleware',
-    'mada_journey.middleware.DisableCSRFMiddleware',  # Middleware personnalisé pour désactiver CSRF
     'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
-    # 'django.middleware.csrf.CsrfViewMiddleware',  # RETIRÉ COMPLÈTEMENT
+    'django.middleware.csrf.CsrfViewMiddleware',  
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
-
-# DÉSACTIVATION COMPLÈTE DE CSRF
-CSRF_COOKIE_SECURE = True
-CSRF_USE_SESSIONS = True
 
 # En production, définir les en-têtes de sécurité appropriés
 # Avec cette configuration, votre application redirigera toutes les requêtes HTTP vers HTTPS et activera les en-têtes HSTS pour appliquer des connexions sécurisées.
@@ -277,7 +240,8 @@ DATABASES = {
         'NAME': 'madaga47_solidaire_db',
         'USER': 'madaga47_solidaire_db',    
         'PASSWORD': 'WJVKHdayMuhT5Vyg3Vtr',
-        'HOST': '5.101.142.84',
+        # 'HOST': '5.101.142.84',
+        'HOST': 'mysql',
         'PORT': '3306',
         'OPTIONS': {
             'charset': 'utf8mb4',
@@ -421,17 +385,6 @@ REST_FRAMEWORK = {
     'PAGE_SIZE': 10
 }
 
-# Configuration de sécurité pour la production
-if IS_PRODUCTION_HTTPS:
-    # Headers de sécurité HTTPS
-    SECURE_SSL_REDIRECT = True  # Géré par le proxy
-    SECURE_HSTS_SECONDS = 31536000
-    SECURE_HSTS_INCLUDE_SUBDOMAINS = True
-    SECURE_HSTS_PRELOAD = True
-    SECURE_CONTENT_TYPE_NOSNIFF = True
-    SECURE_BROWSER_XSS_FILTER = True
-    X_FRAME_OPTIONS = 'DENY'
-
 # Configuration pour servir les fichiers admin en développement
 if DEBUG:
     # Assurer que les fichiers statiques de l'admin sont servis
@@ -445,46 +398,3 @@ PREPEND_WWW = False
 
 # Configuration spéciale pour les requêtes via proxy
 ALLOWED_HOSTS_UNSAFE = False  # Gardez False pour la sécurité
-
-# Variables d'environnement pour debug (optionnel)
-if DEBUG:
-    print(f"IS_PRODUCTION_HTTPS: {IS_PRODUCTION_HTTPS}")
-    print(f"SESSION_COOKIE_SECURE: {SESSION_COOKIE_SECURE}")
-    print("CSRF Protection: DISABLED")
-
-# DÉSACTIVATION TOTALE ET EXPLICITE DE CSRF
-# Cette section force la désactivation de toute vérification CSRF
-USE_CSRF = False
-
-# Monkey patch pour désactiver complètement CSRF au niveau système
-try:
-    import django.middleware.csrf
-    # Remplacer le middleware CSRF par un middleware vide
-    original_csrf_middleware = django.middleware.csrf.CsrfViewMiddleware
-    
-    class DummyCSRFMiddleware:
-        def __init__(self, get_response):
-            self.get_response = get_response
-        
-        def __call__(self, request):
-            setattr(request, '_dont_enforce_csrf_checks', True)
-            return self.get_response(request)
-        
-        def process_view(self, request, view_func, view_args, view_kwargs):
-            setattr(request, '_dont_enforce_csrf_checks', True)
-            return None
-    
-    django.middleware.csrf.CsrfViewMiddleware = DummyCSRFMiddleware
-    
-    print("CSRF Middleware successfully disabled via monkey patch")
-except Exception as e:
-    print(f"Warning: Could not monkey patch CSRF middleware: {e}")
-
-# Supprimer les vérifications CSRF du système de checks
-SILENCED_SYSTEM_CHECKS = [
-    'security.W004',  # SECURE_HSTS_SECONDS warning
-    'security.W008',  # SECURE_BROWSER_XSS_FILTER warning
-    'security.W003',  # CSRF_COOKIE_SECURE warning
-    'security.W016',  # CSRF_COOKIE_HTTPONLY warning
-    'security.W017',  # CSRF_FAILURE_VIEW warning
-]

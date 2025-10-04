@@ -1,6 +1,7 @@
 import { Car, Clock, MapPin, Moon, Ship, View, Waves } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
 import { Badge } from "../ui/badge";
+import { useTranslation } from "react-i18next";
 
 interface Destination {
   nom: string;
@@ -10,6 +11,7 @@ interface Itineraire {
   lieuDepart: string;
   lieuArrivee: string;
   description: string;
+  descriptionEn?: string;
   distanceKm: string;
   dureeTrajet: string;
   lieu: string;
@@ -25,9 +27,12 @@ interface DataProps {
   difficulte?: string;
   transport?: string;
   description?: string;
+  descriptionEn?: string;
   itineraires?: Itineraire[];
   inclus?: string;
+  inclusEn?: string;
   nonInclus?: string;
+  nonInclusen?: string;
 }
 
 interface ContenuPrincipalProps {
@@ -37,6 +42,10 @@ interface ContenuPrincipalProps {
 const ContenuPrincipal: React.FC<ContenuPrincipalProps> = ({
   dataFromState,
 }) => {
+  const { t } = useTranslation();
+  const { i18n } = useTranslation();
+  const lang = i18n.language;
+
   return (
     <div className="lg:col-span-2 space-y-6">
       {/* En-tête */}
@@ -60,12 +69,13 @@ const ContenuPrincipal: React.FC<ContenuPrincipalProps> = ({
           {dataFromState?.duree && (
             <Badge variant="secondary" className="flex items-center">
               <Clock className="h-3 w-3 mr-1" />
-              {dataFromState.duree} days
+              {dataFromState.duree} {t("common.days", "Jours")}
             </Badge>
           )}
           {dataFromState?.difficulte && (
             <Badge variant="outline">
-              Difficulty : {dataFromState.difficulte}
+              {t("common.difficulty", "Difficulty")} :{" "}
+              {dataFromState.difficulte}
             </Badge>
           )}
           {dataFromState?.transport && (
@@ -89,7 +99,9 @@ const ContenuPrincipal: React.FC<ContenuPrincipalProps> = ({
           </CardHeader>
           <CardContent>
             <p className="text-gray-700 leading-relaxed">
-              {dataFromState.description}
+              {lang === "fr"
+                ? dataFromState.description
+                : dataFromState.descriptionEn}
             </p>
           </CardContent>
         </Card>
@@ -99,7 +111,7 @@ const ContenuPrincipal: React.FC<ContenuPrincipalProps> = ({
       {dataFromState?.itineraires && (
         <Card>
           <CardHeader>
-            <CardTitle>Itinerary</CardTitle>
+            <CardTitle>{t("common.itinerary", "Itinerary")}</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="space-y-4">
@@ -109,11 +121,11 @@ const ContenuPrincipal: React.FC<ContenuPrincipalProps> = ({
                   // Déterminer l’affichage des jours
                   let jourTexte = "";
                   if (item.isSejour && item.nuitees > 1) {
-                    jourTexte = `days ${currentDay}-${
+                    jourTexte = `${t("common.days", "Jours")} ${currentDay}-${
                       currentDay + item.nuitees - 1
                     }`;
                   } else {
-                    jourTexte = `day ${currentDay}`;
+                    jourTexte = `${t("common.day", "Jour")} ${currentDay}`;
                   }
 
                   // Incrémenter le compteur
@@ -163,7 +175,11 @@ const ContenuPrincipal: React.FC<ContenuPrincipalProps> = ({
                           )}
                         </div>
 
-                        <p className="text-gray-600">{item.description}</p>
+                        <p className="text-gray-600">
+                          {lang === "fr"
+                            ? item.description
+                            : item.descriptionEn}
+                        </p>
                       </div>
                     </div>
                   );
@@ -180,17 +196,30 @@ const ContenuPrincipal: React.FC<ContenuPrincipalProps> = ({
           <Card>
             <CardHeader>
               <CardTitle className="text-green-800 border-b pb-3">
-                Included
+                {t("common.include", "Included")}
               </CardTitle>
             </CardHeader>
             <CardContent>
               <ul className="space-y-2">
-                {dataFromState.inclus.split(";").map((item, index) => (
-                  <li key={index} className="flex items-center text-green-700">
-                    <span className="w-2 h-2 bg-green-600 rounded-full mr-3" />
-                    {item.trim()}
-                  </li>
-                ))}
+                {lang === "fr"
+                  ? dataFromState?.inclus?.split(";").map((item, index) => (
+                      <li
+                        key={index}
+                        className="flex items-center text-green-700"
+                      >
+                        <span className="w-2 h-2 bg-green-600 rounded-full mr-3" />
+                        {item.trim()}
+                      </li>
+                    ))
+                  : dataFromState?.inclusEn?.split(";").map((item, index) => (
+                      <li
+                        key={index}
+                        className="flex items-center text-green-700"
+                      >
+                        <span className="w-2 h-2 bg-green-600 rounded-full mr-3" />
+                        {item.trim()}
+                      </li>
+                    ))}
               </ul>
             </CardContent>
           </Card>
@@ -200,17 +229,30 @@ const ContenuPrincipal: React.FC<ContenuPrincipalProps> = ({
           <Card>
             <CardHeader>
               <CardTitle className="text-red-800 border-b pb-3">
-                Not Included
+                {t("common.notInclude", "Not Included")}
               </CardTitle>
             </CardHeader>
             <CardContent>
               <ul className="space-y-2">
-                {dataFromState.nonInclus.split(";").map((item, index) => (
-                  <li key={index} className="flex items-center text-red-700">
-                    <span className="w-2 h-2 bg-red-600 rounded-full mr-3" />
-                    {item.trim()}
-                  </li>
-                ))}
+                {lang === "fr"
+                  ? dataFromState?.nonInclus?.split(";").map((item, index) => (
+                      <li
+                        key={index}
+                        className="flex items-center text-red-700"
+                      >
+                        <span className="w-2 h-2 bg-red-600 rounded-full mr-3" />
+                        {item.trim()}
+                      </li>
+                    ))
+                  : dataFromState?.nonInclusen?.split(";").map((item, index) => (
+                      <li
+                        key={index}
+                        className="flex items-center text-red-700"
+                      >
+                        <span className="w-2 h-2 bg-red-600 rounded-full mr-3" />
+                        {item.trim()}
+                      </li>
+                    ))}
               </ul>
             </CardContent>
           </Card>

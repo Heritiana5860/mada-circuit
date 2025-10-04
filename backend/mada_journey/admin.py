@@ -7,7 +7,6 @@ from .models import (
     CircuitImage, VehiculeImage, BlogImage, Itineraire, Testimonia, ContactUsModele, SurMesure, SurMesureActivite, LieuAVisiter
 )
 
-
 # Configuration de l'admin pour l'utilisateur personnalisé
 @admin.register(Utilisateur)
 class UtilisateurAdmin(UserAdmin):
@@ -137,7 +136,7 @@ class BlogImageInline(admin.TabularInline):
 
 @admin.register(Circuit)
 class CircuitAdmin(admin.ModelAdmin):
-    list_display = ('titre', 'destination', 'duree', 'prix', 'inclus', 'non_inclus', 'type_circuit', 'transport', 'difficulte', 'saison', 'image_preview', 'nombre_reservations')
+    list_display = ('titre', 'destination', 'duree', 'prix', 'inclus', 'inclusEn', 'non_inclus', 'non_inclusEn', 'type_circuit', 'transport', 'difficulte', 'saison', 'image_preview', 'nombre_reservations')
     list_filter = ('difficulte', 'destination', 'saison')
     search_fields = ('titre', 'description')
     readonly_fields = ('image_preview',)
@@ -149,11 +148,11 @@ class CircuitAdmin(admin.ModelAdmin):
             'description': 'Ces champs sont obligatoires'
         }),
         ('Informations complémentaires', {
-            'fields': ('description', 'destination', 'region', 'saison', 'prix'),
+            'fields': ('description', 'descriptionEn', 'destination', 'region', 'saison', 'prix'),
             'classes': ('collapse',)
         }),
         ('Services', {
-            'fields': ('inclus', 'non_inclus'),
+            'fields': ('inclus', 'inclusEn', 'non_inclus', 'non_inclusEn'),
             'classes': ('collapse',)
         }),
         ('Image', {
@@ -252,7 +251,7 @@ class ReservationAdmin(admin.ModelAdmin):
 
 @admin.register(Personnel)
 class PersonnelAdmin(admin.ModelAdmin):
-    list_display = ('nom', 'prenom', 'contact', 'email', 'adresse', 'specialite', 'langues', 'biographie', 'status', 'photo')
+    list_display = ('nom', 'prenom', 'contact', 'email', 'adresse', 'specialite', 'specialiteEn', 'langues', 'biographie', 'biographieEn', 'status', 'statusEn', 'photo')
     list_filter = ('langues', 'specialite', 'status')
     search_fields = ('nom', 'prenom', 'specialite', 'biographie', 'status')
     
@@ -261,7 +260,7 @@ class PersonnelAdmin(admin.ModelAdmin):
             'fields': ('nom', 'prenom', 'contact', 'email', 'adresse')
         }),
         ('Informations professionnelles', {
-            'fields': ('specialite', 'langues', 'biographie', 'status')
+            'fields': ('specialite', 'specialiteEn', 'langues', 'biographie', 'biographieEn', 'status', 'statusEn')
         }),
         ('Photo', {
             'fields': ('photo',)
@@ -370,13 +369,13 @@ class BlogCommentaireAdmin(admin.ModelAdmin):
 
 @admin.register(Faq)
 class FaqAdmin(admin.ModelAdmin):
-    list_display = ('question', 'reponse', 'faq_type')
+    list_display = ('questionFr', 'questionEn', 'reponseFr', 'reponseEn', 'faq_type')
     list_filter = ('faq_type',)
-    search_fields = ('question', 'reponse')
+    search_fields = ('questionFr', 'questionEn', 'reponseFr', 'reponseEn')
     
     fieldsets = (
         ('Question et réponse', {
-            'fields': ('question', 'reponse')
+            'fields': ('questionFr', 'questionEn', 'reponseFr', 'reponseEn')
         }),
         ('Organisation', {
             'fields': ('faq_type',)

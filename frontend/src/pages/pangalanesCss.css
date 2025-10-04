@@ -1,6 +1,19 @@
 .custom-bg {
-  background-image: url("/pangalanes2.jpg"), url("/pangalanes1.webp"), url("/bateau.webp");
+  background-image: url("/pangalanes2.jpg"), url("/pangalanes1.webp"),
+    url("/bateau.webp");
   background-position: left center, center center, right center;
   background-repeat: no-repeat;
   background-size: 33.33% 100%, 33.33% 100%, 33.33% 100%;
+}
+
+@media (max-width: 768px) {
+  .custom-bg {
+    background-image: url("/pangalanes2.jpg"), url("/pangalanes1.webp"),
+      url("/bateau.webp");
+    /* Chaque image prend 33.33% de la hauteur */
+    background-size: 100% 33.33%, 100% 33.33%, 100% 33.33%;
+    /* Positionnement vertical : haut, centre, bas */
+    background-position: top center, center center, bottom center;
+    background-repeat: no-repeat;
+  }
 }

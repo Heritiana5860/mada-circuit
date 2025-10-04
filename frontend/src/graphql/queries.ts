@@ -7,10 +7,13 @@ export const GET_ALL_CIRCUITS = gql`
       id
       titre
       description
+      descriptionEn
       duree
       prix
       inclus
+      inclusEn
       nonInclus
+      nonInclusen
       image
       typeCircuit
       difficulte
@@ -32,6 +35,7 @@ export const GET_ALL_CIRCUITS = gql`
         lieu
         nuitees
         description
+        descriptionEn
         isTrajet
         isSejour
       }
@@ -45,10 +49,13 @@ export const ALL_CIRCUITS = gql`
       id
       titre
       description
+      descriptionEn
       duree
       prix
       inclus
+      inclusEn
       nonInclus
+      nonInclusen
       image
       typeCircuit
       difficulte
@@ -70,6 +77,7 @@ export const ALL_CIRCUITS = gql`
         lieu
         nuitees
         description
+        descriptionEn
         isTrajet
         isSejour
       }
@@ -335,9 +343,12 @@ export const GET_ALL_PERSONNELS = gql`
       email
       adresse
       specialite
+      specialiteEn
       langues
       biographie
+      biographieEn
       status
+      statusEn
       photo
     }
   }
@@ -348,9 +359,12 @@ export const GET_ALL_FAQS = gql`
   query AllFaqs {
     allFaqs {
       id
-      question
-      reponse
+      questionFr
+      reponseFr
+      questionEn
+      reponseEn
       faqType
+      createdAt
     }
   }
 `;
@@ -362,6 +376,7 @@ export const GET_TESTIMONIA_BY_STATUS = gql`
       id
       score
       description
+      descriptionEn
       type
       status
       postDate
@@ -382,6 +397,7 @@ export const ALL_TESTIMONIA = gql`
       id
       score
       description
+      descriptionEn
       type
       status
       postDate

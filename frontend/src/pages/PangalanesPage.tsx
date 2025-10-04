@@ -85,27 +85,34 @@ const PangalanesPage = () => {
                 )}
               </p>
 
-              <Button
-                onClick={() => {
-                  document.getElementById("offres")?.scrollIntoView({
-                    behavior: "smooth",
-                  });
-                }}
-                className="mr-5"
-              >
-                {t("pages.pangalanes.offers", "Discover our offers")}
-              </Button>
-              <Button
-                size="lg"
-                variant="secondary"
-                onClick={() => {
-                  document.getElementById("pangalanesVoyages")?.scrollIntoView({
-                    behavior: "smooth",
-                  });
-                }}
-              >
-                {t("pages.pangalanes.why", "Why choose Pangalanes Voyages?")}
-              </Button>
+              <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 md:gap-5 justify-center items-center px-2">
+                <Button
+                  onClick={() => {
+                    document.getElementById("offres")?.scrollIntoView({
+                      behavior: "smooth",
+                    });
+                  }}
+                  size="lg"
+                  className="w-full sm:w-auto sm:min-w-[180px] md:min-w-[220px]"
+                >
+                  {t("pages.pangalanes.offers", "Discover our offers")}
+                </Button>
+
+                <Button
+                  size="lg"
+                  variant="secondary"
+                  onClick={() => {
+                    document
+                      .getElementById("pangalanesVoyages")
+                      ?.scrollIntoView({
+                        behavior: "smooth",
+                      });
+                  }}
+                  className="w-full sm:w-auto sm:min-w-[180px] md:min-w-[220px]"
+                >
+                  {t("pages.pangalanes.why", "Why choose Pangalanes Voyages?")}
+                </Button>
+              </div>
             </div>
           </div>
         </div>

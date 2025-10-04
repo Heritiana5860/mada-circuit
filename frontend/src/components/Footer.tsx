@@ -21,12 +21,14 @@ const Footer = () => {
               Madagascar Voyage Solidaire
             </h3>
             <p className="text-muted-foreground mb-4">
-              Discover the wonders of Madagascar with our tailor-made tours and
-              4x4 vehicle rental services.
+              {t(
+                "footer.discover",
+                "Discover the wonders of Madagascar with our tailor-made tours and 4x4 vehicle rental services."
+              )}
             </p>
             <div className="flex space-x-4">
               <a
-                href="https://web.facebook.com/profile.php?id=61580665146774"
+                href="https://web.facebook.com/profile.php?id=61580882341825"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-foreground hover:text-primary transition-colors"

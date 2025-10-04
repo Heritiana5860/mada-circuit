@@ -147,7 +147,7 @@ const Register = () => {
         telephone: tel,
         email: email,
         password: mdp,
-        image: image, // Le fichier sera envoyé
+        image: image, 
       };
 
       const result = await register(userData);

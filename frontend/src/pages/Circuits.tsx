@@ -13,16 +13,14 @@ import ContentLoading from "@/components/Loading";
 import ContentError from "@/components/error";
 import CardContentDetail from "@/components/detail/CardContentDetail";
 import {
-  DataContext,
   FaqContext,
   TestimoniaContext,
 } from "@/provider/DataContext";
 import { FaqCard } from "@/components/FaqCard";
 import { TestimoniaCarousel } from "@/components/TestimoniaCarousel";
 import SEO from "@/SEO";
-import { urlMedia } from "@/helper/UrlImage";
 import EmptyData from "@/components/EmptyData";
-import { useTranslation, Trans } from "react-i18next";
+import { useTranslation } from "react-i18next";
 
 const Circuits = () => {
   const [selectedRegion, setSelectedRegion] = useState<string>("all");
@@ -66,12 +64,6 @@ const Circuits = () => {
 
   // Recuperer les FAQ
   const { allDataFaq, faqLoading, faqError } = useContext(FaqContext);
-  // Recuperer l'utilisateur afin d'afficher son image sur testimonia
-  const {
-    loading: utilisateurLoading,
-    error: utilisateurError,
-    utilisateur,
-  } = useContext(DataContext);
   // Recuperer les Testimonias
   const { testimoniaData, testimoniaLoading, testimoniaError } =
     useContext(TestimoniaContext);
@@ -189,17 +181,23 @@ const Circuits = () => {
     (searchQuery ? 1 : 0) +
     (selectedRegion !== "all" ? 1 : 0);
 
-  if (
-    circuitsLoading ||
-    faqLoading ||
-    utilisateurLoading ||
-    testimoniaLoading
-  ) {
+  if (circuitsLoading || faqLoading || testimoniaLoading) {
     return <ContentLoading />;
   }
 
-  if (circuitsError || faqError || utilisateurError || testimoniaError) {
+  if (circuitsError || faqError || testimoniaError) {
     return <ContentError />;
+  }
+
+  if (faqError) {
+    console.log("faqError:", {
+      message: faqError.message,
+      status: faqError.status,
+      statusText: faqError.statusText,
+      data: faqError.data,
+      stack: faqError.stack,
+      fullError: faqError,
+    });
   }
 
   const faqCircuit = allDataFaq.filter((faq) => faq.faqType === "CIRCUIT");
@@ -211,10 +209,6 @@ const Circuits = () => {
   for (let i = 0; i < allData.length; i += testimonialsPerSlide) {
     groupedTestimonials.push(allData.slice(i, i + testimonialsPerSlide));
   }
-
-  const utilisateurImage = utilisateur?.image
-    ? `${urlMedia}${utilisateur.image}`
-    : null;
 
   return (
     <div className="min-h-screen flex flex-col bg-gray-50">
@@ -231,7 +225,6 @@ const Circuits = () => {
         {/* Section Hero */}
         <CarouselHeader
           backgroundImages={backgroundImages}
-          // circuitsData={circuitsData}
           currentImageIndex={currentImageIndex}
           titre={t("pages.circuits.circuitsTitle")}
           description={t(
@@ -241,7 +234,6 @@ const Circuits = () => {
           goToNext={goToNext}
           goToPrevious={goToPrevious}
           goToSlide={goToSlide}
-          // showCircuitsCount={true}
         />
 
         {/* Section filtres et recherche */}

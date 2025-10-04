@@ -18,7 +18,7 @@ const Hero = () => {
         <div className="relative w-full h-full">
           {/* Photo 1 - Paysage Madagascar */}
           <div
-            className="absolute w-72 h-48 rounded-xl overflow-hidden shadow-2xl transition-all duration-700 hover:scale-105 hover:shadow-3xl"
+            className="absolute w-72 h-48 rounded-xl overflow-hidden shadow-2xl transition-all duration-700 hover:scale-105 hover:shadow-3xl hidden md:block"
             style={{
               top: "6%",
               left: "16%",
@@ -34,7 +34,7 @@ const Hero = () => {
           </div>
 
           <div
-            className="absolute w-56 h-72 rounded-xl overflow-hidden shadow-2xl transition-all duration-700 hover:scale-105  hover:shadow-3xl"
+            className="absolute w-48 h-64 rounded-xl overflow-hidden shadow-2xl transition-all duration-700 hover:scale-105 hover:shadow-3xl hidden md:block"
             style={{
               top: "10%",
               left: "4%",
@@ -48,7 +48,7 @@ const Hero = () => {
           </div>
 
           <div
-            className="absolute w-72 h-48 rounded-xl overflow-hidden shadow-2xl transition-all duration-700 hover:scale-105  hover:shadow-3xl"
+            className="absolute w-72 h-48 rounded-xl overflow-hidden shadow-2xl transition-all duration-700 hover:scale-105 hover:shadow-3xl hidden md:block"
             style={{
               top: "6%",
               left: "36%",
@@ -101,7 +101,7 @@ const Hero = () => {
             <div className="relative px-4 py-2 flex items-center gap-2 text-sm font-medium text-white">
               <Star className="w-4 h-4 text-accent fill-current drop-shadow-sm" />
               <span className="drop-shadow-sm">
-                Authentic Madagascar Experience
+                {t("pages.hero.exp", "Authentic Madagascar Experience")}
               </span>
               <div className="w-2 h-2 bg-primary rounded-full animate-pulse shadow-[0_0_10px_theme(colors.primary)]"></div>
             </div>

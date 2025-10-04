@@ -9,7 +9,6 @@ import { useQuery } from "@apollo/client";
 import { GET_ALL_CIRCUITS } from "@/graphql/queries";
 import ContentLoading from "@/components/Loading";
 import ContentError from "@/components/error";
-import { formatPrice } from "@/helper/formatage";
 import SEO from "@/SEO";
 import { urlMedia } from "@/helper/UrlImage";
 import EmptyData from "@/components/EmptyData";
@@ -76,22 +75,25 @@ const ProgrammeSolidairePage = () => {
                   Pangalanes Canal.
                 </p>
               </Trans>
-              <Button
-                onClick={() => {
-                  document.getElementById("projet")?.scrollIntoView({
-                    behavior: "smooth",
-                  });
-                }}
-                size="lg"
-                className="mr-4"
-              >
-                {t("pages.solidaire.projects", "Discover our projects")}
-              </Button>
-              <Link to="/contact">
-                <Button size="lg" variant="secondary">
-                  {t("pages.solidaire.donation", "Make a donation")}
+
+              <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 md:gap-5 justify-center items-center px-2">
+                <Button
+                  onClick={() => {
+                    document.getElementById("projet")?.scrollIntoView({
+                      behavior: "smooth",
+                    });
+                  }}
+                  size="lg"
+                  className="mr-4"
+                >
+                  {t("pages.solidaire.projects", "Discover our projects")}
                 </Button>
-              </Link>
+                <Link to="/contact">
+                  <Button size="lg" variant="secondary">
+                    {t("pages.solidaire.donation", "Make a donation")}
+                  </Button>
+                </Link>
+              </div>
             </div>
           </div>
         </div>

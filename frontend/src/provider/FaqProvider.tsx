@@ -13,7 +13,7 @@ export const FaqProvider = ({ children }) => {
   return (
     <FaqContext.Provider
       value={{
-        allDataFaq: allFaq?.allFaqs || null,
+        allDataFaq: allFaq?.allFaqs || [],
         faqLoading,
         faqError,
       }}

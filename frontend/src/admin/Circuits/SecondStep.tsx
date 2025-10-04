@@ -5,12 +5,11 @@ import {
   MapPin,
   PlaneLanding,
   PlaneTakeoff,
-  Plus,
   Route,
   Trash2,
 } from "lucide-react";
 import Field from "../composants/Field";
-import { useRef, useState } from "react";
+import { useRef } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
@@ -30,9 +29,10 @@ interface ItineraryDay {
 
   // Champs pour les séjours
   lieu?: string;
-  nuitees?: number; 
+  nuitees?: number;
 
   description: string;
+  descriptionEn?: string;
 }
 
 interface TwoType {
@@ -49,6 +49,7 @@ const SecondStep: React.FC<TwoType> = ({ days, setDays }) => {
       jour: days.length + 1,
       type,
       description: "",
+      descriptionEn: "",
       // Initialisation conditionnelle selon le type
       ...(type === "trajet"
         ? {
@@ -106,6 +107,7 @@ const SecondStep: React.FC<TwoType> = ({ days, setDays }) => {
             jour: day.jour,
             type: newType,
             description: day.description,
+            descriptionEn: day.descriptionEn,
           };
 
           if (newType === "trajet") {
@@ -342,24 +344,47 @@ const SecondStep: React.FC<TwoType> = ({ days, setDays }) => {
               )}
 
               {/* Description */}
-              <div className="space-y-2">
-                <Label className="text-sm font-medium text-gray-700">
-                  Description de l'étape
-                </Label>
-                <div className="relative">
-                  <LandPlot className="absolute top-3 left-3 h-4 w-4 text-gray-400" />
-                  <Textarea
-                    placeholder={
-                      day.type === "trajet"
-                        ? "Décrivez les points d'intérêt sur le trajet, pauses prévues..."
-                        : "Décrivez les activités prévues, points d'intérêt, hébergement..."
-                    }
-                    value={day.description}
-                    onChange={(e) =>
-                      updateDay(day.id, "description", e.target.value)
-                    }
-                    className="pl-10 min-h-[80px] resize-none"
-                  />
+              <div className="grid grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <Label className="text-sm font-medium text-gray-700">
+                    Description de l'étape
+                  </Label>
+                  <div className="relative">
+                    <LandPlot className="absolute top-3 left-3 h-4 w-4 text-gray-400" />
+                    <Textarea
+                      placeholder={
+                        day.type === "trajet"
+                          ? "Décrivez les points d'intérêt sur le trajet, pauses prévues..."
+                          : "Décrivez les activités prévues, points d'intérêt, hébergement..."
+                      }
+                      value={day.description}
+                      onChange={(e) =>
+                        updateDay(day.id, "description", e.target.value)
+                      }
+                      className="pl-10 min-h-[80px] resize-none"
+                    />
+                  </div>
+                </div>
+
+                <div className="space-y-2">
+                  <Label className="text-sm font-medium text-gray-700">
+                    Step description
+                  </Label>
+                  <div className="relative">
+                    <LandPlot className="absolute top-3 left-3 h-4 w-4 text-gray-400" />
+                    <Textarea
+                      placeholder={
+                        day.type === "trajet"
+                          ? "Describe interest path..."
+                          : "Describe activities, interest, accommondation..."
+                      }
+                      value={day.descriptionEn}
+                      onChange={(e) =>
+                        updateDay(day.id, "descriptionEn", e.target.value)
+                      }
+                      className="pl-10 min-h-[80px] resize-none"
+                    />
+                  </div>
                 </div>
               </div>
             </CardContent>

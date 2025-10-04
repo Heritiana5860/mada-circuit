@@ -9,6 +9,8 @@ import Footer from "../components/Footer";
 import SEO from "@/SEO";
 import { TestimoniaContext } from "@/provider/DataContext";
 import { TestimoniaCarousel } from "@/components/TestimoniaCarousel";
+import ContentLoading from "@/components/Loading";
+import ContentError from "@/components/error";
 
 const Index = () => {
   useEffect(() => {
@@ -22,33 +24,12 @@ const Index = () => {
 
   const [currentIndex, setCurrentIndex] = useState(0);
 
-  const {
-    testimoniaData,
-    testimoniaLoading,
-    testimoniaError,
-  } = useContext(TestimoniaContext);
+  const { testimoniaData, testimoniaLoading, testimoniaError } =
+    useContext(TestimoniaContext);
 
-  if (testimoniaLoading)
-    return (
-      <div className="min-h-screen flex flex-col">
-        <NavBar />
-        <main className="flex-grow flex items-center justify-center">
-          <p>Chargement...</p>
-        </main>
-        <Footer />
-      </div>
-    );
+  if (testimoniaLoading) return <ContentLoading />;
 
-  if (testimoniaError)
-    return (
-      <div className="min-h-screen flex flex-col">
-        <NavBar />
-        <main className="flex-grow flex items-center justify-center">
-          <p>Erreur lors du chargement.</p>
-        </main>
-        <Footer />
-      </div>
-    );
+  if (testimoniaError) return <ContentError />;
 
   // Grouper les témoignages par lots de 3 pour chaque diapositive
   const testimonialsPerSlide = 3;

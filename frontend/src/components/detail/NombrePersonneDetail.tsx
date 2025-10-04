@@ -39,7 +39,7 @@ const NombrePersonneDetail: React.FC<NombrePersonneDetailProps> = ({
           +
         </button>
       </div>
-      <p className="text-xs text-gray-500 mt-1">Maximum 120 personnes</p>
+      {/* <p className="text-xs text-gray-500 mt-1">Maximum 120 personnes</p> */}
     </div>
   );
 };

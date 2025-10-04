@@ -31,6 +31,7 @@ import {
 import { cn } from "@/lib/utils";
 import { CalendarIcon } from "lucide-react";
 import { urlMedia } from "@/helper/UrlImage";
+import ContentLoading from "@/components/Loading";
 
 const VehicleDetail = () => {
   const { id } = useParams();
@@ -87,16 +88,7 @@ const VehicleDetail = () => {
     );
   };
 
-  if (loading)
-    return (
-      <div className="min-h-screen flex flex-col">
-        <NavBar />
-        <main className="flex-grow flex items-center justify-center">
-          <p>Chargement du véhicule...</p>
-        </main>
-        <Footer />
-      </div>
-    );
+  if (loading) return <ContentLoading />;
 
   if (queryError || !data?.vehicule)
     return (

@@ -16,6 +16,9 @@ import { Circuit, User, Vehicule } from "@/types";
 import { formatDate, formatPrice } from "@/helper/formatage";
 import { useContext } from "react";
 import { StatistiqueReservationContext } from "@/provider/DataContext";
+import ContentLoading from "@/components/Loading";
+import { useTranslation } from "react-i18next";
+import ContentError from "@/components/error";
 
 interface Reservation {
   id: string;
@@ -33,6 +36,8 @@ interface Reservation {
 const Reservation = () => {
   const { loading, errorReservation, reservation, user, isAuthenticated } =
     useContext(StatistiqueReservationContext);
+
+  const { t } = useTranslation();
 
   if (!isAuthenticated) {
     return (
@@ -57,48 +62,11 @@ const Reservation = () => {
   }
 
   if (loading) {
-    return (
-      <div className="min-h-screen bg-gray-50">
-        <NavBar />
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-          <div className="text-center bg-white rounded-lg shadow-sm border p-12">
-            <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
-              <Clock className="w-8 h-8 text-blue-600 animate-spin" />
-            </div>
-            <h1 className="text-xl font-semibold text-gray-900 mb-2">
-              Chargement en cours...
-            </h1>
-            <p className="text-gray-600">Récupération de vos réservations.</p>
-          </div>
-        </div>
-        <Footer />
-      </div>
-    );
+    return <ContentLoading />;
   }
 
   if (errorReservation) {
-    return (
-      <div className="min-h-screen bg-gray-50">
-        <NavBar />
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-          <div className="text-center bg-white rounded-lg shadow-sm border p-12">
-            <div className="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
-              <XCircle className="w-8 h-8 text-red-600" />
-            </div>
-            <h1 className="text-xl font-semibold text-gray-900 mb-2">
-              Erreur de chargement
-            </h1>
-            <p className="text-gray-600 mb-4">
-              Impossible de récupérer vos réservations.
-            </p>
-            <p className="text-sm text-red-600 bg-red-50 px-3 py-2 rounded">
-              {errorReservation.message}
-            </p>
-          </div>
-        </div>
-        <Footer />
-      </div>
-    );
+    return <ContentError />;
   }
 
   const reservations = reservation || [];
@@ -113,10 +81,13 @@ const Reservation = () => {
               <Calendar className="w-8 h-8 text-gray-400" />
             </div>
             <h1 className="text-xl font-semibold text-gray-900 mb-2">
-              Aucune réservation
+              {t("reservation.aucun", "Aucune réservation")}
             </h1>
             <p className="text-gray-600">
-              Vous n'avez pas encore effectué de réservation.
+              {t(
+                "reservation.encore",
+                "Vous n'avez pas encore effectué une demande de réservation."
+              )}
             </p>
           </div>
         </div>
@@ -368,8 +339,10 @@ const Reservation = () => {
                               Participants
                             </p>
                             <p className="text-sm font-medium text-gray-900">
-                              {reservation.nombrePersonnes} {" "}
-                              {reservation.nombrePersonnes > 1 ? "people" : "person"}
+                              {reservation.nombrePersonnes}{" "}
+                              {reservation.nombrePersonnes > 1
+                                ? "people"
+                                : "person"}
                             </p>
                           </div>
                         </div>

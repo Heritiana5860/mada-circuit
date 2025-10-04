@@ -22,6 +22,7 @@ import { formatPrice } from "@/helper/formatage";
 import { StatistiqueReservationContext } from "@/provider/DataContext";
 import { urlMedia } from "@/helper/UrlImage";
 import { useTranslation } from "react-i18next";
+import ContentLoading from "@/components/Loading";
 
 // Fonction pour décoder l'ID Relay
 const decodeRelayId = (relayId: string): string => {
@@ -278,16 +279,7 @@ const VehicleDetailSimple = () => {
     }
   };
 
-  if (loading)
-    return (
-      <div className="min-h-screen flex flex-col">
-        <NavBar />
-        <main className="flex-grow flex items-center justify-center">
-          <p>Chargement du véhicule...</p>
-        </main>
-        <Footer />
-      </div>
-    );
+  if (loading) return <ContentLoading />;
 
   if (queryError || !data?.vehicule)
     return (

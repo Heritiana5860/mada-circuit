@@ -4,6 +4,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import { CREATE_TESTIMONIA } from "@/graphql/mutations";
 import { useMutation } from "@apollo/client";
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 
 const Testimonia = () => {
   const [formData, setFormData] = useState({
@@ -18,8 +19,9 @@ const Testimonia = () => {
     setTem(event.target.value);
   };
 
-  const [creationTestimonia] =
-    useMutation(CREATE_TESTIMONIA);
+  const { t } = useTranslation();
+
+  const [creationTestimonia] = useMutation(CREATE_TESTIMONIA);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -80,10 +82,13 @@ const Testimonia = () => {
               </div>
             </div>
             <h2 className="text-2xl font-semibold text-gray-900 mb-2">
-              Merci!
+              {t("pages.testimonia.merci", "Merci!")}
             </h2>
             <p className="text-gray-600">
-              Votre témoignage a été enregistré avec succès.
+              {t(
+                "pages.testimonia.succes",
+                "Votre témoignage a été enregistré avec succès."
+              )}
             </p>
           </div>
         </main>
@@ -99,11 +104,13 @@ const Testimonia = () => {
         <div className="bg-white rounded-lg shadow-sm border p-8">
           <div className="mb-8">
             <h1 className="text-3xl font-bold text-gray-900 mb-2">
-              Partagez votre expérience
+              {t("pages.testimonia.partez", "Partagez votre expérience")}
             </h1>
             <p className="text-gray-600">
-              Votre avis nous aide à améliorer nos services. Merci de prendre le
-              temps de nous faire part de votre retour.
+              {t(
+                "pages.testimonia.avis",
+                "Votre avis nous aide à améliorer nos services. Merci de prendre le temps de nous faire part de votre retour."
+              )}
             </p>
           </div>
 
@@ -113,7 +120,7 @@ const Testimonia = () => {
                 htmlFor="score"
                 className="block text-sm font-medium text-gray-700 mb-2"
               >
-                Note (sur 10)
+                {t("pages.testimonia.note", "Note (sur 10)")}
               </label>
               <div className="relative">
                 <input
@@ -126,7 +133,10 @@ const Testimonia = () => {
                   value={formData.score}
                   onChange={handleInputChange}
                   className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
-                  placeholder="Entrez une note de 0 à 5"
+                  placeholder={t(
+                    "pages.testimonia.entrez",
+                    "Entrez une note de 0 à 5"
+                  )}
                   required
                 />
                 {formData.score && (
@@ -156,7 +166,7 @@ const Testimonia = () => {
                 htmlFor="description"
                 className="block text-sm font-medium text-gray-700 mb-2"
               >
-                Description
+                {t("pages.testimonia.votre", "Votre temoignage")}
               </label>
               <div>
                 <textarea
@@ -166,11 +176,15 @@ const Testimonia = () => {
                   value={formData.description}
                   onChange={handleInputChange}
                   className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors resize-vertical"
-                  placeholder="Décrivez votre expérience..."
+                  placeholder={t(
+                    "pages.testimonia.decrivez",
+                    "Partagez votre témoignage ici..."
+                  )}
                   required
                 />
                 <div className="mt-1 text-sm text-gray-500">
-                  {formData.description.length}/500 caractères
+                  {formData.description.length}/500{" "}
+                  {t("pages.testimonia.caracter", "caractères")}
                 </div>
               </div>
             </div>
@@ -180,7 +194,7 @@ const Testimonia = () => {
                 htmlFor="myDropdown"
                 className="block text-sm font-medium text-gray-700 mb-2"
               >
-                Temoignage pour:
+                {t("pages.testimonia.pour", "Temoignage pour:")}
               </label>
               <select
                 id="tem"
@@ -210,10 +224,10 @@ const Testimonia = () => {
                 {isSubmitting ? (
                   <div className="flex items-center justify-center">
                     <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin mr-2" />
-                    Enregistrement...
+                    {t("pages.testimonia.s", "Enregistrement...")}
                   </div>
                 ) : (
-                  "Enregistrer"
+                  t("pages.testimonia.save", "Enregistrer")
                 )}
               </button>
             </div>

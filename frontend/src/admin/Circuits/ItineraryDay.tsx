@@ -14,4 +14,5 @@ export interface ItineraryDay {
   nuitees?: number;
 
   description: string;
+  descriptionEn?: string;
 }

@@ -17,11 +17,14 @@ interface FirstType {
   region: string;
   saison: string;
   inclus: string;
+  inclusEn?: string;
   non_inclus: string;
+  non_inclusEn?: string;
   transport: string;
   types: string;
   difficulte: string;
   description: string;
+  description_en?: string;
   setTitre: Dispatch<SetStateAction<string>>;
   setDuree: Dispatch<SetStateAction<number>>;
   setPrix: Dispatch<SetStateAction<number>>;
@@ -29,11 +32,14 @@ interface FirstType {
   setRegion: Dispatch<SetStateAction<string>>;
   setSaison: Dispatch<SetStateAction<string>>;
   setInclus: Dispatch<SetStateAction<string>>;
+  setInclusEn?: Dispatch<SetStateAction<string>>;
   setNonInclus: Dispatch<SetStateAction<string>>;
+  setNonInclusEn?: Dispatch<SetStateAction<string>>;
   setTransport: Dispatch<SetStateAction<string>>;
   setTypes: Dispatch<SetStateAction<string>>;
   setDifficulte: Dispatch<SetStateAction<string>>;
   setDescription: Dispatch<SetStateAction<string>>;
+  setDescription_en?: Dispatch<SetStateAction<string>>;
 }
 
 const FirstStep: React.FC<FirstType> = ({
@@ -44,11 +50,14 @@ const FirstStep: React.FC<FirstType> = ({
   region,
   saison,
   inclus,
+  inclusEn,
   non_inclus,
+  non_inclusEn,
   transport,
   types,
   difficulte,
   description,
+  description_en,
   setTitre,
   setDuree,
   setPrix,
@@ -56,11 +65,14 @@ const FirstStep: React.FC<FirstType> = ({
   setRegion,
   setSaison,
   setInclus,
+  setInclusEn,
   setNonInclus,
+  setNonInclusEn,
   setTransport,
   setTypes,
   setDifficulte,
   setDescription,
+  setDescription_en,
 }) => {
   return (
     <div>
@@ -68,7 +80,7 @@ const FirstStep: React.FC<FirstType> = ({
         {/* Titre & Durée & Prix */}
         <div className="grid grid-cols-3 gap-4 mt-4">
           <Field
-            label="Titre"
+            label="Titre *"
             id="titre"
             name="titre"
             placeholder="Aventure inoubliable..."
@@ -80,7 +92,7 @@ const FirstStep: React.FC<FirstType> = ({
 
           <div className="space-y-2">
             <label htmlFor="duree" className="text-sm font-medium">
-              Durée (par jour)
+              Durée (par jour) *
             </label>
             <input
               id="duree"
@@ -114,7 +126,7 @@ const FirstStep: React.FC<FirstType> = ({
         {/* Destination & Région & Saison */}
         <div className="grid grid-cols-3 gap-4 mt-4">
           <Field
-            label="Destination"
+            label="Destination *"
             id="destination"
             name="destination"
             placeholder="Antananarivo, Andasibe, ..."
@@ -125,7 +137,7 @@ const FirstStep: React.FC<FirstType> = ({
           />
 
           <Field
-            label="Région"
+            label="Zone *"
             id="region"
             name="region"
             placeholder="Atsinanana"
@@ -137,7 +149,7 @@ const FirstStep: React.FC<FirstType> = ({
 
           <div className="space-y-2">
             <label htmlFor="saison" className="text-sm font-medium">
-              Sélectionnez saison
+              Sélectionnez saison *
             </label>
             <select
               id="saison"
@@ -154,52 +166,11 @@ const FirstStep: React.FC<FirstType> = ({
           </div>
         </div>
 
-        {/* Inclus & Non inclus & Transport */}
+        {/* Type de circuit & Difficulté & Transport */}
         <div className="grid grid-cols-3 gap-4 mt-4">
-          <Field
-            label="Inclus"
-            id="inclus"
-            name="inclus"
-            placeholder="Petit déjeuner; déjeuner; ..."
-            type="text"
-            value={inclus}
-            setValue={setInclus}
-            icon={<ShieldCheck className="h-4 w-4" />}
-          />
-
-          <Field
-            label="Non inclus"
-            id="non-inclus"
-            name="non-inclus"
-            placeholder="Pour boire; Hébergement; ..."
-            type="text"
-            value={non_inclus}
-            setValue={setNonInclus}
-            icon={<ShieldBan className="h-4 w-4" />}
-          />
-
-          <div className="space-y-2">
-            <label htmlFor="transport" className="text-sm font-medium">
-              Sélectionnez transport
-            </label>
-            <select
-              id="transport"
-              value={transport}
-              onChange={(e) => setTransport(e.target.value)}
-              className="h-12 px-2 border rounded-md w-full"
-            >
-              <option value="">Choisissez un transport...</option>
-              <option value="VOITURE">En voiture</option>
-              <option value="BATEAU">En bateau</option>
-            </select>
-          </div>
-        </div>
-
-        {/* Type de circuit & Difficulté */}
-        <div className="grid grid-cols-2 gap-4 mt-4">
           <div className="space-y-2">
             <label htmlFor="types" className="text-sm font-medium">
-              Sélectionnez type
+              Sélectionnez type *
             </label>
             <select
               id="types"
@@ -216,7 +187,7 @@ const FirstStep: React.FC<FirstType> = ({
 
           <div className="space-y-2">
             <label htmlFor="difficulte" className="text-sm font-medium">
-              Sélectionnez difficulté
+              Sélectionnez difficulté *
             </label>
             <select
               id="difficulte"
@@ -230,19 +201,95 @@ const FirstStep: React.FC<FirstType> = ({
               <option value="DIFFICILE">Difficile</option>
             </select>
           </div>
+
+          <div className="space-y-2">
+            <label htmlFor="transport" className="text-sm font-medium">
+              Sélectionnez transport *
+            </label>
+            <select
+              id="transport"
+              value={transport}
+              onChange={(e) => setTransport(e.target.value)}
+              className="h-12 px-2 border rounded-md w-full"
+            >
+              <option value="">Choisissez un transport...</option>
+              <option value="VOITURE">En voiture</option>
+              <option value="BATEAU">En bateau</option>
+            </select>
+          </div>
         </div>
 
-        {/* Description */}
-        <Field
-          label="Description du circuit"
-          id="description"
-          name="description"
-          placeholder="Dites quelques mots sur le circuit..."
-          type="text"
-          value={description}
-          setValue={setDescription}
-          icon={<Fingerprint className="h-4 w-4" />}
-        />
+        {/* Inclus & Non inclus & (fr/enb) */}
+        <div className="grid grid-cols-3 gap-4 mt-4">
+          <Field
+            label="Inclus *"
+            id="inclus"
+            name="inclus"
+            placeholder="Petit déjeuner; déjeuner; ..."
+            type="text"
+            value={inclus}
+            setValue={setInclus}
+            icon={<ShieldCheck className="h-4 w-4" />}
+          />
+
+          <Field
+            label="Non inclus *"
+            id="non-inclus"
+            name="non-inclus"
+            placeholder="Pour boire; Hébergement; ..."
+            type="text"
+            value={non_inclus}
+            setValue={setNonInclus}
+            icon={<ShieldBan className="h-4 w-4" />}
+          />
+
+          <Field
+            label="Include"
+            id="inclusEn"
+            name="inclusEn"
+            placeholder="Breakfast; Lunch; ..."
+            type="text"
+            value={inclusEn}
+            setValue={setInclusEn}
+            icon={<ShieldCheck className="h-4 w-4" />}
+          />
+        </div>
+
+        {/* Description (fr/en) */}
+        <div className="grid grid-cols-3 gap-4 mt-4">
+          <Field
+            label="Description du circuit"
+            id="description"
+            name="description"
+            placeholder="Dites quelques mots sur le circuit..."
+            type="text"
+            value={description}
+            setValue={setDescription}
+            icon={<Fingerprint className="h-4 w-4" />}
+          />
+
+          <Field
+            label="Circuit description"
+            id="descriptions"
+            name="descriptions"
+            placeholder="Tell something about tour..."
+            type="text"
+            value={description_en}
+            setValue={setDescription_en}
+            icon={<Fingerprint className="h-4 w-4" />}
+          />
+
+          <Field
+            label="Not include"
+            id="notinclus"
+            name="notinclus"
+            placeholder="Gift; Accommondation; ..."
+            type="text"
+            value={non_inclusEn}
+            setValue={setNonInclusEn}
+            icon={<ShieldBan className="h-4 w-4" />}
+          />
+        </div>
       </div>
     </div>
   );

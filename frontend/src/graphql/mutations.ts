@@ -210,12 +210,14 @@ export const CREATE_RESERVATION = gql`
 export const CREATE_TESTIMONIA = gql`
   mutation CreateTestimonia(
     $description: String!
+    $descriptionEn: String
     $score: Int!
     $type: String!
     $utilisateurId: ID!
   ) {
     createTestimonia(
       description: $description
+      descriptionEn: $descriptionEn
       score: $score
       type: $type
       utilisateurId: $utilisateurId
@@ -365,14 +367,26 @@ export const DELETE_SUR_MESURE = gql`
 `;
 
 export const CREATE_FAQ = gql`
-  mutation CreateFaq($faqType: String!, $question: String!, $reponse: String!) {
-    createFaq(faqType: $faqType, question: $question, reponse: $reponse) {
+  mutation CreateFaq(
+    $faqType: String!
+    $questionFr: String!
+    $questionEn: String
+    $reponseFr: String!
+    $reponseEn: String
+  ) {
+    createFaq(
+      faqType: $faqType
+      questionFr: $questionFr
+      questionEn: $questionEn
+      reponseFr: $reponseFr
+      reponseEn: $reponseEn
+    ) {
       success
       errors
       faq {
         id
-        question
-        reponse
+        questionFr
+        reponseFr
         faqType
       }
     }
@@ -383,6 +397,7 @@ export const CREATE_PERSONNEL = gql`
   mutation CreatePersonnel(
     $adresse: String!
     $biographie: String!
+    $biographieEn: String
     $contact: String!
     $email: String!
     $langues: String!
@@ -390,11 +405,14 @@ export const CREATE_PERSONNEL = gql`
     $photo: Upload!
     $prenom: String!
     $specialite: String!
+    $specialiteEn: String
     $status: String!
+    $statusEn: String
   ) {
     createPersonnel(
       adresse: $adresse
       biographie: $biographie
+      biographieEn: $biographieEn
       contact: $contact
       email: $email
       langues: $langues
@@ -402,7 +420,9 @@ export const CREATE_PERSONNEL = gql`
       photo: $photo
       prenom: $prenom
       specialite: $specialite
+      specialiteEn: $specialiteEn
       status: $status
+      statusEn: $statusEn
     ) {
       success
       errors
@@ -438,13 +458,16 @@ export const CREATE_CIRCUIT = gql`
   mutation CreateCircuit(
     $titre: String!
     $description: String
+    $descriptionEn: String
     $duree: Int!
     $prix: Int
     $typeCircuit: String!
     $transport: String!
     $difficulte: String!
     $inclus: String
+    $inclusEn: String
     $nonInclus: String
+    $nonInclusen: String
     $destination: String!
     $region: String
     $saison: String!
@@ -454,13 +477,16 @@ export const CREATE_CIRCUIT = gql`
     createCircuit(
       titre: $titre
       description: $description
+      descriptionEn: $descriptionEn
       duree: $duree
       prix: $prix
       typeCircuit: $typeCircuit
       transport: $transport
       difficulte: $difficulte
       inclus: $inclus
+      inclusEn: $inclusEn
       nonInclus: $nonInclus
+      nonInclusen: $nonInclusen
       destination: $destination
       region: $region
       saison: $saison

@@ -11,6 +11,7 @@ import ThirdStep from "./ThirdStep";
 import { ItineraryDay } from "./ItineraryDay";
 import { useMutation } from "@apollo/client";
 import { CREATE_CIRCUIT } from "@/graphql/mutations";
+import { Loader2 } from "lucide-react";
 
 const CreateCircuit = () => {
   const [currentStep, setCurrentStep] = useState(1);
@@ -29,11 +30,14 @@ const CreateCircuit = () => {
   const [region, setRegion] = useState("");
   const [saison, setSaison] = useState("");
   const [inclus, setInclus] = useState("");
+  const [inclusEn, setInclusEn] = useState("");
   const [nonInclus, setNonInclus] = useState("");
+  const [nonInclusEn, setNonInclusEn] = useState("");
   const [transport, setTransport] = useState("");
   const [types, setTypes] = useState("");
   const [difficulte, setDifficulte] = useState("");
   const [description, setDescription] = useState("");
+  const [description_en, setDescription_en] = useState("");
 
   // Step 2 - État initial mis à jour avec le nouveau format
   const [days, setDays] = useState<ItineraryDay[]>([
@@ -46,6 +50,7 @@ const CreateCircuit = () => {
       distance: 0,
       duree: 0,
       description: "",
+      descriptionEn: "",
     },
   ]);
 
@@ -100,7 +105,18 @@ const CreateCircuit = () => {
   };
 
   if (loading) {
-    return <div>Loading...</div>;
+    return (
+      <div>
+        <main className="flex-grow flex items-center justify-center">
+          <div className="text-center space-y-4">
+            <Loader2 className="h-12 w-12 animate-spin mx-auto text-primary" />
+            <div>
+              <h3 className="text-lg font-semibold">Chargement en cours...</h3>
+            </div>
+          </div>
+        </main>
+      </div>
+    );
   }
 
   if (error) {
@@ -116,11 +132,14 @@ const CreateCircuit = () => {
     setRegion("");
     setSaison("");
     setInclus("");
+    setInclusEn("");
     setNonInclus("");
+    setNonInclusEn("");
     setTransport("");
     setTypes("");
     setDifficulte("");
     setDescription("");
+    setDescription_en("");
     setDays([
       {
         id: "1",
@@ -131,6 +150,7 @@ const CreateCircuit = () => {
         distance: 0,
         duree: 0,
         description: "",
+        descriptionEn: "",
       },
     ]);
     setSelectedImages([]);
@@ -160,6 +180,7 @@ const CreateCircuit = () => {
         jour: day.jour,
         typeItineraire: day.type,
         description: day.description || null,
+        descriptionEn: day.descriptionEn || null,
       };
 
       if (day.type === "trajet") {
@@ -182,6 +203,7 @@ const CreateCircuit = () => {
     const data = {
       titre: titre,
       description: description,
+      descriptionEn: description_en,
       duree: duree,
       prix: parseFloat(prix.toString()),
       typeCircuit: types,
@@ -191,7 +213,9 @@ const CreateCircuit = () => {
       region: region,
       saison: saison,
       inclus: inclus,
+      inclusEn: inclusEn,
       nonInclus: nonInclus,
+      nonInclusen: nonInclusEn,
       itineraires: itineraires,
       images: selectedImages.map((img) => img.file),
     };
@@ -252,11 +276,14 @@ const CreateCircuit = () => {
                   region={region}
                   saison={saison}
                   inclus={inclus}
+                  inclusEn={inclusEn}
                   non_inclus={nonInclus}
+                  non_inclusEn={nonInclusEn}
                   transport={transport}
                   types={types}
                   difficulte={difficulte}
                   description={description}
+                  description_en={description_en}
                   setTitre={setTitre}
                   setDuree={setDuree}
                   setPrix={setPrix}
@@ -264,11 +291,14 @@ const CreateCircuit = () => {
                   setRegion={setRegion}
                   setSaison={setSaison}
                   setInclus={setInclus}
+                  setInclusEn={setInclusEn}
                   setNonInclus={setNonInclus}
+                  setNonInclusEn={setNonInclusEn}
                   setTransport={setTransport}
                   setTypes={setTypes}
                   setDifficulte={setDifficulte}
                   setDescription={setDescription}
+                  setDescription_en={setDescription_en}
                 />
               )}
               {currentStep === 2 && (

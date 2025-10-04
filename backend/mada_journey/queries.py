@@ -5,6 +5,7 @@ from graphql_relay import from_global_id
 import logging
 import base64
 from django.core.exceptions import ValidationError
+from django.utils.translation import activate
 
 from graphql_jwt.decorators import login_required
 
@@ -86,6 +87,7 @@ class Query(graphene.ObjectType):
     commentaires_by_user = graphene.List(BlogCommentaireType, user_id=graphene.ID())
     
     # Queries pour les FAQs
+    # all_faqs = graphene.List(FaqType)
     all_faqs = graphene.List(FaqType)
     
     # Queries pour les galeries d'images
@@ -180,24 +182,6 @@ class Query(graphene.ObjectType):
     
     def resolve_points_interet_by_circuit(self, info, circuit_id):
         return PointInteret.objects.filter(circuit_id=circuit_id).select_related('circuit')
-
-    # Resolvers pour les capacités
-    def resolve_all_capacites(self, info):
-        return Capacite.objects.all()
-
-    def resolve_capacite(self, info, id):
-        try:
-            return Capacite.objects.get(pk=id)
-        except Capacite.DoesNotExist:
-            return None
-
-    def resolve_capacites_by_places(self, info, min_places=None, max_places=None):
-        queryset = Capacite.objects.all()
-        if min_places is not None:
-            queryset = queryset.filter(nombre_places__gte=min_places)
-        if max_places is not None:
-            queryset = queryset.filter(nombre_places__lte=max_places)
-        return queryset
 
     # Resolvers pour les véhicules
     def resolve_all_vehicules(self, info):
@@ -296,6 +280,9 @@ class Query(graphene.ObjectType):
         return BlogCommentaire.objects.filter(utilisateur_id=user_id).select_related('blog', 'utilisateur').order_by('-date_commentaire')
 
     # Resolvers pour les FAQs
+    # def resolve_all_faqs(self, info):
+    #     return Faq.objects.all()
+    
     def resolve_all_faqs(self, info):
         return Faq.objects.all()
 

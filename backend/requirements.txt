@@ -5,6 +5,7 @@ Django==5.2
 django-cors-headers==4.7.0
 django-filter==25.1
 django-graphql-jwt==0.4.0
+django-modeltranslation==0.19.17
 djangorestframework==3.16.0
 graphene==3.4.3
 graphene-django==3.2.3

@@ -1,4 +1,9 @@
-export const FaqCard = ({faq}) => {
+import { useTranslation } from 'react-i18next';
+
+export const FaqCard = ({ faq }) => {
+  const { i18n } = useTranslation();
+  const lang = i18n.language;
+
   return (
     <>
       <section className="py-16 bg-gray-200">
@@ -12,8 +17,8 @@ export const FaqCard = ({faq}) => {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 text-left">
             {faq.map((faq, index) => (
               <div key={index} className="bg-card p-6 rounded-lg shadow-sm">
-                <h3 className="font-bold text-lg mb-2">{faq.question}</h3>
-                <p className="text-muted-foreground">{faq.reponse}</p>
+                <h3 className="font-bold text-lg mb-2">{lang === 'fr' ? faq.questionFr : faq.questionEn}</h3>
+                <p className="text-muted-foreground">{lang === 'fr' ? faq.reponseFr : faq.reponseEn}</p>
               </div>
             ))}
           </div>

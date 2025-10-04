@@ -139,13 +139,16 @@ const VoyagesSurMesure = () => {
     },
   ];
 
-  if (testimoniaLoading || utilisateurLoading || faqLoading) {
-    return (
-      <ContentLoading />
-    );
+  if (
+    testimoniaLoading ||
+    utilisateurLoading ||
+    faqLoading ||
+    surmesureLoading
+  ) {
+    return <ContentLoading />;
   }
 
-  if (testimoniaError || utilisateurError || faqError) {
+  if (testimoniaError || utilisateurError || faqError || surmesureError) {
     return (
       <section className="bg-gradient-to-br from-primary/5 via-accent/5 to-secondary/5 py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -304,8 +307,6 @@ const VoyagesSurMesure = () => {
     } catch (err) {
       console.error("Erreur lors de la réservation:", err);
     }
-    if (surmesureLoading) return <p>Loading...</p>;
-    if (surmesureError) return <p>Error: {surmesureError.message}</p>;
   };
 
   const faqSurMesure = allDataFaq.filter((faq) => faq.faqType === "SURMESURE");
@@ -1234,7 +1235,6 @@ const VoyagesSurMesure = () => {
           groupedTestimonials={groupedTestimonials}
           setCurrentIndex={setCurrentIndex}
           testimonialsPerSlide={testimonialsPerSlide}
-          utilisateurImage={utilisateurImage}
         />
 
         {/* Foire Aux Questions */}

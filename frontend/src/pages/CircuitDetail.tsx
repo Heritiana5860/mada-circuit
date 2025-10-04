@@ -5,7 +5,6 @@ import Footer from "../components/Footer";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { useContext, useEffect, useState } from "react";
-import { formatPrice } from "@/helper/formatage";
 import { useAuth } from "@/contexts/AuthContext";
 import { useMutation } from "@apollo/client";
 import { CREATE_RESERVATION } from "@/graphql/mutations";
@@ -34,6 +33,8 @@ import {
   geocodeAllRegions,
   getConnectionCoordinates,
 } from "@/helper/FonctionMap";
+import ContentLoading from "@/components/Loading";
+import ContentError from "@/components/error";
 
 const defaultIcon = L.icon({
   iconUrl,
@@ -224,8 +225,8 @@ const CircuitDetail = () => {
       setIsSubmitting(false);
     }
 
-    if (mutationLoading) return <p>Loading...</p>;
-    if (mutationError) return <p>Error: {mutationError.message}</p>;
+    if (mutationLoading) return <ContentLoading />;
+    if (mutationError) return <ContentError />;
   };
 
   // Gestion des changements dans le formulaire
@@ -294,7 +295,7 @@ const CircuitDetail = () => {
   };
 
   return (
-    <div className="min-h-screen flex flex-col bg-gray-50">
+    <div className="min-h-screen flex flex-col bg-gray-50 z-4">
       <NavBar />
 
       {/* Bouton retour */}
@@ -327,10 +328,13 @@ const CircuitDetail = () => {
                     {/* Texte de progression */}
                     <div className="flex flex-col">
                       <span className="text-sm font-medium text-gray-800">
-                        Affichage de destination en cours...
+                        {t("common.loading", "Chargement...")}
                       </span>
                       <span className="text-xs text-gray-500">
-                        Veuillez patienter, traitement des données en cours.
+                        {t(
+                          "common.please",
+                          "Veuillez patienter, traitement des données en cours."
+                        )}
                       </span>
                     </div>
 
@@ -357,7 +361,6 @@ const CircuitDetail = () => {
                   }
                   zoom={locations.length > 0 ? 6 : 6}
                   scrollWheelZoom={true}
-                  // style={{ height: "400px", width: "100%" }}
                   className="rounded-lg h-64 md:h-96 lg:h-[500px]"
                 >
                   <TileLayer
@@ -436,25 +439,27 @@ const CircuitDetail = () => {
             <ContenuPrincipal dataFromState={circuitFromState} />
 
             {/* Sidebar de réservation */}
-            <form className="lg:col-span-1">
+            <form className="lg:col-span-1 z-2">
               <Card className="sticky top-6">
                 <CardHeader>
                   <CardTitle className="flex flex-col items-center justify-between">
-                    <p className="border-b pb-3">Réservation</p>
-                    {circuitFromState?.prix && (
+                    <p className="border-b pb-3">
+                      {t("pages.circuits.reservation", "Réservation")}
+                    </p>
+                    {/* {circuitFromState?.prix && (
                       <p className="text-xl font-bold font-sans pt-3">
                         {formatPrice(circuitFromState.prix)}{" "}
                         <span className="text-sm font-normal text-gray-500">
                           /personne
                         </span>
                       </p>
-                    )}
+                    )} */}
                   </CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-4">
                   {/* Date de depart */}
                   <DateDetail
-                    label="Date de depart"
+                    label={t("common.StartedDate", "Date de début")}
                     name="dateDepart"
                     value={formData.dateDepart}
                     handleInputChange={handleInputChange}
@@ -463,7 +468,7 @@ const CircuitDetail = () => {
 
                   {/* Date de fin */}
                   <DateDetail
-                    label="Date de fin"
+                    label={t("common.EndDate", "Date de fin")}
                     name="dateArrive"
                     value={formData.dateArrive}
                     handleInputChange={handleInputChange}
@@ -473,7 +478,7 @@ const CircuitDetail = () => {
 
                   {/* Nombre de participants */}
                   <NombrePersonneDetail
-                    label="Nombre de personne"
+                    label={t("common.nbrPerson", "Nombre de personne")}
                     name="voyageur"
                     guestCount={guestCount}
                     handleGuestCountChange={handleGuestCountChange}
@@ -482,13 +487,16 @@ const CircuitDetail = () => {
                   {/* Message */}
                   <div>
                     <label className="block text-sm font-medium mb-1">
-                      Message (optionnel)
+                      Message ({t("common.optionnel", "optionnel")})
                     </label>
                     <textarea
                       name="commentaire"
                       value={formData.commentaire}
                       onChange={handleInputChange}
-                      placeholder="Demandes spéciales, régimes alimentaires, etc..."
+                      placeholder={t(
+                        "pages.circuits.special",
+                        "Demandes spéciales, etc..."
+                      )}
                       rows={3}
                       className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-primary/20 focus:border-primary resize-none"
                     />
@@ -498,9 +506,14 @@ const CircuitDetail = () => {
                   {days > 0 && (
                     <div className="bg-gray-50 p-4 rounded-lg space-y-2">
                       <div className="flex justify-between items-center text-sm">
-                        <span className="text-gray-600">Durée</span>
+                        <span className="text-gray-600">
+                          {t("pages.circuits.duration", "Durée")}
+                        </span>
                         <span className="font-medium">
-                          {days} {days > 1 ? "jours" : "jour"}
+                          {days}{" "}
+                          {days > 1
+                            ? `${t("common.days", "Jours")}`
+                            : `${t("common.day", "Jour")}`}
                         </span>
                       </div>
                       {/* <div className="flex justify-between items-center text-sm">
@@ -511,7 +524,7 @@ const CircuitDetail = () => {
                       </div> */}
                       <div className="flex justify-between items-center text-sm">
                         <span className="text-gray-600">
-                          Nombre de personnes
+                          {t("common.nbrPerson", "Nombre de personnes")}
                         </span>
                         <span className="font-medium">{guestCount}</span>
                       </div>
@@ -536,12 +549,12 @@ const CircuitDetail = () => {
                       isSubmitting || mutationLoading ? (
                         <>
                           <Loader2 className="h-5 w-5 mr-2 animate-spin" />
-                          Réservation en cours...
+                          {t("common.loading", "Chargement...")}
                         </>
                       ) : (
                         <>
                           <Calendar className="h-5 w-5 mr-2" />
-                          Réserver maintenant
+                          {t("pages.circuits.book", "Réserver maintenant")}
                         </>
                       )
                     ) : (

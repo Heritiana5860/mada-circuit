@@ -2,8 +2,8 @@ import { ArrowRight, MapPin } from "lucide-react";
 import { Card, CardContent } from "../ui/card";
 import { Link } from "react-router-dom";
 import { Button } from "../ui/button";
-import { formatPrice } from "@/helper/formatage";
 import { urlMedia } from "@/helper/UrlImage";
+import { useTranslation } from "react-i18next";
 
 interface ImageType {
   image: string;
@@ -17,6 +17,7 @@ interface PackType {
   images: ImageType[];
   destination: string;
   description: string;
+  descriptionEn?: string;
 }
 
 interface CardContentDetailProps {
@@ -28,6 +29,9 @@ const CardContentDetail: React.FC<CardContentDetailProps> = ({
   pack,
   lien,
 }) => {
+  const { t } = useTranslation();
+  const { i18n } = useTranslation();
+  const lang = i18n.language;
   return (
     <>
       <Card className="overflow-hidden">
@@ -41,7 +45,7 @@ const CardContentDetail: React.FC<CardContentDetailProps> = ({
           )}
           <div className="absolute top-3 left-3">
             <span className="bg-primary text-primary-foreground text-xs font-medium px-2 py-1 rounded-full">
-              {pack.duree} jours
+              {pack.duree} {t("common.days", "Jours")}
             </span>
           </div>
         </div>
@@ -51,14 +55,16 @@ const CardContentDetail: React.FC<CardContentDetailProps> = ({
             <span>{pack?.destination ?? "Destination inconnue"}</span>
           </div>
           <h3 className="text-xl font-bold mb-2">{pack.titre}</h3>
-          <p className="text-muted-foreground mb-4 line-clamp-2">{pack.description}</p>
+          <p className="text-muted-foreground mb-4 line-clamp-2">
+            {lang === "fr" ? pack.description : pack?.descriptionEn}
+          </p>
           <div className="flex justify-between items-center">
             <span className="text-xl font-bold text-primary">
               {/* {formatPrice(pack.prix)} */}
             </span>
             <Link to={`/${lien}/${pack.id}`} state={{ dataState: pack }}>
               <Button variant="outline" size="sm" className="flex items-center">
-                <span>Détails</span>
+                <span>{t("common.detail", "Details")}</span>
                 <ArrowRight className="ml-2 h-4 w-4" />
               </Button>
             </Link>

@@ -13,6 +13,21 @@ services:
       - mysql_data:/var/lib/mysql
     networks:
       - app-network
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    restart: always
+    ports:
+      - "8080:80"
+    environment:
+      PMA_HOST: mysql
+      PMA_PORT: 3306
+      MYSQL_ROOT_PASSWORD: rootpassword123
+    depends_on:
+      - mysql
+    networks:
+      - app-network
+
   frontend:
     build:
       context: ./frontend
@@ -51,7 +66,7 @@ services:
     networks:
       - app-network
     depends_on:
-    - mysql
+      - mysql
 
 volumes:
   backend:

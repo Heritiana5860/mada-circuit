@@ -104,10 +104,13 @@ class Circuit(models.Model):
     id = models.CharField(primary_key=True, default=uuid.uuid4, editable=False, max_length=36)
     titre = models.CharField(max_length=200)
     description = models.TextField(blank=True, null=True)
+    descriptionEn = models.TextField(blank=True, null=True)
     duree = models.IntegerField(help_text="Durée en jours")
     prix = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)
     inclus = models.TextField(blank=True, help_text="Services inclus (ex: hébergement, guide, petit-déjeuner), lister en separant par ';'")
+    inclusEn = models.TextField(blank=True, help_text="Services inclus (ex: hébergement, guide, petit-déjeuner), lister en separant par ';'")
     non_inclus = models.TextField(blank=True, help_text="Services non inclus (ex: essence, péages), lister en separant par ';'")
+    non_inclusEn = models.TextField(blank=True, help_text="Services non inclus (ex: essence, péages), lister en separant par ';'")
     destination = models.TextField(blank=True, help_text="Destination principale du circuit")
     region = models.CharField(max_length=100, blank=True, help_text="Région principale du circuit")
     saison = models.CharField(max_length=100, blank=True, help_text="Saison recommandée pour ce circuit")
@@ -154,6 +157,7 @@ class Itineraire(models.Model):
     
     # Champs communs
     description = models.TextField(verbose_name="Description détaillée", null=True, blank=True)
+    descriptionEn = models.TextField(verbose_name="Description détaillée", null=True, blank=True)
     carte_gps = models.URLField(null=True, blank=True, help_text="Lien vers l'itinéraire GPS")
     
     circuit = models.ForeignKey('Circuit', on_delete=models.CASCADE, related_name='itineraires')
@@ -302,15 +306,18 @@ class Reservation(models.Model):
 
 class Personnel(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    nom = models.CharField(max_length=100)
-    prenom = models.CharField(max_length=100)
-    contact = models.CharField(max_length=20)
-    email = models.CharField(max_length=200)
-    adresse = models.CharField(max_length=200)
-    specialite = models.CharField(max_length=100, help_text="Lister les specialitées en separant par ';'")
-    langues = models.CharField(max_length=200, help_text="Lister les langues en separant par ';'")
+    nom = models.CharField(max_length=100, blank=True, null=True)
+    prenom = models.CharField(max_length=100, blank=True, null=True)
+    contact = models.CharField(max_length=20, blank=True, null=True)
+    email = models.CharField(max_length=200, blank=True, null=True)
+    adresse = models.CharField(max_length=200, blank=True, null=True)
+    specialite = models.CharField(max_length=100, help_text="Lister les specialitées en separant par ';'", blank=True, null=True)
+    specialiteEn = models.CharField(max_length=100, help_text="Lister les specialitées en separant par ';'", blank=True, null=True)
+    langues = models.CharField(max_length=200, help_text="Lister les langues en separant par ';'", blank=True, null=True)
     biographie = models.TextField(blank=True, null=True)
-    status = models.CharField(max_length=200)
+    biographieEn = models.TextField(blank=True, null=True)
+    status = models.CharField(max_length=200, blank=True, null=True)
+    statusEn = models.CharField(max_length=200, blank=True, null=True)
     photo = models.ImageField(upload_to='personnel_image')
 
     def __str__(self):
@@ -420,8 +427,10 @@ class Faq(models.Model):
         VEHICULE = 'VEHICULE', 'vehicule'
         
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    question = models.CharField(max_length=255, verbose_name="Question")
-    reponse = models.TextField(verbose_name="Reponse")
+    questionFr = models.CharField(max_length=255, verbose_name="Question", null=True, blank=True)
+    reponseFr = models.TextField(verbose_name="Reponse", null=True, blank=True)
+    questionEn = models.CharField(max_length=255, verbose_name="Question", null=True, blank=True)
+    reponseEn = models.TextField(verbose_name="Response", null=True, blank=True)
     faq_type = models.CharField(max_length=20, choices=TypeFaq.choices, default=TypeFaq.CIRCUIT, verbose_name="Type")
     created_at = models.DateTimeField(auto_now_add=True)
     
@@ -508,6 +517,12 @@ class Testimonia(models.Model):
     description = models.TextField(
         verbose_name="Description",
         help_text="Un petit témoignage"
+    )
+    descriptionEn = models.TextField(
+        verbose_name="Description",
+        help_text="Un petit témoignage",
+        blank=True,
+        null=True
     )
     type = models.CharField(
         max_length=30, 

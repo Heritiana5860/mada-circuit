@@ -101,6 +101,7 @@ class ItineraireType(graphene.ObjectType):
     
     # Champs communs
     description = graphene.String()
+    descriptionEn = graphene.String()
     carte_gps = graphene.String()
     
     # Propriétés calculées
@@ -129,7 +130,7 @@ class CircuitType(DjangoObjectType):
     class Meta:
         model = Circuit
         fields = (
-            'id', 'titre', 'description', 'duree', 'transport', 'prix', 'inclus', 'non_inclus', 'type_circuit', 'image',
+            'id', 'titre', 'description', 'descriptionEn', 'duree', 'transport', 'prix', 'inclus', 'inclusEn', 'non_inclus', 'non_inclusEn', 'type_circuit', 'image',
             'difficulte', 'destination', 'saison', 'region'  
         )
         interfaces = (relay.Node,)
@@ -213,10 +214,7 @@ class PersonnelType(DjangoObjectType):
     
     class Meta:
         model = Personnel
-        fields = (
-            'id', 'nom', 'prenom', 'contact', 'email', 'adresse', 'specialite',
-            'langues', 'biographie', 'status', 'photo'
-        )
+        fields = '__all__'
 
 class BlogType(DjangoObjectType):
     commentaires = graphene.List(lambda: BlogCommentaireType)
@@ -266,9 +264,7 @@ class BlogCommentaireType(DjangoObjectType):
 class FaqType(DjangoObjectType):
     class Meta:
         model = Faq
-        fields = (
-            'id', 'question', 'reponse', 'faq_type'
-        )
+        fields = '__all__'
         interfaces = (relay.Node,)
 
 class AvailabilityTYpe(graphene.ObjectType):
@@ -283,7 +279,7 @@ class AvailabilityTYpe(graphene.ObjectType):
 class TestimoniaType(DjangoObjectType):
     class Meta:
         model = Testimonia
-        fields = ("id", "score", "description", "type", "post_date", "status", "utilisateur")
+        fields = ("id", "score", "description", "descriptionEn", "type", "post_date", "status", "utilisateur")
         
 class ContactUsType(DjangoObjectType):
     class Meta:

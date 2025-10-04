@@ -3,7 +3,7 @@
     "home": "Accueil",
     "tours": "Circuits",
     "tailorMade": "Voyage sur mesure",
-    "rentals": "Location 4x4",
+    "rentals": "Location voiture",
     "pangalanes": "Canal des Pangalanes",
     "sociallyResponsible": "Programme Solidaire",
     "blog": "Blog",
@@ -18,6 +18,30 @@
     "loggedInAs": "Connecté en tant que",
     "droit": "Tous droits réservés",
     "desc": "Madagascar circuits et voyage Solidaire avec canal evasion dirigé par Sylvain Black. Circuits accompagnés ou personnalisés, location des voitures avec chauffeur guide anglophone et francophone."
+  },
+  "footer": {
+    "discover": "Découvrez les merveilles de Madagascar grâce à nos circuits sur mesure et nos services de location de véhicules 4x4."
+  },
+  "reservation": {
+    "aucun": "Aucune réservation",
+    "encore": "Vous n'avez pas encore effectué une demande de réservation."
+  },
+  "profil": {
+    "my": "Mon Profil",
+    "manage": "Gérez vos informations personnelles et vos préférences",
+    "personal": "Informations personnelles",
+    "contact": "Vos informations personnelles et de contact",
+    "phone": "Téléphone",
+    "joined": "Membre depuis le",
+    "role": "Rôle",
+    "booking": "Mes réservations",
+    "statistics": "Statistiques",
+    "total": "Total réservations",
+    "confirme": "Confirmée",
+    "pending": "En attente",
+    "completed": "Terminée",
+    "cancelled": "Annulée",
+    "shortcuts": "Raccourcis"
   },
   "common": {
     "loading": "Chargement...",
@@ -38,7 +62,16 @@
     "FirstNamePlaceholder": "Votre prénom",
     "EmailPlaceholder": "votre.email@exemple.com",
     "Phone": "Téléphone",
-    "by": "Par"
+    "by": "Par",
+    "detail": "Détails",
+    "please": "Veuillez patienter, traitement des données en cours.",
+    "difficulty": "Difficulté",
+    "itinerary": "Itinéraire",
+    "include": "Inclus",
+    "notInclude": "Non Inclus",
+    "nbrPerson": "Nombre de personne",
+    "optionnel": "Optionnel",
+    "need": "Besoin d'aide?"
   },
   "pages": {
     "hero": {
@@ -55,7 +88,7 @@
       "ownItinerary": "Créez votre propre itinéraire avec l'aide de nos experts pour une expérience unique.",
       "pangalanesCanal": "Canal des Pangalanes",
       "700km": "Explorez ce canal unique de 700 km reliant Farafangana à Toamasina.",
-      "4x4Rentals": "Location de 4x4",
+      "4x4Rentals": "Location voiture",
       "rentAn": "Louez un véhicule tout-terrain pour explorer librement les paysages variés de l'île.",
       "explorer": "Explorer",
       "planMyTrip": "Planifier mon voyage",
@@ -72,11 +105,24 @@
       "homeVehiculeTitre": "Véhicules 4x4",
       "homeVehiculeDescription": "<0>Nos véhicules disponibles</0><1>Découvrez notre flotte de véhicules 4x4 parfaitement adaptés pour explorer les routes de Madagascar en toute sécurité et confort.</1>",
       "SeeAllVehicles": "Voir tous les véhicules",
-      "upcomingVehicles": "Les véhicules seont bientôt disponible."
+      "upcomingVehicles": "Les véhicules seont bientôt disponible.",
+      "exp": "Expérience authentique de Madagascar"
     },
     "testimonia": {
       "title": "Ce que nos voyageurs disent",
-      "description": "Decouvrez les experiences de ceux qui déjà profitent notre voyage personnalisé."
+      "description": "Decouvrez les experiences de ceux qui déjà profitent notre voyage personnalisé.",
+      "partez": "Partagez votre expérience",
+      "avis": "Votre avis nous aide à améliorer nos services. Merci de prendre le temps de nous faire part de votre retour.",
+      "note": "Note (sur 10)",
+      "entrez": "Entrez une note de 0 à 5",
+      "decrivez": "Partagez votre témoignage ici...",
+      "votre": "Votre temoignage",
+      "caracter": "caractères",
+      "pour": "Temoignage pour:",
+      "save": "Enregistrer",
+      "s": "Enregistrement...",
+      "merci": "Merci!",
+      "succes": "Votre témoignage a été enregistré avec succès."
     },
     "contact": {
       "ReachOutToUs": "Contactez-nous",
@@ -119,7 +165,10 @@
       "circuitsNeed": "Besoin d'aide pour choisir?",
       "circuitsOurTravel": "Nos experts en voyages sont là pour vous guider et élaborer l’itinéraire parfait selon vos préférences.",
       "circuitsTalkTo": "Parler avec un expert",
-      "circuitsTailorMade": "Circuit sur mesure"
+      "circuitsTailorMade": "Circuit sur mesure",
+      "reservation": "Réservation",
+      "book": "Réserver maintenant",
+      "special": "Demandes spéciales, etc..."
     },
     "surmesure": {
       "surmesureCreateYourCustom": "Créez votre Voyage Sur Mesure",
@@ -307,7 +356,7 @@
     "blog": {
       "blogNew": "Blog & Actualités",
       "blogDesc": "Suivez nos actualités, découvrez les astuces de nos experts et laissez-vous inspirer par des histoires choisies avec soin.",
-      "blogPost": "Publication sur le blog", 
+      "blogPost": "Publication sur le blog",
       "photoVideo": "Explorez les médias qui enrichissent cet article.",
       "blogPublish": "Publié le ",
       "blogEstimation": "Temps de lecture estimé"

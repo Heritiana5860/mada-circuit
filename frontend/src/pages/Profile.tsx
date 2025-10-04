@@ -20,6 +20,9 @@ import {
 } from "@/provider/DataContext";
 import { urlMedia } from "@/helper/UrlImage";
 import { formatDate } from "@/helper/formatage";
+import ContentLoading from "@/components/Loading";
+import ContentError from "@/components/error";
+import { useTranslation } from "react-i18next";
 
 const Profile = () => {
   const { user } = useAuth();
@@ -30,6 +33,8 @@ const Profile = () => {
     error: errorReservation,
     reservation,
   } = useContext(StatistiqueReservationContext);
+
+  const { t } = useTranslation();
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -43,36 +48,12 @@ const Profile = () => {
 
   // Handle loading state
   if (loading || loadingReservation) {
-    return (
-      <div className="min-h-screen flex flex-col">
-        <NavBar />
-        <main className="flex-grow pt-32 pb-12">
-          <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="flex justify-center items-center h-64">
-              <p>Loading...</p>
-            </div>
-          </div>
-        </main>
-        <Footer />
-      </div>
-    );
+    return <ContentLoading />;
   }
 
   // Handle error state
   if (error || errorReservation) {
-    return (
-      <div className="min-h-screen flex flex-col">
-        <NavBar />
-        <main className="flex-grow pt-32 pb-12">
-          <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="flex justify-center items-center h-64">
-              <p className="text-red-500">Error: {error.message}</p>
-            </div>
-          </div>
-        </main>
-        <Footer />
-      </div>
-    );
+    return <ContentError />;
   }
 
   const getRoleBadgeVariant = (role: string) => {
@@ -139,9 +120,14 @@ const Profile = () => {
       <main className="flex-grow pt-6 pb-12">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="mb-8">
-            <h1 className="text-3xl font-bold">My Profile</h1>
+            <h1 className="text-3xl font-bold">
+              {t("profil.my", "My Profile")}
+            </h1>
             <p className="text-muted-foreground mt-2">
-              Manage your personal information and preferences
+              {t(
+                "profil.manage",
+                "Manage your personal information and preferences"
+              )}
             </p>
           </div>
 
@@ -152,10 +138,13 @@ const Profile = () => {
                 <CardHeader>
                   <CardTitle className="flex items-center">
                     <User className="mr-2 h-5 w-5" />
-                    Personal Information
+                    {t("profil.personal", "Personal Information")}
                   </CardTitle>
                   <CardDescription>
-                    Your personal and contact information
+                    {t(
+                      "profil.contact",
+                      "Your personal and contact information"
+                    )}
                   </CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-6">
@@ -208,7 +197,7 @@ const Profile = () => {
                         <Phone className="mr-3 h-4 w-4 text-muted-foreground" />
                         <div>
                           <label className="text-sm font-medium text-muted-foreground">
-                            Phone
+                            {t("profil.phone", "Phone")}
                           </label>
                           <p className="text-base">{userData.telephone}</p>
                         </div>
@@ -219,7 +208,7 @@ const Profile = () => {
                       <Calendar className="mr-3 h-4 w-4 text-muted-foreground" />
                       <div>
                         <label className="text-sm font-medium text-muted-foreground">
-                          Joined on
+                          {t("profil.joined", "Joined on")}
                         </label>
                         <p className="text-base">
                           {formatDate(userData.dateInscription)}
@@ -231,7 +220,7 @@ const Profile = () => {
                       <Shield className="mr-3 h-4 w-4 text-muted-foreground" />
                       <div>
                         <label className="text-sm font-medium text-muted-foreground">
-                          Role
+                          {t("profil.role", "Role")}
                         </label>
                         <div className="mt-1">
                           <Badge variant={getRoleBadgeVariant(userData.role)}>
@@ -281,12 +270,12 @@ const Profile = () => {
               </Card>
               <Card>
                 <CardHeader>
-                  <CardTitle>Shortcuts</CardTitle>
+                  <CardTitle>{t("profil.shortcuts", "Shortcuts")}</CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-3">
                   <Link to="/reservations">
                     <Button variant="outline" className="w-full justify-start">
-                      My bookings
+                      {t("profil.booking", "My bookings")}
                     </Button>
                   </Link>
                 </CardContent>
@@ -294,40 +283,46 @@ const Profile = () => {
 
               <Card>
                 <CardHeader>
-                  <CardTitle>Statistics</CardTitle>
+                  <CardTitle>{t("profil.statistics", "Statistics")}</CardTitle>
                 </CardHeader>
                 <Separator />
                 <CardContent className="space-y-3">
                   <div className="flex justify-between pt-4 mb-5">
                     <span className="text-medium font-bold text-blue-600">
-                      Total bookings
+                      {t("profil.total", "Total bookings")}
                     </span>
                     <span className="font-bold text-blue-600 text-medium">
                       {stats.total}
                     </span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-sm text-green-600">Confirmed</span>
+                    <span className="text-sm text-green-600">
+                      {t("profil.confirme", "Confirmed")}
+                    </span>
                     <span className="font-medium text-green-600 text-sm">
                       {stats.confirmees}
                     </span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-sm text-yellow-600">Pending</span>
+                    <span className="text-sm text-yellow-600">
+                      {t("profil.pending", "Pending")}
+                    </span>
                     <span className="font-medium text-yellow-600 text-sm">
                       {stats.enAttente}
                     </span>
                   </div>
                   <div className="flex justify-between">
                     <span className="text-sm text-muted-foreground">
-                      Completed
+                      {t("profil.completed", "Completed")}
                     </span>
                     <span className="font-medium text-muted-foreground text-sm">
                       {stats.terminees}
                     </span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-sm text-red-600">Cancelled</span>
+                    <span className="text-sm text-red-600">
+                      {t("profil.cancelled", "Cancelled")}
+                    </span>
                     <span className="font-medium text-red-600 text-sm">
                       {stats.annulees}
                     </span>

@@ -19,6 +19,7 @@ import EmptyData from "@/components/EmptyData";
 import { formatDate } from "@/helper/formatage";
 import { useTranslation } from "react-i18next";
 import ContentLoading from "@/components/Loading";
+import ContentError from "@/components/error";
 
 // Composant principal amélioré
 const Blog = () => {
@@ -54,12 +55,11 @@ const Blog = () => {
   }
 
   if (error) {
-    return <div>{error.message}</div>;
+    return <ContentError />;
   }
 
   const allBlogs = data?.allBlogs;
   console.log(allBlogs);
-  
 
   // Fonction pour déterminer si c'est une image ou vidéo
   const isVideo = (url) => {
@@ -83,7 +83,7 @@ const Blog = () => {
   );
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-blue-50 p-8">
+    <div className="min-h-screen flex flex-col">
       <Helmet>
         <title>Blog & News</title>
         <meta

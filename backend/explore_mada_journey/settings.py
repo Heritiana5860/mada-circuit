@@ -240,8 +240,8 @@ DATABASES = {
         'NAME': 'madaga47_solidaire_db',
         'USER': 'madaga47_solidaire_db',    
         'PASSWORD': 'WJVKHdayMuhT5Vyg3Vtr',
-        # 'HOST': '5.101.142.84',
-        'HOST': 'mysql',
+        'HOST': '5.101.142.84',
+        # 'HOST': 'mysql',
         'PORT': '3306',
         'OPTIONS': {
             'charset': 'utf8mb4',

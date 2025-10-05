@@ -3,7 +3,7 @@
     "home": "Home",
     "tours": "Tours",
     "tailorMade": "Tailor-made tour",
-    "rentals": "4x4 Rentals",
+    "rentals": "Car rentals",
     "pangalanes": "Pangalanes Canal",
     "sociallyResponsible": "Socially Responsible",
     "blog": "Blog",
@@ -18,7 +18,43 @@
     "loggedInAs": "Logged in as",
     "droit": "All rights reserved",
     "desc": "Madagascar tours and responsible travel with Canal Evasion, led by Sylvain Black. Guided or customized tours, car rental with English- and French-speaking driver-guides."
-    },
+  },
+  "footer": {
+    "discover": "Discover the wonders of Madagascar with our tailor-made tours and 4x4 vehicle rental services."
+  },
+  "reservation": {
+    "aucun": "No booking",
+    "encore": "You haven't made a booking request yet."
+  },
+  "profil": {
+    "my": "My Profile",
+    "manage": "Manage your personal information and preferences",
+    "personal": "Personal Information",
+    "contact": "Your personal and contact information",
+    "phone": "Phone",
+    "joined": "Joined on",
+    "role": "Role",
+    "booking": "My bookings",
+    "statistics": "Statistics",
+    "total": "Total bookings",
+    "confirme": "Confirmed",
+    "pending": "Pending",
+    "completed": "Completed",
+    "cancelled": "Cancelled",
+    "shortcuts": "Shortcuts"
+  },
+  "description": {
+    "intro": "Discover our {{annee}} {{marque}} {{modele}}, a {{typeVehicule}} designed to make your journey in Madagascar unforgettable.",
+    "4x4": "Perfectly equipped for adventure, this 4x4 lets you explore Madagascar's most challenging terrains with confidence and ease.",
+    "berline": "Ideal for urban and suburban travel, this vehicle combines comfort and efficiency, making it perfect for discovering Madagascar's vibrant cities.",
+    "suv": "Blending comfort and durability, this SUV ensures a smooth ride across all types of roads, making every trip in Madagascar enjoyable.",
+    "default": "Versatile and reliable, it is perfectly suited to all your transportation needs in Madagascar.",
+    "seating": "With seating for {{places}} people, it is perfectly suited",
+    "solo": "for couples or solo travelers, offering privacy and agility for navigating Madagascar's roads.",
+    "family": "for families or small groups of friends looking to explore Madagascar together.",
+    "group": "for larger groups, ideal for family trips or excursions with friends across the island.",
+    "maintenance": "Regularly maintained and thoroughly checked, this vehicle guarantees your safety and comfort throughout your stay in Madagascar."
+  },
   "common": {
     "loading": "Loading...",
     "error": "Error",
@@ -38,7 +74,18 @@
     "FirstNamePlaceholder": "Your first name",
     "EmailPlaceholder": "your.email@example.com",
     "Phone": "Phone",
-    "by": "By"
+    "by": "By",
+    "detail": "Details",
+    "please": "Please wait, data processing in progress.",
+    "difficulty": "Difficulty",
+    "itinerary": "Itinerary",
+    "include": "Include",
+    "notInclude": "Not Included",
+    "nbrPerson": "Number of people",
+    "optionnel": "Optionnal",
+    "need": "Need help?",
+    "per": "Price per day",
+    "number": "Number of days"
   },
   "pages": {
     "hero": {
@@ -55,7 +102,7 @@
       "ownItinerary": "Create your own itinerary with the help of our experts for a unique experience.",
       "pangalanesCanal": "Pangalanes Canal",
       "700km": "Explore this unique 700 km canal connecting Farafangana to Toamasina.",
-      "4x4Rentals": "4x4 Rentals",
+      "4x4Rentals": "Car rentals",
       "rentAn": "Rent an off-road vehicle to freely explore the island's diverse landscapes.",
       "explorer": "Explore",
       "planMyTrip": "Plan my trip",
@@ -72,11 +119,24 @@
       "homeVehiculeTitre": "4x4 Vehicles",
       "homeVehiculeDescription": "<0>Our Available Vehicles</0><1>Discover our fleet of 4x4 vehicles, perfectly suited to explore Madagascar's roads safely and comfortably.</1>",
       "SeeAllVehicles": "See All Vehicles",
-      "upcomingVehicles": "Upcoming Vehicles coming soon."
+      "upcomingVehicles": "Upcoming Vehicles coming soon.",
+      "exp": "Authentic Madagascar Experience"
     },
     "testimonia": {
       "title": "What our travelers say",
-      "description": "Discover the experiences of those who have already enjoyed our personalized travel services."
+      "description": "Discover the experiences of those who have already enjoyed our personalized travel services.",
+      "partez": "Share your experience",
+      "avis": "Your feedback helps us improve our services. Thank you for taking the time to share your thoughts with us.",
+      "note": "Rating (out of 10)",
+      "entrez": "Enter a rating from 0 to 5",
+      "decrivez": "Share your story here...",
+      "votre": "Your testimonial",
+      "caracter": "characters",
+      "pour": "Testimonial for:",
+      "save": "Save",
+      "s": "Saving...",
+      "merci": "Thank you!",
+      "succes": "Your testimonial has been successfully recorded."
     },
     "surmesure": {
       "surmesureCreateYourCustom": "Create your Custom Tour Journey",
@@ -161,7 +221,7 @@
     "circuits": {
       "all": "All",
       "north": "North",
-      "south": "Suth",
+      "south": "South",
       "east": "East",
       "west": "West",
       "filters": "Filters",
@@ -177,12 +237,19 @@
       "circuitsNeed": "Need help choosing?",
       "circuitsOurTravel": "Our travel experts are here to guide you and craft the perfect itinerary based on your preferences.",
       "circuitsTalkTo": "Talk to an expert",
-      "circuitsTailorMade": "Tailor-made tour"
+      "circuitsTailorMade": "Tailor-made tour",
+      "reservation": "Booking",
+      "book": "Book now",
+      "special": "special demandes, etc..."
     },
     "vehicule": {
       "rental": "Vehicle Rental",
       "byType": "Filter by type",
-      "allTypes": "All types"
+      "allTypes": "All types",
+      "capacity": "Capacity",
+      "seats": "Seats",
+      "driver": "A driver who speaks",
+      "year": "Year of release :"
     },
     "pangalanes": {
       "offers": "Discover our offers",

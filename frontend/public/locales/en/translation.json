@@ -43,6 +43,18 @@
     "cancelled": "Cancelled",
     "shortcuts": "Shortcuts"
   },
+  "description": {
+    "intro": "Discover our {{annee}} {{marque}} {{modele}}, a {{typeVehicule}} designed to make your journey in Madagascar unforgettable.",
+    "4x4": "Perfectly equipped for adventure, this 4x4 lets you explore Madagascar's most challenging terrains with confidence and ease.",
+    "berline": "Ideal for urban and suburban travel, this vehicle combines comfort and efficiency, making it perfect for discovering Madagascar's vibrant cities.",
+    "suv": "Blending comfort and durability, this SUV ensures a smooth ride across all types of roads, making every trip in Madagascar enjoyable.",
+    "default": "Versatile and reliable, it is perfectly suited to all your transportation needs in Madagascar.",
+    "seating": "With seating for {{places}} people, it is perfectly suited",
+    "solo": "for couples or solo travelers, offering privacy and agility for navigating Madagascar's roads.",
+    "family": "for families or small groups of friends looking to explore Madagascar together.",
+    "group": "for larger groups, ideal for family trips or excursions with friends across the island.",
+    "maintenance": "Regularly maintained and thoroughly checked, this vehicle guarantees your safety and comfort throughout your stay in Madagascar."
+  },
   "common": {
     "loading": "Loading...",
     "error": "Error",
@@ -71,7 +83,9 @@
     "notInclude": "Not Included",
     "nbrPerson": "Number of people",
     "optionnel": "Optionnal",
-    "need": "Need help?"
+    "need": "Need help?",
+    "per": "Price per day",
+    "number": "Number of days"
   },
   "pages": {
     "hero": {
@@ -207,7 +221,7 @@
     "circuits": {
       "all": "All",
       "north": "North",
-      "south": "Suth",
+      "south": "South",
       "east": "East",
       "west": "West",
       "filters": "Filters",
@@ -231,7 +245,11 @@
     "vehicule": {
       "rental": "Vehicle Rental",
       "byType": "Filter by type",
-      "allTypes": "All types"
+      "allTypes": "All types",
+      "capacity": "Capacity",
+      "seats": "Seats",
+      "driver": "A driver who speaks",
+      "year": "Year of release :"
     },
     "pangalanes": {
       "offers": "Discover our offers",

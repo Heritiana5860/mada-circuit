@@ -154,18 +154,22 @@ class ItineraireInput(graphene.InputObjectType):
     
     # Champs communs
     description = graphene.String(description="Description de l'étape")
+    descriptionEn = graphene.String(descriptionEn="Step description")
 
 
 class CreateCircuit(graphene.Mutation):
     class Arguments:
         titre = graphene.String(required=True)
         description = graphene.String(required=False)
+        descriptionEn = graphene.String(required=False)
         duree = graphene.Int(required=True)
         prix = graphene.Int(required=False)
         type_circuit = graphene.String(required=True)
         transport = graphene.String(required=True)
         inclus = graphene.String()
+        inclusEn = graphene.String()
         non_inclus = graphene.String()
+        non_inclusEn = graphene.String()
         images = graphene.List(Upload, required=False)
         difficulte = graphene.String(required=True)
         destination = graphene.String(required=True)
@@ -222,12 +226,15 @@ class CreateCircuit(graphene.Mutation):
         type_circuit,
         transport,
         inclus,
+        inclusEn,
         non_inclus,
+        non_inclusEn,
         difficulte,
         destination,
         region,
         saison,
         itineraires,
+        descriptionEn=None,
         images=None
     ):
         try:
@@ -245,12 +252,15 @@ class CreateCircuit(graphene.Mutation):
                 circuit = Circuit.objects.create(
                     titre=titre,
                     description=description,
+                    descriptionEn=descriptionEn,
                     duree=duree,
                     prix=Decimal(str(prix)),
                     type_circuit=type_circuit,
                     transport=transport,
                     inclus=inclus,
+                    inclusEn=inclusEn,
                     non_inclus=non_inclus,
+                    non_inclusEn=non_inclusEn,
                     difficulte=difficulte,
                     destination=destination,
                     region=region,
@@ -264,6 +274,7 @@ class CreateCircuit(graphene.Mutation):
                         'jour': itineraire_data["jour"],
                         'type_itineraire': itineraire_data["type_itineraire"],
                         'description': itineraire_data.get("description"),
+                        'descriptionEn': itineraire_data.get("descriptionEn"),
                     }
                     
                     if itineraire_data["type_itineraire"] == "trajet":
@@ -730,22 +741,27 @@ class DeleteBlogCommentaire(graphene.Mutation):
         except Exception as e:
             return DeleteBlogCommentaire(success=False, errors=[str(e)])
 
-# Mutations pour les FAQs
 class CreateFaq(graphene.Mutation):
     class Arguments:
-        question = graphene.String(required=True)
-        reponse = graphene.String(required=True)
+        question_fr = graphene.String(required=True)
+        question_en = graphene.String()
+        reponse_fr = graphene.String(required=True)
+        reponse_en = graphene.String()
         faq_type = graphene.String(required=True)
-
+    
     faq = graphene.Field(FaqType)
     success = graphene.Boolean()
     errors = graphene.List(graphene.String)
-
-    def mutate(self, info, question, reponse, faq_type):
+    
+    def mutate(self, info, question_fr, reponse_fr, faq_type, 
+               question_en=None, reponse_en=None):
         try:
+            
             faq = Faq.objects.create(
-                question=question,
-                reponse=reponse,
+                questionFr=question_fr,
+                questionEn=question_en,
+                reponseFr=reponse_fr,
+                reponseEn=reponse_en,
                 faq_type=faq_type,
             )
             return CreateFaq(faq=faq, success=True)
@@ -1283,6 +1299,7 @@ class CreateTestimonia(graphene.Mutation):
     class Arguments:
         score = graphene.Int(required=True)
         description = graphene.String(required=True)
+        descriptionEn = graphene.String(required=False)
         type = graphene.String(required=True)
         utilisateur_id = graphene.ID(required=True)
         
@@ -1291,7 +1308,7 @@ class CreateTestimonia(graphene.Mutation):
     success = graphene.Boolean()
     message = graphene.String() 
     
-    def mutate(self, info, score, description, type, utilisateur_id):
+    def mutate(self, info, score, description, descriptionEn, type, utilisateur_id):
         
         try:
             # Décoder avec la fonction Relay
@@ -1301,6 +1318,7 @@ class CreateTestimonia(graphene.Mutation):
             new_testimonia = Testimonia.objects.create(
                 score=score,
                 description=description,
+                descriptionEn=descriptionEn,
                 type=type,
                 utilisateur=utilisateur,
             )
@@ -1459,16 +1477,19 @@ class CreatePersonnel(graphene.Mutation):
         email = graphene.String(required=True)
         adresse = graphene.String(required=True)
         specialite = graphene.String(required=True) 
+        specialiteEn = graphene.String(required=False) 
         langues = graphene.String(required=True) 
         biographie = graphene.String(required=True) 
+        biographieEn = graphene.String(required=False)
         status = graphene.String(required=True)
+        statusEn = graphene.String(required=False)
         photo = Upload(required=True)
         
     personnel = graphene.Field(PersonnelType)
     success = graphene.Boolean()
     errors = graphene.List(graphene.String)
         
-    def mutate(self, info, nom, prenom, contact, email, adresse, specialite, langues, biographie, status, photo): 
+    def mutate(self, info, nom, prenom, contact, email, adresse, specialite, specialiteEn, langues, biographie, biographieEn, status, statusEn, photo): 
         try:
             
             with transaction.atomic():
@@ -1479,9 +1500,12 @@ class CreatePersonnel(graphene.Mutation):
                     email=email,
                     adresse=adresse,
                     specialite=specialite,
+                    specialiteEn=specialiteEn,
                     langues=langues,
                     biographie=biographie,
+                    biographieEn=biographieEn,
                     status=status,
+                    statusEn=statusEn,
                     photo=photo,
                 )
                 

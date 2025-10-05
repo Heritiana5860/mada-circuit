@@ -43,6 +43,18 @@
     "cancelled": "Annulée",
     "shortcuts": "Raccourcis"
   },
+  "description": {
+    "intro": "Découvrez notre {{annee}} {{marque}} {{modele}}, un(e) {{typeVehicule}} conçu(e) pour rendre votre voyage à Madagascar inoubliable.",
+    "4x4": "Parfaitement équipé pour l'aventure, ce 4x4 vous permet d'explorer les terrains les plus difficiles de Madagascar en toute confiance.",
+    "berline": "Idéal pour les trajets urbains et suburbains, ce véhicule allie confort et efficacité, parfait pour découvrir les villes dynamiques de Madagascar.",
+    "suv": "Alliant confort et robustesse, ce SUV assure une conduite agréable sur tous types de routes, rendant chaque voyage à Madagascar plaisant.",
+    "default": "Polyvalent et fiable, il convient parfaitement à tous vos besoins de transport à Madagascar.",
+    "seating": "Avec une capacité de {{places}} personnes, il est parfaitement adapté",
+    "solo": "aux couples ou voyageurs solitaires, offrant intimité et agilité pour naviguer sur les routes de Madagascar.",
+    "family": "aux familles ou petits groupes d'amis souhaitant explorer Madagascar ensemble.",
+    "group": "aux groupes plus nombreux, idéal pour les voyages en famille ou les excursions entre amis à travers l'île.",
+    "maintenance": "Régulièrement entretenu et soigneusement vérifié, ce véhicule garantit votre sécurité et votre confort tout au long de votre séjour à Madagascar."
+  },
   "common": {
     "loading": "Chargement...",
     "error": "Erreur",
@@ -71,7 +83,9 @@
     "notInclude": "Non Inclus",
     "nbrPerson": "Nombre de personne",
     "optionnel": "Optionnel",
-    "need": "Besoin d'aide?"
+    "need": "Besoin d'aide?",
+    "per": "Prix par jour",
+    "number": "Nombre de jours"
   },
   "pages": {
     "hero": {
@@ -231,7 +245,11 @@
     "vehicule": {
       "rental": "Location vehicule",
       "byType": "Filtrer par type",
-      "allTypes": "Tous types"
+      "allTypes": "Tous types",
+      "capacity": "Capacité",
+      "seats": "Places",
+      "driver": "Un chauffeur qui parle",
+      "year": "Année de mise en circulation :"
     },
     "pangalanes": {
       "offers": "Decouvrez nos offres",

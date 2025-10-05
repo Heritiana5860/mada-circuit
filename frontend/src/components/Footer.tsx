@@ -39,6 +39,8 @@ const Footer = () => {
               <a
                 href="https://www.instagram.com/madagascarvoyagesolidaire"
                 className="text-foreground hover:text-primary transition-colors"
+                target="_blank"
+                rel="noopener noreferrer"
                 aria-label="Instagram"
               >
                 <Instagram size={20} />

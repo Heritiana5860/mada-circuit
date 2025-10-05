@@ -435,7 +435,8 @@ class Faq(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     
     def __str__(self):
-        return self.question
+        question = self.questionFr or self.questionEn or "Sans question"
+        return f"{self.get_faq_type_display()} - {question[:50]}"
     
     class Meta:
         ordering = ['created_at']

@@ -6,6 +6,7 @@ import { CSSProperties } from "react";
 import { Vehicule } from "@/types";
 import { formatPrice } from "@/helper/formatage";
 import { urlMedia } from "@/helper/UrlImage";
+import { useTranslation } from "react-i18next";
 
 interface VehicleCardProps {
   vehicle: Vehicule;
@@ -19,6 +20,7 @@ const VehicleCard: React.FC<VehicleCardProps> = ({
   style,
 }) => {
   const { id, marque, modele, annee, prix, images, type, capacite } = vehicle;
+  const { t } = useTranslation();
 
   // Afficher la première image de la galerie ou un placeholder
   const imageUrl =
@@ -59,16 +61,21 @@ const VehicleCard: React.FC<VehicleCardProps> = ({
             </div>
             <div className="flex items-center">
               <Users className="w-4 h-4 mr-1" />
-              <span>{capacite} places</span>
+              <span>
+                {capacite} {t("pages.vehicule.seats", "Seats")}
+              </span>
             </div>
           </div>
 
           <div className="flex items-center justify-between">
             <div className="text-lg font-semibold text-primary">
               {formatPrice(prix)}
-              <span className="text-sm text-gray-500 font-normal"> / jour</span>
+              <span className="text-sm text-gray-500 font-normal">
+                {" "}
+                / {t("common.day", "Jour")}
+              </span>
             </div>
-            <span className="text-sm text-primary font-medium">Réserver</span>
+            <span className="text-sm text-primary font-medium">{t("common.reserver", "Book")}</span>
           </div>
         </div>
       </Link>

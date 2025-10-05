@@ -87,7 +87,8 @@
     "per": "Prix par jour",
     "number": "Nombre de jours",
     "faq": "Questions Fréquentes",
-    "faqDesc": "Retrouvez ci-dessous les réponses aux questions les plus fréquemment posées par nos clients."
+    "faqDesc": "Retrouvez ci-dessous les réponses aux questions les plus fréquemment posées par nos clients.",
+    "reserver": "Réserver"
   },
   "pages": {
     "hero": {

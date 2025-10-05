@@ -87,7 +87,8 @@
     "per": "Price per day",
     "number": "Number of days",
     "faq": "Frequently Asked Questions",
-    "faqDesc": "Below are the answers to the most frequently asked questions by our customers."
+    "faqDesc": "Below are the answers to the most frequently asked questions by our customers.",
+    "reserver": "Book"
   },
   "pages": {
     "hero": {

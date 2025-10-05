@@ -427,10 +427,10 @@ class Faq(models.Model):
         VEHICULE = 'VEHICULE', 'vehicule'
         
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    questionFr = models.CharField(max_length=255, verbose_name="Question", null=True, blank=True)
-    reponseFr = models.TextField(verbose_name="Reponse", null=True, blank=True)
-    questionEn = models.CharField(max_length=255, verbose_name="Question", null=True, blank=True)
-    reponseEn = models.TextField(verbose_name="Response", null=True, blank=True)
+    questionFr = models.CharField(max_length=255, verbose_name="QuestionFr", null=True, blank=True)
+    reponseFr = models.TextField(verbose_name="ReponseFr", null=True, blank=True)
+    questionEn = models.CharField(max_length=255, verbose_name="QuestionEn", null=True, blank=True)
+    reponseEn = models.TextField(verbose_name="ResponseEn", null=True, blank=True)
     faq_type = models.CharField(max_length=20, choices=TypeFaq.choices, default=TypeFaq.CIRCUIT, verbose_name="Type")
     created_at = models.DateTimeField(auto_now_add=True)
     

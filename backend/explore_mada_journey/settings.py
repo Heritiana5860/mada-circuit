@@ -123,6 +123,9 @@ CORS_ALLOWED_ORIGINS = [
     'http://localhost:5173'
 ]
 
+# Si vous utilisez un proxy
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+
 CSRF_TRUSTED_ORIGINS = [
     'https://madagascar-voyagesolidaire.com',
     'https://api.madagascar-voyagesolidaire.com',
@@ -198,6 +201,10 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
+
+CSRF_COOKIE_SECURE = False 
+CSRF_COOKIE_HTTPONLY = False  
+SESSION_COOKIE_SECURE = False
 
 # En production, définir les en-têtes de sécurité appropriés
 # Avec cette configuration, votre application redirigera toutes les requêtes HTTP vers HTTPS et activera les en-têtes HSTS pour appliquer des connexions sécurisées.

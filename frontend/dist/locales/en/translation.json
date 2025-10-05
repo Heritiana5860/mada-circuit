@@ -85,7 +85,9 @@
     "optionnel": "Optionnal",
     "need": "Need help?",
     "per": "Price per day",
-    "number": "Number of days"
+    "number": "Number of days",
+    "faq": "Frequently Asked Questions",
+    "faqDesc": "Below are the answers to the most frequently asked questions by our customers."
   },
   "pages": {
     "hero": {

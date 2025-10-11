@@ -93,15 +93,19 @@ from corsheaders.defaults import default_headers
 SECRET_KEY = 'django-insecure-=-^c))dt)dbi(g%h2kmtgkp)o!q3cr12=m0cs2#3(j2jg(qodf'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = ['*']
+# ALLOWED_HOSTS = ['*']
 
-# ALLOWED_HOSTS = [
-#     'madagascar-voyagesolidaire.com', 
-#     'api.madagascar-voyagesolidaire.com', 
-#     'administration.madagascar-voyagesolidaire.com'
-#     ]
+ALLOWED_HOSTS = [
+    'madagascar-voyagesolidaire.com', 
+    'www.madagascar-voyagesolidaire.com',
+    'api.madagascar-voyagesolidaire.com', 
+    'attwood.simafri.com',
+    '5.101.142.84',
+    'localhost',
+    '127.0.0.1'
+    ]
 
 # Fonction utilitaire pour les listes d'environnement
 def get_list_env(var, default=None):
@@ -117,10 +121,8 @@ def get_list_env(var, default=None):
 
 CORS_ALLOWED_ORIGINS = [
     'https://madagascar-voyagesolidaire.com',
-    'https://api.madagascar-voyagesolidaire.com',
-    'https://administration.madagascar-voyagesolidaire.com',
-    'http://5.101.142.84:8000',
-    'http://localhost:5173'
+    'https://www.madagascar-voyagesolidaire.com',
+    'http://5.101.142.84:8000'
 ]
 
 # Si vous utilisez un proxy
@@ -128,8 +130,8 @@ SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
 CSRF_TRUSTED_ORIGINS = [
     'https://madagascar-voyagesolidaire.com',
+    'https://www.madagascar-voyagesolidaire.com',
     'https://api.madagascar-voyagesolidaire.com',
-    'https://administration.madagascar-voyagesolidaire.com',
     'http://5.101.142.84:8000',
     
 ]
@@ -138,7 +140,7 @@ CORS_ALLOW_ALL_ORIGINS = True
 
 CORS_ALLOW_CREDENTIALS = True
 
-CORS_ALLOW_HEADERS = list(default_headers) + [
+CORS_ALLOW_HEADERS = [
     'accept',
     'accept-encoding',
     'authorization',
@@ -148,21 +150,6 @@ CORS_ALLOW_HEADERS = list(default_headers) + [
     'user-agent',
     'x-csrftoken',
     'x-requested-with',
-    "apollo-require-preflight",
-    'apollographql-client-name',
-    'apollographql-client-version',
-    # Add these variations
-    'ApolloGraphQL-Client-Name',
-    'ApolloGraphQL-Client-Version',
-]
-
-CORS_ALLOW_METHODS = [
-    "GET",
-    "POST",
-    "PUT",
-    "PATCH",
-    "DELETE",
-    "OPTIONS",
 ]
 
 # Application definition
@@ -202,9 +189,9 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-CSRF_COOKIE_SECURE = False 
+CSRF_COOKIE_SECURE = True 
 CSRF_COOKIE_HTTPONLY = False  
-SESSION_COOKIE_SECURE = False
+SESSION_COOKIE_SECURE = True
 
 # En production, définir les en-têtes de sécurité appropriés
 # Avec cette configuration, votre application redirigera toutes les requêtes HTTP vers HTTPS et activera les en-têtes HSTS pour appliquer des connexions sécurisées.
@@ -299,7 +286,8 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 # Répertoires de fichiers statiques pour le développement
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'static'),
-] if DEBUG else []
+    os.path.join(BASE_DIR, '../frontend/dist'),
+] 
 
 # Configuration WhiteNoise optimisée
 WHITENOISE_USE_FINDERS = DEBUG

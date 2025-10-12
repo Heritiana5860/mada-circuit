@@ -196,6 +196,7 @@ CSRF_COOKIE_PATH = '/'
 
 SESSION_COOKIE_SECURE = True
 SESSION_COOKIE_SAMESITE = 'Lax'
+SESSION_COOKIE_DOMAIN = '.madagascar-voyagesolidaire.com'
 
 
 

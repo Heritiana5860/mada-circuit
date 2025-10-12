@@ -45,11 +45,11 @@ const client = new ApolloClient({
   cache: new InMemoryCache(),
   defaultOptions: {
     watchQuery: {
-      fetchPolicy: "cache-and-network",
+      fetchPolicy: "network-only",
       errorPolicy: "all",
     },
     query: {
-      fetchPolicy: "cache-first",
+      fetchPolicy: "network-only",
       errorPolicy: "all",
     },
     mutate: {

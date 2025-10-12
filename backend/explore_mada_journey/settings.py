@@ -191,7 +191,13 @@ MIDDLEWARE = [
 
 CSRF_COOKIE_SECURE = True 
 CSRF_COOKIE_HTTPONLY = False  
+CSRF_COOKIE_SAMESITE = 'Lax'
+CSRF_COOKIE_DOMAIN = '.madagascar-voyagesolidaire.com'
+
 SESSION_COOKIE_SECURE = True
+SESSION_COOKIE_SAMESITE = 'Lax'
+
+
 
 # En production, définir les en-têtes de sécurité appropriés
 # Avec cette configuration, votre application redirigera toutes les requêtes HTTP vers HTTPS et activera les en-têtes HSTS pour appliquer des connexions sécurisées.

@@ -25,9 +25,6 @@ const uploadLink = createUploadLink({
   uri: "https://api.madagascar-voyagesolidaire.com/graphql/",
   credentials: 'include',
   // uri: "http://localhost:8000/graphql/",
-  headers: {
-    'Accept': 'application/json',
-  },
 });
 
 // Lien d'authentification pour ajouter le token aux headers

@@ -8,7 +8,7 @@ from schema_root import schema
 from graphene_file_upload.django import FileUploadGraphQLView
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
+    path('admin/', csrf_exempt(admin.site.urls)),
 
     # GraphQL routes avec support d'upload
     path('graphql/', csrf_exempt(FileUploadGraphQLView.as_view(graphiql=True, schema=schema))),

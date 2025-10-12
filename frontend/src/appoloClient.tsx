@@ -23,7 +23,11 @@ const errorLink = onError(({ graphQLErrors, networkError }) => {
 // Lien upload pour gérer les fichiers (remplace createHttpLink)
 const uploadLink = createUploadLink({
   uri: "https://api.madagascar-voyagesolidaire.com/graphql/",
+  credentials: 'include',
   // uri: "http://localhost:8000/graphql/",
+  headers: {
+    'Accept': 'application/json',
+  },
 });
 
 // Lien d'authentification pour ajouter le token aux headers

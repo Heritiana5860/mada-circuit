@@ -284,7 +284,7 @@ const ProgrammeSolidairePage = () => {
                       />
                       <div className="absolute top-3 left-3">
                         <span className="bg-primary text-primary-foreground text-xs font-medium px-2 py-1 rounded-full">
-                          {pack.duree} days
+                          {pack.duree} {t("common.days", "Days")}
                         </span>
                       </div>
                     </div>

@@ -38,14 +38,14 @@ class ItineraireInline(admin.TabularInline):
     extra = 1
     can_delete = True
     
-    fields = ('jour', 'type_itineraire', 'lieu_depart', 'lieu_arrivee', 'lieu', 'distance_km', 'duree_trajet', 'nuitees', 'description', 'carte_gps')
+    fields = ('jour', 'type_itineraire', 'lieu_depart', 'lieu_arrivee', 'lieu', 'distance_km', 'duree_trajet', 'nuitees', 'description', 'descriptionEn', 'carte_gps')
     
     # Ajout d'une classe CSS pour cibler spécifiquement cet inline
     classes = ['itineraires-inline']
     
     class Media:
         css = {
-            'all': ('admin/css/itineraires.css',)  # Créer ce fichier dans static/admin/css/
+            'all': ('admin/css/itineraires.css',)
         }
         js = ('admin/js/itineraires.js',)
     

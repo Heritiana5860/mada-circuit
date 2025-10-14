@@ -310,7 +310,7 @@ const ProgrammeSolidairePage = () => {
                             size="sm"
                             className="flex items-center"
                           >
-                            <span>Details</span>
+                            <span>{t("common.detail", "Détails")}</span>
                             <ArrowRight className="ml-2 h-4 w-4" />
                           </Button>
                         </Link>

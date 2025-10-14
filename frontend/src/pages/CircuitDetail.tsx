@@ -558,7 +558,7 @@ const CircuitDetail = () => {
                         </>
                       )
                     ) : (
-                      "Se connecter pour réserver"
+                      t("common.log", "Se connecter pour réserver")
                     )}
                   </Button>
 

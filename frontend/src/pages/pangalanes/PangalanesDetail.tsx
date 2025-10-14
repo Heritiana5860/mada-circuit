@@ -31,7 +31,7 @@ import {
 } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import L from "leaflet";
-
+import { useTranslation } from "react-i18next";
 import iconUrl from "leaflet/dist/images/marker-icon.png";
 import iconShadowUrl from "leaflet/dist/images/marker-shadow.png";
 
@@ -47,6 +47,7 @@ const PangalanesDetailPage = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const { isAuthenticated, user } = useAuth();
+  const { t } = useTranslation();
 
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
   const [isImageLoading, setIsImageLoading] = useState(true);
@@ -439,21 +440,23 @@ const PangalanesDetailPage = () => {
               <Card className="sticky top-6">
                 <CardHeader>
                   <CardTitle className="flex flex-col items-center justify-between">
-                    <p className="border-b pb-3">Réservation</p>
-                    {dataFromState?.prix && (
+                    <p className="border-b pb-3">
+                      {t("pages.circuits.reservation", "Réservation")}
+                    </p>
+                    {/* {dataFromState?.prix && (
                       <p className="text-xl font-bold font-sans pt-3">
                         {formatPrice(dataFromState.prix)}{" "}
                         <span className="text-sm font-normal text-gray-500">
                           /personne
                         </span>
                       </p>
-                    )}
+                    )} */}
                   </CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-4">
                   {/* Date de depart */}
                   <DateDetail
-                    label="Date de depart"
+                    label={t("common.StartedDate", "Date de début")}
                     name="dateDepart"
                     value={formData.dateDepart}
                     handleInputChange={handleInputChange}
@@ -462,7 +465,7 @@ const PangalanesDetailPage = () => {
 
                   {/* Date de fin */}
                   <DateDetail
-                    label="Date de fin"
+                    label={t("common.EndDate", "Date de fin")}
                     name="dateArrive"
                     value={formData.dateArrive}
                     handleInputChange={handleInputChange}
@@ -472,7 +475,7 @@ const PangalanesDetailPage = () => {
 
                   {/* Nombre de participants */}
                   <NombrePersonneDetail
-                    label="Nombre de personne"
+                    label={t("common.nbrPerson", "Nombre de personne")}
                     name="voyageur"
                     guestCount={guestCount}
                     handleGuestCountChange={handleGuestCountChange}
@@ -481,7 +484,7 @@ const PangalanesDetailPage = () => {
                   {/* Message */}
                   <div>
                     <label className="block text-sm font-medium mb-1">
-                      Message (optionnel)
+                      Message ({t("common.optionnel", "optionnel")})
                     </label>
                     <textarea
                       name="commentaire"
@@ -497,20 +500,25 @@ const PangalanesDetailPage = () => {
                   {days > 0 && (
                     <div className="bg-gray-50 p-4 rounded-lg space-y-2">
                       <div className="flex justify-between items-center text-sm">
-                        <span className="text-gray-600">Durée</span>
+                        <span className="text-gray-600">
+                          {t("pages.circuits.duration", "Durée")}
+                        </span>
                         <span className="font-medium">
-                          {days} {days > 1 ? "jours" : "jour"}
+                          {days}{" "}
+                          {days > 1
+                            ? t("common.days", "Days")
+                            : t("common.day", "Day")}
                         </span>
                       </div>
-                      <div className="flex justify-between items-center text-sm">
+                      {/* <div className="flex justify-between items-center text-sm">
                         <span className="text-gray-600">Prix par personne</span>
                         <span className="font-medium">
                           {formatPrice(dataFromState.prix)}
                         </span>
-                      </div>
+                      </div> */}
                       <div className="flex justify-between items-center text-sm">
                         <span className="text-gray-600">
-                          Nombre de personnes
+                          {t("common.nbrPerson", "Nombre de personne")}
                         </span>
                         <span className="font-medium">{guestCount}</span>
                       </div>
@@ -535,16 +543,16 @@ const PangalanesDetailPage = () => {
                       isSubmitting || mutationLoading ? (
                         <>
                           <Loader2 className="h-5 w-5 mr-2 animate-spin" />
-                          Réservation en cours...
+                          {t("common.loading", "Chargement...")}
                         </>
                       ) : (
                         <>
                           <Calendar className="h-5 w-5 mr-2" />
-                          Réserver maintenant
+                          {t("pages.circuits.book", "Réserver maintenant")}
                         </>
                       )
                     ) : (
-                      "Se connecter pour réserver"
+                      t("common.log", "Se connecter pour réserver")
                     )}
                   </Button>
 

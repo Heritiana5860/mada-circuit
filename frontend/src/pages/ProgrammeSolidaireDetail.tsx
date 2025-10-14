@@ -25,6 +25,7 @@ import {
 } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import L from "leaflet";
+import { useTranslation } from "react-i18next";
 
 import iconUrl from "leaflet/dist/images/marker-icon.png";
 import iconShadowUrl from "leaflet/dist/images/marker-shadow.png";
@@ -47,6 +48,7 @@ const ProgrammeSolidaireDetail = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const { isAuthenticated, user } = useAuth();
+  const { t } = useTranslation();
 
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
   const [isImageLoading, setIsImageLoading] = useState(true);
@@ -540,9 +542,7 @@ const ProgrammeSolidaireDetail = () => {
                         </span>
                       </div> */}
                       <div className="flex justify-between items-center text-sm">
-                        <span className="text-gray-600">
-                          Number of people
-                        </span>
+                        <span className="text-gray-600">Number of people</span>
                         <span className="font-medium">{guestCount}</span>
                       </div>
                       {/* <div className="border-t pt-2">
@@ -575,7 +575,7 @@ const ProgrammeSolidaireDetail = () => {
                         </>
                       )
                     ) : (
-                      "Se connecter pour réserver"
+                      t("common.log", "Se connecter pour réserver")
                     )}
                   </Button>
 

@@ -52,7 +52,7 @@ class ItineraireInline(admin.TabularInline):
     
 @admin.register(Itineraire)
 class ItineraireAdmin(admin.ModelAdmin):
-    list_display = ('jour', 'lieu_depart', 'lieu_arrivee', 'distance_km', 'duree_trajet', 'description', 'type_itineraire', 'circuit', 'nombre_circuits')
+    list_display = ('jour', 'lieu_depart', 'lieu_arrivee', 'distance_km', 'duree_trajet', 'description', 'descriptionEn', 'type_itineraire', 'circuit', 'nombre_circuits')
 
     def nombre_circuits(self, obj):
         return 1 if obj.circuit else 0

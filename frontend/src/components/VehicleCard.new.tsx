@@ -1,11 +1,12 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { cn } from "@/lib/utils";
-import { Armchair, Car, Users } from "lucide-react";
+import { Armchair, Car } from "lucide-react";
 import { CSSProperties } from "react";
 import { Vehicule } from "@/types";
 import { formatPrice } from "@/helper/formatage";
 import { urlMedia } from "@/helper/UrlImage";
+import { useTranslation } from "react-i18next";
 
 interface VehicleCardProps {
   vehicle: Vehicule;
@@ -23,6 +24,8 @@ const VehicleCard: React.FC<VehicleCardProps> = ({
     vehicle.images && vehicle.images.length > 0
       ? `${urlMedia}${vehicle.images[0].image}`
       : "/placeholder.svg";
+
+  const { t } = useTranslation();
 
   return (
     <div
@@ -76,7 +79,9 @@ const VehicleCard: React.FC<VehicleCardProps> = ({
             <span className="text-xl font-bold text-primary">
               {formatPrice(vehicle.prix)}
             </span>
-            <span className="text-sm text-muted-foreground ml-1">/day</span>
+            <span className="text-sm text-muted-foreground ml-1">
+              / {t("common.day", "Jour")}
+            </span>
           </div>
 
           <Link

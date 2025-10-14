@@ -157,7 +157,7 @@ class Itineraire(models.Model):
     
     # Champs communs
     description = models.TextField(verbose_name="Description détaillée", null=True, blank=True)
-    descriptionEn = models.TextField(verbose_name="Description détaillée", null=True, blank=True)
+    descriptionEn = models.TextField(verbose_name="DescriptionEn détaillée", null=True, blank=True)
     carte_gps = models.URLField(null=True, blank=True, help_text="Lien vers l'itinéraire GPS")
     
     circuit = models.ForeignKey('Circuit', on_delete=models.CASCADE, related_name='itineraires')

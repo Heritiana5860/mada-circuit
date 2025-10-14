@@ -80,7 +80,7 @@ const VehicleCard: React.FC<VehicleCardProps> = ({
               {formatPrice(vehicle.prix)}
             </span>
             <span className="text-sm text-muted-foreground ml-1">
-              / {t("common.day", "Jour")}
+              /{t("common.day", "Day")}
             </span>
           </div>
 
@@ -88,7 +88,7 @@ const VehicleCard: React.FC<VehicleCardProps> = ({
             to={`/location-4x4/${vehicle.id}`}
             className="btn-secondary text-sm py-1 px-3 h-auto"
           >
-            Réserver
+            {t("common.reserver", "Réserver")}
           </Link>
         </div>
       </div>

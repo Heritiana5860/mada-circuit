@@ -723,7 +723,7 @@ const VehicleDetailSimple = () => {
                           {isSubmitting || reservationLoading
                             ? t("common.loading", "Chargement...")
                             : !isAuthenticated
-                            ? "Log in to book"
+                            ? t("common.log", "Log in to book")
                             : t("pages.circuits.book", "Réserver maintenant")}
                         </Button>
                       </div>

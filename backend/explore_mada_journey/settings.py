@@ -187,14 +187,14 @@ MIDDLEWARE = [
 
 CSRF_COOKIE_SECURE = True 
 CSRF_COOKIE_HTTPONLY = False  
-CSRF_COOKIE_SAMESITE = 'None'
-CSRF_COOKIE_DOMAIN = '.madagascar-voyagesolidaire.com'
+# CSRF_COOKIE_SAMESITE = 'None'
+# CSRF_COOKIE_DOMAIN = '.madagascar-voyagesolidaire.com'
 CSRF_USE_SESSIONS = False  
 CSRF_COOKIE_PATH = '/'
 
 SESSION_COOKIE_SECURE = True
-SESSION_COOKIE_SAMESITE = 'None'
-SESSION_COOKIE_DOMAIN = '.madagascar-voyagesolidaire.com'
+# SESSION_COOKIE_SAMESITE = 'None'
+# SESSION_COOKIE_DOMAIN = '.madagascar-voyagesolidaire.com'
 
 
 

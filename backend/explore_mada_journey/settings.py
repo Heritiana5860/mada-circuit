@@ -95,8 +95,6 @@ SECRET_KEY = 'django-insecure-=-^c))dt)dbi(g%h2kmtgkp)o!q3cr12=m0cs2#3(j2jg(qodf
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-# ALLOWED_HOSTS = ['*']
-
 ALLOWED_HOSTS = [
     'madagascar-voyagesolidaire.com', 
     'www.madagascar-voyagesolidaire.com',
@@ -189,13 +187,13 @@ MIDDLEWARE = [
 
 CSRF_COOKIE_SECURE = True 
 CSRF_COOKIE_HTTPONLY = False  
-CSRF_COOKIE_SAMESITE = 'Lax'
+CSRF_COOKIE_SAMESITE = 'None'
 CSRF_COOKIE_DOMAIN = '.madagascar-voyagesolidaire.com'
-CSRF_USE_SESSIONS = False  # Utiliser les cookies, pas les sessions
+CSRF_USE_SESSIONS = False  
 CSRF_COOKIE_PATH = '/'
 
 SESSION_COOKIE_SECURE = True
-SESSION_COOKIE_SAMESITE = 'Lax'
+SESSION_COOKIE_SAMESITE = 'None'
 SESSION_COOKIE_DOMAIN = '.madagascar-voyagesolidaire.com'
 
 

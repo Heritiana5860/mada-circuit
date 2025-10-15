@@ -136,6 +136,13 @@ CORS_ALLOW_ALL_ORIGINS = True
 
 CORS_ALLOW_CREDENTIALS = True
 
+CORS_EXPOSE_HEADERS = [
+    'Content-Type',
+    'Content-Length',
+    'X-CSRFToken',
+    'Authorization',
+]
+
 CORS_ALLOW_HEADERS = [
     'accept',
     'accept-encoding',

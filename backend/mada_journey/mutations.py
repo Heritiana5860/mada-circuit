@@ -1308,7 +1308,7 @@ class CreateTestimonia(graphene.Mutation):
     success = graphene.Boolean()
     message = graphene.String() 
     
-    def mutate(self, info, score, description, descriptionEn, type, utilisateur_id):
+    def mutate(self, info, score, description, type, utilisateur_id, descriptionEn=None):
         
         try:
             # Décoder avec la fonction Relay

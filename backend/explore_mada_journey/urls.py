@@ -7,11 +7,20 @@ from django.views.decorators.csrf import csrf_exempt
 from schema_root import schema
 from graphene_file_upload.django import FileUploadGraphQLView
 
+from django.contrib.sitemaps.views import sitemap
+from .sitemaps import StaticViewSitemap
+
+sitemaps = {
+    'static': StaticViewSitemap,
+}
+
 urlpatterns = [
     path('admin/', admin.site.urls),
 
     # GraphQL routes avec support d'upload
     path('graphql/', csrf_exempt(FileUploadGraphQLView.as_view(graphiql=True, schema=schema))),
+    
+    path("sitemap.xml", sitemap, {'sitemaps': sitemaps}, name='sitemap'),
 ]
 
 if settings.DEBUG:

@@ -8,10 +8,10 @@ from schema_root import schema
 from graphene_file_upload.django import FileUploadGraphQLView
 
 from django.contrib.sitemaps.views import sitemap
-from .sitemaps import StaticViewSitemap
+from .sitemaps import ReactStaticSitemap
 
 sitemaps = {
-    'static': StaticViewSitemap,
+    'react_static': ReactStaticSitemap,
 }
 
 urlpatterns = [
